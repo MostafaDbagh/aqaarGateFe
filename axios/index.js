@@ -1,6 +1,7 @@
 import axios from 'axios'
 const localhost = 'http://localhost:5500/api'
 const heroku = 'https://proty-api-mostafa-56627d8ca9aa.herokuapp.com/api'
+const render ='https://aqaargatebe2.onrender.com'
 
 const getBaseURL = () => {
   if (typeof window !== 'undefined') {
@@ -14,7 +15,7 @@ const getBaseURL = () => {
 };
 
 export const Axios = axios.create({
-  baseURL: getBaseURL(),
+  baseURL: render,
   timeout: 30000, // Request timeout in milliseconds (increased to 30 seconds)
   headers: {
     'Content-Type': 'application/json',
