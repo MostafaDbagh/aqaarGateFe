@@ -1,0 +1,12 @@
+.addPropertyLink {
+  color: #0ea5e9;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.addPropertyLink:hover {
+  color: #0284c7;
+  text-decoration: none;
+}
+
+

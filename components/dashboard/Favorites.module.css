@@ -1,0 +1,17 @@
+.favoritesTitleCount {
+  margin-left: 8px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.favoritesDeleteButton {
+  background: none;
+  border: none;
+  color: #dc3545;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+

@@ -1,0 +1,1106 @@
+/* About Component Styles */
+.aboutSection {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 0;
+  background: linear-gradient(135deg, #ffffff 0%, #fff8f0 20%, #ffe5cc 40%, #ffddb8 60%, #fff8f0 80%, #ffffff 100%);
+  min-height: 100vh;
+  width: 94%;
+  margin: 0 auto 32px;
+  border-radius: 24px;
+}
+
+.animatedBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.floatingCircle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(228, 93, 11, 0.08);
+  animation: float 6s ease-in-out infinite;
+  filter: blur(40px);
+}
+
+.floatingCircle:nth-of-type(1) {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  left: 10%;
+}
+
+.floatingCircle:nth-of-type(2) {
+  width: 400px;
+  height: 400px;
+  bottom: 20%;
+  right: 15%;
+  animation-duration: 8s;
+  animation-delay: 2s;
+  filter: blur(50px);
+  background: rgba(228, 93, 11, 0.06);
+}
+
+.floatingCircle:nth-of-type(3) {
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  right: 10%;
+  animation-duration: 7s;
+  animation-delay: 4s;
+  filter: blur(35px);
+  background: rgba(228, 93, 11, 0.1);
+}
+
+.geometricShape {
+  position: absolute;
+  background: rgba(228, 93, 11, 0.04);
+  animation: rotate 20s linear infinite;
+}
+
+.geometricShape:nth-of-type(1) {
+  width: 200px;
+  height: 200px;
+  transform: rotate(45deg);
+  top: 30%;
+  left: 5%;
+  border-radius: 20px;
+}
+
+.geometricShape:nth-of-type(2) {
+  width: 150px;
+  height: 150px;
+  transform: rotate(30deg);
+  bottom: 10%;
+  left: 20%;
+  animation-duration: 15s;
+  animation-direction: reverse;
+  border-radius: 10px;
+  background: rgba(228, 93, 11, 0.05);
+}
+
+.mainContainer {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Glass Effect Sections */
+.glassSection {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  padding: 60px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  margin-bottom: 40px;
+}
+
+/* Hero Section */
+.heroSection {
+  text-align: center;
+  margin-bottom: 80px;
+  transition: all 0.8s ease-out;
+}
+
+.heroSection.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heroSection.hidden {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.heroBadge {
+  display: inline-block;
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.heroBadge span {
+  color: #e45d0b;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 30px;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(228, 93, 11, 0.2);
+}
+
+.heroSubtitle {
+  font-size: clamp(18px, 2.5vw, 28px);
+  color: #4a4a4a;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 30px auto 0;
+  font-weight: 400;
+}
+
+.heroDivider {
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #e45d0b, #ffde59);
+  margin: 30px auto 0;
+  border-radius: 2px;
+  animation: scaleX 1s ease-out;
+  box-shadow: 0 2px 8px rgba(228, 93, 11, 0.3);
+}
+
+/* Vision Points Grid */
+.visionPointsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-bottom: 80px;
+}
+
+.visionPointCard {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 24px;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.visionPointCard.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.visionPointCard.hidden {
+  transform: translateY(50px);
+  opacity: 0;
+}
+
+.visionPointCard:hover {
+  transform: translateY(-10px) scale(1.02) !important;
+  box-shadow: 0 20px 40px rgba(228, 93, 11, 0.2) !important;
+}
+
+.visionPointCard:nth-of-type(1) {
+  animation-delay: 0.2s;
+}
+
+.visionPointCard:nth-of-type(2) {
+  animation-delay: 0.4s;
+}
+
+.visionPointCard:nth-of-type(3) {
+  animation-delay: 0.6s;
+}
+
+.featureCard:nth-of-type(1) {
+  animation-delay: 1s;
+}
+
+.featureCard:nth-of-type(2) {
+  animation-delay: 1.2s;
+}
+
+.featureCard:nth-of-type(3) {
+  animation-delay: 1.4s;
+}
+
+.visionStatement {
+  animation-delay: 0.8s;
+}
+
+.madeWithLoveSection {
+  animation-delay: 1.8s;
+}
+
+.visionPointIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #e45d0b, #ffde59);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 15px rgba(228, 93, 11, 0.3);
+}
+
+.visionPointTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.visionPointText {
+  font-size: 16px;
+  color: #4a4a4a;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Main Vision Statement */
+.visionStatement {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  padding: 60px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 60px;
+  transition: all 0.8s ease-out;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.visionStatement.visible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.visionStatement.hidden {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.visionStatementTitle {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 30px;
+  line-height: 1.3;
+}
+
+.visionStatementText {
+  font-size: 20px;
+  color: #4a4a4a;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+/* Cities Grid */
+.citiesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.cityCard {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  text-align: center;
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.cityCard.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.cityCard.hidden {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+.cityCard:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(228, 93, 11, 0.15);
+}
+
+.cityIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.cityName {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Features Grid */
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.featureCard {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  text-align: center;
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.featureCard.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.featureCard.hidden {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+.featureIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.featureTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.featureText {
+  font-size: 15px;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Made with Love Section */
+.madeWithLoveSection {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  padding: 60px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  text-align: center;
+  transition: all 0.8s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.madeWithLoveSection.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.madeWithLoveSection.hidden {
+  transform: translateY(40px);
+  opacity: 0;
+}
+
+.decorativeHeart {
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.1;
+  transform: rotate(-15deg);
+  color: #e45d0b;
+  user-select: none;
+  pointer-events: none;
+  top: -20px;
+  right: 30px;
+}
+
+.decorativeHeart:nth-of-type(2) {
+  font-size: 100px;
+  opacity: 0.08;
+  transform: rotate(15deg);
+  bottom: -30px;
+  left: 20px;
+  top: auto;
+  right: auto;
+}
+
+.loveIcon {
+  font-size: 48px;
+  margin-bottom: 24px;
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.loveTitle {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+}
+
+.loveText {
+  font-size: 18px;
+  color: #4a4a4a;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.feedbackCard {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 32px;
+  margin-top: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.feedbackCard:nth-of-type(2) {
+  margin-top: 24px;
+}
+
+.feedbackTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.feedbackText {
+  font-size: 17px;
+  color: #4a4a4a;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.featuresIcons {
+  font-size: 40px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.featuresIcons span {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.featuresIcons span:nth-of-type(2) {
+  animation-delay: 0.3s;
+}
+
+.featuresIcons span:nth-of-type(3) {
+  animation-delay: 0.6s;
+}
+
+.footerNote {
+  margin-top: 32px;
+  font-size: 16px;
+  color: #666;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-30px) translateX(20px);
+  }
+  66% {
+    transform: translateY(20px) translateX(-15px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes scaleX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Responsive Styles */
+
+/* Large Tablets (1024px and below) */
+@media (max-width: 1024px) {
+  .mainContainer {
+    max-width: 100%;
+    padding: 0 30px;
+  }
+
+  .glassSection {
+    padding: 50px 30px;
+  }
+
+  .visionPointsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .citiesGrid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 24px;
+  }
+
+  .visionStatement {
+    padding: 50px 30px;
+  }
+
+  .madeWithLoveSection {
+    padding: 50px 30px;
+  }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .aboutSection {
+    padding: 60px 0;
+    width: 96%;
+    margin: 0 auto 24px;
+    border-radius: 20px;
+  }
+
+  .mainContainer {
+    padding: 0 20px;
+  }
+
+  .glassSection {
+    padding: 40px 20px;
+    border-radius: 24px;
+    margin-bottom: 30px;
+  }
+
+  .heroSection {
+    margin-bottom: 60px;
+  }
+
+  .heroBadge {
+    padding: 10px 24px;
+    margin-bottom: 20px;
+  }
+
+  .heroBadge span {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .heroTitle {
+    font-size: clamp(28px, 6vw, 48px);
+    margin-bottom: 20px;
+  }
+
+  .heroSubtitle {
+    font-size: clamp(16px, 4vw, 22px);
+    margin-top: 20px;
+  }
+
+  .heroDivider {
+    width: 80px;
+    height: 3px;
+    margin-top: 20px;
+  }
+
+  .visionPointsGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 50px;
+  }
+
+  .visionPointCard {
+    padding: 30px 24px;
+    border-radius: 20px;
+  }
+
+  .visionPointIcon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+
+  .visionPointIcon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .visionPointTitle {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .visionPointText {
+    font-size: 15px;
+  }
+
+  .visionStatement {
+    padding: 40px 24px;
+    border-radius: 24px;
+    margin-bottom: 50px;
+  }
+
+  .visionStatementTitle {
+    font-size: clamp(24px, 5vw, 36px);
+    margin-bottom: 20px;
+  }
+
+  .visionStatementText {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+
+  .citiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .cityCard {
+    padding: 24px 16px;
+    border-radius: 18px;
+  }
+
+  .cityIcon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .cityName {
+    font-size: 18px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .featureCard {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .featureIcon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .featureTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .featureText {
+    font-size: 14px;
+  }
+
+  .madeWithLoveSection {
+    padding: 40px 24px;
+    border-radius: 24px;
+  }
+
+  .loveIcon {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+
+  .loveTitle {
+    font-size: clamp(24px, 5vw, 36px);
+    margin-bottom: 20px;
+  }
+
+  .loveText {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .feedbackCard {
+    padding: 24px 20px;
+    margin-top: 24px;
+    border-radius: 18px;
+  }
+
+  .feedbackTitle {
+    font-size: 20px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .feedbackText {
+    font-size: 15px;
+  }
+
+  .featuresIcons {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .footerNote {
+    margin-top: 24px;
+    font-size: 14px;
+  }
+
+  /* Reduce animated background shapes on mobile */
+  .floatingCircle:nth-of-type(1) {
+    width: 200px;
+    height: 200px;
+    filter: blur(30px);
+  }
+
+  .floatingCircle:nth-of-type(2) {
+    width: 250px;
+    height: 250px;
+    filter: blur(35px);
+  }
+
+  .floatingCircle:nth-of-type(3) {
+    width: 150px;
+    height: 150px;
+    filter: blur(25px);
+  }
+
+  .geometricShape:nth-of-type(1) {
+    width: 120px;
+    height: 120px;
+  }
+
+  .geometricShape:nth-of-type(2) {
+    width: 100px;
+    height: 100px;
+  }
+
+  .decorativeHeart {
+    font-size: 80px;
+  }
+
+  .decorativeHeart:nth-of-type(2) {
+    font-size: 60px;
+  }
+}
+
+/* Mobile Devices (576px and below) */
+@media (max-width: 576px) {
+  .aboutSection {
+    padding: 40px 0;
+    width: 98%;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+  }
+
+  .mainContainer {
+    padding: 0 16px;
+  }
+
+  .glassSection {
+    padding: 30px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .heroSection {
+    margin-bottom: 40px;
+  }
+
+  .heroBadge {
+    padding: 8px 20px;
+    margin-bottom: 16px;
+  }
+
+  .heroBadge span {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .heroTitle {
+    font-size: clamp(24px, 8vw, 36px);
+    margin-bottom: 16px;
+  }
+
+  .heroSubtitle {
+    font-size: clamp(14px, 5vw, 18px);
+    margin-top: 16px;
+  }
+
+  .heroDivider {
+    width: 60px;
+    height: 3px;
+    margin-top: 16px;
+  }
+
+  .visionPointsGrid {
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .visionPointCard {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .visionPointIcon {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 16px;
+  }
+
+  .visionPointIcon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .visionPointTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .visionPointText {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .visionStatement {
+    padding: 30px 20px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+  }
+
+  .visionStatementTitle {
+    font-size: clamp(20px, 6vw, 28px);
+    margin-bottom: 16px;
+  }
+
+  .visionStatementText {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .citiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .cityCard {
+    padding: 20px 12px;
+    border-radius: 16px;
+  }
+
+  .cityIcon {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .cityName {
+    font-size: 16px;
+  }
+
+  .featuresGrid {
+    gap: 20px;
+  }
+
+  .featureCard {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .featureIcon {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .featureTitle {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .featureText {
+    font-size: 13px;
+  }
+
+  .madeWithLoveSection {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+
+  .loveIcon {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+  .loveTitle {
+    font-size: clamp(20px, 6vw, 28px);
+    margin-bottom: 16px;
+  }
+
+  .loveText {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .feedbackCard {
+    padding: 20px 16px;
+    margin-top: 20px;
+    border-radius: 16px;
+  }
+
+  .feedbackCard:nth-of-type(2) {
+    margin-top: 16px;
+  }
+
+  .feedbackTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .feedbackText {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .featuresIcons {
+    font-size: 28px;
+    margin-bottom: 10px;
+    gap: 6px;
+  }
+
+  .footerNote {
+    margin-top: 20px;
+    font-size: 13px;
+  }
+
+  /* Hide or reduce decorative elements on very small screens */
+  .decorativeHeart {
+    font-size: 60px;
+    opacity: 0.05;
+  }
+
+  .decorativeHeart:nth-of-type(2) {
+    font-size: 50px;
+  }
+}
+
+/* Extra Small Devices (400px and below) */
+@media (max-width: 400px) {
+  .aboutSection {
+    padding: 30px 0;
+    width: 100%;
+    margin: 0 auto 12px;
+    border-radius: 12px;
+  }
+
+  .mainContainer {
+    padding: 0 12px;
+  }
+
+  .glassSection {
+    padding: 24px 16px;
+  }
+
+  .heroTitle {
+    font-size: 22px;
+  }
+
+  .visionPointCard,
+  .featureCard,
+  .feedbackCard,
+  .cityCard {
+    padding: 20px 16px;
+  }
+
+  .visionPointIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .visionPointIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .citiesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Landscape Orientation for Tablets */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .aboutSection {
+    padding: 50px 0;
+  }
+
+  .heroSection {
+    margin-bottom: 50px;
+  }
+
+  .visionPointsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .citiesGrid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+}
+

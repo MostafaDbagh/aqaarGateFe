@@ -1,0 +1,226 @@
+/* Full Width Container */
+.wgListing {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 40px;
+}
+
+/* Grid Layout - 3 Cards Per Row */
+.rootGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .rootGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 992px) {
+  .rootGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .rootGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+}
+
+.imageWrap {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+}
+
+.propertyImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.imageWrap:hover .propertyImage {
+  transform: scale(1.05);
+}
+
+.priceSection {
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  border-top: 1px solid #e5e7eb;
+}
+.priceText {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.contactSection {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.callButtonContainer {
+  position: relative;
+  flex: 1;
+  min-width: 120px;
+}
+.callButton {
+  background: white;
+  border: 1px solid #F97316;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #F97316;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+  height: 40px;
+  justify-content: center;
+}
+.phoneOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  z-index: 10;
+  margin-top: 4px;
+}
+.phoneOptionsRow {
+  display: flex;
+  gap: 6px;
+}
+.phoneBtn {
+  flex: 1;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.whatsappBtn {
+  flex: 1;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.emailBtn {
+  background: white;
+  border: 1px solid #F97316;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #F97316;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 120px;
+  height: 40px;
+  justify-content: center;
+}
+
+.emailBtn:hover {
+  background: #F97316;
+  color: white;
+}
+
+.detailsBtn {
+  background: #F97316;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 120px;
+  height: 40px;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.detailsBtn:hover {
+  background: #d96513;
+}
+.wrapPagination {
+  margin-top: 40px;
+}
+
+.listingCard {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.listingCard:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.listingCard .box-house {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.listingCard .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}

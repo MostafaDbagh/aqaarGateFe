@@ -1,0 +1,349 @@
+/* Ensure all property card images have consistent dimensions */
+.box-house .image-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 280px !important;
+  max-height: 280px !important;
+  min-height: 280px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  display: block !important;
+}
+
+.box-house .image-wrap img,
+.box-house .image-wrap .property-img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 280px !important;
+  min-height: 280px !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Grid view - consistent dimensions */
+.box-house.property-image-fix .image-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 280px !important;
+  max-height: 280px !important;
+  min-height: 280px !important;
+}
+
+.box-house.property-image-fix .image-wrap img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 280px !important;
+  min-height: 280px !important;
+  object-fit: cover !important;
+}
+
+/* List view - consistent dimensions */
+.box-house.property-list-image-fix .image-wrap {
+  width: 250px !important;
+  max-width: 250px !important;
+  height: 300px !important;
+  max-height: 300px !important;
+  min-height: 300px !important;
+}
+
+.box-house.property-list-image-fix .image-wrap img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 300px !important;
+  min-height: 300px !important;
+  object-fit: cover !important;
+}
+
+/* Custom CSS to fix image container sizing - More specific selectors */
+
+/* EMERGENCY FIX - Force image-wrap to have height */
+.image-wrap {
+  min-height: 200px !important;
+  height: auto !important;
+}
+
+.box-house .image-wrap {
+  min-height: 200px !important;
+  height: auto !important;
+}
+
+/* Override any conflicting styles */
+.box-house.property-image-fix .image-wrap,
+.box-house.property-list-image-fix .image-wrap {
+  height: 280px !important;
+  min-height: 280px !important;
+}
+
+.box-house.property-list-image-fix .image-wrap {
+  height: 300px !important;
+  min-height: 300px !important;
+}
+
+/* Grid view - Force fixed dimensions - FIX HEIGHT ISSUE */
+.box-house.property-image-fix .image-wrap {
+  width: 424px !important;
+  height: 280px !important;
+  min-width: 424px !important;
+  max-width: 424px !important;
+  min-height: 280px !important;
+  max-height: 280px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  background-color: #f5f5f5 !important;
+  border-radius: 8px !important;
+  position: relative !important;
+  display: block !important;
+}
+
+.box-house.property-image-fix .image-wrap > a {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  position: relative !important;
+}
+
+.box-house.property-image-fix .image-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 8px !important;
+}
+
+/* List view - Force fixed dimensions - FIX HEIGHT ISSUE */
+.box-house.property-list-image-fix .image-wrap {
+  width: 250px !important;
+  height: 300px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
+  min-height: 300px !important;
+  max-height: 300px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  background-color: #f5f5f5 !important;
+  border-radius: 8px !important;
+  position: relative !important;
+  display: block !important;
+}
+
+/* Additional image fill rules for list view */
+.box-house.property-list-image-fix .image-wrap > a {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  position: relative !important;
+}
+
+.box-house.property-list-image-fix .image-wrap > a img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 8px !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+/* Force image to fill container completely - List view */
+.box-house.property-list-image-fix .image-wrap img.lazyload,
+.box-house.property-list-image-fix .image-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 8px !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* Additional override for any parent containers that might be forcing full width */
+.tf-grid-layout .box-house.property-image-fix {
+  width: auto !important;
+  max-width: 424px !important;
+}
+
+.tf-grid-layout .box-house.property-list-image-fix {
+  width: auto !important;
+  max-width: 700px !important;
+}
+
+/* More specific grid layout overrides - FULL HEIGHT IMAGES */
+.tf-grid-layout.lg-col-3 .box-house.property-image-fix .image-wrap,
+.tf-grid-layout.md-col-2 .box-house.property-image-fix .image-wrap {
+  width: 424px !important;
+  height: 280px !important;
+  max-width: 424px !important;
+  max-height: 280px !important;
+  flex-shrink: 0 !important;
+}
+
+.tf-grid-layout.lg-col-2 .box-house.property-list-image-fix .image-wrap {
+  width: 250px !important;
+  height: 300px !important;
+  max-width: 250px !important;
+  max-height: 300px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Fix box-house container taking full width - Most aggressive override - WIDER CARDS */
+.box-house.property-image-fix {
+  width: 424px !important;
+  max-width: 424px !important;
+  min-width: 424px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  flex-basis: 424px !important;
+  box-sizing: border-box !important;
+}
+
+.box-house.property-list-image-fix {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: auto !important;
+  height: auto !important;
+  min-height: 300px !important;
+  max-height: 350px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 15px !important;
+  padding: 15px !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  flex-basis: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Override CSS Grid behavior for box-house containers - WIDER CARDS */
+.tf-grid-layout.lg-col-3 .box-house.property-image-fix,
+.tf-grid-layout.md-col-2 .box-house.property-image-fix {
+  grid-column: auto !important;
+  width: 424px !important;
+  max-width: 424px !important;
+  justify-self: start !important;
+  align-self: start !important;
+}
+
+.tf-grid-layout.lg-col-2 .box-house.property-list-image-fix {
+  grid-column: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 300px !important;
+  max-height: 350px !important;
+  justify-self: stretch !important;
+  align-self: start !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+/* Ensure the entire card doesn't stretch - WIDER CARDS */
+.tf-grid-layout .box-house.property-image-fix {
+  width: 424px !important;
+  max-width: 424px !important;
+  justify-self: start !important;
+  align-self: start !important;
+  flex: none !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  flex-basis: auto !important;
+}
+
+.tf-grid-layout .box-house.property-list-image-fix {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 300px !important;
+  max-height: 350px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 15px !important;
+  padding: 15px !important;
+}
+
+/* List view content area - COMPACT */
+.box-house.property-list-image-fix .content-wrap {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  padding: 0 !important;
+}
+
+/* List view text content */
+.box-house.property-list-image-fix .content-wrap h5,
+.box-house.property-list-image-fix .content-wrap h6,
+.box-house.property-list-image-fix .content-wrap p {
+  margin: 0 0 5px 0 !important;
+  line-height: 1.2 !important;
+}
+
+.box-house.property-list-image-fix .content-wrap .price {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  margin-top: auto !important;
+}
+
+/* Disable hover overlay and image scaling for property cards */
+.box-house .image-wrap::before,
+.box-house .image-wrap::after {
+  display: none !important;
+  content: none !important;
+}
+
+.box-house:hover .image-wrap img,
+.box-house:hover .img-style img {
+  transform: none !important;
+}
+
+.box-house .image-wrap::before,
+.box-house .image-wrap::after {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.box-house:hover .image-wrap::before,
+.box-house:hover .image-wrap::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.box-house:hover .image-wrap img,
+.box-house:hover .img-style img {
+  transform: none !important;
+  filter: none !important;
+}
+
+.box-house .image-wrap > a::after {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  background: none !important;
+  bottom: auto !important;
+}
+
+.box-house:hover .image-wrap > a::after {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}

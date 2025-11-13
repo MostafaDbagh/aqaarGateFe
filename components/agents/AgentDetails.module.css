@@ -1,0 +1,383 @@
+/* AgentDetails Component Styles */
+
+/* Main Container */
+.agentDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 60px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .agentDetailsContainer {
+    gap: 40px;
+    margin-bottom: 80px;
+    padding: 40px;
+  }
+}
+
+.agentDetailsContainer:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* First Row: Image and Info */
+.firstRow {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .firstRow {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+  }
+}
+
+/* Image Wrapper */
+.imageWrap {
+  flex: 0 0 auto;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .imageWrap {
+    width: 400px;
+    height: 400px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .imageWrap {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    margin: 0 auto;
+  }
+}
+
+.agentImage {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease;
+}
+
+.agentImage:hover {
+  transform: scale(1.05);
+}
+
+/* Content Inner */
+.contentInner {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .contentInner {
+    width: auto;
+  }
+}
+
+/* Second Row: Description Section */
+.descriptionRow {
+  padding-top: 30px;
+  border-top: 2px solid #f1f5f9;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .descriptionRow {
+    padding-top: 40px;
+  }
+}
+
+/* Follow Me Section */
+.followMeSection {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.followMeTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.followMeTitle::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}
+
+/* Social Media Icons in Info Section */
+.socialMedia {
+  margin-top: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.socialMedia li {
+  margin: 0;
+}
+
+.socialMedia li a {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #64748b;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: 1px solid #e2e8f0;
+}
+
+.socialMedia li a:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  border-color: transparent;
+}
+
+.socialMedia li a i {
+  font-size: 18px;
+}
+
+/* Additional Details */
+.additionalDetails {
+  margin-top: 20px;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Toggle Button */
+.toggleButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 12px 0;
+  color: #F1913D;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.toggleButton:hover {
+  color: #d96513;
+  transform: translateX(4px);
+}
+
+.toggleButton svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.chevronIcon {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.chevronIconRotated {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Details Section */
+.detailsSection {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.detailItem {
+  padding: 10px;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.detailLabel {
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.detailValue {
+  color: #666;
+}
+
+.sectionTitle {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Services Section */
+.servicesSection {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.serviceItem {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.serviceIcon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.serviceTitle {
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.serviceDescription {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Professional Summary */
+.professionalSummary {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.summaryText {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.achievements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.achievementItem {
+  text-align: center;
+  padding: 10px;
+}
+
+.achievementNumber {
+  font-size: 28px;
+  color: #ff6b35;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.achievementLabel {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Contact Info */
+.contactInfo {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.contactIcon {
+  font-size: 20px;
+  margin-right: 10px;
+  color: #ff6b35;
+}
+
+.contactLabel {
+  color: #333;
+  display: block;
+  font-size: 12px;
+}
+
+.contactValue {
+  color: #666;
+  font-size: 14px;
+}
+
+

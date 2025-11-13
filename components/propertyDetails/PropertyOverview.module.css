@@ -1,0 +1,38 @@
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  height: 32px;
+  line-height: 1;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statusBadge.forRent {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+}
+
+.statusBadge.forSale {
+  background-color: #10B981;
+  color: #FFFFFF;
+}
+
+.statusBadge.default {
+  background-color: #6B7280;
+  color: #FFFFFF;
+}
+

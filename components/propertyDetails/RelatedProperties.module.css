@@ -1,0 +1,221 @@
+.propertiesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.propertyCard {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+}
+
+.propertyCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 40%;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.propertyImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.propertyCard:hover .propertyImage {
+  transform: scale(1.05);
+}
+
+.statusBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  z-index: 2;
+}
+
+.statusBadge.forSale {
+  background-color: #10B981;
+}
+
+.statusBadge.forRent {
+  background-color: #3B82F6;
+}
+
+.offerBadge {
+  position: absolute;
+  top: 48px;
+  left: 12px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: #F59E0B;
+  color: #ffffff;
+  z-index: 2;
+}
+
+.cardContent {
+  padding: 16px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.propertyTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.propertyTitle a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.propertyTitle a:hover {
+  color: #F1913D;
+}
+
+.location {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.location i {
+  color: #F1913D;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.location span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metaInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 12px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+.metaItem span {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #F1913D;
+  margin: 0;
+}
+
+.detailsBtn {
+  padding: 8px 20px;
+  background-color: transparent;
+  color: #F1913D;
+  border: 1px solid #F1913D;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.detailsBtn:hover {
+  background-color: #F1913D;
+  color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .propertiesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .propertiesGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .propertyCard {
+    flex-direction: column;
+  }
+  
+  .imageWrapper {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .cardContent {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .imageWrapper {
+    height: 180px;
+  }
+}
+

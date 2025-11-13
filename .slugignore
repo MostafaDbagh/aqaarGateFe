@@ -1,0 +1,57 @@
+# Heroku slugignore - files to exclude from deployment
+
+# Dependencies (installed fresh on Heroku)
+node_modules/
+
+# Build artifacts (built fresh on Heroku)
+.next/
+out/
+build/
+dist/
+
+# Development files
+.env.local
+.env.development
+.env.test
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+*.test.js
+*.test.jsx
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.jsx
+*.spec.ts
+*.spec.tsx
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Misc
+.cache/
+.temp/
+tmp/
+temp/
+

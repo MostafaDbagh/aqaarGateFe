@@ -1,0 +1,81 @@
+.successMessage {
+  color: #10b981; /* green-500 */
+  font-weight: 600;
+}
+
+.errorMessage {
+  color: #ef4444; /* red-500 */
+  font-weight: 600;
+}
+
+.termsLink {
+  text-decoration: underline;
+}
+
+.developerLink {
+  margin-left: 6px;
+  text-decoration: underline;
+}
+
+.developerName {
+  color: #f1913d;
+  margin-left: 2px;
+}
+
+.appStoreContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appStoreContainer img {
+  transition: opacity 0.3s ease;
+}
+
+.appStoreContainer img:hover {
+  opacity: 0.9 !important;
+}
+
+.appStoreContainer svg {
+  background-color: #000401;
+  border: 1px solid #5e5e61;
+  border-radius: 4px;
+  transition: opacity 0.3s ease;
+}
+
+.appStoreContainer svg:hover {
+  opacity: 0.9 !important;
+}
+
+.appStoreIconWrapper {
+  display: inline-block;
+}
+
+.appStoreIconWrapper:first-child {
+  margin-bottom: 12px;
+}
+
+.appStoreIconLink {
+  display: inline-block;
+  cursor: not-allowed;
+}
+
+.appStoreIcon {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.appStoreIcon:hover {
+  opacity: 0.9;
+}
+
+/* Collapse animation */
+.footer-col-block .tf-collapse-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.footer-col-block.open .tf-collapse-content {
+  max-height: 1000px;
+}

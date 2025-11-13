@@ -1,0 +1,173 @@
+"use client";
+import React, { useEffect, useCallback, memo } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { footerData } from "@/constants/footerLinks";
+import AppleStoreIcon from "@/components/icons/AppleStoreIcon";
+import GooglePlayIcon from "@/components/icons/GooglePlayIcon";
+import styles from "./Footer1.module.css";
+function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
+  const toggleOpen = useCallback((event) => {
+    const parent = event.target.closest(".footer-col-block");
+    const content = parent?.querySelector(".tf-collapse-content");
+
+    if (!parent || !content) return;
+
+    if (parent.classList.contains("open")) {
+      parent.classList.remove("open");
+      content.classList.remove("open");
+    } else {
+      parent.classList.add("open");
+      content.classList.add("open");
+    }
+  }, []);
+
+  useEffect(() => {
+    const headings = document.querySelectorAll(".title-mobile");
+
+    headings.forEach((heading) => {
+      heading.addEventListener("click", toggleOpen);
+    });
+
+    // Clean up event listeners when the component unmounts
+    return () => {
+      headings.forEach((heading) => {
+        heading.removeEventListener("click", toggleOpen);
+      });
+    };
+  }, [toggleOpen]);
+  return (
+    <footer id="footer">
+      <div className="tf-container">
+        <div className="row">
+          <div className="col-12">
+            <div className="footer-top">
+              <div className="footer-logo">
+                <Link href={`/`}>
+                  <Image
+                    id="logo_footer"
+                    alt="logo-footer"
+                    src={logo}
+                    width={272}
+                    height={85}
+                    loading="lazy"
+                    priority={false}
+                  />
+                </Link>
+              </div>
+              <div className="wrap-contact-item">
+                <div className="contact-item">
+                  <div className="icons">
+                    <i className="icon-phone-2" />
+                  </div>
+                  <div className="content">
+                    <div className="title text-1">Call us</div>
+                    <h6>
+                      <a href="#"> +963995278383</a>
+                    </h6>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <div className="icons">
+                    <i className="icon-letter-2" />
+                  </div>
+                  <div className="content">
+                    <div className="title text-1">Nee live help</div>
+                    <h6 className="fw-4">
+                      <a href="#">mohammaddbagh0@gmail.com</a>
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="footer-main">
+            <div className="row">
+              {footerData.map((column, index) => (
+                <div className="col-lg-3 col-md-6" key={index}>
+                  <div
+                    className={`footer-menu-list footer-col-block ${
+                      column.className || ""
+                    }`}
+                  >
+                    <h5 className="title lh-30 title-desktop">
+                      {column.title}
+                    </h5>
+                    <h5 className="title lh-30 title-mobile">{column.title}</h5>
+                    <ul className="tf-collapse-content">
+                      {column.links.map((link, linkIndex) => (
+                        <li key={linkIndex}>
+                          {link.href.startsWith("/") ? (
+                            <Link href={link.href}>{link.text}</Link>
+                          ) : (
+                            <a href={link.href}>{link.text}</a>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+              <div className="col-lg-3 col-md-6">
+                <div className="footer-menu-list">
+                  <h5 className="title lh-30 mb-19">Download Our App</h5>
+                  <div className={styles.appStoreContainer}>
+                    <div className={`hover-tooltip ${styles.appStoreIconWrapper}`}>
+                      <a href="#" onClick={(e) => e.preventDefault()} className={styles.appStoreIconLink}>
+                        <AppleStoreIcon width={150} height={50} className={styles.appStoreIcon} />
+                      </a>
+                      <span className="tooltip">Coming soon</span>
+                    </div>
+                    <div className={`hover-tooltip ${styles.appStoreIconWrapper}`}>
+                      <a href="#" onClick={(e) => e.preventDefault()} className={styles.appStoreIconLink}>
+                        <GooglePlayIcon width={150} height={50} className={styles.appStoreIcon} />
+                      </a>
+                      <span className="tooltip">Coming soon</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-12">
+          <div className="footer-bottom">
+            <p>
+              Copyright © {new Date().getFullYear()}{" "}
+              <span className="fw-7">AqaarGate - REAL ESTATE</span> . Designed &amp;
+              Developed by
+              <a href="#" className={styles.developerName}>Mostafa Dbagh</a>
+            </p>
+            <div className="wrap-social">
+              <div className="text-3  fw-6 text_white">Follow us</div>
+              <ul className="tf-social ">
+                <li>
+                  <a href="#">
+                    <i className="icon-fb" />
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i className="icon-X" />
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i className="icon-linked" />
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i className="icon-ins" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default memo(Footer1);

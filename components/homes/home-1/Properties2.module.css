@@ -1,0 +1,444 @@
+/* Holiday Homes Card - Clean Layout */
+.propertyCard {
+  display: flex;
+  padding: 12px;
+  width: 500px;
+  min-height: 400px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin: 0 10px;
+}
+
+.propertyCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Left Section - Image + Text below */
+.leftSection {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Left Image Section - Fixed 300px x 220px */
+.imageSection {
+  width: 300px;
+  min-height: 240px;
+  position: relative;
+  overflow: hidden;
+}
+
+.imageSection img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.propertyCard:hover .imageSection img {
+  transform: scale(1.05);
+}
+
+/* Badges */
+.badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.badgeRent {
+  background: #f1913d;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badgeHoliday {
+  background: #10b981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Action Buttons */
+.actionButtons {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.quickViewBtn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.quickViewBtn:hover {
+  background: #f1913d;
+  color: white;
+}
+
+.quickViewBtn i {
+  font-size: 14px;
+}
+
+/* Right Content Section */
+.contentSection {
+  flex-shrink: 0;
+  padding: 0 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+/* Title Section - Below Image */
+.titleSection {
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.propertyTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.propertyLocation {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.propertyLocation i {
+  color: #f1913d;
+  font-size: 14px;
+}
+
+/* Details Section */
+.detailsSection {
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.detailsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+  width: 100%;
+  min-height: 40px;
+}
+
+.detailItem i {
+  color: #f1913d;
+  font-size: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.detailItem span {
+  font-size: 12px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.detailItem strong {
+  color: #f1913d;
+  font-weight: 700;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+/* Price and Details Section - Below text on left */
+.priceDetailsSection {
+  padding: 16px 20px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e5e7eb;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f1913d;
+  margin: 0;
+}
+
+.detailsBtn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid #f1913d;
+  color: #f1913d;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.detailsBtn:hover {
+  background: #f1913d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(241, 145, 61, 0.3);
+}
+
+/* Action Buttons Section - Tab Style */
+.actionButtonsSection {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.actionButtonsVertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Action Tab - Same style as detailItem tabs */
+.actionTab {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  white-space: nowrap;
+  width: 100%;
+  min-height: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 12px;
+  color: #4b5563;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.actionTab:hover {
+  background: #f1913d;
+  color: white;
+  transform: translateY(-2px);
+  border: 2px solid #f1913d;
+  box-shadow: 0 4px 12px rgba(241, 145, 61, 0.3);
+}
+
+.actionTab i {
+  color: #f1913d;
+  font-size: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.actionTab:hover i {
+  color: white;
+}
+
+.actionTab span {
+  font-size: 12px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  transition: color 0.3s ease;
+}
+
+.actionTab:hover span {
+  color: white;
+}
+
+.actionTab strong {
+  color: #f1913d;
+  font-weight: 700;
+  font-size: 14px;
+  margin-left: 4px;
+  transition: color 0.3s ease;
+}
+
+.actionTab:hover strong {
+  color: white;
+}
+
+/* Swiper Container and Slide Styling */
+.wrap-properties-sw .swiper {
+  padding: 0 20px !important;
+  margin: 0 !important;
+}
+
+.swiper-slide {
+  width: 480px !important;
+  margin-right: 0 !important;
+  padding: 0 10px !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure proper spacing between slides */
+.swiper-slide + .swiper-slide {
+  margin-left: 20px !important;
+}
+
+/* Pagination Dots Styling */
+.spd-properties {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 30px !important;
+  gap: 8px !important;
+  width: 100% !important;
+  text-align: center !important;
+  position: relative !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.swiper-pagination {
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.spd-properties .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: #e5e7eb !important;
+  opacity: 1 !important;
+  margin: 0 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.spd-properties .swiper-pagination-bullet-active {
+  background: #f1913d !important;
+  transform: scale(1.2) !important;
+}
+
+.spd-properties .swiper-pagination-bullet-active-main {
+  background: #f1913d !important;
+  transform: scale(1.2) !important;
+}
+
+/* Additional overrides for all possible Swiper pagination classes */
+.spd-properties .swiper-pagination-bullet-active-main,
+.spd-properties .swiper-pagination-bullet-active,
+.spd-properties .swiper-pagination-bullet-active-prev,
+.spd-properties .swiper-pagination-bullet-active-next {
+  background: #f1913d !important;
+  background-color: #f1913d !important;
+  transform: scale(1.2) !important;
+}
+
+/* Global Swiper pagination override */
+.swiper-pagination-bullet-active {
+  background: #f1913d !important;
+  background-color: #f1913d !important;
+}
+
+.swiper-pagination-bullet-active-main {
+  background: #f1913d !important;
+  background-color: #f1913d !important;
+}
+
+.spd-properties .swiper-pagination-bullet:hover {
+  background: #f1913d !important;
+  opacity: 0.7 !important;
+}
+
+/* Additional utility classes */
+.property-image-cover {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.contact-agent-title {
+  margin-bottom: 6px !important;
+  font-weight: 600 !important;
+}
+
+.phone-number-text {
+  margin-left: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .propertyCard {
+    flex-direction: column;
+  }
+  
+  .leftSection {
+    width: 100%;
+  }
+  
+  .imageSection {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .detailsGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .priceDetailsSection {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .detailsBtn {
+    text-align: center;
+  }
+}

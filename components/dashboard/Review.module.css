@@ -1,0 +1,295 @@
+/* Review Component Styles */
+
+/* Statistics Cards */
+.statCard {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.statCardBody {
+  text-align: center;
+  padding: 1rem;
+}
+
+.statNumber {
+  color: #ff6b35;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.statNumberYellow {
+  color: #FFB800;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.statNumberGreen {
+  color: #28a745;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.starIcon {
+  font-size: 24px;
+}
+
+/* Title Badge */
+.titleBadge {
+  font-size: 14px;
+  font-weight: normal;
+  margin-left: 10px;
+  color: #666;
+}
+
+/* Loading and Error States */
+.loadingContainer {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 40px;
+  color: #dc3545;
+}
+
+.emptyContainer {
+  text-align: center;
+  padding: 40px;
+}
+
+/* Property Info */
+.propertyInfo {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.propertyLink {
+  color: #f1913d;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 4px;
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: #fef7f1;
+  border-radius: 4px;
+  border: 1px solid rgba(241, 145, 61, 0.2);
+}
+
+.propertyLink:hover {
+  background-color: #fef0e6;
+  color: #e67e22;
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.hideButton {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hideButton:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.hideButtonActive {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.hideButtonActive:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+/* Property Info Container */
+.propertyInfoContainer {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* Hide Buttons */
+.hideButtonDashboard {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hideButtonDashboard:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.hideButtonListing {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hideButtonListing:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Pagination */
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.paginationButton {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #495057;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationButtonActive {
+  background-color: #f1913d;
+  border-color: #f1913d;
+  color: white;
+  font-weight: 600;
+}
+
+.paginationButtonActive:hover {
+  background-color: #e67e22;
+  border-color: #e67e22;
+}
+
+.paginationEllipsis {
+  padding: 0 8px;
+  color: #6c757d;
+  cursor: default;
+}
+
+.paginationInfo {
+  font-size: 14px;
+  color: #666;
+  margin: 0 16px;
+}
+
+.paginationPageNumbers {
+  display: flex;
+  gap: 5px;
+}
+
+.paginationEllipsis {
+  padding: 8px 12px;
+  color: #999;
+}
+
+.paginationPageButton {
+  padding: 8px 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  min-width: 40px;
+  transition: all 0.2s ease;
+}
+
+.paginationPageButton:hover {
+  background-color: #f5f5f5;
+}
+
+.paginationPageButtonActive {
+  background: #ff6b35;
+  color: #fff;
+  font-weight: 600;
+  border-color: #ff6b35;
+}
+
+.paginationPageButtonActive:hover {
+  background-color: #ff6b35;
+}
+
+.paginationNavButton {
+  padding: 8px 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.paginationNavButton:hover:not(:disabled) {
+  background-color: #f5f5f5;
+}
+
+.paginationNavButton:disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
