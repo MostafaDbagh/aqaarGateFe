@@ -1,7 +1,7 @@
 import axios from 'axios'
 const localhost = 'http://localhost:5500/api'
 const heroku = 'https://proty-api-mostafa-56627d8ca9aa.herokuapp.com/api'
-const render ='https://aqaargatebe2.onrender.com'
+const render ='https://aqaargatebe2.onrender.com/api'
 
 const getBaseURL = () => {
   if (typeof window !== 'undefined') {
