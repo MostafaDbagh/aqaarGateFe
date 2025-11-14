@@ -11,20 +11,23 @@ const getBaseURL = () => {
     }
   }
 
-  return process.env.NEXT_PUBLIC_API_URL || heroku;
+  return process.env.NEXT_PUBLIC_API_URL || render;
 };
 
 export const Axios = axios.create({
-  baseURL: render,
+  baseURL: '/api', // Will be overridden by interceptor
   timeout: 30000, // Request timeout in milliseconds (increased to 30 seconds)
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request interceptor to add auth token
+// Request interceptor to set baseURL dynamically and add auth token
 Axios.interceptors.request.use(
   (config) => {
+    // Set baseURL dynamically based on environment
+    config.baseURL = getBaseURL();
+    
     // Get token from localStorage or cookies
     const token = localStorage.getItem('token') || 
                   document.cookie

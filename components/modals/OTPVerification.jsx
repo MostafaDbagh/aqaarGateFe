@@ -150,10 +150,21 @@ export default function OTPVerification({
   return (
     <div 
       className={styles.overlay}
-      onClick={(e) => { if (e.target === e.currentTarget) { handleClose(); } }}
+      onClick={(e) => {
+        // Prevent closing modal when clicking outside - only X button can close
+        // Only prevent if clicking directly on overlay (not on container or its children)
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+          // Do nothing - modal should not close
+        }
+      }}
     >
       {/* Modal content */}
-      <div className={styles.container}>
+      <div 
+        className={styles.container}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className={styles.header}>
           <h4 className={styles.title}>
