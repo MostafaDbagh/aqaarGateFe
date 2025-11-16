@@ -209,7 +209,9 @@ export const metadata = {
     },
   },
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION || 'your-google-verification-code', // Replace with actual verification code from Google Search Console
+    google: process.env.GOOGLE_SITE_VERIFICATION || 'tKhN1veJe2nKYfDKpyWVldjh3KLbfXbEFRMigQMIZ28',
+    // Note: The verification code should match the one in Google Search Console
+    // If using HTML tag method, this should be the code from the meta tag content attribute
   },
 }
 
@@ -226,7 +228,8 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* Advanced SEO Meta Tags - IMPORTANT: Add verification codes from Google Search Console, Bing Webmaster, Yandex Webmaster */}
-        <meta name="google-site-verification" content={process.env.GOOGLE_SITE_VERIFICATION || "your-google-verification-code"} />
+        {/* Note: Google verification is also in metadata.verification.google, but manual meta tag ensures it's visible */}
+        <meta name="google-site-verification" content={process.env.GOOGLE_SITE_VERIFICATION || "tKhN1veJe2nKYfDKpyWVldjh3KLbfXbEFRMigQMIZ28"} />
         <meta name="msvalidate.01" content={process.env.BING_VERIFICATION || "your-bing-verification-code"} />
         <meta name="yandex-verification" content={process.env.YANDEX_VERIFICATION || "your-yandex-verification-code"} />
         
