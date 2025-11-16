@@ -1,15 +1,17 @@
 export default function AdvancedSEO() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+  
   // Advanced SEO Schema for Real Estate
   const realEstateSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Proty Real Estate",
-    "description": "Premium real estate services in Syria and Lattakia",
-    "url": "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com",
-    "logo": "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/images/logo/logo-2@2x.png",
-    "image": "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/images/logo/logo-2@2x.png",
-    "telephone": "+1-555-0123",
-    "email": "info@protyrealestate.com",
+    "name": "AqaarGate Real Estate",
+    "description": "Premium real estate services in Syria and Lattakia. Perfect for expats from EU countries and Arab Gulf.",
+    "url": baseUrl,
+    "logo": `${baseUrl}/images/logo/logo-2@2x.png`,
+    "image": `${baseUrl}/images/logo/logo-2@2x.png`,
+    "telephone": "+971549967817",
+    "email": "info@aqaargate.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "123 Real Estate Street",
@@ -49,10 +51,10 @@ export default function AdvancedSEO() {
     "paymentAccepted": "Cash, Credit Card, Bank Transfer",
     "openingHours": "Mo-Fr 09:00-18:00, Sa 09:00-16:00",
     "sameAs": [
-      "https://www.facebook.com/protyrealestate",
-      "https://www.twitter.com/protyrealestate",
-      "https://www.instagram.com/protyrealestate",
-      "https://www.linkedin.com/company/protyrealestate"
+      "https://www.facebook.com/aqaargate",
+      "https://www.twitter.com/aqaargate",
+      "https://www.instagram.com/aqaargate",
+      "https://www.linkedin.com/company/aqaargate"
     ]
   };
 
@@ -60,12 +62,12 @@ export default function AdvancedSEO() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/#localbusiness",
-    "name": "Proty Real Estate",
-    "description": "Leading real estate agency in Syria and Lattakia",
-    "url": "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com",
-    "telephone": "+1-555-0123",
-    "email": "info@protyrealestate.com",
+    "@id": `${baseUrl}/#localbusiness`,
+    "name": "AqaarGate Real Estate",
+    "description": "Leading real estate agency in Syria and Lattakia. Expert guidance for international property buyers.",
+    "url": baseUrl,
+    "telephone": "+971549967817",
+    "email": "info@aqaargate.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "123 Real Estate Street",
@@ -138,8 +140,8 @@ export default function AdvancedSEO() {
     "description": "Comprehensive real estate services in Syria and Lattakia",
     "provider": {
       "@type": "RealEstateAgent",
-      "name": "Proty Real Estate",
-      "url": "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com"
+      "name": "AqaarGate Real Estate",
+      "url": baseUrl
     },
     "areaServed": [
       {

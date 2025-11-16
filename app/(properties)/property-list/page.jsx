@@ -46,7 +46,7 @@ export const metadata = {
   openGraph: {
     title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
     description: "Browse our comprehensive collection of properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, or holiday home with advanced search filters.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/property-list',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,
     images: [
       {
         url: '/images/section/property-grid-bg.jpg',
@@ -63,7 +63,7 @@ export const metadata = {
     images: ['/images/section/property-grid-bg.jpg'],
   },
   alternates: {
-    canonical: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/property-list',
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,
   },
 };
 export default function page() {

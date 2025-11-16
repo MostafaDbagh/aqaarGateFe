@@ -1,5 +1,6 @@
 export default function sitemap() {
-  const baseUrl = 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com'
+  // Update to your production domain
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'
   
   return [
     {

@@ -3,14 +3,16 @@ import StructuredData from '@/components/seo/StructuredData'
 import KeywordOptimization from '@/components/seo/KeywordOptimization'
 import AdvancedSEO from '@/components/seo/AdvancedSEO'
 import PerformanceOptimization from '@/components/seo/PerformanceOptimization'
+import InternationalSEO from '@/components/seo/InternationalSEO'
 
 export const metadata = {
   title: {
     default: 'AqaarGate Real Estate - Find Your Dream Property',
     template: '%s | AqaarGate Real Estate'
   },
-  description: 'Discover premium properties for sale and rent in Syria and Lattakia. AqaarGate Real Estate offers luxury homes, apartments, holiday homes, and commercial properties with expert guidance and personalized service throughout Syria.',
+  description: 'Discover premium properties for sale and rent in Syria and Lattakia. AqaarGate Real Estate offers luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties for sale and rent (بيع وتأجير). Perfect for expats from Germany, Netherlands, EU countries, and Arab Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman). Expert guidance for international property buyers.',
   keywords: [
+    // Syria and Lattakia keywords
     'real estate syria',
     'properties syria',
     'syria real estate',
@@ -57,7 +59,109 @@ export const metadata = {
     'syria land for sale',
     'lattakia land for sale',
     'syria rental properties',
-    'lattakia rental properties'
+    'lattakia rental properties',
+    // International keywords - EU countries searching for Syria properties
+    'syria real estate from germany',
+    'syria properties germany',
+    'syria real estate deutschland',
+    'syria properties netherlands',
+    'syria real estate netherlands',
+    'syria properties from netherlands',
+    'syria real estate from europe',
+    'syria properties eu',
+    'syria real estate europe',
+    'buy property syria from germany',
+    'buy property syria from netherlands',
+    'buy property syria from europe',
+    'syria real estate for expats',
+    'syria properties expats',
+    'syria real estate expatriates',
+    'syria property investment germany',
+    'syria property investment netherlands',
+    'syria property investment europe',
+    'syria holiday homes expats',
+    'syria vacation rentals expats',
+    'syria real estate for germans',
+    'syria real estate for dutch',
+    // International keywords - Arab Gulf countries searching for Syria properties
+    'syria real estate from uae',
+    'syria properties uae',
+    'syria real estate dubai',
+    'syria properties dubai',
+    'syria real estate from saudi arabia',
+    'syria properties saudi arabia',
+    'syria real estate riyadh',
+    'syria properties riyadh',
+    'syria real estate from qatar',
+    'syria properties qatar',
+    'syria real estate doha',
+    'syria properties doha',
+    'syria real estate from kuwait',
+    'syria properties kuwait',
+    'syria real estate kuwait city',
+    'syria properties kuwait city',
+    'syria real estate from bahrain',
+    'syria properties bahrain',
+    'syria real estate manama',
+    'syria properties manama',
+    'syria real estate from oman',
+    'syria properties oman',
+    'syria real estate muscat',
+    'syria properties muscat',
+    'syria real estate gulf',
+    'syria properties gulf countries',
+    'buy property syria from uae',
+    'buy property syria from saudi arabia',
+    'buy property syria from qatar',
+    'buy property syria from kuwait',
+    'buy property syria from bahrain',
+    'buy property syria from oman',
+    'invest syria from gulf',
+    'syria property investment uae',
+    'syria property investment saudi arabia',
+    'syria property investment qatar',
+    'syria property investment kuwait',
+    'syria property investment bahrain',
+    'syria property investment oman',
+    'syria real estate for emirates',
+    'syria real estate for saudis',
+    'syria real estate for qataris',
+    'syria real estate for kuwaitis',
+    // Local search variations - Arabic keywords
+    'عقارات سوريا',
+    'عقارات اللاذقية',
+    'شراء عقار في سوريا',
+    'استثمار عقاري في سوريا',
+    'عقارات سوريا من الإمارات',
+    'عقارات سوريا من السعودية',
+    'عقارات سوريا من قطر',
+    'عقارات سوريا من الكويت',
+    // Holiday homes in Arabic
+    'بيوت عطلات',
+    'بيوت عطلات سوريا',
+    'بيوت عطلات اللاذقية',
+    'بيوت عطلات للبيع',
+    'بيوت عطلات للإيجار',
+    'بيع بيوت عطلات',
+    'تأجير بيوت عطلات',
+    'بيوت عطلات للبيع في سوريا',
+    'بيوت عطلات للإيجار في سوريا',
+    'بيع وتأجير بيوت',
+    'بيع وتأجير بيوت عطلات',
+    'بيع وتأجير بيوت في سوريا',
+    'بيع وتأجير بيوت عطلات في سوريا',
+    'بيوت عطلات على الشاطئ',
+    'بيوت عطلات ساحلية',
+    // Vacation rentals in Arabic
+    'إيجار منازل عطلات',
+    'منازل عطلات للايجار',
+    'استئجار بيت عطلة',
+    'بيوت عطلات للعائلات',
+    // Holiday homes for expats in Arabic
+    'بيوت عطلات للعرب',
+    'بيوت عطلات للخليجيين',
+    'بيوت عطلات في سوريا للعرب',
+    'بيوت عطلات في سوريا للخليجيين'
   ],
   authors: [{ name: 'AqaarGate Real Estate Team' }],
   creator: 'AqaarGate Real Estate',
@@ -105,7 +209,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code', // Replace with actual verification code
+    google: process.env.GOOGLE_SITE_VERIFICATION || 'your-google-verification-code', // Replace with actual verification code from Google Search Console
   },
 }
 
@@ -121,20 +225,25 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#f1913d" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {/* Advanced SEO Meta Tags */}
-        <meta name="google-site-verification" content="your-google-verification-code" />
-        <meta name="msvalidate.01" content="your-bing-verification-code" />
-        <meta name="yandex-verification" content="your-yandex-verification-code" />
+        {/* Advanced SEO Meta Tags - IMPORTANT: Add verification codes from Google Search Console, Bing Webmaster, Yandex Webmaster */}
+        <meta name="google-site-verification" content={process.env.GOOGLE_SITE_VERIFICATION || "your-google-verification-code"} />
+        <meta name="msvalidate.01" content={process.env.BING_VERIFICATION || "your-bing-verification-code"} />
+        <meta name="yandex-verification" content={process.env.YANDEX_VERIFICATION || "your-yandex-verification-code"} />
         
-        {/* Geographic Meta Tags */}
-        <meta name="geo.region" content="SY-LA" />
-        <meta name="geo.placename" content="Lattakia, Syria" />
+        {/* Geographic Meta Tags - Target Syria and International Markets */}
+        <meta name="geo.region" content="SY" />
+        <meta name="geo.placename" content="Syria" />
         <meta name="geo.position" content="35.5167;35.7833" />
         <meta name="ICBM" content="35.5167, 35.7833" />
         
-        {/* Language and Locale */}
-        <meta name="language" content="en-US" />
-        <meta name="locale" content="en_US" />
+        {/* Target countries for international SEO */}
+        <meta name="target-audience" content="Syria, Germany, Netherlands, Europe, United Arab Emirates, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman" />
+        <meta name="target-market" content="Syria real estate for expats, Syria properties from EU, Syria real estate from Gulf" />
+        
+        {/* Language and Locale - Support multiple languages */}
+        <meta name="language" content="en, ar" />
+        <meta name="locale" content="en_US, ar_SY" />
+        <meta httpEquiv="Content-Language" content="en, ar" />
         
         {/* Mobile Optimization */}
         <meta name="format-detection" content="telephone=no" />
@@ -158,6 +267,7 @@ export default function RootLayout({ children }) {
         <KeywordOptimization />
         <AdvancedSEO />
         <PerformanceOptimization />
+        <InternationalSEO />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

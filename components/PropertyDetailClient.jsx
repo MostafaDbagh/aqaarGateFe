@@ -9,6 +9,7 @@ import Details3 from "@/components/propertyDetails/Details3";
 import PropertyReviews from "@/components/propertyDetails/PropertyReviews";
 import RelatedProperties from "@/components/propertyDetails/RelatedProperties";
 import LocationLoader from "@/components/common/LocationLoader";
+import PropertyStructuredData from "@/components/seo/PropertyStructuredData";
 
 export default function PropertyDetailClient({ id }) {
   const { data: property, isLoading, isError, error } = useListing(id);
@@ -104,6 +105,7 @@ export default function PropertyDetailClient({ id }) {
 
   return (
     <>
+      <PropertyStructuredData property={property} />
       <div id="wrapper">
         <Header1 />
         <Breadcumb pageName="Property Details" />

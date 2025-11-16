@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Syria & Lattakia Real Estate - Premium Properties for Sale & Rent',
-  description: 'Discover luxury homes, apartments, and holiday homes for sale and rent in Syria and Lattakia. Expert real estate guidance with Proty Real Estate - your trusted property partner in Syria.',
+  title: 'Syria & Lattakia Real Estate - Premium Properties for Sale & Rent | Perfect for Expats from EU & Gulf | AqaarGate',
+  description: 'Discover luxury homes, apartments, and holiday homes (بيوت عطلات) for sale and rent (بيع وتأجير) in Syria and Lattakia. Expert real estate guidance for expats from Germany, Netherlands, EU countries, and Arab Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman). Your trusted property partner in Syria.',
   keywords: [
     'syria real estate',
     'lattakia real estate',
@@ -35,12 +35,29 @@ export const metadata = {
     'syria property investment',
     'lattakia property investment',
     'syria land for sale',
-    'lattakia land for sale'
+    'lattakia land for sale',
+    // Arabic keywords for holiday homes
+    'بيوت عطلات',
+    'بيوت عطلات سوريا',
+    'بيوت عطلات اللاذقية',
+    'بيوت عطلات للبيع',
+    'بيوت عطلات للإيجار',
+    'بيع بيوت عطلات',
+    'تأجير بيوت عطلات',
+    'بيع وتأجير بيوت',
+    'بيع وتأجير بيوت عطلات',
+    'بيع وتأجير بيوت في سوريا',
+    'بيوت عطلات على الشاطئ',
+    'بيوت عطلات ساحلية',
+    'إيجار منازل عطلات',
+    'منازل عطلات للايجار',
+    'استئجار بيت عطلة',
+    'بيوت عطلات للعائلات'
   ],
   openGraph: {
-    title: 'Syria & Lattakia Real Estate - Premium Properties for Sale & Rent',
-    description: 'Discover luxury homes, apartments, and holiday homes for sale and rent in Syria and Lattakia. Expert real estate guidance with Proty Real Estate.',
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com',
+    title: 'Syria & Lattakia Real Estate - Premium Properties for Sale & Rent | AqaarGate',
+    description: 'Discover luxury homes, apartments, and holiday homes (بيوت عطلات) for sale and rent (بيع وتأجير) in Syria and Lattakia. Expert real estate guidance with AqaarGate Real Estate.',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com',
     images: [
       {
         url: '/images/section/hero-bg.jpg',
@@ -57,7 +74,7 @@ export const metadata = {
     images: ['/images/section/hero-bg.jpg'],
   },
   alternates: {
-    canonical: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com',
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com',
   },
 }
 

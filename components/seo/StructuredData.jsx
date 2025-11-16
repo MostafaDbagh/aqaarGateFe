@@ -24,15 +24,70 @@ export default function StructuredData() {
       "https://www.instagram.com/protyrealestate",
       "https://www.linkedin.com/company/protyrealestate"
     ],
-    "serviceArea": {
-      "@type": "GeoCircle",
-      "geoMidpoint": {
-        "@type": "GeoCoordinates",
-        "latitude": 35.5167,
-        "longitude": 35.7833
+    "serviceArea": [
+      {
+        "@type": "Country",
+        "name": "Syria"
       },
-      "geoRadius": "200000"
-    },
+      {
+        "@type": "Country",
+        "name": "Germany"
+      },
+      {
+        "@type": "Country",
+        "name": "Netherlands"
+      },
+      {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 35.5167,
+          "longitude": 35.7833
+        },
+        "geoRadius": {
+          "@type": "Distance",
+          "name": "Syria and International Markets"
+        }
+      }
+    ],
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "Syria"
+      },
+      {
+        "@type": "Country",
+        "name": "Germany"
+      },
+      {
+        "@type": "Country",
+        "name": "Netherlands"
+      },
+      {
+        "@type": "Country",
+        "name": "United Arab Emirates"
+      },
+      {
+        "@type": "Country",
+        "name": "Saudi Arabia"
+      },
+      {
+        "@type": "Country",
+        "name": "Qatar"
+      },
+      {
+        "@type": "Country",
+        "name": "Kuwait"
+      },
+      {
+        "@type": "Country",
+        "name": "Bahrain"
+      },
+      {
+        "@type": "Country",
+        "name": "Oman"
+      }
+    ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Real Estate Services",
