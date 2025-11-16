@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import FavoriteButton from "../common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
+import styles from "./PropertyGridItems.module.css";
 import logger from "@/utlis/logger";
 
 export default function PropertyGridItems({ listings = [] }) {
@@ -532,11 +533,9 @@ export default function PropertyGridItems({ listings = [] }) {
                 </li>
               )}
               <li 
-                className="flat-tag text-4 fw-6 text_white"
-                style={{
-                  backgroundColor: property.status?.toLowerCase() === 'rent' ? '#3B82F6' : '#10B981',
-                  color: 'white'
-                }}
+                className={`flat-tag text-4 fw-6 text_white ${styles.statusBadge} ${
+                  property.status?.toLowerCase() === 'rent' ? styles.statusBadgeRent : styles.statusBadgeSale
+                }`}
               >
                 {property.status?.toLowerCase() === 'rent' ? 'For Rent' : 'For Sale'}
               </li>
@@ -550,26 +549,34 @@ export default function PropertyGridItems({ listings = [] }) {
             </div>
           </div>
           <div className="content">
-            <h5 className="title">
-              <Link href={`/property-detail/${property._id}`}>
-                {property.propertyTitle || property.propertyKeyword || 'Property'}
-              </Link>
-            </h5>
-            <p className="location text-1 flex items-center gap-6">
-              <i className="icon-location" /> {property.state || property.location || 'Location not specified'}
+            <div className={styles.propertyTypeTitleContainer}>
+              {property.propertyType && (
+                <p className={`property-type text-1 ${styles.propertyType}`}>
+                  {property.propertyType}
+                </p>
+              )}
+              <h5 className={`title ${styles.titleBadge}`}>
+                <Link href={`/property-detail/${property._id}`} className={styles.titleLink}>
+                  {property.propertyTitle || property.propertyKeyword || 'Property'}
+                </Link>
+              </h5>
+            </div>
+  
+            <p className={`location text-1 flex items-center gap-6 ${styles.locationText}`}>
+              <i className="icon-location" /> <span className={styles.locationContent}><span className={styles.locationState}>{property.state}</span>-{property.address || 'Location not specified'}</span>
             </p>
-            <ul className="meta-list flex" style={{ gap: '24px' }}>
+            <ul className={`meta-list flex ${styles.metaList}`}>
               <li className="text-1 flex items-center">
                 <i className="icon-bed" />
-                <span style={{ marginLeft: '4px' }}>{property.bedrooms || 0}</span>
+                <span className={styles.metaItemSpan}>{property.bedrooms || 0}</span>
               </li>
               <li className="text-1 flex items-center">
                 <i className="icon-bath" />
-                <span style={{ marginLeft: '4px' }}>{property.bathrooms || 0}</span>
+                <span className={styles.metaItemSpan}>{property.bathrooms || 0}</span>
               </li>
               <li className="text-1 flex items-center">
                 <i className="icon-sqft" />
-                <span style={{ marginLeft: '4px' }}>{property.size || 0}</span> Sqft
+                <span className={styles.metaItemSpan}>{property.size || 0}</span> Sqft
               </li>
             </ul>
             {/* Contact Section */}

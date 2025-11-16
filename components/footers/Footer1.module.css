@@ -25,7 +25,6 @@
 .appStoreContainer {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .appStoreContainer img {
@@ -52,7 +51,7 @@
 }
 
 .appStoreIconWrapper:first-child {
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .appStoreIconLink {

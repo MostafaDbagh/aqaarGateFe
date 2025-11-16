@@ -715,6 +715,7 @@ export default function AddProperty() {
                 Notes:
               </label>
               <textarea
+                style={{ fontSize: '18px', lineHeight: '22.4px', fontWeight: '500',color: '#374151' }}
                 name="notes"
                 id="notes"
                 className="form-control"

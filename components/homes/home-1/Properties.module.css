@@ -1,0 +1,235 @@
+/* Loading and Error States */
+.loadingContainer {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.errorText {
+  color: #dc3545;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.emptyText {
+  color: #6B7280;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Image Wrapper */
+.imageWrap {
+  width: 100%;
+  max-width: 100%;
+  height: 280px;
+  max-height: 280px;
+  min-height: 280px;
+  overflow: hidden;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 280px;
+  min-height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Status Badge */
+.statusBadge {
+  color: white;
+}
+
+.statusBadgeRent {
+  background-color: #3B82F6;
+}
+
+.statusBadgeSale {
+  background-color: #10B981;
+}
+
+/* Favorite Button Container */
+.favoriteButtonContainer {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 6;
+  display: flex;
+}
+
+/* Property Type and Title Container */
+.propertyTypeTitleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.propertyType {
+  margin: 0;
+  color: #374151;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.titleBadge {
+  font-size: 16px;
+  font-weight: 600;
+  background: #f1913d;
+  border-radius: 12px;
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: inline-block;
+  margin: 0;
+  padding: 4px 12px;
+}
+
+.titleLink {
+  color: floralwhite;
+  text-decoration: none;
+}
+
+.titleLink:hover {
+  color: floralwhite;
+  text-decoration: none;
+}
+
+/* Meta List */
+.metaList {
+  gap: 24px;
+}
+
+.metaItemSpan {
+  margin-left: 4px;
+}
+
+/* Location */
+.locationState {
+  color: #f1913d;
+  font-weight: 600;
+}
+
+.locationText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 100%;
+}
+
+/* Contact Section */
+.contactSection {
+  margin-bottom: 16px;
+}
+
+.callButtonContainer {
+  position: relative;
+}
+
+/* Button Styles */
+.button {
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 120px;
+  justify-content: center;
+}
+
+@media (max-width: 360px) {
+  .button {
+    min-width: 100%;
+  }
+}
+
+.callButton {
+  background: white;
+  border: 1px solid #F97316;
+  color: #F97316;
+}
+
+.callButtonActive {
+  background-color: #F97316;
+  color: white;
+}
+
+.emailButton {
+  background: white;
+  border: 1px solid #F97316;
+  color: #F97316;
+}
+
+.detailsButton {
+  background: #F97316;
+  border: none;
+  color: white;
+  text-decoration: none;
+}
+
+/* Phone Options */
+.phoneOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  margin-top: 4px;
+}
+
+.phoneOptionsContainer {
+  display: flex;
+  gap: 6px;
+}
+
+.phoneActionButton {
+  flex: 1;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.callActionButton {
+  background: #10b981;
+  color: white;
+}
+
+.whatsappActionButton {
+  background: #25D366;
+  color: white;
+}
+
+/* Price Section */
+.priceSection {
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+

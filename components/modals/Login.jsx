@@ -89,17 +89,21 @@ export default function Login({ isOpen, onClose }) {
     }
   };
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
-
-
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+    <div 
+      className={styles.modalOverlay}
+      onClick={(e) => {
+        // Prevent closing modal when clicking outside - only X button can close
+        // Only prevent if clicking directly on overlay (not on container or its children)
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+          // Do nothing - modal should not close
+        }
+      }}
+    >
       <div className={styles.modalContent}>
         <button 
           className={styles.closeButton} 
