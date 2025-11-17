@@ -109,23 +109,13 @@ export default function AdvancedSEO() {
           "@type": "Person",
           "name": "Ahmed Al-Mahmoud"
         },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "reviewBody": "Excellent service! Found my dream home in Lattakia through Proty Real Estate."
+        "reviewBody": "Excellent service! Found my dream home in Lattakia through AqaarGate Real Estate."
       },
       {
         "@type": "Review",
         "author": {
           "@type": "Person",
           "name": "Sarah Johnson"
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
         },
         "reviewBody": "Professional and knowledgeable team. Great experience buying property in Syria."
       }
