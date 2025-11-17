@@ -1,6 +1,39 @@
-export default function sitemap() {
+async function getProperties() {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
+    const response = await fetch(`${apiUrl}/listing/search?limit=10000`, {
+      next: { revalidate: 3600 } // Revalidate every hour
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch properties for sitemap');
+      return [];
+    }
+    
+    const data = await response.json();
+    // Handle both array response and wrapped response
+    const properties = Array.isArray(data) ? data : (data.data || data.listings || []);
+    return properties;
+  } catch (error) {
+    console.error('Error fetching properties for sitemap:', error);
+    return [];
+  }
+}
+
+export default async function sitemap() {
   // Update to your production domain
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'
+  
+  // Fetch all properties
+  const properties = await getProperties();
+  
+  // Generate property URLs
+  const propertyUrls = properties.map((property) => ({
+    url: `${baseUrl}/property-detail/${property._id || property.id}`,
+    lastModified: property.updatedAt ? new Date(property.updatedAt) : new Date(),
+    changeFrequency: 'daily',
+    priority: 0.8,
+  }));
   
   return [
     {
@@ -178,5 +211,7 @@ export default function sitemap() {
       changeFrequency: 'daily',
       priority: 0.8,
     },
+    // Add all property detail pages
+    ...propertyUrls,
   ]
 }

@@ -45,108 +45,48 @@ export default function MobileMenu() {
         <div className="mb-body">
           <ul id="menu-mobile-menu">
             <li
-              className={`menu-item menu-item-has-children-mobile  ${
+              className={`menu-item  ${
                 homes.some((elm) => elm.href == pathname)
                   ? "current-menu-item"
                   : ""
               } `}
             >
-              <a
-                href="#dropdown-menu-one"
-                className="item-menu-mobile collapsed"
-                data-bs-toggle="collapse"
-                aria-expanded="true"
-                aria-controls="dropdown-menu-one"
+              <Link
+                href="/"
+                className="item-menu-mobile"
+                onClick={() => {
+                  const offcanvas = document.getElementById('menu-mobile');
+                  if (offcanvas) {
+                    const closeButton = offcanvas.querySelector('[data-bs-dismiss="offcanvas"]');
+                    if (closeButton) {
+                      closeButton.click();
+                    }
+                  }
+                }}
               >
                 Home
-              </a>
-              <div
-                id="dropdown-menu-one"
-                className="collapse"
-                data-bs-parent="#menu-mobile-menu"
-              >
-                <ul className="sub-mobile">
-                  {homes.map((link, i) => (
-                    <li
-                      key={i}
-                      className={
-                        pathname == link.href
-                          ? "menu-item current-item"
-                          : "menu-item "
-                      }
-                    >
-                      <Link href={link.href}>{link.label}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </Link>
             </li>
             <li
-              className={`menu-item menu-item-has-children-mobile  ${
+              className={`menu-item   ${
                 isParentActive(propertyLinks) ? "current-menu-item" : ""
               } `}
             >
-              <a
-                href="#dropdown-menu-two"
-                className="item-menu-mobile collapsed"
-                data-bs-toggle="collapse"
-                aria-expanded="true"
-                aria-controls="dropdown-menu-two"
+              <Link
+                href="/property-list"
+                className="item-menu-mobile"
+                onClick={() => {
+                  const offcanvas = document.getElementById('menu-mobile');
+                  if (offcanvas) {
+                    const closeButton = offcanvas.querySelector('[data-bs-dismiss="offcanvas"]');
+                    if (closeButton) {
+                      closeButton.click();
+                    }
+                  }
+                }}
               >
                 Listing
-              </a>
-              <div
-                id="dropdown-menu-two"
-                className="collapse"
-                data-bs-parent="#menu-mobile-menu"
-              >
-                <ul className="sub-mobile">
-                  {propertyLinks.map((links, i) => (
-                    <li
-                      key={i}
-                      className={`menu-item menu-item-has-children-mobile-2 ${
-                        isParentActive(links.submenu) ? "current-menu-item" : ""
-                      }`}
-                    >
-                      <a
-                        href="#sub-layout"
-                        className="item-menu-mobile collapsed"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="sub-agents"
-                      >
-                        {links.title}
-                      </a>
-                      <div
-                        id="sub-layout"
-                        className="collapse"
-                        data-bs-parent="#dropdown-menu-two"
-                      >
-                        <ul className="sub-mobile">
-                          {links.submenu.map((link, i2) => (
-                            <li
-                              key={i2}
-                              className={
-                                pathname.split("/")[1] ==
-                                link.href.split("/")[1]
-                                  ? "menu-item current-item"
-                                  : "menu-item "
-                              }
-                            >
-                              <Link
-                                href={link.href}
-                                className="item-menu-mobile"
-                              >
-                                {link.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </Link>
             </li>
             <li
               className={`menu-item menu-item-has-children-mobile   ${
@@ -231,39 +171,25 @@ export default function MobileMenu() {
               </div>
             </li>
             <li
-              className={`menu-item menu-item-has-children-mobile ${
+              className={`menu-item  ${
                 isParentActive(blogMenu) ? "current-menu-item" : ""
               } `}
             >
-              <a
-                href="#dropdown-menu-five"
-                className="item-menu-mobile collapsed"
-                data-bs-toggle="collapse"
-                aria-expanded="true"
-                aria-controls="dropdown-menu-five"
+              <Link
+                href="/blog-grid"
+                className="item-menu-mobile"
+                onClick={() => {
+                  const offcanvas = document.getElementById('menu-mobile');
+                  if (offcanvas) {
+                    const closeButton = offcanvas.querySelector('[data-bs-dismiss="offcanvas"]');
+                    if (closeButton) {
+                      closeButton.click();
+                    }
+                  }
+                }}
               >
                 Blogs
-              </a>
-              <div
-                id="dropdown-menu-five"
-                className="collapse"
-                data-bs-parent="#menu-mobile-menu"
-              >
-                <ul className="sub-mobile">
-                  {blogMenu.map((link, i) => (
-                    <li
-                      key={i}
-                      className={
-                        link.href.split("/")[1] == pathname.split("/")[1]
-                          ? "menu-item current-item"
-                          : "menu-item"
-                      }
-                    >
-                      <Link href={link.href}>{link.label}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </Link>
             </li>
             <li
               className={`menu-item ${
@@ -277,38 +203,38 @@ export default function MobileMenu() {
             </li>
           </ul>
           <div className="support">
-            <a href="#" className="text-need">
+            <Link href="/contact" className="text-need">
               {" "}
               Need help?
-            </a>
+            </Link>
             <ul className="mb-info">
               <li>
-                Call Us Now: <span className="number">1-555-678-8888</span>
+                Call Us Now: <span className="number">+971 50 666 6666</span>
               </li>
               <li>
-                Support 24/7: <a href="#">themesflat@gmail.com</a>
+                Support 24/7: <a href="mailto:support@aqaargate.com">support@aqaargate.com</a>
               </li>
               <li>
                 <div className="wrap-social">
                   <p>Follow us:</p>
                   <ul className="tf-social style-2">
                     <li>
-                      <a href="#">
+                      <a href="https://www.facebook.com/aqaargate" target="_blank" rel="noopener noreferrer">
                         <i className="icon-fb" />
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="https://www.twitter.com/aqaargate" target="_blank" rel="noopener noreferrer">
                         <i className="icon-X" />
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="https://www.linkedin.com/company/aqaargate" target="_blank" rel="noopener noreferrer">
                         <i className="icon-linked" />
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="https://www.instagram.com/aqaargate" target="_blank" rel="noopener noreferrer">
                         <i className="icon-ins" />
                       </a>
                     </li>
