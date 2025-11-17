@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import LocationLoader from "@/components/common/LocationLoader";
 import { useReviewsByAgent } from "@/apis/hooks";
 import Toast from "../common/Toast";
 
@@ -115,11 +116,8 @@ export default function AgentReviews() {
           <h3 className="title">My Property Reviews</h3>
           <div className="wrap-table">
             {isLoading ? (
-              <div className="text-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <p className="mt-3">Loading reviews...</p>
+              <div style={{ padding: '40px 20px' }}>
+                <LocationLoader size="medium" message="Loading reviews..." />
               </div>
             ) : isError ? (
               <div className="alert alert-danger">

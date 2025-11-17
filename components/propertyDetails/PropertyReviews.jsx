@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
+import LocationLoader from "@/components/common/LocationLoader";
 import { useReviewsByProperty, useCreateReview } from "@/apis/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import logger from "@/utlis/logger";
@@ -132,11 +133,8 @@ export default function PropertyReviews({ propertyId }) {
         <div className="tf-container">
           <div className="row">
             <div className="col-12">
-              <div className="text-center">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading reviews...</span>
-                </div>
-                <p className="mt-3">Loading reviews...</p>
+              <div style={{ padding: '40px 20px' }}>
+                <LocationLoader size="medium" message="Loading reviews..." />
               </div>
             </div>
           </div>

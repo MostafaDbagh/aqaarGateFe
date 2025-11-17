@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
+import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -64,11 +65,8 @@ export default function Properties2() {
                   Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
                 </p>
               </div>
-              <div className="text-center">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <p className="mt-3">Loading properties...</p>
+              <div style={{ padding: '40px 20px' }}>
+                <LocationLoader size="medium" message="Loading properties..." />
               </div>
             </div>
           </div>

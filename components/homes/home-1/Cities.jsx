@@ -1,72 +1,53 @@
 import React, { useMemo } from "react";
 import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
-import { useSearchListings } from "@/apis/hooks";
+import LocationLoader from "@/components/common/LocationLoader";
+import { useQuery } from "@tanstack/react-query";
+import { cityAPI } from "@/apis/city";
 import { useRouter } from "next/navigation";
 
 export default function Cities() {
   const router = useRouter();
   
-  const { data: searchResponse, isLoading, isError } = useSearchListings({ 
-    limit: 100, // Limit to 100 to ensure we get all cities
-    sort: 'newest' 
+  // Use new city API - much more efficient than fetching all listings
+  const { data: cityStatsResponse, isLoading, isError, error } = useQuery({
+    queryKey: ['cities', 'stats'],
+    queryFn: () => cityAPI.getCityStats(),
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   
-  // Memoize listings data to prevent unnecessary re-renders
-  // API returns array directly, not wrapped in data property
-  const listings = useMemo(() => {
-    // Handle both array response and wrapped response
-    if (Array.isArray(searchResponse)) {
-      return searchResponse;
+  // Extract cities data from API response
+  const citiesData = useMemo(() => {
+    if (!cityStatsResponse?.data?.cities) {
+      // Log for debugging
+      console.log('Cities API Response:', cityStatsResponse);
+      return [];
     }
-    return searchResponse?.data || [];
-  }, [searchResponse]);
-
-  // Memoize state counts calculation to prevent recalculation on every render
-  // Use city field (primary) or state field (fallback) for backward compatibility
-  const stateCounts = useMemo(() => {
-    return listings.reduce((acc, listing) => {
-      // Use city field (backend uses city), fallback to state for backward compatibility
-      const cityOrState = listing.city || listing.state;
-      if (cityOrState) {
-        acc[cityOrState] = (acc[cityOrState] || 0) + 1;
-      }
-      return acc;
-    }, {});
-  }, [listings]);
-
-  // Function to get the correct image for each Syrian city
-  const getCityImage = (cityName) => {
-    const cityImageMap = {
-      'Aleppo': '/images/cities/aleppo.jpg',
-      'Damascus': '/images/cities/damascus.jpg',
-      'Daraa': '/images/cities/daraa.webp',
-      'Der El Zor': '/images/cities/deralzor.jpg',
-      'Hama': '/images/cities/hama.jpg',
-      'Homs': '/images/cities/Homs.jpg',
-      'Idlib': '/images/cities/idlib.jpg',
-      'Latakia': '/images/cities/latakia.jpeg',
-      'Tartus': '/images/cities/tartous.jpg'
-    };
-    
-    // Return the mapped image or fallback to hero image
-    return cityImageMap[cityName] || '/images/cities/SY.webp';
-  };
+    return cityStatsResponse.data.cities;
+  }, [cityStatsResponse]);
+  
+  // Log error if any
+  if (isError) {
+    console.error('Cities API Error:', error);
+  }
 
   // Memoize locations array to prevent recreation on every render
   const locations = useMemo(() => {
-    const locationsData = Object.entries(stateCounts).map(([state, count], index) => ({
-      id: index + 1,
-      city: state,
-      properties: `${count} Properties`,
-      imageSrc: getCityImage(state), // Use Syrian city images
-      alt: state,
-      width: 400, // Same width for all boxes
-      height: 350 // Same height for all boxes
-    }));
-    
-    return locationsData;
-  }, [stateCounts]);
+    return citiesData
+      .sort((a, b) => b.count - a.count) // Sort by count descending
+      .slice(0, 9) // Show only top 9 cities
+      .map((city, index) => ({
+        id: index + 1,
+        city: city.city || city.displayName,
+        properties: `${city.count} Property${city.count !== 1 ? 's' : ''}`,
+        imageSrc: city.imageSrc || '/images/cities/SY.webp',
+        alt: city.city || city.displayName,
+        width: 400,
+        height: 350
+      }));
+  }, [citiesData]);
 
   // Handle city button click - scroll to properties and trigger search
   const handleCityClick = (e, cityName) => {
@@ -94,11 +75,8 @@ export default function Cities() {
                 Discover beautiful properties across Syria's major cities
               </p>
             </div>
-            <div className="text-center">
-              <div className="spinner-border" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="mt-3">Loading Syrian cities...</p>
+            <div style={{ padding: '40px 20px' }}>
+              <LocationLoader size="medium" message="Loading Syrian cities..." />
             </div>
           </div>
         </div>

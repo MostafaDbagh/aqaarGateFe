@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense, lazy } from "react";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Hero from "@/components/homes/home-1/Hero";
+import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
 import { cleanParams } from "@/utlis/cleanedParams";
 
@@ -20,24 +21,9 @@ const ComponentLoader = ({ name }) => (
     justifyContent: 'center', 
     alignItems: 'center', 
     minHeight: '200px',
-    background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-    backgroundSize: '200% 100%',
-    animation: 'loading 1.5s infinite'
+    padding: '40px 20px'
   }}>
-    <style jsx>{`
-      @keyframes loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
-      }
-    `}</style>
-    <div style={{ 
-      padding: '20px', 
-      borderRadius: '8px', 
-      background: 'rgba(255,255,255,0.9)',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-    }}>
-      Loading {name}...
-    </div>
+    <LocationLoader size="medium" message={`Loading ${name}...`} />
   </div>
 );
 

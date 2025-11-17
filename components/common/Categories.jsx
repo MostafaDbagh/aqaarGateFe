@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import SplitTextAnimation from "./SplitTextAnimation";
-import { listingAPI } from "@/apis/listing";
+import LocationLoader from "./LocationLoader";
+import { categoryAPI } from "@/apis/category";
 
 export default function Categories({
   parentClass = "tf-spacing-1 section-categories pb-0",
@@ -13,83 +14,48 @@ export default function Categories({
   onSearchChange,
   setCategory
 }) {
-  // Get all properties for accurate counting (no pagination)
-  const { data: allListingsResponse } = useQuery({
-    queryKey: ['listings', 'all-count'],
-    queryFn: () => listingAPI.searchListings({ limit: 1000 }), // Get all listings for accurate counts
+  // Use new category API - much more efficient than fetching all listings
+  const { data: categoryStatsResponse, isLoading, isError, error } = useQuery({
+    queryKey: ['categories', 'stats'],
+    queryFn: () => categoryAPI.getCategoryStats(),
     staleTime: 5 * 60 * 1000, // 5 minutes cache
-    refetchOnWindowFocus: false, // Prevent unnecessary refetches
-    refetchOnMount: false, // Prevent refetch on component mount if data exists
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   
-  // Memoize listings data to prevent unnecessary re-renders
-  // API returns array directly, not wrapped in data property
-  const allListings = useMemo(() => {
-    // Handle both array response and wrapped response
-    if (Array.isArray(allListingsResponse)) {
-      return allListingsResponse;
+  // Extract categories data from API response
+  const categoriesData = useMemo(() => {
+    if (!categoryStatsResponse?.data?.categories) {
+      // Log for debugging
+      console.log('Categories API Response:', categoryStatsResponse);
+      return [];
     }
-    return allListingsResponse?.data || [];
-  }, [allListingsResponse]);
+    return categoryStatsResponse.data.categories;
+  }, [categoryStatsResponse]);
+  
+  // Log error if any
+  if (isError) {
+    console.error('Categories API Error:', error);
+  }
 
-  // Memoize categories calculation to prevent recalculation on every render
+  // Memoize categories with icons and formatting
   const categories = useMemo(() => {
-    const propertyTypes = ['Apartment', 'Villa/farms', 'Office', 'Commercial', 'Land', 'Holiday Home'];
     const icons = ['icon-apartment1', 'icon-villa', 'icon-office1', 'icon-commercial', 'icon-land', 'icon-studio'];
     
-    // Debug: Log all property types found in listings
-    if (allListings.length > 0) {
-      const uniqueTypes = [...new Set(allListings.map(p => p.propertyType))];
-      console.log('Categories - Found property types:', uniqueTypes);
-      console.log('Categories - Total listings:', allListings.length);
-    }
-    
-    return propertyTypes.map((type, index) => {
-      const displayName = type === 'Land' ? 'Land/Plot' : type;
-      // Count listings that match the type (case-insensitive and flexible matching)
-      const count = allListings.filter(p => {
-        if (!p.propertyType) return false;
-        const listingType = p.propertyType.trim();
-        const searchType = type.trim();
-        
-        // Exact match
-        if (listingType === searchType) return true;
-        
-        // Case-insensitive match
-        if (listingType.toLowerCase() === searchType.toLowerCase()) return true;
-        
-        // Special handling for Land/Plot
-        if (type === 'Land' && (listingType === 'Land' || listingType === 'Land/Plot' || listingType.toLowerCase() === 'land')) {
-          return true;
-        }
-        
-        // Special handling for Villa/farms
-        if (type === 'Villa/farms' && (listingType.includes('Villa') || listingType.includes('villa') || listingType.includes('Farm') || listingType.includes('farm'))) {
-          return true;
-        }
-        
-        // Special handling for Holiday Home
-        if (type === 'Holiday Home' && (listingType === 'Holiday Home' || listingType === 'Holiday Homes' || listingType.toLowerCase().includes('holiday'))) {
-          return true;
-        }
-        
-        return false;
-      }).length;
-      
-      return {
-        name: displayName,
-        icon: icons[index],
-        count
-      };
-    });
-  }, [allListings]);
+    return categoriesData.map((category, index) => ({
+      name: category.name,
+      displayName: category.displayName || category.name,
+      count: category.count || 0,
+      slug: category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-'),
+      icon: icons[index] || 'icon-apartment1'
+    }));
+  }, [categoriesData]);
 
   // Memoize category click handler to prevent recreation on every render
-  const handleCategoryClick = useCallback((categoryName) => {
-    setCategory(categoryName);
-    // Map display name to actual property type for API
-    const apiPropertyType = categoryName === 'Land/Plot' ? 'Land' : categoryName;
-    onSearchChange({ propertyType: apiPropertyType });
+  const handleCategoryClick = useCallback((category) => {
+    setCategory(category.name);
+    // Use the actual property type name from API
+    onSearchChange({ propertyType: category.name });
   }, [setCategory, onSearchChange]);
 
   // Memoize swiper breakpoints to prevent recreation
@@ -99,6 +65,28 @@ export default function Categories({
     768: { slidesPerView: 4, spaceBetween: 40 },
     1200: { slidesPerView: 6, spaceBetween: 10 },
   }), []);
+
+  // Show loading state with spinner
+  if (isLoading) {
+    return (
+      <section className={parentClass}>
+        <div className="tf-container">
+          <div className="heading-section text-center mb-48">
+            <h2 className="title split-text effect-right">
+              <SplitTextAnimation text="Try Searching For" />
+            </h2>
+            <p className="text-1 split-text split-lines-transform">
+              Alot of Featured homes enthusiasts just like you have found their
+              dream home
+            </p>
+          </div>
+          <div style={{ padding: '40px 20px' }}>
+            <LocationLoader size="medium" message="Loading categories..." />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={parentClass}>
@@ -133,26 +121,33 @@ export default function Categories({
               dynamicBullets: false,
             }}
           >
-            {categories.map((category, index) => (
-              <SwiperSlide className="swiper-slide" key={index}>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick(category.name)}
-                  className={`categories-item ${
-                    (searchParams.propertyType === category.name || 
-                     (category.name === 'Land/Plot' && searchParams.propertyType === 'Land')) ? "active" : ""
-                  }`}
-                >
-                  <div className="icon-box">
-                    <i className={`icon ${category.icon}`}></i>
-                  </div>
-                  <div className="content text-center">
-                    <h5 className="category-title-h5">{category.name}</h5>
-                    <p className="mt-4 text-1">{category.count} Property</p>
-                  </div>
-                </button>
+            {categories.length === 0 ? (
+              <SwiperSlide className="swiper-slide">
+                <div className="text-center p-4">No categories available</div>
               </SwiperSlide>
-            ))}
+            ) : (
+              categories.map((category, index) => (
+                <SwiperSlide className="swiper-slide" key={index}>
+                  <button
+                    type="button"
+                    onClick={() => handleCategoryClick(category)}
+                    disabled={isLoading}
+                    className={`categories-item ${
+                      (searchParams.propertyType === category.name || 
+                       (category.displayName === 'Land/Plot' && searchParams.propertyType === 'Land')) ? "active" : ""
+                    }`}
+                  >
+                    <div className="icon-box">
+                      <i className={`icon ${category.icon}`}></i>
+                    </div>
+                    <div className="content text-center">
+                      <h5 className="category-title-h5">{category.displayName}</h5>
+                      <p className="mt-4 text-1">{category.count} Property{category.count !== 1 ? 's' : ''}</p>
+                    </div>
+                  </button>
+                </SwiperSlide>
+              ))
+            )}
           </Swiper>
           
           {/* Pagination dots for mobile and tablet */}

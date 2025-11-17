@@ -2,6 +2,7 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
 import { getPropertyImage, getPropertyTitle } from "@/utlis/propertyHelpers";
 import styles from "./RelatedProperties.module.css";
@@ -62,11 +63,8 @@ export default function RelatedProperties({ currentProperty }) {
               <div className="heading-section mb-32">
                 <h2 className="title">Similar Properties</h2>
               </div>
-              <div className="text-center">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <p className="mt-3">Loading similar properties...</p>
+              <div style={{ padding: '40px 20px' }}>
+                <LocationLoader size="medium" message="Loading similar properties..." />
               </div>
             </div>
           </div>
