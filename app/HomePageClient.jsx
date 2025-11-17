@@ -59,12 +59,17 @@ export default function HomePageClient() {
 
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [category, setCategory] = useState("");
-  const [params, setParams] = useState(null);
+  // Initialize with default limit: 12 for home page performance
+  const [params, setParams] = useState({ limit: 12, sort: 'newest' });
 
   useEffect(() => {
     if (triggerSearch || category) {
       const cleaned = cleanParams(searchParams);
-      setParams(cleaned);
+      // Add limit: 12 for home page to improve loading performance
+      setParams({ ...cleaned, limit: 12, sort: cleaned.sort || 'newest' });
+    } else {
+      // Default: show only 12 properties on home page when no search
+      setParams({ limit: 12, sort: 'newest' });
     }
   }, [searchParams, triggerSearch, category]);
 

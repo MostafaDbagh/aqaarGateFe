@@ -10,6 +10,7 @@ import { amenitiesList } from "@/constants/amenities";
 import logger from "@/utlis/logger";
 import styles from "./AddProperty.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import { sanitizeInput, validateFileUpload } from "@/utils/security";
 
 export default function AddProperty() {
   const router = useRouter();
@@ -76,9 +77,16 @@ export default function AddProperty() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    
+    // Sanitize text inputs to prevent XSS
+    const sanitizedValue = type === 'checkbox' ? checked : 
+                          (type === 'text' || type === 'textarea' || type === 'email') 
+                            ? sanitizeInput(value) 
+                            : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: sanitizedValue
     }));
     
     // Clear error when user starts typing
@@ -107,32 +115,35 @@ export default function AddProperty() {
       return;
     }
 
-    // Validate file types
-    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
+    // Validate and sanitize each file using security utility
+    const validFiles = [];
+    for (const file of files) {
+      const validation = validateFileUpload(file, {
+        maxSize: 5 * 1024 * 1024, // 5MB
+        allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
+        maxFiles: 10
+      });
+      
+      if (!validation.valid) {
+        setToast({ type: "error", message: validation.error });
+        continue;
+      }
+      
+      validFiles.push(file);
+    }
     
-    if (invalidFiles.length > 0) {
-      setToast({ type: "error", message: "Only JPEG, PNG, and WebP images are allowed" });
+    if (validFiles.length === 0) {
       return;
     }
 
-    // Validate file sizes (max 5MB per image)
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    const oversizedFiles = files.filter(file => file.size > maxSize);
-    
-    if (oversizedFiles.length > 0) {
-      setToast({ type: "error", message: "Each image must be less than 5MB" });
-      return;
-    }
-
-    const newImages = [...images, ...files];
+    const newImages = [...images, ...validFiles];
     setImages(newImages);
 
     // Create preview URLs
-    const newPreviews = files.map(file => URL.createObjectURL(file));
+    const newPreviews = validFiles.map(file => URL.createObjectURL(file));
     setImagePreview(prev => [...prev, ...newPreviews]);
     
-    setToast({ type: "success", message: `${files.length} image(s) added successfully` });
+    setToast({ type: "success", message: `${validFiles.length} image(s) added successfully` });
   };
 
   const removeImage = (index) => {

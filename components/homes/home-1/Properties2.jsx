@@ -58,7 +58,7 @@ export default function Properties2() {
             <div className="col-12">
               <div className="heading-section text-center mb-48">
                 <h2 className="title split-text effect-right">
-                  <SplitTextAnimation text="Holiday Homes Listings" />
+                  Holiday Homes Listings
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
                   Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
@@ -85,8 +85,8 @@ export default function Properties2() {
           <div className="row">
             <div className="col-12">
               <div className="heading-section text-center mb-48">
-                <h2 className="title split-text effect-right">
-                  <SplitTextAnimation text="Holiday Homes Listings" />
+                <h2 className="title">
+                  Holiday Homes Listings
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
                   Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
@@ -114,7 +114,7 @@ export default function Properties2() {
             <div className="col-12">
               <div className="heading-section text-center mb-48">
                 <h2 className="title split-text effect-right">
-                  <SplitTextAnimation text="Holiday Homes Listings" />
+                  Holiday Homes Listings
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
                   Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
@@ -140,7 +140,7 @@ export default function Properties2() {
           <div className="col-12">
             <div className="heading-section text-center mb-48">
               <h2 className="title split-text effect-right">
-                <SplitTextAnimation text="Holiday Homes Listings" />
+                Holiday Homes Listings
               </h2>
               <p className="text-1 split-text split-lines-transform">
                 Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.

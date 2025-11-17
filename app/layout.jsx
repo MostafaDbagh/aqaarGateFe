@@ -264,6 +264,12 @@ export default function RootLayout({ children }) {
         {/* Cache Control */}
         <meta httpEquiv="Cache-Control" content="public, max-age=31536000" />
         <meta httpEquiv="Expires" content="31536000" />
+        
+        {/* Security Headers - Additional layer */}
+        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       </head>
       <body className="popup-loader">
         <StructuredData />

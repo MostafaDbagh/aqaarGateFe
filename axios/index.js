@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { getCSRFToken, generateCSRFToken, rateLimiter } from '@/utils/security'
+
 const localhost = 'http://localhost:5500/api'
 const heroku = 'https://proty-api-mostafa-56627d8ca9aa.herokuapp.com/api'
 const render ='https://aqaargatebe2.onrender.com/api'
@@ -28,6 +30,17 @@ Axios.interceptors.request.use(
     // Set baseURL dynamically based on environment
     config.baseURL = getBaseURL();
     
+    // Rate limiting check (client-side protection)
+    if (typeof window !== 'undefined') {
+      const userIdentifier = localStorage.getItem('user') 
+        ? JSON.parse(localStorage.getItem('user')).email || 'anonymous'
+        : 'anonymous';
+      
+      if (!rateLimiter.check(userIdentifier, 30, 60000)) { // 30 requests per minute
+        return Promise.reject(new Error('Too many requests. Please try again later.'));
+      }
+    }
+    
     // Get token from localStorage or cookies
     const token = localStorage.getItem('token') || 
                   document.cookie
@@ -37,6 +50,17 @@ Axios.interceptors.request.use(
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    // Add CSRF token for state-changing requests
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(config.method?.toUpperCase())) {
+      let csrfToken = getCSRFToken();
+      if (!csrfToken) {
+        csrfToken = generateCSRFToken();
+      }
+      if (csrfToken) {
+        config.headers['X-CSRF-Token'] = csrfToken;
+      }
     }
     
     // If sending FormData, remove Content-Type header to let axios set it automatically with boundary

@@ -105,7 +105,7 @@ export default function Categories({
       <div className="tf-container">
         <div className="heading-section text-center mb-48">
           <h2 className="title split-text effect-right">
-            <SplitTextAnimation text="Try Searching For" />
+            Try Searching For
           </h2>
           <p className="text-1 split-text split-lines-transform">
             Alot of Featured homes enthusiasts just like you have found their

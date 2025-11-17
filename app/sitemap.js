@@ -1,7 +1,7 @@
 async function getProperties() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
-    const response = await fetch(`${apiUrl}/listing/search?limit=10000`, {
+    const response = await fetch(`${apiUrl}/listing/search?limit=100`, {
       next: { revalidate: 3600 } // Revalidate every hour
     });
     

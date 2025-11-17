@@ -9,10 +9,19 @@ export default function SplitTextAnimation({
 
   useEffect(() => {
     setIsClient(true);
-    // Small delay to ensure hydration is complete
+    // Delay to ensure hydration is complete and DOM is ready
+    // Also ensures WOW.js has initialized
     const timer = setTimeout(() => {
       setMounted(true);
-    }, 0);
+      // Force re-render to apply animated class
+      // Also trigger animation by adding class to DOM element
+      const elements = document.querySelectorAll('.splitting');
+      elements.forEach(el => {
+        if (!el.classList.contains('animated')) {
+          el.classList.add('animated');
+        }
+      });
+    }, 150); // Delay to ensure WOW.js and DOM are ready
     return () => clearTimeout(timer);
   }, []);
 
@@ -24,20 +33,23 @@ export default function SplitTextAnimation({
   const baseStyle = {
     "--word-total": wordCount,
     "--char-total": charCount,
-    visibility: "hidden", // Start hidden on both server and client to avoid hydration mismatch
   };
 
-  // Only show after hydration completes
-  const finalStyle = mounted
-    ? { ...baseStyle, visibility: "visible" }
-    : baseStyle;
+  // Build className with 'animated' class when mounted
+  // Add 'animated' class immediately on client side to trigger animation
+  const className = `wow charsAnimIn words chars splitting${mounted && isClient ? ' animated' : ''}`;
+  
+  // Style to ensure visibility
+  const style = {
+    ...baseStyle,
+  };
 
   return (
     <>
       <span
-        className="wow charsAnimIn words chars splitting"
+        className={className}
         aria-hidden="true"
-        style={finalStyle}
+        style={style}
         suppressHydrationWarning
       >
         {text
@@ -63,7 +75,11 @@ export default function SplitTextAnimation({
                       key={i2}
                       className="char"
                       data-char={elm2}
-                      style={{ "--char-index": charIndex }}
+                      style={{ 
+                        "--char-index": charIndex,
+                        // Fallback: show text even if animation hasn't started
+                        opacity: mounted ? undefined : 1
+                      }}
                     >
                       {elm2}
                     </span>

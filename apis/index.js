@@ -10,6 +10,8 @@ import pointAPI from './points';
 import { messageAPI } from './message';
 import { newsletterAPI } from './newsletter';
 import dashboardAPI from './dashboard';
+import categoryAPI from './category';
+import cityAPI from './city';
 
 // Export all APIs
 export {
@@ -23,7 +25,9 @@ export {
   pointAPI,
   messageAPI,
   newsletterAPI,
-  dashboardAPI
+  dashboardAPI,
+  categoryAPI,
+  cityAPI
 };
 
 // Default export with all APIs
@@ -38,7 +42,9 @@ export default {
   points: pointAPI,
   message: messageAPI,
   newsletter: newsletterAPI,
-  dashboard: dashboardAPI
+  dashboard: dashboardAPI,
+  category: categoryAPI,
+  city: cityAPI
 };
 
 // Individual exports for convenience
@@ -53,3 +59,5 @@ export const points = pointAPI;
 export const message = messageAPI;
 export const newsletter = newsletterAPI;
 export const dashboard = dashboardAPI;
+export const category = categoryAPI;
+export const city = cityAPI;
