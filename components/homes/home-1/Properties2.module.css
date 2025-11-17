@@ -1,6 +1,7 @@
-/* Holiday Homes Card - Clean Layout */
+/* Holiday Homes Card - Responsive Layout */
 .propertyCard {
   display: flex;
+  flex-direction: row;
   padding: 12px;
   width: 500px;
   min-height: 400px;
@@ -12,6 +13,26 @@
   transition: all 0.3s ease;
   flex-shrink: 0;
   margin: 0 10px;
+}
+
+@media (max-width: 768px) {
+  .propertyCard {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    border-radius: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .propertyCard:hover {
+    transform: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .propertyCard:hover {
@@ -27,12 +48,42 @@
   flex-direction: column;
 }
 
-/* Left Image Section - Fixed 300px x 220px */
+@media (max-width: 768px) {
+  .leftSection {
+    width: 100%;
+    order: 1;
+  }
+}
+
+/* Image Section */
 .imageSection {
   width: 300px;
   min-height: 240px;
   position: relative;
   overflow: hidden;
+  border-radius: 8px 8px 0 0;
+}
+
+@media (max-width: 768px) {
+  .imageSection {
+    width: 100%;
+    min-height: 280px;
+    height: 280px;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .imageSection {
+    min-height: 240px;
+    height: 240px;
+  }
+}
+
+.propertyImage {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .imageSection img {
@@ -53,8 +104,17 @@
   top: 12px;
   left: 12px;
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   z-index: 2;
+}
+
+@media (max-width: 480px) {
+  .badges {
+    top: 8px;
+    left: 8px;
+    gap: 6px;
+  }
 }
 
 .badgeRent {
@@ -65,6 +125,18 @@
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badgeSale {
+  background: #10b981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .badgeHoliday {
@@ -75,6 +147,29 @@
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .badgeRent,
+  .badgeSale,
+  .badgeHoliday {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .badgeRent,
+  .badgeSale,
+  .badgeHoliday {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+}
+
+.statusBadge {
+  /* Status badge will use badgeRent or badgeSale class */
 }
 
 /* Action Buttons */
@@ -87,31 +182,16 @@
   z-index: 2;
 }
 
-.quickViewBtn {
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.quickViewBtn:hover {
-  background: #f1913d;
-  color: white;
-}
-
-.quickViewBtn i {
-  font-size: 14px;
+@media (max-width: 480px) {
+  .actionButtons {
+    top: 8px;
+    right: 8px;
+  }
 }
 
 /* Right Content Section */
 .contentSection {
-  flex-shrink: 0;
+  flex: 1;
   padding: 0 18px;
   display: flex;
   flex-direction: column;
@@ -119,11 +199,35 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .contentSection {
+    padding: 0;
+    width: 100%;
+    background: white;
+    order: 2;
+  }
+}
+
 /* Title Section - Below Image */
 .titleSection {
   padding: 16px 20px;
   background: #f8fafc;
   border-bottom: 1px solid #e5e7eb;
+}
+
+@media (max-width: 768px) {
+  .titleSection {
+    padding: 16px;
+    background: white;
+    border-bottom: 1px solid #f0f0f0;
+    order: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleSection {
+    padding: 14px;
+  }
 }
 
 .propertyTitle {
@@ -139,6 +243,19 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .propertyTitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .propertyTitle {
+    font-size: 16px;
+  }
+}
+
 .propertyLocation {
   font-size: 13px;
   color: #6b7280;
@@ -148,9 +265,109 @@
   gap: 6px;
 }
 
+@media (max-width: 768px) {
+  .propertyLocation {
+    font-size: 13px;
+  }
+}
+
 .propertyLocation i {
   color: #f1913d;
   font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Price and Details Section */
+.priceDetailsSection {
+  padding: 16px 20px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e5e7eb;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .priceDetailsSection {
+    padding: 16px;
+    background: white;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    flex-direction: row;
+    align-items: center;
+    order: 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .priceDetailsSection {
+    padding: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
+
+.price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f1913d;
+  margin: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .price {
+    font-size: 22px;
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .price {
+    font-size: 20px;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.detailsBtn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid #f1913d;
+  color: #f1913d;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: center;
+  display: inline-block;
+}
+
+.detailsBtn:hover {
+  background: #f1913d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(241, 145, 61, 0.3);
+}
+
+@media (max-width: 768px) {
+  .detailsBtn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detailsBtn {
+    width: 100%;
+    padding: 12px 20px;
+  }
 }
 
 /* Details Section */
@@ -166,6 +383,23 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .detailsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 16px;
+    order: 4;
+  }
+}
+
+@media (max-width: 480px) {
+  .detailsGrid {
+    padding: 14px;
+    gap: 8px;
+  }
+}
+
 .detailItem {
   display: flex;
   align-items: center;
@@ -178,11 +412,39 @@
   min-height: 40px;
 }
 
+@media (max-width: 768px) {
+  .detailItem {
+    padding: 12px;
+    font-size: 12px;
+    min-height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detailItem {
+    padding: 10px;
+    font-size: 11px;
+    min-height: 45px;
+  }
+}
+
 .detailItem i {
   color: #f1913d;
   font-size: 16px;
   margin-right: 8px;
   flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .detailItem i {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detailItem i {
+    font-size: 16px;
+  }
 }
 
 .detailItem span {
@@ -192,6 +454,8 @@
   align-items: center;
   gap: 4px;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .detailItem strong {
@@ -201,46 +465,60 @@
   margin-left: 4px;
 }
 
-/* Price and Details Section - Below text on left */
-.priceDetailsSection {
-  padding: 16px 20px;
-  background: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #e5e7eb;
+@media (max-width: 768px) {
+  .detailItem strong {
+    font-size: 15px;
+  }
 }
 
-.price {
-  font-size: 24px;
-  font-weight: 700;
-  color: #f1913d;
-  margin: 0;
+@media (max-width: 480px) {
+  .detailItem strong {
+    font-size: 13px;
+  }
 }
 
-.detailsBtn {
-  padding: 10px 20px;
-  background: transparent;
-  border: 2px solid #f1913d;
-  color: #f1913d;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.detailsBtn:hover {
-  background: #f1913d;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(241, 145, 61, 0.3);
-}
-
-/* Action Buttons Section - Tab Style */
+/* Action Buttons Section */
 .actionButtonsSection {
   margin-top: 16px;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .actionButtonsSection {
+    margin-top: 0;
+    padding: 16px;
+    background: #f8fafc;
+    border-top: 1px solid #f0f0f0;
+    order: 5;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionButtonsSection {
+    padding: 14px;
+  }
+}
+
+.contactAgentTitle {
+  font-weight: bold;
+  font-style: oblique;
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+@media (max-width: 768px) {
+  .contactAgentTitle {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contactAgentTitle {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
 }
 
 .actionButtonsVertical {
@@ -250,7 +528,14 @@
   width: 100%;
 }
 
-/* Action Tab - Same style as detailItem tabs */
+@media (max-width: 768px) {
+  .actionButtonsVertical {
+    margin-top: 4px;
+    font-weight: 600;
+  }
+}
+
+/* Action Tab */
 .actionTab {
   display: flex;
   align-items: center;
@@ -276,6 +561,20 @@
   box-shadow: 0 4px 12px rgba(241, 145, 61, 0.3);
 }
 
+@media (max-width: 768px) {
+  .actionTab {
+    font-size: 13px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionTab {
+    padding: 11px;
+    font-size: 12px;
+  }
+}
+
 .actionTab i {
   color: #f1913d;
   font-size: 16px;
@@ -296,6 +595,8 @@
   gap: 4px;
   flex: 1;
   transition: color 0.3s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .actionTab:hover span {
@@ -314,10 +615,21 @@
   color: white;
 }
 
+.phone-number-text {
+  margin-left: 0;
+}
+
 /* Swiper Container and Slide Styling */
 .wrap-properties-sw .swiper {
   padding: 0 20px !important;
   margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .wrap-properties-sw .swiper {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
 }
 
 .swiper-slide {
@@ -327,9 +639,21 @@
   box-sizing: border-box !important;
 }
 
-/* Ensure proper spacing between slides */
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
 .swiper-slide + .swiper-slide {
   margin-left: 20px !important;
+}
+
+@media (max-width: 768px) {
+  .swiper-slide + .swiper-slide {
+    margin-left: 0 !important;
+  }
 }
 
 /* Pagination Dots Styling */
@@ -370,7 +694,6 @@
   transform: scale(1.2) !important;
 }
 
-/* Additional overrides for all possible Swiper pagination classes */
 .spd-properties .swiper-pagination-bullet-active-main,
 .spd-properties .swiper-pagination-bullet-active,
 .spd-properties .swiper-pagination-bullet-active-prev,
@@ -380,7 +703,6 @@
   transform: scale(1.2) !important;
 }
 
-/* Global Swiper pagination override */
 .swiper-pagination-bullet-active {
   background: #f1913d !important;
   background-color: #f1913d !important;
@@ -396,49 +718,19 @@
   opacity: 0.7 !important;
 }
 
-/* Additional utility classes */
-.property-image-cover {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
+/* Utility Classes */
+.loaderContainer {
+  padding: 40px 20px;
 }
 
-.contact-agent-title {
-  margin-bottom: 6px !important;
-  font-weight: 600 !important;
-}
-
-.phone-number-text {
-  margin-left: 0 !important;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
-  .propertyCard {
-    flex-direction: column;
+  .loaderContainer {
+    padding: 30px 16px;
   }
-  
-  .leftSection {
-    width: 100%;
-  }
-  
-  .imageSection {
-    width: 100%;
-    height: 200px;
-  }
-  
-  .detailsGrid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  
-  .priceDetailsSection {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-  
-  .detailsBtn {
-    text-align: center;
+}
+
+@media (max-width: 480px) {
+  .loaderContainer {
+    padding: 20px 12px;
   }
 }

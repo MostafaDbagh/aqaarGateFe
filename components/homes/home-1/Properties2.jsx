@@ -65,7 +65,7 @@ export default function Properties2() {
                   Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
                 </p>
               </div>
-              <div style={{ padding: '40px 20px' }}>
+              <div className={styles.loaderContainer}>
                 <LocationLoader size="medium" message="Loading properties..." />
               </div>
             </div>
@@ -175,6 +175,11 @@ export default function Properties2() {
               >
                 {listings.map((property) => {
                   const imageSrc = getImageSource(property);
+                  const status = property.status?.toLowerCase();
+                  const isRent = status === 'rent';
+                  const isSale = status === 'sale';
+                  const displayStatus = isRent ? 'For Rent' : isSale ? 'For Sale' : 'For Rent';
+                  
                   return (
                   <SwiperSlide key={property._id}>
                     <div className={`${styles.propertyCard}`}>
@@ -183,7 +188,7 @@ export default function Properties2() {
                         <div className={styles.imageSection}>
                           <Link href={`/property-detail/${property._id}`}>
                             <Image
-                              className="lazyload property-image-cover"
+                              className={`lazyload property-image-cover ${styles.propertyImage}`}
                               alt={property.propertyKeyword || property.propertyType || "Property"}
                               src={imageSrc || "/images/section/box-house-2.jpg"}
                               fill
@@ -191,14 +196,15 @@ export default function Properties2() {
                               onError={(e) => {
                                 e.currentTarget.src = "/images/section/box-house-2.jpg";
                               }}
-                              style={{ objectFit: "cover" }}
                             />
                           </Link>
                           
                           {/* Badges */}
                           <div className={styles.badges}>
-                            <span className={styles.badgeRent}>
-                              For Rent
+                            <span 
+                              className={`${isRent ? styles.badgeRent : styles.badgeSale} ${styles.statusBadge}`}
+                            >
+                              {displayStatus}
                             </span>
                             <span className={styles.badgeHoliday}>
                               🏖️ Holiday Home
@@ -260,33 +266,43 @@ export default function Properties2() {
                         
                         {/* Action Buttons - Tab Style */}
                         <div className={styles.actionButtonsSection}>
-                          <p className="contact-agent-title" style={{fontWeight:'bold',fontStyle:'oblique',fontSize:'12px'}}>Contact Agent</p>
-                          <div className={styles.actionButtonsVertical} style={{ marginTop: '4px',fontWeight: '600' }}>
+                          <p className={`${styles.contactAgentTitle} contact-agent-title`}>Contact Agent</p>
+                          <div className={styles.actionButtonsVertical}>
                             <button 
                               className={`${styles.actionTab} ${styles.callTab}`}
                               onClick={() => {
-                                if (property.agentNumber) {
-                                  window.open(`tel:${property.agentNumber}`, '_self');
+                                const phoneNumber = property.agentNumber || property.agent?.phoneNumber || property.agent?.phone;
+                                if (phoneNumber) {
+                                  window.open(`tel:${phoneNumber}`, '_self');
                                 } else {
                                   alert('Phone number not available');
                                 }
                               }}
                             >
                               <i className="icon-phone-1" />
-                              <span className="phone-number-text"><strong>+963949112178</strong></span>
+                              <span className="phone-number-text">
+                                <strong>
+                                  {property.agentNumber || property.agent?.phoneNumber || property.agent?.phone || 'Call Agent'}
+                                </strong>
+                              </span>
                             </button>
                             <button 
                               className={`${styles.actionTab} ${styles.emailTab}`}
                               onClick={() => {
-                                if (property.agentEmail) {
-                                  window.open(`mailto:${property.agentEmail}`, '_self');
+                                const email = property.agentEmail || property.agent?.email;
+                                if (email) {
+                                  window.open(`mailto:${email}`, '_self');
                                 } else {
                                   alert('Email not available');
                                 }
                               }}
                             >
                               <i className="icon-mail" />
-                              <span><strong>Agent</strong></span>
+                              <span>
+                                <strong>
+                                  {property.agentEmail || property.agent?.email || 'Email Agent'}
+                                </strong>
+                              </span>
                             </button>
                           </div>
                         </div>

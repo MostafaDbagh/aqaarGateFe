@@ -22,6 +22,7 @@ export const Axios = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Include credentials (cookies) in CORS requests
 })
 
 // Request interceptor to set baseURL dynamically and add auth token
@@ -75,12 +76,33 @@ Axios.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle auth errors
+// Response interceptor to handle auth errors and CORS issues
 Axios.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
+    // Handle CORS errors
+    if (!error.response && error.message && (
+      error.message.includes('Network Error') || 
+      error.message.includes('CORS') ||
+      error.message.includes('Failed to fetch')
+    )) {
+      console.error('[CORS Error]', {
+        message: error.message,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL,
+        method: error.config?.method
+      });
+      
+      // Return a more descriptive error
+      return Promise.reject({
+        ...error,
+        isCorsError: true,
+        message: 'Network error: Unable to connect to the server. Please check your internet connection and try again.',
+      });
+    }
+    
     // Only redirect to login for specific authentication endpoints
     // Don't redirect for listing operations to avoid disrupting user workflow
     if (error.response?.status === 401) {
@@ -96,6 +118,18 @@ Axios.interceptors.response.use(
         if (typeof window !== 'undefined') {
           window.location.href = '/';
         }
+      }
+    }
+    
+    // Handle CORS-related status codes
+    if (error.response?.status === 0 || error.response?.status === 403) {
+      const url = error.config?.url || '';
+      if (url && !url.includes('/auth/')) {
+        console.warn('[CORS Warning]', {
+          status: error.response?.status,
+          url: error.config?.url,
+          origin: typeof window !== 'undefined' ? window.location.origin : 'unknown'
+        });
       }
     }
     

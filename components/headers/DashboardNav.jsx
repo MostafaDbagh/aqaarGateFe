@@ -118,11 +118,24 @@ export default function DashboardNav({ color = "" }) {
         className={`menu-user ${isLoggedIn ? 'dashboard-nav-menu' : 'dashboard-nav-menu-hidden'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Dashboard - Only for logged in agents */}
-        {isLoggedIn && isAgentUser && (
+        {/* Dashboard - For all logged in users (disabled on mobile only) */}
+        {isLoggedIn && (
           <Link 
-            className="dropdown-item" 
-            href={`/dashboard`}
+            className="dropdown-item dashboard-disabled-mobile"
+            href={isAgentUser ? `/dashboard` : '#'}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px) or if not an agent
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+              if (!isAgentUser) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -133,11 +146,19 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* My Profile - For ALL logged in users */}
+        {/* My Profile - For ALL logged in users (disabled on mobile only) */}
         {isLoggedIn && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/my-profile`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -148,11 +169,19 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* My Package - Only for logged in agents */}
+        {/* My Package - Only for logged in agents (disabled on mobile only) */}
         {isLoggedIn && isAgentUser && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/my-package`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -163,11 +192,19 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* My Favorites - For ALL logged in users */}
+        {/* My Favorites - For ALL logged in users (disabled on mobile only) */}
         {isLoggedIn && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/my-favorites`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -177,11 +214,19 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* Reviews - Only for logged in agents */}
+        {/* Reviews - Only for logged in agents (disabled on mobile only) */}
         {isLoggedIn && isAgentUser && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/review`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -192,11 +237,19 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* Messages - Only for logged in agents */}
+        {/* Messages - Only for logged in agents (disabled on mobile only) */}
         {isLoggedIn && isAgentUser && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/messages`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -206,16 +259,24 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* Make me Agent - Only for regular users (not agents) */}
+        {/* Make me Agent - Only for regular users (not agents) (disabled on mobile only) */}
         {isLoggedIn && !isAgentUser && (
           <button 
             type="button"
-            className="dropdown-item dashboard-nav-button" 
-            onClick={handleMakeAgent}
+            className="dropdown-item dashboard-nav-button dashboard-disabled-mobile" 
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+              // On desktop, call the original handler
+              handleMakeAgent(e);
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db',
-              cursor: 'pointer',
               borderRadius: '24px'
             }}
           >
@@ -224,11 +285,19 @@ export default function DashboardNav({ color = "" }) {
           </button>
         )}
 
-        {/* My Properties - Only for logged in agents */}
+        {/* My Properties - Only for logged in agents (disabled on mobile only) */}
         {isLoggedIn && isAgentUser && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/my-property`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'
@@ -239,11 +308,19 @@ export default function DashboardNav({ color = "" }) {
           </Link>
         )}
 
-        {/* Add Property - Only for logged in agents */}
+        {/* Add Property - Only for logged in agents (disabled on mobile only) */}
         {isLoggedIn && isAgentUser && (
           <Link 
-            className="dropdown-item" 
+            className="dropdown-item dashboard-disabled-mobile" 
             href={`/add-property`}
+            onClick={(e) => {
+              // Disable on mobile (screen width <= 768px)
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }
+            }}
             style={{
               padding: '14px 12px',
               border: '1px solid #d1d5db'

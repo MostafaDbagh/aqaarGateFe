@@ -350,32 +350,7 @@ export default function Faqs() {
               </ul>
             </div>
           </div>
-          <div className="col-xl-4 col-lg-5">
-            <div className="tf-sidebar sticky-sidebar">
-         
-              <div className="sidebar-ads">
-                <div className="image-wrap">
-                  <Image
-                    className="lazyload"
-                    data-src="/images/blog/ads.jpg"
-                    alt="FAQ illustration"
-                    width={400}
-                    height={470}
-                    src="/images/blog/ads.jpg"
-                  />
-                </div>
-                <div className="logo relative z-5">
-                  <Image
-                    alt="FAQ illustration"
-                    width={272}
-                    height={85}
-                    src="/images/logo/logo-2@2x.png"
-                  />
-                </div>
-    
-              </div>
-            </div>
-          </div>
+  
         </div>
       </div>
     </section>
