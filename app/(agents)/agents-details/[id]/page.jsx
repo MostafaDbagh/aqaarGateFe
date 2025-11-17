@@ -6,8 +6,8 @@ import Header1 from "@/components/headers/Header1";
 import React from "react";
 
 export const metadata = {
-  title: "Agents Details || Proty - Real Estate React Nextjs Template",
-  description: "Proty - Real Estate React Nextjs Template",
+  title: "Agents Details || AqaarGate - Real Estate React Nextjs Template",
+  description: "AqaarGate - Real Estate React Nextjs Template",
 };
 
 export default async function page({ params }) {

@@ -6,8 +6,8 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-  title: "Page Not Found || Proty - Real Estate React Nextjs Template",
-  description: "Proty - Real Estate React Nextjs Template",
+  title: "Page Not Found || AqaarGate - Real Estate React Nextjs Template",
+  description: "AqaarGate - Real Estate React Nextjs Template",
 };
 export default function page() {
   return (

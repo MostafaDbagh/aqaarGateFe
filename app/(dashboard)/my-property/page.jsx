@@ -3,8 +3,8 @@ import RouteGuard from "@/components/common/RouteGuard";
 import React from "react";
 
 export const metadata = {
-  title: "My Property || Proty - Real Estate React Nextjs Template",
-  description: "Proty - Real Estate React Nextjs Template",
+  title: "My Property || AqaarGate - Real Estate React Nextjs Template",
+  description: "AqaarGate - Real Estate React Nextjs Template",
 };
 export default function page() {
   return (

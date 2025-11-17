@@ -1,4 +1,6 @@
 export default function PerformanceOptimization() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+  
   // Performance optimization meta tags
   const performanceMetaTags = `
     <!-- Performance Optimization -->
@@ -37,19 +39,19 @@ export default function PerformanceOptimization() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "AqaarGate Real Estate",
-    "url": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com",
+    "url": baseUrl,
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com/property-list?search={search_term_string}"
+        "urlTemplate": `${baseUrl}/property-list?search={search_term_string}`
       },
       "query-input": "required name=search_term_string"
     },
     "sameAs": [
-      "https://www.facebook.com/protyrealestate",
-      "https://www.twitter.com/protyrealestate",
-      "https://www.instagram.com/protyrealestate"
+      "https://www.facebook.com/aqaargate",
+      "https://www.twitter.com/aqaargate",
+      "https://www.instagram.com/aqaargate"
     ]
   };
 

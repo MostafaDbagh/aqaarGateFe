@@ -22,7 +22,7 @@ export const metadata = {
   openGraph: {
     title: "About Us - SyProperty | Ambitious Young Syrians Showcasing Syria's Real Estate",
     description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/about-us',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/about-us`,
   },
   twitter: {
     card: 'summary_large_image',

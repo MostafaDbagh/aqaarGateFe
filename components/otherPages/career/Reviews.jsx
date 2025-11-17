@@ -22,7 +22,7 @@ export default function Reviews() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  Reviews from employees working at Proty
+                  Reviews from employees working at AqaarGate
                 </h2>
                 <div
                   className="description mb-32 wow animate__fadeInUp animate__animated"

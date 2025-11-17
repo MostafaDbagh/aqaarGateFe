@@ -22,7 +22,7 @@ export const metadata = {
     title: "Syria & Lattakia Properties – Full-Width List | Buy & Rent Homes",
     description:
       "Browse houses, apartments, and holiday homes for sale and rent. Use filters to find the perfect property in Lattakia and Syria.",
-    url: "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/property-list-full-width",
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list-full-width`,
     images: [
       { url: "/images/section/property-grid-bg.jpg", width: 1200, height: 630, alt: "Property Listings" },
     ],
@@ -35,7 +35,7 @@ export const metadata = {
     images: ["/images/section/property-grid-bg.jpg"],
   },
   alternates: {
-    canonical: "https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/property-list-full-width",
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list-full-width`,
   },
 };
 export default function page() {

@@ -171,14 +171,14 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com',
     siteName: 'AqaarGate Real Estate',
     title: 'AqaarGate Real Estate - Find Your Dream Property',
     description: 'Discover premium properties for sale and rent. Expert guidance and personalized service for all your real estate needs.',

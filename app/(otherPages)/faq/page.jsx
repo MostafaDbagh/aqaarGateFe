@@ -32,7 +32,7 @@ export const metadata = {
   openGraph: {
     title: "Syria Real Estate FAQ - Common Questions About Property in Lattakia",
     description: "Find answers to frequently asked questions about buying, selling, and renting properties in Syria and Lattakia. Expert guidance on real estate transactions.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/faq',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/faq`,
     images: [
       {
         url: '/images/section/faq-bg.jpg',
@@ -49,7 +49,7 @@ export const metadata = {
     images: ['/images/section/faq-bg.jpg'],
   },
   alternates: {
-    canonical: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/faq',
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/faq`,
   },
 };
 

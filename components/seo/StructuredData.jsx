@@ -1,11 +1,13 @@
 export default function StructuredData() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+  
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     "name": "AqaarGate Real Estate",
     "description": "Premium real estate services for buying, selling, and renting properties",
-    "url": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com",
-    "logo": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com/images/logo/logo-2@2x.png",
+    "url": baseUrl,
+    "logo": `${baseUrl}/images/logo/logo-2@2x.png`,
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+1-555-0123",
@@ -19,10 +21,10 @@ export default function StructuredData() {
       "addressRegion": "Lattakia Governorate"
     },
     "sameAs": [
-      "https://www.facebook.com/protyrealestate",
-      "https://www.twitter.com/protyrealestate",
-      "https://www.instagram.com/protyrealestate",
-      "https://www.linkedin.com/company/protyrealestate"
+      "https://www.facebook.com/aqaargate",
+      "https://www.twitter.com/aqaargate",
+      "https://www.instagram.com/aqaargate",
+      "https://www.linkedin.com/company/aqaargate"
     ],
     "serviceArea": [
       {
@@ -140,13 +142,13 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "AqaarGate Real Estate",
-    "url": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com",
+    "url": baseUrl,
     "description": "Find your dream property with AqaarGate Real Estate",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com/property-list?search={search_term_string}"
+        "urlTemplate": `${baseUrl}/property-list?search={search_term_string}`
       },
       "query-input": "required name=search_term_string"
     }
@@ -160,7 +162,7 @@ export default function StructuredData() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://AqaarGate-frontend-mostafa-4a0069a6dba8.herokuapp.com"
+        "item": baseUrl
       }
     ]
   };

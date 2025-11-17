@@ -7,8 +7,8 @@ import Header1 from "@/components/headers/Header1";
 import React from "react";
 
 export const metadata = {
-  title: "Contact Proty Real Estate - Syria & Lattakia Property Experts",
-  description: "Contact Proty Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you find your dream home or investment property.",
+  title: "Contact AqaarGate Real Estate - Syria & Lattakia Property Experts",
+  description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you find your dream home or investment property.",
   keywords: [
     'contact syria real estate agent',
     'contact lattakia real estate agent',
@@ -36,26 +36,26 @@ export const metadata = {
     'lattakia coastal property advice'
   ],
   openGraph: {
-    title: "Contact Proty Real Estate - Syria & Lattakia Property Experts",
-    description: "Contact Proty Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/contact',
+    title: "Contact AqaarGate Real Estate - Syria & Lattakia Property Experts",
+    description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you.",
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/contact`,
     images: [
       {
         url: '/images/section/contact-bg.jpg',
         width: 1200,
         height: 630,
-        alt: 'Contact Proty Real Estate',
+        alt: 'Contact AqaarGate Real Estate',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Contact Us - Get in Touch with Proty Real Estate",
-    description: "Contact Proty Real Estate for expert guidance on buying, selling, or renting properties.",
+    title: "Contact Us - Get in Touch with AqaarGate Real Estate",
+    description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties.",
     images: ['/images/section/contact-bg.jpg'],
   },
   alternates: {
-    canonical: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/contact',
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/contact`,
   },
 };
 export default function page() {

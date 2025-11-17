@@ -34,7 +34,7 @@ export const metadata = {
   openGraph: {
     title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/blog-grid',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/blog-grid`,
     images: [
       {
         url: '/images/section/blog-bg.jpg',
@@ -51,7 +51,7 @@ export const metadata = {
     images: ['/images/section/blog-bg.jpg'],
   },
   alternates: {
-    canonical: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/blog-grid',
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/blog-grid`,
   },
 };
 export default function page() {

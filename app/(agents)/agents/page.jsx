@@ -37,7 +37,7 @@ export const metadata = {
   openGraph: {
     title: "Syria & Lattakia Real Estate Agents - Expert Property Professionals",
     description: "Meet our team of experienced real estate agents and property professionals in Syria and Lattakia. Get personalized guidance for all your property needs.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/agents',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/agents`,
     images: [
       {
         url: '/images/section/agents-bg.jpg',
@@ -54,7 +54,7 @@ export const metadata = {
     images: ['/images/section/agents-bg.jpg'],
   },
   alternates: {
-    canonical: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/agents',
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/agents`,
   },
 };
 export default function page() {

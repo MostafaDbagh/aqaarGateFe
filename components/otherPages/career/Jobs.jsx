@@ -18,7 +18,7 @@ export default function Jobs() {
                     data-wow-duration="1s"
                     data-wow-delay="0s"
                   >
-                    Best Job For You At Proty
+                    Best Job For You At AqaarGate
                   </h2>
                   <p
                     className="text-1 wow animate__fadeInUp animate__animated"
@@ -76,7 +76,7 @@ export default function Jobs() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  Join Our Growing Team at Proty
+                  Join Our Growing Team at AqaarGate
                 </h2>
                 <p
                   className="text-1 wow animate__fadeInUp animate__animated"

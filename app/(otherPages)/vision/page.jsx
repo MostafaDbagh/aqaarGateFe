@@ -20,7 +20,7 @@ export const metadata = {
   openGraph: {
     title: "Our Vision - SyProperty | Transforming Real Estate in Syria",
     description: "Discover SyProperty's vision: displaying Syria properties to the world with modern standards.",
-    url: 'https://proty-frontend-mostafa-4a0069a6dba8.herokuapp.com/vision',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/vision`,
   },
   twitter: {
     card: 'summary_large_image',

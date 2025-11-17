@@ -80,7 +80,7 @@ export default function AgentDetails({ agentId }) {
                     <p className="font-poppins">
                       {agent.position || agent.job || "Real Estate Agent"} at{" "}
                       <a href="#" className="fw-7">
-                        {agent.companyName || "Proty Real Estate"}
+                        {agent.companyName || "AqaarGate Real Estate"}
                       </a>
                     </p>
                   </div>
@@ -214,7 +214,7 @@ export default function AgentDetails({ agentId }) {
                         <div className={`detail-item ${styles.detailItem}`}>
                           <strong className={styles.detailLabel}>Company:</strong>
                           <span className={styles.detailValue}>
-                            {agent.companyName || "Proty Real Estate"}
+                            {agent.companyName || "AqaarGate Real Estate"}
                           </span>
                         </div>
                         
@@ -466,7 +466,7 @@ export default function AgentDetails({ agentId }) {
                   />
                 </fieldset>
                 <div className="wrap-btn">
-                  <a href={`mailto:${agent.email || 'contact@proty.com'}`} className="tf-btn bg-color-primary w-full">
+                  <a href={`mailto:${agent.email || 'contact@aqaargate.com'}`} className="tf-btn bg-color-primary w-full">
                     <svg width={20}
                       height={20}
                       viewBox="0 0 20 20"
