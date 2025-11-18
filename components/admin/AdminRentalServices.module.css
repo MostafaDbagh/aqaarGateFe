@@ -1,0 +1,234 @@
+.container {
+  padding: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1f2937;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchInput,
+.selectInput {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.error {
+  padding: 12px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 12px;
+  text-align: left;
+  background-color: #f9fafb;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.ownerInfo,
+.propertyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ownerInfo strong,
+.propertyInfo strong {
+  color: #1f2937;
+}
+
+.ownerInfo span,
+.propertyInfo span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badgePending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badgeReview {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badgeInspected {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.badgeAgreement {
+  background-color: #fce7f3;
+  color: #9f1239;
+}
+
+.badgeAgreed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badgeRejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badgeDefault {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.statusSelect {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.dateInput {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btnEdit {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btnEdit:hover {
+  background-color: #2563eb;
+}
+
+.btnSave {
+  background-color: #10b981;
+  color: white;
+}
+
+.btnSave:hover {
+  background-color: #059669;
+}
+
+.btnCancel {
+  background-color: #6b7280;
+  color: white;
+}
+
+.btnCancel:hover {
+  background-color: #4b5563;
+}
+
+.btnDelete {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btnDelete:hover {
+  background-color: #dc2626;
+}
+
+.noData {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.pageBtn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+

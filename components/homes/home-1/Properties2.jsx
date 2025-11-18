@@ -209,6 +209,11 @@ export default function Properties2() {
                             <span className={styles.badgeHoliday}>
                               🏖️ Holiday Home
                             </span>
+                            {property.isAgentBlocked && (
+                              <span className={styles.badgeBlockedAgent}>
+                                Blocked Agent
+                              </span>
+                            )}
                           </div>
                           
                           {/* Action Buttons */}

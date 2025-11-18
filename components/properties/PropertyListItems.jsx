@@ -447,6 +447,11 @@ export default function PropertyListItems({ listings = [] }) {
               >
                 {property.status?.toLowerCase() === 'rent' ? 'For Rent' : 'For Sale'}
               </li>
+              {property.isAgentBlocked && (
+                <li className="flat-tag text-4 fw-6 text_white" style={{ backgroundColor: '#dc2626', color: 'white' }}>
+                  Blocked Agent
+                </li>
+              )}
             </ul>
             <div className="favorite-floating">
               <FavoriteButton

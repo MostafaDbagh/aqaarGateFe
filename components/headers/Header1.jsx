@@ -11,8 +11,11 @@ import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 
 export default function Header1({ parentClass = "header" }) {
   // Use Redux for auth state
-  const { isAuthenticated: isLoggedIn, isAgent } = useAuthState();
+  const { isAuthenticated: isLoggedIn, isAgent, user } = useAuthState();
   const { showSuccessModal } = useGlobalModal();
+  
+  // Check if user is admin
+  const isAdmin = user?.role === 'admin';
 
   const makeAgent = async (e) => {
     e.preventDefault();
@@ -81,8 +84,8 @@ export default function Header1({ parentClass = "header" }) {
                     </div>
                   )}
                   
-                  {/* Make Me Agent Button - Only for Logged in Users (not agents) */}
-                  {isLoggedIn && !isAgent && (
+                  {/* Make Me Agent Button - Only for Logged in Users (not agents, not admin) */}
+                  {isLoggedIn && !isAgent && !isAdmin && (
                     <div className="btn-add">
                       <button
                         type="button"

@@ -13,6 +13,7 @@ import dashboardAPI from './dashboard';
 import categoryAPI from './category';
 import cityAPI from './city';
 import propertyRentalAPI from './propertyRental';
+import adminAPI from './admin';
 
 // Export all APIs
 export {
@@ -29,7 +30,8 @@ export {
   dashboardAPI,
   categoryAPI,
   cityAPI,
-  propertyRentalAPI
+  propertyRentalAPI,
+  adminAPI
 };
 
 // Default export with all APIs
@@ -47,7 +49,8 @@ export default {
   dashboard: dashboardAPI,
   category: categoryAPI,
   city: cityAPI,
-  propertyRental: propertyRentalAPI
+  propertyRental: propertyRentalAPI,
+  admin: adminAPI
 };
 
 // Individual exports for convenience
@@ -65,3 +68,4 @@ export const dashboard = dashboardAPI;
 export const category = categoryAPI;
 export const city = cityAPI;
 export const propertyRental = propertyRentalAPI;
+export const admin = adminAPI;

@@ -41,8 +41,11 @@ const useRouteProtection = (requiredRole = null) => {
   const isAuthorized = (requiredRole) => {
     const userRole = getUserRole();
     
-    // Agent can access everything
-    if (userRole === 'agent') return true;
+    // Admin can access everything
+    if (userRole === 'admin') return true;
+    
+    // Agent can access agent routes
+    if (userRole === 'agent' && requiredRole !== 'admin') return true;
     
     // User can access user routes
     if (userRole === 'user' && requiredRole === 'user') return true;
@@ -53,10 +56,14 @@ const useRouteProtection = (requiredRole = null) => {
     return false;
   };
 
-  const checkRouteAccess = (pathname) => {
+  const checkRouteAccess = (pathname, requiredRole = null) => {
     const userRole = getUserRole();
     
     // Define route categories
+    const adminRoutes = [
+      '/admin'
+    ];
+    
     const agentRoutes = [
       '/dashboard',
       '/add-property', 
@@ -80,9 +87,15 @@ const useRouteProtection = (requiredRole = null) => {
       '/my-profile',
       '/my-favorites',
       '/messages',
-      '/review'
+      '/review',
+      '/admin'
     ];
 
+    // Check if current path is an admin route
+    const isAdminRoute = adminRoutes.some(route => 
+      pathname.startsWith(route)
+    );
+    
     // Check if current path is an agent route
     const isAgentRoute = agentRoutes.some(route => 
       pathname.startsWith(route)
@@ -99,15 +112,21 @@ const useRouteProtection = (requiredRole = null) => {
     );
 
     // Determine access level needed
-    let requiredAccess = null;
-    if (isAgentRoute) requiredAccess = 'agent';
-    else if (isUserRoute) requiredAccess = 'user';
-    else if (isGuestBlocked) requiredAccess = 'user';
+    // If requiredRole is passed (from RouteGuard), use it
+    // Otherwise, determine from pathname
+    let requiredAccess = requiredRole;
+    if (!requiredAccess) {
+      if (isAdminRoute) requiredAccess = 'admin';
+      else if (isAgentRoute) requiredAccess = 'agent';
+      else if (isUserRoute) requiredAccess = 'user';
+      else if (isGuestBlocked) requiredAccess = 'user';
+    }
 
     return {
       userRole,
       requiredAccess,
       isAuthorized: isAuthorized(requiredAccess),
+      isAdminRoute,
       isAgentRoute,
       isUserRoute,
       isGuestBlocked

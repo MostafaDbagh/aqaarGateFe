@@ -354,7 +354,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onBlur={handleInputBlur}
               >
                 <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
                 <option value="closed">Closed</option>
               </select>

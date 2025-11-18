@@ -1,0 +1,38 @@
+.adminLayout {
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.pageLayout {
+  display: flex;
+  flex: 1;
+  margin-top: 80px;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 160px 30px 30px 30px;
+  margin-left: 280px;
+  margin-top: 180px;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    margin-left: 0;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 15px;
+  }
+}
+

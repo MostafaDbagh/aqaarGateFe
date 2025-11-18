@@ -20,10 +20,21 @@ const RouteGuard = ({ children, requiredRole = null }) => {
   useEffect(() => {
     if (isLoading) return;
 
-    const routeCheck = checkRouteAccess(pathname);
-    const { userRole, requiredAccess, isAuthorized, isAgentRoute, isUserRoute, isGuestBlocked } = routeCheck;
+    const routeCheck = checkRouteAccess(pathname, requiredRole);
+    const { userRole, requiredAccess, isAuthorized, isAdminRoute, isAgentRoute, isUserRoute, isGuestBlocked } = routeCheck;
 
     // If user is authorized, allow access
+    // For admin routes, check if user is admin
+    if (requiredRole === 'admin') {
+      if (userRole === 'admin') {
+        return; // Admin is authorized
+      } else {
+        // Not admin, redirect to home
+        router.push('/');
+        return;
+      }
+    }
+    
     if (isAuthorized) {
       return;
     }
@@ -42,12 +53,18 @@ const RouteGuard = ({ children, requiredRole = null }) => {
         return;
       }
     } else if (userRole === 'user') {
-      if (isAgentRoute) {
+      if (isAgentRoute || isAdminRoute) {
         // Redirect to home and show become agent modal
         router.push('/');
         setTimeout(() => {
           showModal('becomeAgent');
         }, 100);
+        return;
+      }
+    } else if (userRole === 'agent') {
+      if (isAdminRoute) {
+        // Agent trying to access admin routes
+        router.push('/');
         return;
       }
     }
@@ -74,7 +91,17 @@ const RouteGuard = ({ children, requiredRole = null }) => {
   }
 
   // Check if user has access to current route
-  const routeCheck = checkRouteAccess(pathname);
+  const routeCheck = checkRouteAccess(pathname, requiredRole);
+  
+  // Special handling for admin routes
+  if (requiredRole === 'admin') {
+    if (routeCheck.userRole !== 'admin') {
+      return null; // Not admin, will redirect
+    }
+    // Admin is authorized, show children
+    return children;
+  }
+  
   if (!routeCheck.isAuthorized) {
     return null; // Component will redirect, so return null
   }

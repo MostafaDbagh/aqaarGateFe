@@ -50,6 +50,11 @@
   background-color: #10B981;
 }
 
+.blockedAgentBadge {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
 /* Meta List */
 .metaList {
   gap: 24px;

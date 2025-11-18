@@ -532,13 +532,18 @@ export default function PropertyGridItems({ listings = [] }) {
                   Special Offer
                 </li>
               )}
-              <li 
-                className={`flat-tag text-4 fw-6 text_white ${styles.statusBadge} ${
-                  property.status?.toLowerCase() === 'rent' ? styles.statusBadgeRent : styles.statusBadgeSale
-                }`}
-              >
-                {property.status?.toLowerCase() === 'rent' ? 'For Rent' : 'For Sale'}
-              </li>
+                <li 
+                  className={`flat-tag text-4 fw-6 text_white ${styles.statusBadge} ${
+                    property.status?.toLowerCase() === 'rent' ? styles.statusBadgeRent : styles.statusBadgeSale
+                  }`}
+                >
+                  {property.status?.toLowerCase() === 'rent' ? 'For Rent' : 'For Sale'}
+                </li>
+                {property.isAgentBlocked && (
+                  <li className={`flat-tag text-4 fw-6 text_white ${styles.blockedAgentBadge}`}>
+                    Blocked Agent
+                  </li>
+                )}
             </ul>
             <div className="favorite-floating">
               <FavoriteButton

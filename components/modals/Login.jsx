@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { UserIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./Login.module.css";
 
 export default function Login({ isOpen, onClose }) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -81,6 +83,9 @@ export default function Login({ isOpen, onClose }) {
       
       // Close the modal
       closeModal();
+      
+      // No force redirect - let users navigate manually
+      // Users can access their dashboards through the sidebar or navigation
       
     } catch (error) {
       setError(error.message || 'Login failed. Please try again.');

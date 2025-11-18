@@ -28,8 +28,12 @@ export default function DashboardNav({ color = "" }) {
     isAgent: isAgentUser, 
     displayName, 
     logout: logoutUser,
-    changeRole 
+    changeRole,
+    user
   } = useAuthState();
+  
+  // Check if user is admin
+  const isAdmin = user?.role === 'admin';
 
   // Use GlobalModal context for modals
   const { showRegisterModal, showLoginModal, showSuccessModal } = useGlobalModal();
@@ -118,217 +122,290 @@ export default function DashboardNav({ color = "" }) {
         className={`menu-user ${isLoggedIn ? 'dashboard-nav-menu' : 'dashboard-nav-menu-hidden'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Dashboard - For all logged in users (disabled on mobile only) */}
-        {isLoggedIn && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile"
-            href={isAgentUser ? `/dashboard` : '#'}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px) or if not an agent
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-              if (!isAgentUser) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <DashboardIcon />
-            Dashboard
-          </Link>
+        {/* ADMIN MENU ITEMS */}
+        {isLoggedIn && isAdmin && (
+          <>
+            {/* Admin Dashboard */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile"
+              href="/admin/overview"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <DashboardIcon />
+              Admin Dashboard
+            </Link>
+
+
+            {/* Properties */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile" 
+              href="/admin/properties"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <PropertyIcon />
+              Properties
+            </Link>
+
+            {/* Agents */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile" 
+              href="/admin/agents"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <AddPropertyIcon />
+              Agents
+            </Link>
+
+            {/* Rental Services */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile" 
+              href="/admin/rental-services"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <PropertyIcon />
+              Rental Services
+            </Link>
+
+            {/* Contact Us */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile" 
+              href="/admin/contacts"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <ReviewIcon />
+              Contact Us
+            </Link>
+          </>
         )}
 
-        {/* My Profile - For ALL logged in users (disabled on mobile only) */}
-        {isLoggedIn && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/my-profile`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <ProfileIcon />
-            My profile
-          </Link>
-        )}
+        {/* AGENT & USER MENU ITEMS (Not Admin) */}
+        {isLoggedIn && !isAdmin && (
+          <>
+            {/* Dashboard - For agents only */}
+            {isAgentUser && (
+              <Link 
+                className="dropdown-item dashboard-disabled-mobile"
+                href="/dashboard"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db'
+                }}
+              >
+                <DashboardIcon />
+                Dashboard
+              </Link>
+            )}
 
-        {/* My Package - Only for logged in agents (disabled on mobile only) */}
-        {isLoggedIn && isAgentUser && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/my-package`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <PackageIcon />
-            My package
-          </Link>
-        )}
 
-        {/* My Favorites - For ALL logged in users (disabled on mobile only) */}
-        {isLoggedIn && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/my-favorites`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <FavoritesCount />
-          </Link>
-        )}
+            {/* My Package - Only for logged in agents (disabled on mobile only) */}
+            {isAgentUser && (
+              <Link 
+                className="dropdown-item dashboard-disabled-mobile" 
+                href="/my-package"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db'
+                }}
+              >
+                <PackageIcon />
+                My package
+              </Link>
+            )}
 
-        {/* Reviews - Only for logged in agents (disabled on mobile only) */}
-        {isLoggedIn && isAgentUser && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/review`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <ReviewIcon />
-            Reviews
-          </Link>
-        )}
+            {/* My Favorites - For ALL logged in users (disabled on mobile only) */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile" 
+              href="/my-favorites"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <FavoritesCount />
+            </Link>
 
-        {/* Messages - Only for logged in agents (disabled on mobile only) */}
-        {isLoggedIn && isAgentUser && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/messages`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <MessagesCount />
-          </Link>
-        )}
+            {/* Reviews - Only for logged in agents (disabled on mobile only) */}
+            {isAgentUser && (
+              <Link 
+                className="dropdown-item dashboard-disabled-mobile" 
+                href="/review"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db'
+                }}
+              >
+                <ReviewIcon />
+                Reviews
+              </Link>
+            )}
 
-        {/* Make me Agent - Only for regular users (not agents) (disabled on mobile only) */}
-        {isLoggedIn && !isAgentUser && (
-          <button 
-            type="button"
-            className="dropdown-item dashboard-nav-button dashboard-disabled-mobile" 
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-              // On desktop, call the original handler
-              handleMakeAgent(e);
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db',
-              borderRadius: '24px'
-            }}
-          >
-            <AddPropertyIcon />
-            Make me Agent
-          </button>
-        )}
+            {/* Messages - Only for logged in agents (disabled on mobile only) */}
+            {isAgentUser && (
+              <Link 
+                className="dropdown-item dashboard-disabled-mobile" 
+                href="/messages"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db'
+                }}
+              >
+                <MessagesCount />
+              </Link>
+            )}
 
-        {/* My Properties - Only for logged in agents (disabled on mobile only) */}
-        {isLoggedIn && isAgentUser && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/my-property`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <PropertyIcon />
-            My properties
-          </Link>
-        )}
+            {/* Make me Agent - Only for regular users (not agents, not admin) (disabled on mobile only) */}
+            {!isAgentUser && (
+              <button 
+                type="button"
+                className="dropdown-item dashboard-nav-button dashboard-disabled-mobile" 
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                  handleMakeAgent(e);
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '24px'
+                }}
+              >
+                <AddPropertyIcon />
+                Make me Agent
+              </button>
+            )}
 
-        {/* Add Property - Only for logged in agents (disabled on mobile only) */}
-        {isLoggedIn && isAgentUser && (
-          <Link 
-            className="dropdown-item dashboard-disabled-mobile" 
-            href={`/add-property`}
-            onClick={(e) => {
-              // Disable on mobile (screen width <= 768px)
-              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }
-            }}
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <AddPropertyIcon />
-            Add property
-          </Link>
+            {/* My Properties - Only for logged in agents (disabled on mobile only) */}
+            {isAgentUser && (
+              <Link 
+                className="dropdown-item dashboard-disabled-mobile" 
+                href="/my-property"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db'
+                }}
+              >
+                <PropertyIcon />
+                My properties
+              </Link>
+            )}
+
+            {/* Add Property - Only for logged in agents (disabled on mobile only) */}
+            {isAgentUser && (
+              <Link 
+                className="dropdown-item dashboard-disabled-mobile" 
+                href="/add-property"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #d1d5db'
+                }}
+              >
+                <AddPropertyIcon />
+                Add property
+              </Link>
+            )}
+          </>
         )}
 
         {/* Login/Register - Only for non-logged in users */}
