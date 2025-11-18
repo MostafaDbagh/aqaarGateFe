@@ -11,14 +11,24 @@
 }
 
 .box-house .image-wrap img,
-.box-house .image-wrap .property-img {
+.box-house .image-wrap .property-img,
+.box-house .image-wrap .lazyload,
+.box-house .image-wrap Image,
+.box-house .image-wrap .image-slider img,
+.box-house .image-wrap .image-link img {
   width: 100% !important;
   max-width: 100% !important;
   height: 100% !important;
-  max-height: 280px !important;
-  min-height: 280px !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
   object-fit: cover !important;
+  object-position: center !important;
   display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
 }
 
 /* Grid view - consistent dimensions */
@@ -98,19 +108,36 @@
   display: block !important;
 }
 
-.box-house.property-image-fix .image-wrap > a {
+.box-house.property-image-fix .image-wrap > a,
+.box-house.property-image-fix .image-wrap .image-link,
+.box-house.property-image-fix .image-wrap .image-slider {
   width: 100% !important;
   height: 100% !important;
+  min-height: 100% !important;
   display: block !important;
   position: relative !important;
 }
 
-.box-house.property-image-fix .image-wrap img {
+.box-house.property-image-fix .image-wrap img,
+.box-house.property-image-fix .image-wrap .property-img,
+.box-house.property-image-fix .image-wrap .lazyload,
+.box-house.property-image-fix .image-wrap Image,
+.box-house.property-image-fix .image-wrap .image-slider img,
+.box-house.property-image-fix .image-wrap .image-link img {
   width: 100% !important;
+  max-width: 100% !important;
   height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
   object-fit: cover !important;
+  object-position: center !important;
   display: block !important;
   border-radius: 8px !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
 }
 
 /* List view - Force fixed dimensions - FIX HEIGHT ISSUE */
@@ -137,10 +164,20 @@
   position: relative !important;
 }
 
-.box-house.property-list-image-fix .image-wrap > a img {
+.box-house.property-list-image-fix .image-wrap > a img,
+.box-house.property-list-image-fix .image-wrap img,
+.box-house.property-list-image-fix .image-wrap .property-img,
+.box-house.property-list-image-fix .image-wrap .lazyload,
+.box-house.property-list-image-fix .image-wrap Image,
+.box-house.property-list-image-fix .image-wrap .image-slider img,
+.box-house.property-list-image-fix .image-wrap .image-link img {
   width: 100% !important;
+  max-width: 100% !important;
   height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
   object-fit: cover !important;
+  object-position: center !important;
   display: block !important;
   border-radius: 8px !important;
   position: absolute !important;
