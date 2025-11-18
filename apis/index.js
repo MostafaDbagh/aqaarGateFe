@@ -12,6 +12,7 @@ import { newsletterAPI } from './newsletter';
 import dashboardAPI from './dashboard';
 import categoryAPI from './category';
 import cityAPI from './city';
+import propertyRentalAPI from './propertyRental';
 
 // Export all APIs
 export {
@@ -27,7 +28,8 @@ export {
   newsletterAPI,
   dashboardAPI,
   categoryAPI,
-  cityAPI
+  cityAPI,
+  propertyRentalAPI
 };
 
 // Default export with all APIs
@@ -44,7 +46,8 @@ export default {
   newsletter: newsletterAPI,
   dashboard: dashboardAPI,
   category: categoryAPI,
-  city: cityAPI
+  city: cityAPI,
+  propertyRental: propertyRentalAPI
 };
 
 // Individual exports for convenience
@@ -61,3 +64,4 @@ export const newsletter = newsletterAPI;
 export const dashboard = dashboardAPI;
 export const category = categoryAPI;
 export const city = cityAPI;
+export const propertyRental = propertyRentalAPI;

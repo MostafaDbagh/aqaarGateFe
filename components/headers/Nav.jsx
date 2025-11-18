@@ -86,6 +86,13 @@ export default function Nav() {
       >
         <Link href="/agents">Agents</Link>
       </li>
+      <li
+        className={` ${
+          pathname?.split("/")[1] === "property-rental-service" ? "current-menu" : ""
+        } `}
+      >
+        <Link href="/property-rental-service">Rental Service</Link>
+      </li>
       <li className={"/contact" == pathname ? "current-menu" : ""}>
         <Link href={`/contact`}>Contact</Link>
       </li>

@@ -1,0 +1,890 @@
+/* Hero Section */
+.heroSection {
+  position: relative;
+  padding: 60px 0 40px;
+  background: linear-gradient(135deg, #fef7f1 0%, #ffffff 50%, #fff5ed 100%);
+  border-radius: 24px;
+  margin-bottom: 60px;
+  overflow: hidden;
+}
+
+.heroSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(241, 145, 61, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.heroSection::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(241, 145, 61, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.heroIconWrapper {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 30px;
+  background: linear-gradient(135deg, #f1913d 0%, #e0812d 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(241, 145, 61, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.heroIconWrapper i {
+  font-size: 50px;
+  color: white;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(241, 145, 61, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(241, 145, 61, 0.4);
+  }
+}
+
+.heroTitle {
+  font-size: clamp(32px, 5vw, 48px);
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.heroSubtitle {
+  font-size: clamp(16px, 2.5vw, 20px);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Service Cards */
+.serviceCard {
+  padding: 40px;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 20px;
+  height: 100%;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.serviceCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #f1913d 0%, #e0812d 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: #f1913d;
+}
+
+.serviceCard:hover::before {
+  transform: scaleX(1);
+}
+
+.serviceIcon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.serviceIconOrange {
+  background: linear-gradient(135deg, #f1913d 0%, #e0812d 100%);
+}
+
+.serviceIconGreen {
+  background: linear-gradient(135deg, #f1913d 0%, #e0812d 100%);
+}
+
+.serviceIcon i {
+  font-size: 45px;
+  color: white;
+  z-index: 1;
+}
+
+.serviceIcon svg {
+  width: 45px;
+  height: 45px;
+  display: block;
+}
+
+.serviceCard:hover .serviceIcon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.serviceCardTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.serviceCardTitle i {
+  font-size: 24px;
+  color: #f1913d;
+  flex-shrink: 0;
+}
+
+.serviceCardTitle svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.serviceCardText {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* Details Box */
+.detailsBox {
+  padding: 40px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.detailsBoxTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #1f2937;
+  text-align: center;
+}
+
+.stepsList {
+  margin-top: 32px;
+}
+
+.stepItem {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 30px;
+}
+
+.stepItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.stepNumber {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #f1913d 0%, #e0812d 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(241, 145, 61, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.stepNumber i {
+  font-size: 28px;
+}
+
+.stepNumber svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+.stepItem:hover .stepNumber {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 25px rgba(241, 145, 61, 0.4);
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepContentTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stepContentTitle i {
+  color: #f1913d;
+  font-size: 22px;
+}
+
+.stepContentTitle svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.stepContentText {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* Commission Section */
+.commissionSection {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.commissionBox {
+  padding: 50px 40px;
+  background: linear-gradient(135deg, #fef7f1 0%, #fff5ed 50%, #fef7f1 100%);
+  border-radius: 24px;
+  border: 3px solid #f1913d;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(241, 145, 61, 0.15);
+}
+
+.commissionBox::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(241, 145, 61, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.commissionBox::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(241, 145, 61, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.commissionTitle {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1f2937;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.commissionTitle::before {
+  content: '💰';
+  font-size: 36px;
+}
+
+.commissionText {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #6b7280;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.commissionHighlight {
+  color: #f1913d;
+  font-size: 20px;
+}
+
+.highlightBox {
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  margin-top: 24px;
+  border: 2px solid #f1913d;
+  box-shadow: 0 4px 15px rgba(241, 145, 61, 0.1);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.highlightBox:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(241, 145, 61, 0.2);
+}
+
+.highlightBoxText {
+  font-size: 16px;
+  color: #374151;
+  margin: 0;
+}
+
+/* Form Section */
+.formContainer {
+  padding: 50px 40px;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e5e7eb;
+  position: relative;
+  overflow: hidden;
+}
+
+.formContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #f1913d 0%, #e0812d 100%);
+}
+
+.formTitle {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1f2937;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.formTitle::before {
+  content: '📋';
+  font-size: 36px;
+}
+
+.formSubtitle {
+  font-size: 16px;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.alert {
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.alertSuccess {
+  background-color: #fef7f1;
+  color: #92400e;
+  border: 1px solid #fed7aa;
+}
+
+.alertDanger {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.formLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 15px;
+}
+
+.formLabel i {
+  color: #f1913d;
+  font-size: 18px;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 16px;
+  color: #9ca3af;
+  font-size: 20px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.textareaWrapper {
+  position: relative;
+}
+
+.textareaIcon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: #9ca3af;
+  font-size: 20px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.requiredStar {
+  color: #ef4444;
+}
+
+.formInput {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  background: white;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #f1913d;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+  background: #fef7f1;
+}
+
+.formSelect {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.formTextarea {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  resize: vertical;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  background: white;
+  font-family: inherit;
+}
+
+.formTextarea:focus {
+  outline: none;
+  border-color: #f1913d;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+  background: #fef7f1;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 18px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #f1913d 0%, #e0812d 100%);
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(241, 145, 61, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.submitButton:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #e0812d 0%, #d0711d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(241, 145, 61, 0.4);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitButton i {
+  font-size: 20px;
+}
+
+/* Benefits Section */
+.benefitsSection {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.benefitsTitle {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #1f2937;
+}
+
+.benefitCard {
+  padding: 35px 30px;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 20px;
+  border: 2px solid #e5e7eb;
+  height: 100%;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefitCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #f1913d 0%, #e0812d 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.benefitCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border-color: #f1913d;
+}
+
+.benefitCard:hover::before {
+  transform: scaleX(1);
+}
+
+.benefitIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.benefitCard:hover .benefitIcon {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.benefitIconOrange {
+  background: linear-gradient(135deg, #fef7f1 0%, #fff5ed 100%);
+  border: 2px solid #fed7aa;
+}
+
+.benefitIconGreen {
+  background: linear-gradient(135deg, #fef7f1 0%, #fff5ed 100%);
+  border: 2px solid #fed7aa;
+}
+
+.benefitIconBlue {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 2px solid #bfdbfe;
+}
+
+.benefitIcon i {
+  font-size: 40px;
+  display: block;
+}
+
+.benefitIcon svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.benefitIconOrange i {
+  color: #f1913d;
+}
+
+.benefitIconGreen i {
+  color: #f1913d;
+}
+
+.benefitIconBlue i {
+  color: #3b82f6;
+}
+
+.benefitIconBlue svg {
+  color: #3b82f6;
+}
+
+.benefitTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1f2937;
+}
+
+.benefitText {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heroSection {
+    padding: 40px 20px 30px;
+    border-radius: 16px;
+    margin-bottom: 40px;
+  }
+
+  .heroIconWrapper {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+
+  .heroIconWrapper i {
+    font-size: 40px;
+  }
+
+  .serviceCard {
+    padding: 30px 20px;
+  }
+
+  .detailsBox {
+    padding: 30px 20px;
+  }
+
+  .formContainer {
+    padding: 30px 20px;
+  }
+
+  .commissionSection {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .commissionBox {
+    padding: 30px 20px;
+  }
+
+  .commissionTitle {
+    font-size: 24px;
+  }
+
+  .commissionTitle::before {
+    font-size: 28px;
+  }
+
+  .commissionText {
+    font-size: 16px;
+  }
+
+  .stepItem {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .stepNumber {
+    align-self: flex-start;
+    width: 50px;
+    height: 50px;
+  }
+
+  .stepNumber i {
+    font-size: 24px;
+  }
+
+  .stepContentTitle {
+    font-size: 18px;
+  }
+
+  .stepContentTitle i {
+    font-size: 20px;
+  }
+
+
+  .benefitCard {
+    padding: 25px 20px;
+  }
+
+  .benefitIcon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .benefitIcon i {
+    font-size: 30px;
+  }
+
+  .benefitIcon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .formTitle {
+    font-size: 24px;
+  }
+
+  .formTitle::before {
+    font-size: 28px;
+  }
+
+  .benefitsSection {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .benefitsTitle {
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+
+  .serviceCardTitle {
+    font-size: 20px;
+  }
+
+  .detailsBoxTitle {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 30px 15px 20px;
+    margin-bottom: 30px;
+  }
+
+  .heroTitle {
+    font-size: 24px;
+  }
+
+  .heroSubtitle {
+    font-size: 14px;
+  }
+
+  .commissionSection {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .commissionBox {
+    padding: 25px 15px;
+  }
+
+  .commissionTitle {
+    font-size: 20px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .formContainer {
+    padding: 25px 15px;
+  }
+
+  .formTitle {
+    font-size: 20px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .serviceCard {
+    padding: 25px 15px;
+  }
+
+  .detailsBox {
+    padding: 25px 15px;
+  }
+
+  .benefitCard {
+    padding: 20px 15px;
+  }
+
+  .benefitsSection {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .benefitsTitle {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+}
+

@@ -94,14 +94,7 @@ export default function AdvancedSEO() {
         "closes": "16:00"
       }
     ],
-    "priceRange": "$$",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "127",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    "priceRange": "$$"
   };
 
   // Service Schema
