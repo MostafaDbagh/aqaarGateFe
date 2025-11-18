@@ -116,6 +116,26 @@ export default function AdminDashboard() {
             <p className={styles.statLabel}>Pending Rental Requests</p>
           </div>
         </div>
+
+        <div className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.statIconAgent}`}>
+            <i className="icon-user" />
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statValue}>{stats?.agents?.total || 0}</h3>
+            <p className={styles.statLabel}>Total Agents</p>
+          </div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.statIconBlocked}`}>
+            <i className="icon-close" />
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statValue}>{stats?.agents?.blocked || 0}</h3>
+            <p className={styles.statLabel}>Blocked Agents</p>
+          </div>
+        </div>
       </div>
     </div>
   );

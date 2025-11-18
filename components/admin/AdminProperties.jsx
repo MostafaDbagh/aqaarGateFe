@@ -4,6 +4,7 @@ import { adminAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./AdminProperties.module.css";
+import { UserIcon } from "@/components/icons";
 
 export default function AdminProperties() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
@@ -44,6 +45,21 @@ export default function AdminProperties() {
   };
 
   const handleApproval = async (id, approvalStatus) => {
+    // Check if trying to approve and agent is blocked
+    if (approvalStatus === "approved") {
+      const property = properties.find(p => p._id === id);
+      if (property && property.agentId) {
+        const agent = property.agentId;
+        if (agent && agent.isBlocked) {
+          showWarningModal(
+            "Cannot Approve Property",
+            `The agent (${agent.username || agent.email}) is blocked. You cannot approve properties from blocked agents. Please unblock the agent first.`
+          );
+          return;
+        }
+      }
+    }
+
     try {
       await adminAPI.updatePropertyApproval(id, approvalStatus);
       showSuccessModal(
@@ -52,9 +68,10 @@ export default function AdminProperties() {
       );
       fetchProperties();
     } catch (err) {
+      const errorMessage = err.message || err.error?.message || "Failed to update property approval";
       showWarningModal(
         "Error",
-        err.message || "Failed to update property approval"
+        errorMessage
       );
     }
   };
@@ -165,6 +182,7 @@ export default function AdminProperties() {
               <th>Type</th>
               <th>Status</th>
               <th>Approval</th>
+              <th>Agent</th>
               <th>Price</th>
               <th>Location</th>
               <th>Actions</th>
@@ -173,7 +191,7 @@ export default function AdminProperties() {
           <tbody>
             {properties.length === 0 ? (
               <tr>
-                <td colSpan="8" className={styles.noData}>No properties found</td>
+                <td colSpan="9" className={styles.noData}>No properties found</td>
               </tr>
             ) : (
               properties.map((property) => (
@@ -197,6 +215,28 @@ export default function AdminProperties() {
                     <span className={`${styles.badge} ${getStatusBadgeClass(property.approvalStatus)}`}>
                       {property.approvalStatus}
                     </span>
+                  </td>
+                  <td>
+                    {property.agentId ? (
+                      <div className={styles.agentInfo}>
+                        <div className={styles.agentNameRow}>
+                          <UserIcon width={14} height={14} stroke="currentColor" />
+                          <span className={styles.agentName}>
+                            {property.agentId.username || property.agentId.email || "Unknown"}
+                          </span>
+                          {property.agentId.isBlocked && (
+                            <span className={`${styles.badge} ${styles.badgeBlockedAgent}`}>
+                              Blocked
+                            </span>
+                          )}
+                        </div>
+                        {property.agentId.email && (
+                          <span className={styles.agentEmail}>{property.agentId.email}</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className={styles.noAgent}>No Agent</span>
+                    )}
                   </td>
                   <td>
                     {property.propertyPrice} {property.currency || "USD"}

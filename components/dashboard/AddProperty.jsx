@@ -75,6 +75,9 @@ export default function AddProperty() {
     loadUser();
   }, [router]);
 
+  // Check if agent is blocked
+  const isAgentBlocked = user?.isBlocked === true;
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     
@@ -208,6 +211,12 @@ export default function AddProperty() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    // Check if agent is blocked
+    if (isAgentBlocked) {
+      setToast({ type: "error", message: "Your account is blocked. You cannot add properties." });
+      return;
+    }
+
     logger.debug("🔄 Form submitted - Starting validation");
     
     const isValid = validateForm();
@@ -767,11 +776,17 @@ export default function AddProperty() {
             <button
               type="submit"
               className="tf-btn bg-color-primary pd-13"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isAgentBlocked}
               onClick={(e) => {
                 // Directly call handleSubmit to ensure API call happens
                 handleSubmit(e);
               }}
+              style={isAgentBlocked ? { 
+                opacity: 0.5, 
+                cursor: 'not-allowed',
+                backgroundColor: '#ccc'
+              } : {}}
+              title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : 'Add property'}
             >
               {isSubmitting ? "Creating Property..." : "Add Property"}
             </button>
@@ -779,11 +794,24 @@ export default function AddProperty() {
             <button
               type="button"
               className="tf-btn style-border pd-10"
+              disabled={isAgentBlocked}
               onClick={() => {
+                // Check if agent is blocked
+                if (isAgentBlocked) {
+                  setToast({ type: "error", message: "Your account is blocked. This action is disabled." });
+                  return;
+                }
                 // Save as draft functionality
                 logger.debug("Save as draft:", formData);
                 setToast({ type: "success", message: "Draft saved!" });
               }}
+              style={isAgentBlocked ? { 
+                opacity: 0.5, 
+                cursor: 'not-allowed',
+                borderColor: '#ccc',
+                color: '#ccc'
+              } : {}}
+              title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : 'Save and preview property'}
             >
               Save & Preview
             </button>

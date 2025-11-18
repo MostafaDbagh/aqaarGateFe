@@ -119,6 +119,44 @@
   color: #6b7280;
 }
 
+.badgeBlockedAgent {
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-size: 10px;
+  padding: 2px 8px;
+  margin-left: 6px;
+}
+
+.agentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agentNameRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.agentName {
+  font-weight: 500;
+  color: #1f2937;
+  font-size: 13px;
+}
+
+.agentEmail {
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.noAgent {
+  color: #9ca3af;
+  font-size: 12px;
+  font-style: italic;
+}
+
 .actions {
   display: flex;
   gap: 8px;

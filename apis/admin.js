@@ -42,6 +42,10 @@ export const adminAPI = {
       });
       return response.data;
     } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.message) {
+        throw new Error(errorData.message);
+      }
       throw error.response?.data || error.message;
     }
   },

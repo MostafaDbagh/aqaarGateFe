@@ -42,6 +42,9 @@ export default function Review() {
     }
   }, []);
 
+  // Check if agent is blocked
+  const isAgentBlocked = user?.isBlocked === true;
+
   // Fetch agent's property reviews with pagination
   const { data: reviewsData, isLoading, isError } = useReviewsByAgent(
     user?._id,
@@ -156,6 +159,12 @@ export default function Review() {
 
   // Handle hide review from dashboard
   const handleHideFromDashboard = async (reviewId) => {
+    // Check if agent is blocked
+    if (isAgentBlocked) {
+      showToast('Your account is blocked. This action is disabled.', 'error');
+      return;
+    }
+
     try {
       await hideFromDashboardMutation.mutateAsync({ reviewId, hidden: true });
       // Mark this review as hidden from dashboard
@@ -168,6 +177,12 @@ export default function Review() {
 
   // Handle hide review from listing
   const handleHideFromListing = async (reviewId) => {
+    // Check if agent is blocked
+    if (isAgentBlocked) {
+      showToast('Your account is blocked. This action is disabled.', 'error');
+      return;
+    }
+
     try {
       await hideFromListingMutation.mutateAsync({ reviewId, hidden: true });
       // Mark this review as hidden from listing
@@ -289,18 +304,20 @@ export default function Review() {
                     <div className={styles.actionButtons}>
                       <button
                         onClick={() => handleHideFromDashboard(review._id)}
-                        disabled={hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard || hideFromDashboardMutation.isPending}
+                        disabled={isAgentBlocked || hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard || hideFromDashboardMutation.isPending}
                         className={styles.hideButtonDashboard}
-                        title={(hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? 'Already hidden' : 'Hide from Dashboard'}
+                        title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : ((hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? 'Already hidden' : 'Hide from Dashboard')}
+                        style={isAgentBlocked ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                       >
                         {hideFromDashboardMutation.isPending && !hiddenFromDashboard.has(review._id) && !review.hiddenFromDashboard ? 'Hiding...' : 
                          (hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? 'Hidden' : 'Hide from Dashboard'}
                       </button>
                       <button
                         onClick={() => handleHideFromListing(review._id)}
-                        disabled={hiddenFromListing.has(review._id) || review.hiddenFromListing || hideFromListingMutation.isPending}
+                        disabled={isAgentBlocked || hiddenFromListing.has(review._id) || review.hiddenFromListing || hideFromListingMutation.isPending}
                         className={styles.hideButtonListing}
-                        title={(hiddenFromListing.has(review._id) || review.hiddenFromListing) ? 'Already hidden' : 'Hide from Listing'}
+                        title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : ((hiddenFromListing.has(review._id) || review.hiddenFromListing) ? 'Already hidden' : 'Hide from Listing')}
+                        style={isAgentBlocked ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                       >
                         {hideFromListingMutation.isPending && !hiddenFromListing.has(review._id) && !review.hiddenFromListing ? 'Hiding...' : 
                          (hiddenFromListing.has(review._id) || review.hiddenFromListing) ? 'Hidden' : 'Hide from Listing'}

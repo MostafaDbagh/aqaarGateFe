@@ -341,23 +341,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             </div>
 
             {/* Approval Status */}
-            <div>
-              <label className={styles.formLabel}>
-                Approval Status
-              </label>
-              <select
-                name="approvalStatus"
-                value={formData.approvalStatus}
-                onChange={handleInputChange}
-                className={styles.input}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}
-              >
-                <option value="pending">Pending</option>
-                <option value="rejected">Rejected</option>
-                <option value="closed">Closed</option>
-              </select>
-            </div>
+   
 
             {/* Amenities */}
             <div>

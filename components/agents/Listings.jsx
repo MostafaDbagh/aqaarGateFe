@@ -72,12 +72,14 @@ export default function Listings({ agentId }) {
   };
 
   // Fetch listings for the agent with pagination and filtering
+  // For public agent listing page, only show approved properties
   const { data: listingsData, isLoading, isError, error } = useListingsByAgent(
     agentId,
     {
       page: currentPage,
       limit: itemsPerPage,
       status: statusFilter,
+      public: true, // This is a public page, only show approved
     }
   );
 
