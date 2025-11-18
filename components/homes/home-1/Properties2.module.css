@@ -2,7 +2,7 @@
 .propertyCard {
   display: flex;
   flex-direction: row;
-  padding: 12px;
+  padding: 0px;
   width: 500px;
   min-height: 400px;
   background: white;
@@ -207,7 +207,7 @@
 /* Right Content Section */
 .contentSection {
   flex: 1;
-  padding: 0 18px;
+  padding: 8px 8px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -632,6 +632,7 @@
 
 .phone-number-text {
   margin-left: 0;
+  font-size: 12px;
 }
 
 /* Swiper Container and Slide Styling */

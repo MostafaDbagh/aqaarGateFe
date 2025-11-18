@@ -1,10 +1,54 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'res.cloudinary.com',
+        },
+        {
+          protocol: 'https',
+          hostname: '**.cloudinary.com',
+        },
+        {
+          protocol: 'https',
+          hostname: 'picsum.photos',
+        },
+        {
+          protocol: 'https',
+          hostname: 'cdn.pixabay.com',
+        },
+        {
+          protocol: 'https',
+          hostname: 'i.pravatar.cc',
+        },
+        {
+          protocol: 'https',
+          hostname: '**.amazonaws.com',
+        },
+        {
+          protocol: 'https',
+          hostname: '**.s3.amazonaws.com',
+        },
+        {
+          protocol: 'http',
+          hostname: 'localhost',
+        },
+        {
+          protocol: 'https',
+          hostname: '**.onrender.com',
+        },
+        {
+          protocol: 'https',
+          hostname: '**.herokuapp.com',
+        },
+      ],
+      // Legacy domains support (for older Next.js versions)
       domains: ['res.cloudinary.com', 'picsum.photos', 'cdn.pixabay.com', 'i.pravatar.cc', 'example.com'],
       formats: ['image/avif', 'image/webp'],
       deviceSizes: [360, 420, 640, 768, 1024, 1280, 1536, 1920],
       imageSizes: [16, 32, 48, 64, 96, 128, 256],
+      unoptimized: false, // Enable optimization by default
     },
     compress: true,
     poweredByHeader: false,

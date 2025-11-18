@@ -24,19 +24,134 @@ export default function Properties({ listings, isLoading, isError }) {
     window.open(whatsappUrl, '_blank');
   };
 
+  // Function to resolve image URL from various formats
+  const resolveImageUrl = (value) => {
+    if (!value) return null;
+
+    const rawValue = typeof value === 'string' ? value.trim() : value;
+    if (!rawValue) return null;
+
+    if (typeof rawValue !== 'string') {
+      const candidate = rawValue.url || rawValue.secure_url || rawValue.path || rawValue.src;
+      return resolveImageUrl(candidate);
+    }
+
+    const raw = rawValue.trim();
+
+    if (/^https?:\/\//i.test(raw) || raw.startsWith('data:') || raw.startsWith('blob:')) {
+      return raw;
+    }
+
+    if (raw.startsWith('//')) {
+      return `https:${raw}`;
+    }
+
+    const isBareFilename = /^[^\/]+\.(jpg|jpeg|png|webp|gif|avif|svg|heic)$/i.test(raw);
+    if (isBareFilename) {
+      return null;
+    }
+
+    if (raw.startsWith('/')) {
+      return raw;
+    }
+
+    if (!raw.includes('/')) {
+      return null;
+    }
+
+    const normalized = raw.replace(/\\/g, '/');
+    const trimmed = normalized.replace(/^(\.\/)+/, '').replace(/^\/+/, '');
+    if (!trimmed) {
+      return null;
+    }
+
+    return `/${trimmed}`;
+  };
+
+  // Function to extract image URLs from listing (similar to PropertyGridItems)
+  const extractImageUrls = (listing) => {
+    const urls = [];
+
+    const pushUrl = (value) => {
+      const resolved = resolveImageUrl(value);
+      if (resolved) {
+        urls.push(resolved);
+      }
+    };
+
+    // Try images array (can be array of objects with url property or array of strings)
+    if (Array.isArray(listing.images) && listing.images.length > 0) {
+      listing.images.forEach((item) => {
+        // Handle object format: { url: "...", publicId: "...", ... }
+        if (typeof item === 'object' && item !== null) {
+          pushUrl(item.url || item.secure_url || item.path || item.src);
+        } else {
+          // Handle string format
+          pushUrl(item);
+        }
+      });
+    }
+
+    // Try galleryImages array
+    if (Array.isArray(listing.galleryImages) && listing.galleryImages.length > 0) {
+      listing.galleryImages.forEach((item) => {
+        if (typeof item === 'object' && item !== null) {
+          pushUrl(item.url || item.secure_url || item.path || item.src);
+        } else {
+          pushUrl(item);
+        }
+      });
+    }
+
+    // Try imageNames array (usually strings)
+    if (Array.isArray(listing.imageNames) && listing.imageNames.length > 0) {
+      listing.imageNames.forEach((name) => pushUrl(name));
+    }
+
+    // Try single image properties
+    pushUrl(listing.coverImage);
+    pushUrl(listing.featuredImage);
+    pushUrl(listing.mainImage);
+
+    // Remove duplicates and filter out nulls
+    const uniqueUrls = urls
+      .filter(Boolean)
+      .filter((url, index, arr) => arr.indexOf(url) === index);
+
+    // Return first image or fallback
+    const finalUrl = uniqueUrls.length > 0 ? uniqueUrls[0] : "/images/section/box-house-2.jpg";
+    
+    // Debug logging
+    if (process.env.NODE_ENV === 'development' && uniqueUrls.length === 0) {
+      console.warn('No images found for listing:', {
+        id: listing._id,
+        hasImages: !!listing.images,
+        imagesLength: listing.images?.length || 0,
+        hasImageNames: !!listing.imageNames,
+        imageNamesLength: listing.imageNames?.length || 0,
+        listing: listing
+      });
+    }
+    
+    return finalUrl;
+  };
+
   // Function to get image source from listing
   const getImageSource = (listing) => {
-    // Try to get first image from images array
-    if (listing.images && Array.isArray(listing.images) && listing.images.length > 0) {
-      const firstImage = listing.images[0];
-      return firstImage.url || firstImage || "/images/section/box-house-2.jpg";
+    const imageUrl = extractImageUrls(listing);
+    // Debug: Log image extraction
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Listing image extraction:', {
+        listingId: listing._id,
+        hasImages: !!listing.images,
+        imagesLength: listing.images?.length || 0,
+        hasImageNames: !!listing.imageNames,
+        imageNamesLength: listing.imageNames?.length || 0,
+        extractedUrl: imageUrl,
+        listing: listing
+      });
     }
-    // Fallback to imageNames
-    if (listing.imageNames && Array.isArray(listing.imageNames) && listing.imageNames.length > 0) {
-      return listing.imageNames[0];
-    }
-    // Default fallback image
-    return "/images/section/box-house-2.jpg";
+    return imageUrl;
   };
 
   if (isLoading) return (
@@ -148,26 +263,81 @@ export default function Properties({ listings, isLoading, isError }) {
           overflow: 'hidden',
           position: 'relative'
         }}>
-          <Link href={`/property-detail/${listing._id}`}>
+          <Link 
+            href={`/property-detail/${listing._id}`} 
+            style={{ 
+              display: 'block', 
+              width: '100%', 
+              height: '100%', 
+              position: 'relative',
+              minHeight: '280px',
+              backgroundColor: '#f3f4f6'
+            }}
+          >
             <Image
               className="lazyload"
               alt={listing.propertyKeyword || listing.propertyType || 'Property'}
               src={getImageSource(listing)}
               width={600}
               height={280}
+              unoptimized={getImageSource(listing)?.startsWith('http') || false}
               style={{
                 width: '100%',
-                maxWidth: '100%',
                 height: '100%',
-                maxHeight: '280px',
+                maxWidth: '100%',
+                maxHeight: '100%',
                 minHeight: '280px',
                 objectFit: 'cover',
+                objectPosition: 'center',
                 display: 'block'
               }}
               onError={(e) => {
-                e.target.src = "/images/section/box-house-2.jpg";
+                console.error('Image failed to load:', e.target.src);
+                // Try fallback image
+                if (e.target.src !== "/images/section/box-house-2.jpg" && !e.target.src.includes('box-house-2.jpg')) {
+                  e.target.src = "/images/section/box-house-2.jpg";
+                } else {
+                  // If fallback also fails, show placeholder
+                  e.target.style.display = 'none';
+                  const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
+                  if (placeholder) {
+                    placeholder.style.display = 'flex';
+                  }
+                }
+              }}
+              onLoad={(e) => {
+                if (process.env.NODE_ENV === 'development') {
+                  console.log('Image loaded successfully:', e.target.src);
+                }
+                // Hide placeholder if image loads
+                const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
+                if (placeholder) {
+                  placeholder.style.display = 'none';
+                }
+                // Show image
+                e.target.style.display = 'block';
               }}
             />
+            {/* Fallback placeholder */}
+            <div 
+              className="image-placeholder" 
+              style={{
+                display: 'none',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#f3f4f6',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#9ca3af',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
+              No Image Available
+            </div>
           </Link>
 
           <ul className="box-tag flex gap-8">

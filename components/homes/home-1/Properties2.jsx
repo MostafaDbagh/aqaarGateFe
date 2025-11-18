@@ -280,10 +280,10 @@ export default function Properties2() {
                               }}
                             >
                               <i className="icon-phone-1" />
-                              <span className="phone-number-text">
-                                <strong>
+                              <span className="phone-number-text" style={{fontSize: '12px'}}>
+                                
                                   {property.agentNumber || property.agent?.phoneNumber || property.agent?.phone || 'Call Agent'}
-                                </strong>
+                                
                               </span>
                             </button>
                             <button 
@@ -299,9 +299,9 @@ export default function Properties2() {
                             >
                               <i className="icon-mail" />
                               <span>
-                                <strong>
+                                
                                   {property.agentEmail || property.agent?.email || 'Email Agent'}
-                                </strong>
+                                
                               </span>
                             </button>
                           </div>

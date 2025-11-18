@@ -110,12 +110,10 @@ export default function Sidebar({ property }) {
             <div className="content">
               <h6 className="name">{agentName}</h6>
               <ul className="contact">
-                {agentNumber && agentNumber !== "Not provided" && (
-                  <li>
-                    <i className="icon-phone-1" />
-                    <span>{agentNumber}</span>
-                  </li>
-                )}
+                <li>
+                  <i className="icon-phone-1" />
+                  <span>{agentNumber && agentNumber !== "Not provided" ? agentNumber : "Phone number not provided"}</span>
+                </li>
                 {agentEmail && (
                   <li>
                     <i className="icon-mail" />
