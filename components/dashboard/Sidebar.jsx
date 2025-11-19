@@ -85,6 +85,52 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Sold Properties */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.SOLD_PROPERTIES ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.SOLD_PROPERTIES);
+                        router.replace('/admin/sold-properties');
+                      }
+                    }}
+                  >
+                    <i className="icon-check" />
+                    <span>Sold Properties</span>
+                  </button>
+                </li>
+
+                {/* Deleted Properties */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.DELETED_PROPERTIES ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.DELETED_PROPERTIES);
+                        router.replace('/admin/deleted-properties');
+                      }
+                    }}
+                  >
+                    <i className="icon-trash" />
+                    <span>Deleted Properties</span>
+                  </button>
+                </li>
+
                 {/* Agents */}
                 <li
                   className={`nav-menu-item ${

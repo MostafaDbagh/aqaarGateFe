@@ -136,6 +136,26 @@ export default function AdminDashboard() {
             <p className={styles.statLabel}>Blocked Agents</p>
           </div>
         </div>
+
+        <div className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.statIconSold}`}>
+            <i className="icon-sale" />
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statValue}>{stats?.properties?.sold || 0}</h3>
+            <p className={styles.statLabel}>Sold Properties</p>
+          </div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={`${styles.statIcon} ${styles.statIconDeleted}`}>
+            <i className="icon-trashcan" />
+          </div>
+          <div className={styles.statContent}>
+            <h3 className={styles.statValue}>{stats?.properties?.deleted || 0}</h3>
+            <p className={styles.statLabel}>Deleted Properties</p>
+          </div>
+        </div>
       </div>
     </div>
   );

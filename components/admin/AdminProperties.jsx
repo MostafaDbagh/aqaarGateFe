@@ -4,6 +4,7 @@ import { adminAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
+import ConfirmationModal from "../modals/ConfirmationModal";
 import styles from "./AdminProperties.module.css";
 import { UserIcon } from "@/components/icons";
 
@@ -24,6 +25,11 @@ export default function AdminProperties() {
   const [pagination, setPagination] = useState(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    propertyId: null,
+    loading: false
+  });
 
   useEffect(() => {
     fetchProperties();
@@ -79,16 +85,30 @@ export default function AdminProperties() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this property?")) return;
+  const handleDelete = async (id, deletedReason) => {
+    if (!deletedReason || !deletedReason.trim()) {
+      showWarningModal("Error", "Please provide a reason for deletion");
+      return;
+    }
     
     try {
-      await adminAPI.deleteProperty(id);
+      setDeleteModal(prev => ({ ...prev, loading: true }));
+      await adminAPI.deleteProperty(id, deletedReason);
       showSuccessModal("Success", "Property deleted successfully");
+      setDeleteModal({ isOpen: false, propertyId: null, loading: false });
       fetchProperties();
     } catch (err) {
+      setDeleteModal(prev => ({ ...prev, loading: false }));
       showWarningModal("Error", err.message || "Failed to delete property");
     }
+  };
+
+  const handleDeleteClick = (property) => {
+    setDeleteModal({
+      isOpen: true,
+      propertyId: property._id,
+      loading: false
+    });
   };
 
   const handleViewDetails = (propertyId) => {
@@ -195,7 +215,6 @@ export default function AdminProperties() {
               <th>Type</th>
               <th>Status</th>
               <th>Approval</th>
-              <th>Agent</th>
               <th>Price</th>
               <th>Location</th>
               <th>Actions</th>
@@ -204,7 +223,7 @@ export default function AdminProperties() {
           <tbody>
             {properties.length === 0 ? (
               <tr>
-                <td colSpan="9" className={styles.noData}>No properties found</td>
+                <td colSpan="8" className={styles.noData}>No properties found</td>
               </tr>
             ) : (
               properties.map((property) => (
@@ -228,28 +247,6 @@ export default function AdminProperties() {
                     <span className={`${styles.badge} ${getStatusBadgeClass(property.approvalStatus)}`}>
                       {property.approvalStatus}
                     </span>
-                  </td>
-                  <td>
-                    {property.agentId ? (
-                      <div className={styles.agentInfo}>
-                        <div className={styles.agentNameRow}>
-                          <UserIcon width={14} height={14} stroke="currentColor" />
-                          <span className={styles.agentName}>
-                            {property.agentId.username || property.agentId.email || "Unknown"}
-                          </span>
-                          {property.agentId.isBlocked && (
-                            <span className={`${styles.badge} ${styles.badgeBlockedAgent}`}>
-                              Blocked
-                            </span>
-                          )}
-                        </div>
-                        {property.agentId.email && (
-                          <span className={styles.agentEmail}>{property.agentId.email}</span>
-                        )}
-                      </div>
-                    ) : (
-                      <span className={styles.noAgent}>No Agent</span>
-                    )}
                   </td>
                   <td>
                     {property.propertyPrice} {property.currency || "USD"}
@@ -290,7 +287,7 @@ export default function AdminProperties() {
                       )}
                       <button
                         className={`${styles.btn} ${styles.btnDelete}`}
-                        onClick={() => handleDelete(property._id)}
+                        onClick={() => handleDeleteClick(property)}
                       >
                         Delete
                       </button>
@@ -333,7 +330,27 @@ export default function AdminProperties() {
         propertyId={selectedPropertyId}
         onApprove={handleApproval}
         onReject={(id) => handleApproval(id, "rejected")}
-        onDelete={handleDelete}
+        onDelete={handleDeleteClick}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, propertyId: null, loading: false })}
+        onConfirm={(deletedReason) => {
+          if (deleteModal.propertyId) {
+            handleDelete(deleteModal.propertyId, deletedReason);
+          }
+        }}
+        title="Delete Property"
+        message="Please provide a reason for deleting this property. This property will be marked as deleted."
+        confirmText="Delete Property"
+        confirmColor="#dc3545"
+        loading={deleteModal.loading}
+        showInput={true}
+        inputLabel="Reason for deletion"
+        inputPlaceholder="Enter the reason for deleting this property..."
+        inputRequired={true}
       />
     </div>
   );

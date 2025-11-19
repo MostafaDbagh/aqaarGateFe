@@ -9,9 +9,35 @@ const ConfirmationModal = ({
   confirmText = "Confirm", 
   cancelText = "Cancel",
   confirmColor = "#dc3545",
-  loading = false 
+  loading = false,
+  showInput = false,
+  inputPlaceholder = "",
+  inputLabel = "",
+  inputValue = "",
+  onInputChange = null,
+  inputRequired = false
 }) => {
+  const [inputVal, setInputVal] = React.useState(inputValue || "");
+  
+  React.useEffect(() => {
+    if (isOpen) {
+      setInputVal(inputValue || "");
+    }
+  }, [isOpen, inputValue]);
+
   if (!isOpen) return null;
+
+  const handleConfirm = () => {
+    if (showInput && inputRequired && !inputVal.trim()) {
+      return; // Don't proceed if input is required and empty
+    }
+    if (onInputChange) {
+      onInputChange(inputVal);
+    }
+    if (onConfirm) {
+      onConfirm(inputVal);
+    }
+  };
 
   return (
     <div 
@@ -65,12 +91,67 @@ const ConfirmationModal = ({
         }}>
           <p style={{
             margin: 0,
+            marginBottom: showInput ? '16px' : 0,
             fontSize: '14px',
             color: '#666666',
             lineHeight: '1.5'
           }}>
             {message}
           </p>
+          {showInput && (
+            <div>
+              {inputLabel && (
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  color: '#333333'
+                }}>
+                  {inputLabel}
+                  {inputRequired && <span style={{ color: '#dc3545' }}> *</span>}
+                </label>
+              )}
+              <textarea
+                value={inputVal}
+                onChange={(e) => {
+                  setInputVal(e.target.value);
+                  if (onInputChange) {
+                    onInputChange(e.target.value);
+                  }
+                }}
+                placeholder={inputPlaceholder}
+                required={inputRequired}
+                style={{
+                  width: '100%',
+                  minHeight: '80px',
+                  padding: '10px 12px',
+                  border: `1px solid ${inputRequired && !inputVal.trim() ? '#dc3545' : '#d1d5db'}`,
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontFamily: 'inherit',
+                  resize: 'vertical',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = inputRequired && !inputVal.trim() ? '#dc3545' : '#d1d5db';
+                }}
+              />
+              {inputRequired && !inputVal.trim() && (
+                <p style={{
+                  margin: '4px 0 0',
+                  fontSize: '12px',
+                  color: '#dc3545'
+                }}>
+                  This field is required
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Footer */}
@@ -114,8 +195,8 @@ const ConfirmationModal = ({
             {cancelText}
           </button>
           <button
-            onClick={onConfirm}
-            disabled={loading}
+            onClick={handleConfirm}
+            disabled={loading || (showInput && inputRequired && !inputVal.trim())}
             style={{
               padding: '10px 20px',
               border: 'none',

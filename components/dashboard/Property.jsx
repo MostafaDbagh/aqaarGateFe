@@ -120,7 +120,11 @@ export default function Property() {
       onConfirm: async () => {
         setConfirmationModal(prev => ({ ...prev, loading: true }));
         try {
-          await listingAPI.updateListing(listing._id, { isSold: !listing.isSold });
+          const updateData = { isSold: !listing.isSold };
+          // Backend will automatically set soldDate when isSold is true
+          // Backend will automatically clear soldDate when isSold is false
+          // No need to send soldDate explicitly - backend handles it dynamically
+          await listingAPI.updateListing(listing._id, updateData);
           refetch(); // Refresh the listings
           setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
           showToast(`Property marked as ${action} successfully!`, 'success');
@@ -155,19 +159,23 @@ export default function Property() {
     setConfirmationModal({
       isOpen: true,
       title: 'Delete Property',
-      message: 'This property will be permanently removed. This action cannot be undone.',
+      message: 'Please provide a reason for deleting this property. This property will be marked as deleted.',
       confirmText: 'Delete Property',
       confirmColor: '#dc3545',
-      onConfirm: async () => {
+      showInput: true,
+      inputLabel: 'Reason for deletion',
+      inputPlaceholder: 'Enter the reason for deleting this property...',
+      inputRequired: true,
+      onConfirm: async (deletedReason) => {
         setConfirmationModal(prev => ({ ...prev, loading: true }));
         try {
-          await listingAPI.deleteListing(listing._id);
+          await listingAPI.deleteListing(listing._id, deletedReason);
           await refetch(); // Refresh the listings
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
+          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false });
           showToast('Property deleted successfully!', 'success');
         } catch (error) {
           logger.error('Error deleting property:', error);
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
+          setConfirmationModal(prev => ({ ...prev, loading: false }));
           
           // Show more specific error message
           const errorMessage = error?.response?.data?.message || error?.response?.data?.error || error?.message || error?.error || 'Failed to delete property. Please try again.';
@@ -797,13 +805,17 @@ export default function Property() {
       {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={confirmationModal.isOpen}
-        onClose={() => setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false })}
+        onClose={() => setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false })}
         onConfirm={confirmationModal.onConfirm}
         title={confirmationModal.title}
         message={confirmationModal.message}
         confirmText={confirmationModal.confirmText}
         confirmColor={confirmationModal.confirmColor}
         loading={confirmationModal.loading}
+        showInput={confirmationModal.showInput || false}
+        inputLabel={confirmationModal.inputLabel || ''}
+        inputPlaceholder={confirmationModal.inputPlaceholder || ''}
+        inputRequired={confirmationModal.inputRequired || false}
       />
 
       {/* Toast Notification */}

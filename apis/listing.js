@@ -114,11 +114,12 @@ export const listingAPI = {
     }
   },
 
-  // Delete listing
-  deleteListing: async (id) => {
+  // Delete listing (soft delete with reason)
+  deleteListing: async (id, deletedReason = '') => {
     try {
       const token = localStorage.getItem('token');
       const response = await Axios.delete(`/listing/delete/${id}`, {
+        data: { deletedReason },
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

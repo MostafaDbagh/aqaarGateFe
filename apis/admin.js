@@ -50,9 +50,70 @@ export const adminAPI = {
     }
   },
 
-  deleteProperty: async (id) => {
+  deleteProperty: async (id, deletedReason = '') => {
     try {
-      const response = await Axios.delete(`/admin/properties/${id}`);
+      const response = await Axios.delete(`/admin/properties/${id}`, {
+        data: { deletedReason }
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Sold Properties
+  getSoldProperties: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.search) params.append('search', filters.search);
+      if (filters.propertyType) params.append('propertyType', filters.propertyType);
+      if (filters.city) params.append('city', filters.city);
+      if (filters.agentId) params.append('agentId', filters.agentId);
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = `/admin/sold-properties${queryString ? `?${queryString}` : ''}`;
+      const response = await Axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateSoldPropertyCharges: async (id, soldCharges) => {
+    try {
+      const response = await Axios.put(`/admin/sold-properties/${id}/charges`, {
+        soldCharges
+      });
+      return response.data;
+    } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.message) {
+        throw new Error(errorData.message);
+      }
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Deleted Properties
+  getDeletedProperties: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.search) params.append('search', filters.search);
+      if (filters.propertyType) params.append('propertyType', filters.propertyType);
+      if (filters.city) params.append('city', filters.city);
+      if (filters.agentId) params.append('agentId', filters.agentId);
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = `/admin/deleted-properties${queryString ? `?${queryString}` : ''}`;
+      const response = await Axios.get(url);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
