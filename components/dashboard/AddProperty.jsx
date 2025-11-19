@@ -12,7 +12,7 @@ import styles from "./AddProperty.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { sanitizeInput, validateFileUpload } from "@/utils/security";
 
-export default function AddProperty() {
+export default function AddProperty({ isAdminMode = false }) {
   const router = useRouter();
   const { showSuccessModal } = useGlobalModal();
   const [user, setUser] = useState(null);
@@ -65,11 +65,24 @@ export default function AddProperty() {
       setUser(userData);
       
       // Set agent info in form data
-      setFormData(prev => ({
-        ...prev,
-        agent: userData.email,
-        agentId: userData._id
-      }));
+      if (isAdminMode && userData.role === 'admin') {
+        // Admin mode: auto-fill with admin details
+        setFormData(prev => ({
+          ...prev,
+          agent: 'admin@aqaargate.com',
+          agentId: userData._id,
+          agentEmail: 'admin@aqaargate.com',
+          agentNumber: userData.phone || '',
+          agentWhatsapp: userData.phone || ''
+        }));
+      } else {
+        // Regular agent mode
+        setFormData(prev => ({
+          ...prev,
+          agent: userData.email,
+          agentId: userData._id
+        }));
+      }
     };
 
     loadUser();
@@ -81,11 +94,22 @@ export default function AddProperty() {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     
-    // Sanitize text inputs to prevent XSS
-    const sanitizedValue = type === 'checkbox' ? checked : 
-                          (type === 'text' || type === 'textarea' || type === 'email') 
-                            ? sanitizeInput(value) 
-                            : value;
+    // For checkboxes, use checked value directly
+    // For text inputs, allow spaces but remove only dangerous characters (<, >, javascript:, on*=)
+    // Don't use sanitizeInput during typing as it trims spaces
+    let sanitizedValue;
+    if (type === 'checkbox') {
+      sanitizedValue = checked;
+    } else if (type === 'text' || type === 'textarea' || type === 'email') {
+      // Only remove dangerous characters, keep spaces
+      sanitizedValue = value
+        .replace(/[<>]/g, '') // Remove < and >
+        .replace(/javascript:/gi, '')
+        .replace(/on\w+\s*=/gi, '');
+      // Don't use .trim() here to allow spaces
+    } else {
+      sanitizedValue = value;
+    }
     
     setFormData(prev => ({
       ...prev,
@@ -269,11 +293,13 @@ export default function AddProperty() {
         landArea: formData.landArea ? parseInt(formData.landArea) : parseInt(formData.size),
         yearBuilt: formData.yearBuilt ? parseInt(formData.yearBuilt) : new Date().getFullYear(),
         garageSize: formData.garages && formData.garageSize ? parseInt(formData.garageSize) : 0,
-        approvalStatus: "pending",
+        approvalStatus: isAdminMode && user?.role === 'admin' ? "approved" : "pending",
         isSold: false,
         isDeleted: false,
         // Auto-embed agent contact info from user profile
-        agentEmail: user?.email || "",
+        agentEmail: isAdminMode && user?.role === 'admin' 
+          ? 'admin@aqaargate.com' 
+          : (user?.email || ""),
         agentNumber: user?.phone || "",
         agentWhatsapp: user?.phone || "",
         images: images,
@@ -289,14 +315,18 @@ export default function AddProperty() {
       logger.debug("Property created successfully:", result);
       
       // Show success modal
+      const successMessage = isAdminMode && user?.role === 'admin'
+        ? "Property has been added successfully and is automatically approved!"
+        : "Your property has been submitted and is pending approval. You will be redirected to your properties page.";
+      
       showSuccessModal(
         "Property Added Successfully!",
-        "Your property has been submitted and is pending approval. You will be redirected to your properties page.",
+        successMessage,
         user?.email || ""
       );
       
       // Reset form with default values
-      setFormData({
+      const resetFormData = {
         propertyType: "Apartment",
         propertyKeyword: "",
         propertyDesc: "",
@@ -315,12 +345,24 @@ export default function AddProperty() {
         country: "Syria",
         state: "Aleppo",
         neighborhood: "Downtown",
-        agent: user?.email || "",
-        agentId: user?._id || "",
         amenities: [],
         propertyId: `PROP_${Date.now()}`,
         notes: ""
-      });
+      };
+      
+      // If admin mode, auto-fill admin details again
+      if (isAdminMode && user?.role === 'admin') {
+        resetFormData.agent = 'admin@aqaargate.com';
+        resetFormData.agentId = user._id;
+        resetFormData.agentEmail = 'admin@aqaargate.com';
+        resetFormData.agentNumber = user.phone || '';
+        resetFormData.agentWhatsapp = user.phone || '';
+      } else {
+        resetFormData.agent = user?.email || "";
+        resetFormData.agentId = user?._id || "";
+      }
+      
+      setFormData(resetFormData);
       setImages([]);
       setImagePreview([]);
       setErrors({});

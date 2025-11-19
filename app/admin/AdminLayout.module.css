@@ -23,6 +23,11 @@
   transition: margin-left 0.3s ease;
 }
 
+/* Remove padding-left for add-property page */
+.mainContent:has([data-page="add-property"]) {
+  padding-left: 0;
+}
+
 @media (max-width: 1024px) {
   .mainContent {
     margin-left: 0;

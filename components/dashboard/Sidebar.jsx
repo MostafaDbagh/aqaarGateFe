@@ -85,6 +85,29 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Add Property */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.ADD_PROPERTY ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.ADD_PROPERTY);
+                        router.replace('/admin/add-property');
+                      }
+                    }}
+                  >
+                    <i className="icon-plus" />
+                    <span>Add Property</span>
+                  </button>
+                </li>
+
                 {/* Sold Properties */}
                 <li
                   className={`nav-menu-item ${
@@ -126,7 +149,7 @@ export default function Sidebar() {
                       }
                     }}
                   >
-                    <i className="icon-trash" />
+                    <i className="icon-trashcan" />
                     <span>Deleted Properties</span>
                   </button>
                 </li>
@@ -197,6 +220,52 @@ export default function Sidebar() {
                   >
                     <i className="icon-mail" />
                     <span>Contact Us</span>
+                  </button>
+                </li>
+
+                {/* Reviews */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.REVIEWS ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.REVIEWS);
+                        router.replace('/admin/reviews');
+                      }
+                    }}
+                  >
+                    <i className="icon-star" />
+                    <span>Reviews</span>
+                  </button>
+                </li>
+
+                {/* Messages */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.MESSAGES ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.MESSAGES);
+                        router.replace('/admin/messages');
+                      }
+                    }}
+                  >
+                    <i className="icon-message" />
+                    <span>Messages</span>
                   </button>
                 </li>
               </>

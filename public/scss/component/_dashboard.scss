@@ -10,6 +10,13 @@
     -ms-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
+    
+    /* Remove padding-left for admin pages */
+    &.admin-add-property-page,
+    &.admin-reviews-page,
+    &.admin-messages-page {
+      padding-left: 0 !important;
+    }
   }
   .main-content-inner {
     padding: 111px 56px 0;
@@ -22,6 +29,14 @@
       flex-direction: column;
       justify-content: space-between;
     }
+    
+    /* Admin pages: reduce padding-top to 32px */
+    &.admin-add-property-page-inner,
+    &.admin-reviews-page-inner,
+    &.admin-messages-page-inner {
+      padding-top: 32px !important;
+    }
+    
     .box-btn {
       display: flex;
       justify-content: center;
