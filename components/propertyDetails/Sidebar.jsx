@@ -12,6 +12,7 @@ export default function Sidebar({ property }) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [imageError, setImageError] = useState(false);
   
   const createMessageMutation = useCreateMessage();
   
@@ -36,13 +37,18 @@ export default function Sidebar({ property }) {
                     "Property Agent";
   
   // Get agent avatar - check all possible image fields, fallback to default if no image
-  const agentAvatar = property?.agentId?.avatar || 
-                      property?.agentId?.image ||
-                      property?.agentId?.imageUrl ||
-                      property?.agent?.avatar ||
-                      property?.agent?.image ||
-                      property?.agent?.imageUrl ||
-                      "/images/avatar/seller.jpg";
+  const agentAvatarInitial = property?.agentId?.avatar || 
+                             property?.agentId?.image ||
+                             property?.agentId?.imageUrl ||
+                             property?.agent?.avatar ||
+                             property?.agent?.image ||
+                             property?.agent?.imageUrl ||
+                             null;
+  
+  // Use fallback image if initial image fails or doesn't exist
+  const agentAvatar = imageError || !agentAvatarInitial 
+    ? "/images/agent-avatar.svg" 
+    : agentAvatarInitial;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -102,9 +108,10 @@ export default function Sidebar({ property }) {
                   objectFit: 'cover',
                   borderRadius: '50%'
                 }}
-                onError={(e) => {
-                  e.target.src = "/images/avatar/seller.jpg";
+                onError={() => {
+                  setImageError(true);
                 }}
+                unoptimized={agentAvatar === "/images/agent-avatar.svg"}
               />
             </div>
             <div className="content">
