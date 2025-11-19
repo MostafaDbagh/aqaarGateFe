@@ -1,21 +1,47 @@
 async function getProperties() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
-    const response = await fetch(`${apiUrl}/listing/search?limit=100`, {
-      next: { revalidate: 3600 } // Revalidate every hour
-    });
     
-    if (!response.ok) {
-      console.error('Failed to fetch properties for sitemap');
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    try {
+      const response = await fetch(`${apiUrl}/listing/search?limit=500&approvalStatus=approved`, {
+        next: { revalidate: 3600 }, // Revalidate every hour
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        console.error('Failed to fetch properties for sitemap');
+        return [];
+      }
+      
+      const data = await response.json();
+      // Handle both array response and wrapped response
+      const properties = Array.isArray(data) ? data : (data.data || data.listings || []);
+      
+      // Filter only approved and not sold properties
+      return (properties || []).filter(p => 
+        p && 
+        (p._id || p.id) && 
+        p.approvalStatus === 'approved' && 
+        p.isSold !== true && 
+        p.isDeleted !== true
+      ).slice(0, 1000); // Limit to 1000 properties max
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        console.error('Timeout fetching properties for sitemap');
+      } else {
+        console.error('Error fetching properties for sitemap:', fetchError);
+      }
       return [];
     }
-    
-    const data = await response.json();
-    // Handle both array response and wrapped response
-    const properties = Array.isArray(data) ? data : (data.data || data.listings || []);
-    return properties;
   } catch (error) {
-    console.error('Error fetching properties for sitemap:', error);
+    console.error('Error in getProperties:', error);
     return [];
   }
 }
@@ -23,21 +49,45 @@ async function getProperties() {
 async function getAgents() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
-    const response = await fetch(`${apiUrl}/agents`, {
-      next: { revalidate: 3600 } // Revalidate every hour
-    });
     
-    if (!response.ok) {
-      console.error('Failed to fetch agents for sitemap');
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
+    try {
+      const response = await fetch(`${apiUrl}/agents?limit=500`, {
+        next: { revalidate: 3600 }, // Revalidate every hour
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        console.error('Failed to fetch agents for sitemap');
+        return [];
+      }
+      
+      const data = await response.json();
+      // Handle both array response and wrapped response
+      const agents = Array.isArray(data) ? data : (data.data || []);
+      
+      // Filter only non-blocked agents
+      return (agents || []).filter(a => 
+        a && 
+        (a._id || a.id) && 
+        a.isBlocked !== true
+      ).slice(0, 500); // Limit to 500 agents max
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        console.error('Timeout fetching agents for sitemap');
+      } else {
+        console.error('Error fetching agents for sitemap:', fetchError);
+      }
       return [];
     }
-    
-    const data = await response.json();
-    // Handle both array response and wrapped response
-    const agents = Array.isArray(data) ? data : (data.data || []);
-    return agents;
   } catch (error) {
-    console.error('Error fetching agents for sitemap:', error);
+    console.error('Error in getAgents:', error);
     return [];
   }
 }
@@ -55,15 +105,25 @@ async function getAgents() {
  * 
  * Note: Only approved properties and non-blocked agents are included
  */
+
+// Configure sitemap generation - revalidate every hour
+export const revalidate = 3600;
+
 export default async function sitemap() {
   // Base URL for the website - Update this to your production domain
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'
   
-  // Fetch all properties and agents from the API
+  // Fetch all properties and agents from the API in parallel with timeout protection
   // Properties are filtered to only include approved ones
   // Agents are filtered to exclude blocked ones
-  const properties = await getProperties();
-  const agents = await getAgents();
+  // Use Promise.allSettled to prevent one failure from breaking the entire sitemap
+  const [propertiesResult, agentsResult] = await Promise.allSettled([
+    getProperties(),
+    getAgents()
+  ]);
+  
+  const properties = propertiesResult.status === 'fulfilled' ? propertiesResult.value : [];
+  const agents = agentsResult.status === 'fulfilled' ? agentsResult.value : [];
   
   // Generate property URLs (only if properties exist and have IDs)
   const propertyUrls = (properties || [])
