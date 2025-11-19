@@ -42,11 +42,26 @@ async function getAgents() {
   }
 }
 
+/**
+ * Sitemap Generator for AqaarGate Real Estate
+ * 
+ * This file generates a sitemap.xml file that lists all public pages
+ * that should be indexed by search engines.
+ * 
+ * The sitemap includes:
+ * - Static pages (homepage, property-list, agents, etc.)
+ * - Dynamic property detail pages (fetched from API)
+ * - Dynamic agent detail pages (fetched from API)
+ * 
+ * Note: Only approved properties and non-blocked agents are included
+ */
 export default async function sitemap() {
-  // Update to your production domain
+  // Base URL for the website - Update this to your production domain
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'
   
-  // Fetch all properties and agents
+  // Fetch all properties and agents from the API
+  // Properties are filtered to only include approved ones
+  // Agents are filtered to exclude blocked ones
   const properties = await getProperties();
   const agents = await getAgents();
   
@@ -71,18 +86,31 @@ export default async function sitemap() {
     }));
   
   return [
+    // Homepage - Highest priority
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
+    
+    // Property listing pages - High priority for SEO
     {
       url: `${baseUrl}/property-list`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
+    
+    // Agent pages - Important for SEO
+    {
+      url: `${baseUrl}/agents`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    
+    // Legal and policy pages - Required for compliance
     {
       url: `${baseUrl}/terms-and-conditions`,
       lastModified: new Date(),
@@ -96,44 +124,21 @@ export default async function sitemap() {
       priority: 0.8,
     },
     
-
-    {
-      url: `${baseUrl}/agents`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/career`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-
-    {
-      url: `${baseUrl}/vision`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
+    // Company information pages
     {
       url: `${baseUrl}/about-us`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/vision`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    
+    // Blog pages - Content marketing
     {
       url: `${baseUrl}/blog-grid`,
       lastModified: new Date(),
@@ -146,9 +151,43 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
-    // Add all property detail pages
+    
+    // Service pages
+    {
+      url: `${baseUrl}/property-rental-service`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    
+    // Contact and support pages
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/career`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    
+    // Dynamic property detail pages
+    // These are generated from the API and include all approved properties
+    // Each property gets its own URL: /property-detail/[id]
     ...propertyUrls,
-    // Add all agent detail pages
+    
+    // Dynamic agent detail pages
+    // These are generated from the API and include all non-blocked agents
+    // Each agent gets its own URL: /agents-details/[id]
     ...agentUrls,
   ]
 }

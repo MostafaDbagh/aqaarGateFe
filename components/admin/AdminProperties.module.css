@@ -172,6 +172,16 @@
   transition: all 0.2s;
 }
 
+.btnView {
+  background-color: #3b82f6;
+  color: white;
+  margin-right: 8px;
+}
+
+.btnView:hover {
+  background-color: #2563eb;
+}
+
 .btnApprove {
   background-color: #10b981;
   color: white;

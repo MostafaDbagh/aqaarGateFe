@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { adminAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import PropertyDetailsModal from "./PropertyDetailsModal";
 import styles from "./AdminProperties.module.css";
 import { UserIcon } from "@/components/icons";
 
@@ -21,6 +22,8 @@ export default function AdminProperties() {
     limit: 20
   });
   const [pagination, setPagination] = useState(null);
+  const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchProperties();
@@ -86,6 +89,16 @@ export default function AdminProperties() {
     } catch (err) {
       showWarningModal("Error", err.message || "Failed to delete property");
     }
+  };
+
+  const handleViewDetails = (propertyId) => {
+    setSelectedPropertyId(propertyId);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedPropertyId(null);
   };
 
   const getStatusBadgeClass = (status) => {
@@ -244,6 +257,13 @@ export default function AdminProperties() {
                   <td>{property.city}, {property.country}</td>
                   <td>
                     <div className={styles.actions}>
+                      <button
+                        className={`${styles.btn} ${styles.btnView}`}
+                        onClick={() => handleViewDetails(property._id)}
+                        title="View full property details with images"
+                      >
+                        View Details
+                      </button>
                       {property.approvalStatus === "pending" && (
                         <>
                           <button
@@ -305,6 +325,16 @@ export default function AdminProperties() {
           </button>
         </div>
       )}
+
+      {/* Property Details Modal */}
+      <PropertyDetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={handleCloseDetailsModal}
+        propertyId={selectedPropertyId}
+        onApprove={handleApproval}
+        onReject={(id) => handleApproval(id, "rejected")}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

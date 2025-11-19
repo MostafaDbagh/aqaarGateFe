@@ -180,22 +180,25 @@ export const metadata = {
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com',
     siteName: 'AqaarGate Real Estate',
-    title: 'AqaarGate Real Estate - Find Your Dream Property',
-    description: 'Discover premium properties for sale and rent. Expert guidance and personalized service for all your real estate needs.',
+    title: 'AqaarGate Real Estate - Premium Properties in Syria & Lattakia',
+    description: 'Discover premium properties for sale and rent in Syria and Lattakia. Luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties. Perfect for expats from EU and Gulf countries.',
     images: [
       {
-        url: '/images/logo/logo-2@2x.png',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'AqaarGate Real Estate',
+        alt: 'AqaarGate Real Estate - Premium Properties in Syria',
+        type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AqaarGate Real Estate - Find Your Dream Property',
-    description: 'Discover premium properties for sale and rent. Expert guidance and personalized service.',
-    images: ['/images/logo/logo-2@2x.png'],
+    title: 'AqaarGate Real Estate - Premium Properties in Syria & Lattakia',
+    description: 'Discover premium properties for sale and rent in Syria and Lattakia. Luxury homes, apartments, holiday homes, and commercial properties.',
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`],
+    creator: '@AqaarGate',
+    site: '@AqaarGate',
   },
   robots: {
     index: true,
@@ -226,6 +229,35 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#f1913d" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        {/* Enhanced Open Graph Meta Tags for Better Social Media Sharing */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'} />
+        <meta property="og:title" content="AqaarGate Real Estate - Premium Properties in Syria & Lattakia" />
+        <meta property="og:description" content="Discover premium properties for sale and rent in Syria and Lattakia. Luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties. Perfect for expats from EU and Gulf countries." />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="AqaarGate Real Estate - Premium Properties in Syria" />
+        <meta property="og:site_name" content="AqaarGate Real Estate" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_SY" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'} />
+        <meta name="twitter:title" content="AqaarGate Real Estate - Premium Properties in Syria & Lattakia" />
+        <meta name="twitter:description" content="Discover premium properties for sale and rent in Syria and Lattakia. Luxury homes, apartments, holiday homes, and commercial properties." />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`} />
+        <meta name="twitter:image:alt" content="AqaarGate Real Estate - Premium Properties in Syria" />
+        <meta name="twitter:creator" content="@AqaarGate" />
+        <meta name="twitter:site" content="@AqaarGate" />
+        
+        {/* Additional Meta Tags for Better Social Sharing */}
+        <meta name="application-name" content="AqaarGate Real Estate" />
+        <meta name="apple-mobile-web-app-title" content="AqaarGate" />
+        <meta name="msapplication-TileColor" content="#f1913d" />
+        <meta name="msapplication-TileImage" content="/images/logo/logo@2x.png" />
         
         {/* Advanced SEO Meta Tags - IMPORTANT: Add verification codes from Google Search Console, Bing Webmaster, Yandex Webmaster */}
         {/* Note: Google verification is also in metadata.verification.google, but manual meta tag ensures it's visible */}
