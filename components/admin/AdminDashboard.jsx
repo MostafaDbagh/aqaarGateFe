@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { adminAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import styles from "../../app/admin/overview/AdminDashboard.module.css";
@@ -8,16 +8,24 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    // Prevent double fetch in React Strict Mode
+    if (hasFetched.current) {
+      return;
+    }
+
     const fetchStats = async () => {
       try {
+        hasFetched.current = true;
         setLoading(true);
         const response = await adminAPI.getDashboardStats();
         setStats(response.data);
         setError(null);
       } catch (err) {
         setError(err.message || "Failed to load dashboard stats");
+        hasFetched.current = false; // Reset on error to allow retry
       } finally {
         setLoading(false);
       }

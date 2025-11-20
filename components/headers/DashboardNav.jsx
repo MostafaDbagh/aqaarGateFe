@@ -4,8 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuthState } from "@/store/hooks/useAuth";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
-import FavoritesCount from "@/components/common/FavoritesCount";
-import MessagesCount from "@/components/common/MessagesCount";
 import { 
   UserAvatarIcon, 
   DashboardIcon, 
@@ -276,6 +274,26 @@ export default function DashboardNav({ color = "" }) {
               </Link>
             )}
 
+            {/* My Profile - For ALL logged in users and agents (disabled on mobile only) */}
+            <Link 
+              className="dropdown-item dashboard-disabled-mobile" 
+              href="/my-profile"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }}
+              style={{
+                padding: '14px 12px',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              <ProfileIcon />
+              My Profile
+            </Link>
+
             {/* My Favorites - For ALL logged in users (disabled on mobile only) */}
             <Link 
               className="dropdown-item dashboard-disabled-mobile" 
@@ -292,7 +310,8 @@ export default function DashboardNav({ color = "" }) {
                 border: '1px solid #d1d5db'
               }}
             >
-              <FavoritesCount />
+              <i className="icon-bookmark" />
+              My favorites
             </Link>
 
             {/* Reviews - Only for logged in agents (disabled on mobile only) */}
@@ -334,7 +353,8 @@ export default function DashboardNav({ color = "" }) {
                   border: '1px solid #d1d5db'
                 }}
               >
-                <MessagesCount />
+                <i className="icon-message" />
+                Messages
               </Link>
             )}
 

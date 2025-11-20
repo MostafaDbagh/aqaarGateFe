@@ -64,6 +64,19 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Validate both fields are filled
+    if (!formData.password || formData.password.trim().length === 0) {
+      setError("Password is required");
+      setFieldErrors(prev => ({ ...prev, password: "Password is required" }));
+      return;
+    }
+    
+    if (!formData.confirmPassword || formData.confirmPassword.trim().length === 0) {
+      setError("Please confirm your password");
+      setFieldErrors(prev => ({ ...prev, confirmPassword: "Please confirm your password" }));
+      return;
+    }
+    
     const validationError = validatePassword();
     if (validationError) {
       setError(validationError);
@@ -74,15 +87,22 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
     setIsSubmitting(true);
 
     try {
-      await onSubmit(formData.password);
-      setFormData({ password: "", confirmPassword: "" });
+      await onSubmit(formData.password.trim());
+      // Don't clear form data here - parent handles success/error
       setError(""); // Clear any errors on success
     } catch (err) {
-      // Only show local error if it's a validation error
-      // API errors will be handled by the parent component with error modal
-      const errorMsg = err.message || "Failed to reset password. Please try again.";
+      // Extract error message from different error formats
+      let errorMsg = "Failed to reset password. Please try again.";
+      if (err?.message) {
+        errorMsg = err.message;
+      } else if (err?.error) {
+        errorMsg = err.error;
+      } else if (err?.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      }
       logger.error("NewPassword error:", errorMsg);
-      // Don't set local error as the parent will show error modal
+      // Set local error for immediate feedback, parent will also show error modal
+      setError(errorMsg);
     } finally {
       setIsSubmitting(false);
     }

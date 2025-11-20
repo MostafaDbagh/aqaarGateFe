@@ -50,10 +50,12 @@ export default function OTPVerification({
   // Auto-verify OTP when all 6 digits are filled
   useEffect(() => {
     const otpString = otp.join('');
-    if (otpString.length === 6 && !otpVerified && !isLoading) {
+    if (otpString.length === 6 && !otpVerified && !isLoading && email) {
+      // Only auto-verify if we have all 6 digits, not verified yet, not loading, and email exists
       handleVerifyOTP();
     }
-  }, [otp, otpVerified, isLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otp.join(''), otpVerified, isLoading, email]);
 
   const handleOTPChange = (index, value) => {
     if (value.length > 1) return;
@@ -112,12 +114,26 @@ export default function OTPVerification({
         inputRefs.current[0]?.focus();
       }
     } catch (error) {
-      if (error.message) setError(error.message);
-      else if (error.error) setError(error.error);
-      else if (typeof error === 'string') setError(error);
-      else setError('OTP verification failed. Please try again.');
+      // Extract error message from different error formats
+      let errorMsg = 'OTP verification failed. Please try again.';
+      if (error?.message) {
+        errorMsg = error.message;
+      } else if (error?.error) {
+        errorMsg = error.error;
+      } else if (typeof error === 'string') {
+        errorMsg = error;
+      } else if (error?.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error?.response?.data?.error) {
+        errorMsg = error.response.data.error;
+      }
+      
+      setError(errorMsg);
       setOtp(['', '', '', '', '', '']);
-      inputRefs.current[0]?.focus();
+      // Reset focus after a short delay to ensure input is cleared
+      setTimeout(() => {
+        inputRefs.current[0]?.focus();
+      }, 100);
     } finally {
       setIsLoading(false);
     }

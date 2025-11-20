@@ -170,9 +170,12 @@ export default function Property() {
         setConfirmationModal(prev => ({ ...prev, loading: true }));
         try {
           await listingAPI.deleteListing(listing._id, deletedReason);
-          await refetch(); // Refresh the listings
           setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false });
           showToast('Property deleted successfully!', 'success');
+          // Force page reload after successful deletion
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } catch (error) {
           logger.error('Error deleting property:', error);
           setConfirmationModal(prev => ({ ...prev, loading: false }));

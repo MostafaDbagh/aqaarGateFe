@@ -27,7 +27,7 @@ export const footerData = [
     links: [
       { text: "Terms of use", href: "/terms-and-conditions" },
       { text: "Privacy policy", href: "/privacy-policy" },
-      { text: "Contact support", href: "/contact" },
+      { text: "Rental service", href: "/property-rental-service" },
       { text: "FAQs", href: "/faq" },
     ],
     className: "style-2",

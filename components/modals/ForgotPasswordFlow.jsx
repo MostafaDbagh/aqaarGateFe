@@ -14,6 +14,16 @@ export default function ForgotPasswordFlow({ isOpen, onClose, onSuccess }) {
   const [otpCode, setOtpCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Reset flow when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      // Reset all state when modal closes
+      setCurrentStep(1);
+      setEmail("");
+      setOtpCode("");
+      setErrorMessage("");
+    }
+  }, [isOpen]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -53,8 +63,22 @@ export default function ForgotPasswordFlow({ isOpen, onClose, onSuccess }) {
 
   // Handle password reset
   const handlePasswordReset = async (newPassword) => {
+    if (!email) {
+      logger.error("❌ Password reset failed: No email available");
+      setErrorMessage("Email not found. Please start the process again.");
+      setCurrentStep(5);
+      return;
+    }
+    
     try {
       logger.debug("🔄 Starting password reset for:", email);
+      
+      // Validate password before sending
+      if (!newPassword || newPassword.trim().length < 6) {
+        setErrorMessage("Password must be at least 6 characters long.");
+        setCurrentStep(5);
+        return;
+      }
       
       // Call API to reset password
       const response = await authAPI.resetPassword(email, newPassword);
@@ -84,12 +108,16 @@ export default function ForgotPasswordFlow({ isOpen, onClose, onSuccess }) {
       // Extract error message from different error formats
       let errorMsg = "Failed to reset password. Please try again.";
       
-      if (error.message) {
+      if (error?.message) {
         errorMsg = error.message;
       } else if (typeof error === 'string') {
         errorMsg = error;
-      } else if (error.error) {
+      } else if (error?.error) {
         errorMsg = error.error;
+      } else if (error?.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error?.response?.data?.error) {
+        errorMsg = error.response.data.error;
       }
       
       setErrorMessage(errorMsg);

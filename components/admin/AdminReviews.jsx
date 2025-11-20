@@ -118,7 +118,6 @@ export default function AdminReviews() {
               }
             } catch (err) {
               // If property fetch fails, skip this review
-              console.error('Error fetching property for review:', err);
             }
           }
         }

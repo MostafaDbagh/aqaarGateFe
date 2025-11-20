@@ -7,6 +7,7 @@ export const metadata = {
   description: "AqaarGate - Real Estate React Nextjs Template",
 };
 export default function page() {
+  // Allow both user and agent roles
   return (
     <RouteGuard requiredRole="user">
       <Profile />

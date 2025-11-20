@@ -25,7 +25,7 @@ export default function AddProperty({ isAdminMode = false }) {
     propertyPrice: "",
     currency: "USD",
     status: "rent",
-    rentType: "monthly",
+    rentType: isAdminMode ? "one-week" : "three-month",
     bedrooms: "",
     bathrooms: "",
     size: "",
@@ -90,6 +90,18 @@ export default function AddProperty({ isAdminMode = false }) {
 
   // Check if agent is blocked
   const isAgentBlocked = user?.isBlocked === true;
+  
+  // Check if user is admin
+  const isAdmin = user?.role === 'admin';
+  
+  // Property types - Holiday Home only for admin
+  const getPropertyTypes = () => {
+    const baseTypes = ["Apartment", "Villa", "Office", "House", "Land", "Commercial"];
+    if (isAdmin || isAdminMode) {
+      return [...baseTypes, "Holiday Home"];
+    }
+    return baseTypes;
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -100,6 +112,41 @@ export default function AddProperty({ isAdminMode = false }) {
     let sanitizedValue;
     if (type === 'checkbox') {
       sanitizedValue = checked;
+    } else if (name === 'yearBuilt') {
+      // Special handling for yearBuilt - allow numbers only
+      const numericValue = value.replace(/[^0-9]/g, ''); // Only allow digits
+      const currentYear = new Date().getFullYear();
+      const maxYear = currentYear;
+      const minYear = 1900;
+      
+      // Allow typing numbers freely, but validate immediately
+      if (numericValue) {
+        // Prevent more than 4 digits
+        if (numericValue.length > 4) {
+          sanitizedValue = formData.yearBuilt; // Keep previous value
+          setErrors(prev => ({ ...prev, yearBuilt: `Year cannot be more than 4 digits. The date is invalid.` }));
+          return; // Don't update
+        }
+        
+        const yearNum = parseInt(numericValue);
+        
+        // Validate and show error immediately - check even while typing
+        if (yearNum < minYear) {
+          sanitizedValue = numericValue; // Allow typing but show error
+          setErrors(prev => ({ ...prev, yearBuilt: `Year must be at least ${minYear}. The date is invalid.` }));
+        } else if (yearNum > maxYear) {
+          sanitizedValue = numericValue; // Allow typing but show error
+          setErrors(prev => ({ ...prev, yearBuilt: `Year cannot be greater than ${maxYear}. The date is invalid.` }));
+        } else {
+          // Valid year - clear error
+          sanitizedValue = numericValue;
+          setErrors(prev => ({ ...prev, yearBuilt: '' }));
+        }
+      } else {
+        // Empty value - clear error
+        sanitizedValue = numericValue;
+        setErrors(prev => ({ ...prev, yearBuilt: '' }));
+      }
     } else if (type === 'text' || type === 'textarea' || type === 'email') {
       // Only remove dangerous characters, keep spaces
       sanitizedValue = value
@@ -116,8 +163,9 @@ export default function AddProperty({ isAdminMode = false }) {
       [name]: sanitizedValue
     }));
     
-    // Clear error when user starts typing
-    if (errors[name]) {
+    // For yearBuilt, errors are already set in the special handling above
+    // For other fields, clear error when user starts typing
+    if (name !== 'yearBuilt' && errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
@@ -216,10 +264,12 @@ export default function AddProperty({ isAdminMode = false }) {
     if (!formData.size || isNaN(formData.size) || parseInt(formData.size) <= 0) {
       newErrors.size = "Valid size is required";
     }
-    // Year built validation - allow up to 5 years in the future
+    // Year built validation - dynamic max year (current year), min year is 1900
     const currentYear = new Date().getFullYear();
-    if (formData.yearBuilt && (isNaN(formData.yearBuilt) || parseInt(formData.yearBuilt) < 1800 || parseInt(formData.yearBuilt) > currentYear + 5)) {
-      newErrors.yearBuilt = `Valid year is required (between 1800 and ${currentYear + 5})`;
+    const maxYear = currentYear;
+    const minYear = 1900;
+    if (formData.yearBuilt && (isNaN(formData.yearBuilt) || parseInt(formData.yearBuilt) < minYear || parseInt(formData.yearBuilt) > maxYear)) {
+      newErrors.yearBuilt = `Valid year is required (between ${minYear} and ${maxYear})`;
     }
     
     // User/Agent validation
@@ -333,7 +383,7 @@ export default function AddProperty({ isAdminMode = false }) {
         propertyPrice: "",
         currency: "USD",
         status: "rent",
-        rentType: "monthly",
+        rentType: isAdminMode ? "one-week" : "three-month",
         bedrooms: "",
         bathrooms: "",
         size: "",
@@ -615,7 +665,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 </label>
                 <DropdownSelect
                   name="propertyType"
-                  options={["Apartment", "Villa", "Holiday Home", "Office", "House", "Land", "Commercial"]}
+                  options={getPropertyTypes()}
                   selectedValue={formData.propertyType}
                   onChange={(value) => handleDropdownChange('propertyType', value)}
                   addtionalParentClass=""
@@ -644,7 +694,11 @@ export default function AddProperty({ isAdminMode = false }) {
                   </label>
                   <DropdownSelect
                     name="rentType"
-                    options={["monthly", "three-month", "six-month", "one-year"]}
+                    options={
+                      isAdmin || isAdminMode
+                        ? ["one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
+                        : ["three-month", "six-month", "one-year"]
+                    }
                     selectedValue={formData.rentType}
                     onChange={(value) => handleDropdownChange('rentType', value)}
                     addtionalParentClass=""
@@ -694,9 +748,15 @@ export default function AddProperty({ isAdminMode = false }) {
                   className="form-control"
                   value={formData.yearBuilt}
                   onChange={handleInputChange}
-                  min="1800"
+                  min="1900"
                   max={new Date().getFullYear()}
+                  placeholder="e.g., 2020"
                 />
+                {errors.yearBuilt && (
+                  <span className="text-danger" style={{ display: 'block', marginTop: '5px', fontSize: '14px', fontWeight: '500' }}>
+                    {errors.yearBuilt}
+                  </span>
+                )}
               </fieldset>
             </div>
             

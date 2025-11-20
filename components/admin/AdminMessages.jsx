@@ -9,6 +9,7 @@ import { listingAPI } from "@/apis/listing";
 import Toast from "../common/Toast";
 import { CopyIcon, CheckIcon } from "@/components/icons";
 import styles from "../dashboard/Messages.module.css";
+import adminStyles from "./AdminMessages.module.css";
 
 /**
  * AdminMessages Component
@@ -127,7 +128,6 @@ export default function AdminMessages() {
               }
             } catch (err) {
               // If property fetch fails, skip this message
-              console.error('Error fetching property for message:', err);
             }
           }
         }
@@ -135,7 +135,6 @@ export default function AdminMessages() {
         setAdminMessages(filteredMessages);
         lastProcessedDataRef.current = currentData;
       } catch (error) {
-        console.error('Error filtering admin messages:', error);
         setAdminMessages(allMessages); // Fallback to all messages
         lastProcessedDataRef.current = currentData;
       } finally {
@@ -326,10 +325,7 @@ export default function AdminMessages() {
             e.preventDefault();
             if (page > 1) handlePageChange(page - 1);
           }}
-          style={{ 
-            cursor: page <= 1 ? 'not-allowed' : 'pointer',
-            opacity: page <= 1 ? 0.5 : 1
-          }}
+          className={page <= 1 ? adminStyles.paginationLinkDisabled : adminStyles.paginationLink}
           aria-label="Go to previous page"
         >
           <i className="icon-chevron-left" aria-hidden="true"></i>
@@ -371,10 +367,7 @@ export default function AdminMessages() {
             e.preventDefault();
             if (page < totalPages) handlePageChange(page + 1);
           }}
-          style={{ 
-            cursor: page >= totalPages ? 'not-allowed' : 'pointer',
-            opacity: page >= totalPages ? 0.5 : 1
-          }}
+          className={page >= totalPages ? adminStyles.paginationLinkDisabled : adminStyles.paginationLink}
           aria-label="Go to next page"
         >
           <i className="icon-chevron-right" aria-hidden="true"></i>
@@ -392,12 +385,7 @@ export default function AdminMessages() {
           <div className="button-show-hide show-mb">
             <span className="body-1">Show Messages</span>
           </div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center', 
-            minHeight: '400px' 
-          }}>
+          <div className={adminStyles.loaderContainer}>
             <LocationLoader 
               size="large" 
               message={isLoading ? "Loading admin messages..." : "Filtering admin messages..."}
@@ -415,7 +403,7 @@ export default function AdminMessages() {
           <div className="button-show-hide show-mb">
             <span className="body-1">Show Messages</span>
           </div>
-          <div style={{ textAlign: 'center', padding: '40px', color: '#dc3545' }}>
+          <div className={adminStyles.errorContainer}>
             <p>Error loading messages. Please try again.</p>
             <button onClick={() => refetch()} className="btn btn-primary" aria-label="Retry loading messages">
               Retry
@@ -434,13 +422,13 @@ export default function AdminMessages() {
         </div>
 
         {/* Statistics Cards */}
-        <div className="row mb-4" style={{ justifyContent: 'center' }}>
+        <div className={`row mb-4 ${adminStyles.statsRow}`}>
           <div className="col-md-3 col-sm-6 mb-3">
             <div className={styles.statCard}>
-              <div className={styles.statValue}>
+              <div className={adminStyles.statValue}>
                 {stats.total || 0}
               </div>
-              <div className={styles.statLabel}>
+              <div className={adminStyles.statLabel}>
                 Total Messages
               </div>
             </div>
@@ -539,14 +527,14 @@ export default function AdminMessages() {
             {messages.length === 0 ? (
               <div className="text-center py-5">
                 <div className="mb-3">
-                  <i className="icon-message" style={{ fontSize: '48px', color: '#6c757d' }} aria-hidden="true"></i>
+                  <i className={`icon-message ${adminStyles.emptyStateIcon}`} aria-hidden="true"></i>
                 </div>
                 <h5>No messages found</h5>
                 <p className="text-muted">You don't have any messages for admin properties matching your current filters.</p>
               </div>
             ) : (
-              <div className="table-responsive" style={{ overflowX: 'auto', maxWidth: '100%' }}>
-                <table className="table table-hover mb-0" style={{ minWidth: '1200px' }}>
+              <div className={`table-responsive ${adminStyles.tableWrapper}`}>
+                <table className={`table table-hover mb-0 ${adminStyles.table}`}>
                   <thead className="table-light">
                     <tr>
                       <th>Status</th>
@@ -575,22 +563,17 @@ export default function AdminMessages() {
                           </div>
                         </td>
                         <td>
-                          <div style={{ maxWidth: '200px' }}>
+                          <div className={adminStyles.messageIdCell}>
                             <strong>{message.subject}</strong>
                             <br />
-                            <small className="text-muted" style={{ 
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden'
-                            }}>
+                            <small className={`text-muted ${adminStyles.messageContentText}`}>
                               {message.message}
                             </small>
                           </div>
                         </td>
                         <td>
                           {message.propertyId ? (
-                            <div style={{ maxWidth: '150px' }}>
+                            <div className={adminStyles.messageContentCell}>
                               <strong>{message.propertyId.propertyKeyword}</strong>
                               <br />
                               <small className="text-muted">
@@ -603,43 +586,19 @@ export default function AdminMessages() {
                         </td>
                         <td>
                           {message.propertyId?.propertyId ? (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <small className="text-muted" style={{ fontFamily: 'monospace', fontSize: '11px' }}>
+                            <div className={adminStyles.propertyIdContainer}>
+                              <small className={`text-muted ${adminStyles.propertyIdText}`}>
                                 {message.propertyId.propertyId}
                               </small>
                               <button
                                 type="button"
-                                className="btn btn-sm btn-link p-0"
+                                className={`btn btn-sm btn-link p-0 ${adminStyles.btnCopy} ${copiedId === message._id ? adminStyles.btnCopyCopied : ''}`}
                                 onClick={() => handleCopyPropertyId(message.propertyId.propertyId, message._id)}
-                                style={{
-                                  padding: '4px 6px',
-                                  color: copiedId === message._id ? '#28a745' : '#6c757d',
-                                  textDecoration: 'none',
-                                  fontSize: '14px',
-                                  lineHeight: '1',
-                                  minWidth: '24px',
-                                  minHeight: '24px',
-                                  background: 'none',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                  transition: 'color 0.2s',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center'
-                                }}
                                 title={copiedId === message._id ? 'Copied!' : 'Copy Property ID'}
                                 aria-label="Copy property ID to clipboard"
-                                onMouseEnter={(e) => {
-                                  if (copiedId !== message._id) {
-                                    e.target.style.color = '#007bff';
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.target.style.color = copiedId === message._id ? '#28a745' : '#6c757d';
-                                }}
                               >
                                 {copiedId === message._id ? (
-                                  <CheckIcon style={{ fontSize: '16px' }} />
+                                  <CheckIcon className={adminStyles.btnIcon} />
                                 ) : (
                                   <CopyIcon 
                                     width={16} 
@@ -662,79 +621,27 @@ export default function AdminMessages() {
                           <small>{formatDate(message.createdAt)}</small>
                         </td>
                         <td>
-                          <div className="btn-group" role="group" style={{ gap: '8px' }}>
+                          <div className={`btn-group ${adminStyles.btnGroup}`} role="group">
                             {message.status === 'unread' && (
                               <button
-                                className="btn btn-sm"
-                                style={{
-                                  background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-                                  border: 'none',
-                                  color: 'white',
-                                  borderRadius: '8px',
-                                  padding: '8px 16px',
-                                  fontSize: '13px',
-                                  fontWeight: '500',
-                                  boxShadow: '0 2px 8px rgba(6, 182, 212, 0.2)',
-                                  transition: 'all 0.2s ease',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '6px'
-                                }}
+                                className={`btn btn-sm ${adminStyles.btnMarkRead}`}
                                 onClick={() => handleMarkAsRead(message._id)}
                                 disabled={isMarkingAsRead}
                                 title="Mark as Read"
                                 aria-label={`Mark message as read`}
-                                onMouseEnter={(e) => {
-                                  if (!isMarkingAsRead) {
-                                    e.target.style.transform = 'translateY(-1px)';
-                                    e.target.style.boxShadow = '0 4px 12px rgba(6, 182, 212, 0.3)';
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  if (!isMarkingAsRead) {
-                                    e.target.style.transform = 'translateY(0)';
-                                    e.target.style.boxShadow = '0 2px 8px rgba(6, 182, 212, 0.2)';
-                                  }
-                                }}
                               >
-                                <i className="icon-eye" aria-hidden="true" style={{ fontSize: '14px' }}></i>
+                                <i className={`icon-eye ${adminStyles.btnIcon}`} aria-hidden="true"></i>
                                 {isMarkingAsRead ? 'Marking...' : 'Mark as Read'}
                               </button>
                             )}
                             <button
-                              className="btn btn-sm"
-                              style={{
-                                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                                border: 'none',
-                                color: 'white',
-                                borderRadius: '8px',
-                                padding: '8px 16px',
-                                fontSize: '13px',
-                                fontWeight: '500',
-                                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)',
-                                transition: 'all 0.2s ease',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px'
-                              }}
+                              className={`btn btn-sm ${adminStyles.btnDelete}`}
                               onClick={() => handleDeleteClick(message)}
                               disabled={isDeleting}
                               title="Delete Message"
                               aria-label={`Delete message from ${message.senderName}`}
-                              onMouseEnter={(e) => {
-                                if (!isDeleting) {
-                                  e.target.style.transform = 'translateY(-1px)';
-                                  e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (!isDeleting) {
-                                  e.target.style.transform = 'translateY(0)';
-                                  e.target.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.2)';
-                                }
-                              }}
                             >
-                              <i className="icon-trash" aria-hidden="true" style={{ fontSize: '14px' }}></i>
+                              <i className={`icon-trash ${adminStyles.btnIcon}`} aria-hidden="true"></i>
                               {isDeleting ? 'Deleting...' : 'Delete'}
                             </button>
                           </div>
@@ -759,7 +666,7 @@ export default function AdminMessages() {
 
         {/* Reply Modal */}
         {replyModal.isOpen && (
-          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className={`modal show d-block ${adminStyles.modalOverlay}`}>
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
                 <div className="modal-header">
@@ -780,7 +687,7 @@ export default function AdminMessages() {
                   </div>
                   <div className="mb-3">
                     <strong>Message:</strong>
-                    <div className="border p-3 mt-2" style={{ backgroundColor: '#f8f9fa' }}>
+                    <div className={`border p-3 mt-2 ${adminStyles.modalMessageBox}`}>
                       {replyModal.message.message}
                     </div>
                   </div>
@@ -820,7 +727,7 @@ export default function AdminMessages() {
 
         {/* Delete Confirmation Modal */}
         {deleteModal.isOpen && (
-          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className={`modal show d-block ${adminStyles.modalOverlay}`}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
@@ -841,7 +748,7 @@ export default function AdminMessages() {
                   </div>
                   <div className="mb-3">
                     <strong>Message:</strong>
-                    <div className="border p-3 mt-2" style={{ backgroundColor: '#f8f9fa', maxHeight: '150px', overflow: 'auto' }}>
+                    <div className={`border p-3 mt-2 ${adminStyles.modalMessageBoxScrollable}`}>
                       {deleteModal.message.message}
                     </div>
                   </div>
@@ -860,16 +767,9 @@ export default function AdminMessages() {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-danger"
+                    className={`btn btn-danger ${adminStyles.btnDelete}`}
                     onClick={() => handleDelete(deleteModal.message._id)}
                     disabled={isDeleting}
-                    style={{
-                      background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '8px 20px',
-                      fontWeight: '500'
-                    }}
                   >
                     {isDeleting ? 'Deleting...' : 'Confirm Delete'}
                   </button>

@@ -1,15 +1,16 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
-import FavoritesCount from "@/components/common/FavoritesCount";
+import React, { useState } from "react";
 import ReviewsCount from "@/components/common/ReviewsCount";
-import MessagesCount from "@/components/common/MessagesCount";
 import PropertiesCount from "@/components/common/PropertiesCount";
 import { useAuthState } from "@/store/hooks/useAuth";
 import { authAPI } from "@/apis/auth";
+import { userAPI } from "@/apis/user";
 import { DashboardGridIcon, DocumentIcon, PackageBoxIcon, EditIcon, LogoutArrowIcon, UserIcon } from "@/components/icons";
 import { useAdminTab, TABS } from "@/components/admin/AdminDashboardMain";
+import DeleteAccountModal from "@/components/modals/DeleteAccountModal";
+import Toast from "@/components/common/Toast";
 import styles from "./Sidebar.module.css";
 
 export default function Sidebar() {
@@ -17,6 +18,9 @@ export default function Sidebar() {
   const router = useRouter();
   const { isAgent, logout: logoutUser, user } = useAuthState();
   const isAdmin = user?.role === 'admin';
+  const [deleteAccountModal, setDeleteAccountModal] = useState({ isOpen: false });
+  const [toast, setToast] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // Get admin tab context if available (only works when inside AdminDashboardMain)
   const adminTabContext = useAdminTab(); // This will return null if not in context
@@ -29,6 +33,31 @@ export default function Sidebar() {
     } catch (error) {
       // Still logout and redirect even if API call fails
       logoutUser(); // This will handle the redirect to home page
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user?._id) {
+      setToast({ type: 'error', message: 'User information not found.' });
+      setDeleteAccountModal({ isOpen: false });
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await userAPI.deleteAccount(user._id);
+      setToast({ type: 'success', message: 'Your account has been deleted successfully.' });
+      // Clear local storage and logout
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setTimeout(() => {
+        logoutUser(); // This will redirect to home page
+      }, 1500);
+    } catch (error) {
+      const errorMessage = error?.message || error?.error || error?.response?.data?.message || 'Failed to delete account. Please try again.';
+      setToast({ type: 'error', message: errorMessage });
+      setIsDeleting(false);
+      setDeleteAccountModal({ isOpen: false });
     }
   };
   return (
@@ -297,13 +326,26 @@ export default function Sidebar() {
                     </Link>
                   </li>
                 )}
+                {/* My Profile - For all users and agents */}
+                <li
+                  className={`nav-menu-item ${
+                    pathname == "/my-profile" ? "active" : ""
+                  } `}
+                >
+                  <Link className="nav-menu-link" href={`/my-profile`}>
+                    <UserIcon />
+                    My Profile
+                  </Link>
+                </li>
+
                 <li
                   className={`nav-menu-item ${
                     pathname == "/my-favorites" ? "active" : ""
                   } `}
                 >
                   <Link className="nav-menu-link" href={`/my-favorites`}>
-                    <FavoritesCount />
+                    <i className="icon-bookmark" />
+                    My favorites
                   </Link>
                 </li>
            
@@ -324,7 +366,8 @@ export default function Sidebar() {
                     } `}
                   >
                     <Link className="nav-menu-link" href={`/messages`}>
-                      <MessagesCount />
+                      <i className="icon-message" />
+                      Messages
                     </Link>
                   </li>
                 )}
@@ -391,9 +434,50 @@ export default function Sidebar() {
                 Logout
               </button>
             </li>
+            {/* Delete My Account - For agent (after Logout) and user (last tab) */}
+            {!isAdmin && (
+              <li className={`nav-menu-item `}>
+                <button 
+                  className="nav-menu-link" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setDeleteAccountModal({ isOpen: true });
+                  }}
+                  style={{
+                    color: '#dc3545',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <i className="icon-trash" style={{ marginRight: '8px' }} />
+                  Delete My Account
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>
+      
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={deleteAccountModal.isOpen}
+        onClose={() => {
+          if (!isDeleting) {
+            setDeleteAccountModal({ isOpen: false });
+          }
+        }}
+        onConfirm={handleDeleteAccount}
+        loading={isDeleting}
+        userRole={isAgent ? 'agent' : 'user'}
+      />
+      
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

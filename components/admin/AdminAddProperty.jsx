@@ -37,7 +37,7 @@ export default function AdminAddProperty() {
 
   return (
     <div className={styles.adminAddPropertyContainer} data-page="add-property">
-      <h1 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: '600' }}>
+      <h1 className={styles.title}>
         Add New Property
       </h1>
       <AddProperty isAdminMode={true} />

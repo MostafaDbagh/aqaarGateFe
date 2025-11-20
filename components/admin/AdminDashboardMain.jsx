@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext, useEffect } from "react";
+import React, { useState, createContext, useContext, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import AdminDashboard from "./AdminDashboard";
 import AdminProperties from "./AdminProperties";
@@ -36,9 +36,15 @@ export const useAdminTab = () => {
 export default function AdminDashboardMain() {
   const pathname = usePathname();
   const context = useAdminTab();
+  const lastPathnameRef = useRef(null);
 
-  // Initialize active tab from URL pathname only on mount
+  // Initialize active tab from URL pathname only on mount or when pathname actually changes
   useEffect(() => {
+    // Skip if pathname hasn't actually changed
+    if (lastPathnameRef.current === pathname) {
+      return;
+    }
+
     if (pathname && context) {
       let tabToSet = TABS.OVERVIEW;
       if (pathname.includes('/admin/properties')) {
@@ -66,7 +72,9 @@ export default function AdminDashboardMain() {
       if (context.activeTab !== tabToSet) {
         context.setActiveTab(tabToSet);
       }
+      lastPathnameRef.current = pathname;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]); // Update when pathname changes (e.g., from direct navigation)
 
   // Use context activeTab, fallback to OVERVIEW if not available

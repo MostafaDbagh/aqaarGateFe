@@ -27,8 +27,15 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setEmailError("");
     
-    // Validate email before submitting
+    // Validate email is not empty
+    if (!email || email.trim().length === 0) {
+      setEmailError("Email is required");
+      return;
+    }
+    
+    // Validate email format before submitting
     if (!validateEmail()) {
       return;
     }
@@ -37,11 +44,22 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
 
     try {
       // Call the onSubmit function passed from parent
-      await onSubmit(email);
-      setEmail("");
+      await onSubmit(email.trim().toLowerCase());
+      // Don't clear email here - parent needs it for next step
       setEmailError("");
     } catch (err) {
-      setError(err.message || "Failed to send reset code. Please try again.");
+      // Extract error message from different error formats
+      let errorMsg = "Failed to send reset code. Please try again.";
+      if (err?.message) {
+        errorMsg = err.message;
+      } else if (err?.error) {
+        errorMsg = err.error;
+      } else if (typeof err === 'string') {
+        errorMsg = err;
+      } else if (err?.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      }
+      setError(errorMsg);
     } finally {
       setIsSubmitting(false);
     }

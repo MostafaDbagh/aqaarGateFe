@@ -96,7 +96,10 @@ export default function AdminProperties() {
       await adminAPI.deleteProperty(id, deletedReason);
       showSuccessModal("Success", "Property deleted successfully");
       setDeleteModal({ isOpen: false, propertyId: null, loading: false });
-      fetchProperties();
+      // Force page reload after successful deletion
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       setDeleteModal(prev => ({ ...prev, loading: false }));
       showWarningModal("Error", err.message || "Failed to delete property");
