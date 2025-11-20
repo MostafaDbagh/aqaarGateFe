@@ -1,7 +1,44 @@
-.disabledInput {
-  background-color: #f3f4f6;
-  color: #6b7280;
-  cursor: not-allowed;
+/* Property Keyword Tags Suggestions */
+.keywordTagsContainer {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
+.keywordTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
 
+.keywordTag:hover {
+  background-color: #e0e0e0;
+  border-color: #c0c0c0;
+  transform: translateY(-1px);
+}
+
+.keywordTag:active {
+  transform: translateY(0);
+}
+
+.keywordTagIcon {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.keywordTagsLabel {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  display: block;
+}

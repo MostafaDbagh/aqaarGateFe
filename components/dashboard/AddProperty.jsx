@@ -51,6 +51,54 @@ export default function AddProperty({ isAdminMode = false }) {
 
   const createListingMutation = useCreateListing();
 
+  // Suggested keyword tags
+  const keywordTags = [
+    "South-facing house",
+    "East-facing",
+    "West-facing",
+    "Well-ventilated",
+    "Bright",
+    "Modern building",
+    "Old building",
+    "Spacious",
+    "View",
+    "Open view",
+    "Sea view",
+    "Mountain view",
+    "luxury",
+    'doublex finishing',
+    'super doublex finishing',
+    'standard finishing',
+    'stone finishing',
+  ];
+
+  // Handle tag click - add tag to propertyKeyword
+  const handleTagClick = (tag) => {
+    const currentKeyword = formData.propertyKeyword.trim();
+    if (currentKeyword) {
+      // If keyword already contains this tag, don't add it again
+      if (currentKeyword.toLowerCase().includes(tag.toLowerCase())) {
+        return;
+      }
+      // Add tag with comma separator
+      setFormData(prev => ({
+        ...prev,
+        propertyKeyword: `${currentKeyword}, ${tag}`
+      }));
+    } else {
+      // If keyword is empty, just set the tag
+      setFormData(prev => ({
+        ...prev,
+        propertyKeyword: tag
+      }));
+    }
+    
+    // Clear error if exists
+    if (errors.propertyKeyword) {
+      setErrors(prev => ({ ...prev, propertyKeyword: '' }));
+    }
+  };
+
   // Load user data on mount
   useEffect(() => {
     const loadUser = () => {
@@ -539,6 +587,22 @@ export default function AddProperty({ isAdminMode = false }) {
                   onChange={handleInputChange}
                 />
                 {errors.propertyKeyword && <span className="text-danger">{errors.propertyKeyword}</span>}
+                
+                {/* Keyword Tags Suggestions */}
+                <div className={styles.keywordTagsContainer}>
+                  <span className={styles.keywordTagsLabel}>Suggested tags:</span>
+                  {keywordTags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className={styles.keywordTag}
+                      onClick={() => handleTagClick(tag)}
+                      title={`Click to add "${tag}"`}
+                    >
+                      {tag}
+                      <span className={styles.keywordTagIcon}>+</span>
+                    </span>
+                  ))}
+                </div>
               </fieldset>
               
               <fieldset className="box box-fieldset">

@@ -436,19 +436,15 @@ export default function Sidebar() {
             </li>
             {/* Delete My Account - For agent (after Logout) and user (last tab) */}
             {!isAdmin && (
-              <li className={`nav-menu-item `}>
+              <li className={`nav-menu-item ${styles.deleteAccountItem}`}>
                 <button 
-                  className="nav-menu-link" 
+                  className={`nav-menu-link ${styles.deleteAccountButton}`}
                   onClick={(e) => {
                     e.preventDefault();
                     setDeleteAccountModal({ isOpen: true });
                   }}
-                  style={{
-                    color: '#dc3545',
-                    cursor: 'pointer'
-                  }}
                 >
-                  <i className="icon-trash" style={{ marginRight: '8px' }} />
+                  <i className="icon-trash" />
                   Delete My Account
                 </button>
               </li>
