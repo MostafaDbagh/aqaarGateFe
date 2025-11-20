@@ -436,7 +436,7 @@ export default function Sidebar() {
             </li>
             {/* Delete My Account - For agent (after Logout) and user (last tab) */}
             {!isAdmin && (
-              <li className={`nav-menu-item ${styles.deleteAccountItem}`}>
+              <li className={` ${styles.deleteAccountItem}`}>
                 <button 
                   className={`nav-menu-link ${styles.deleteAccountButton}`}
                   onClick={(e) => {
