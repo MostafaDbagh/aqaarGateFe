@@ -141,6 +141,27 @@ export default function AddProperty({ isAdminMode = false }) {
   
   // Check if user is admin
   const isAdmin = user?.role === 'admin';
+
+  // Update rentType when propertyType changes to Villa and status is rent
+  useEffect(() => {
+    if (formData.propertyType === "Villa" && formData.status === "rent") {
+      // Set default to "daily" for Villa rent if current value is not in Villa options
+      if (!["daily", "one-week", "two-week", "monthly"].includes(formData.rentType)) {
+        setFormData(prev => ({
+          ...prev,
+          rentType: "daily"
+        }));
+      }
+    } else if (formData.status === "rent") {
+      // Reset to default for non-Villa rent properties
+      if (["daily", "one-week", "two-week", "monthly"].includes(formData.rentType)) {
+        setFormData(prev => ({
+          ...prev,
+          rentType: isAdmin || isAdminMode ? "one-week" : "three-month"
+        }));
+      }
+    }
+  }, [formData.propertyType, formData.status, isAdmin, isAdminMode]);
   
   // Property types - Holiday Home only for admin
   const getPropertyTypes = () => {
@@ -759,8 +780,13 @@ export default function AddProperty({ isAdminMode = false }) {
                   <DropdownSelect
                     name="rentType"
                     options={
-                      isAdmin || isAdminMode
+                      // For Villa + rent: show daily, one-week, two-week, monthly
+                      formData.propertyType === "Villa" && formData.status === "rent"
+                        ? ["daily", "one-week", "two-week", "monthly"]
+                        // For admin: show all options
+                        : isAdmin || isAdminMode
                         ? ["one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
+                        // For regular agents: show three-month, six-month, one-year
                         : ["three-month", "six-month", "one-year"]
                     }
                     selectedValue={formData.rentType}

@@ -493,9 +493,36 @@ export default function Property() {
                                   href={`/property-detail/${listing._id}`}
                                   className="link"
                                 >
-                                  {listing.propertyKeyword}
+                                  {listing.propertyType || 'Property'}
                                 </Link>
                               </div>
+                              {/* Property Keyword Tags */}
+                              {listing.propertyKeyword && (
+                                <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                  {listing.propertyKeyword.split(',').map((keyword, index) => {
+                                    const trimmedKeyword = keyword.trim();
+                                    if (!trimmedKeyword) return null;
+                                    return (
+                                      <span 
+                                        key={index} 
+                                        style={{
+                                          display: 'inline-flex',
+                                          alignItems: 'center',
+                                          padding: '4px 10px',
+                                          backgroundColor: '#f0f0f0',
+                                          border: '1px solid #e0e0e0',
+                                          borderRadius: '20px',
+                                          fontSize: '12px',
+                                          color: '#333',
+                                          fontWeight: '500'
+                                        }}
+                                      >
+                                        {trimmedKeyword}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              )}
                               <div className="text-date">
                                 Posting date: {formatDate(listing.createdAt)}
                               </div>

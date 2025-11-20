@@ -365,9 +365,36 @@ export default function Listings({ agentId }) {
                   <div className="content">
                     <h5 className="title">
                       <Link href={`/property-detail/${property._id}`}>
-                        {property.propertyKeyword || property.propertyTitle || 'Property'}
+                        {property.propertyTitle || 'Property'}
                       </Link>
                     </h5>
+                    {/* Property Keyword Tags */}
+                    {property.propertyKeyword && (
+                      <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {property.propertyKeyword.split(',').map((keyword, index) => {
+                          const trimmedKeyword = keyword.trim();
+                          if (!trimmedKeyword) return null;
+                          return (
+                            <span 
+                              key={index} 
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                padding: '4px 10px',
+                                backgroundColor: '#f0f0f0',
+                                border: '1px solid #e0e0e0',
+                                borderRadius: '20px',
+                                fontSize: '12px',
+                                color: '#333',
+                                fontWeight: '500'
+                              }}
+                            >
+                              {trimmedKeyword}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                     <p className="location text-1 flex items-center gap-6">
                       <i className="icon-location" /> {property.address || property.state || 'Location not specified'}
                     </p>

@@ -20,6 +20,44 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Suggested keyword tags
+  const keywordTags = [
+    "South-facing house",
+    "East-facing",
+    "West-facing",
+    "Well-ventilated",
+    "Bright",
+    "Modern building",
+    "Old building",
+    "Spacious",
+    "View",
+    "Open view",
+    "Sea view",
+    "Mountain view"
+  ];
+
+  // Handle tag click - add tag to propertyKeyword
+  const handleTagClick = (tag) => {
+    const currentKeyword = formData.propertyKeyword.trim();
+    if (currentKeyword) {
+      // If keyword already contains this tag, don't add it again
+      if (currentKeyword.toLowerCase().includes(tag.toLowerCase())) {
+        return;
+      }
+      // Add tag with comma separator
+      setFormData(prev => ({
+        ...prev,
+        propertyKeyword: `${currentKeyword}, ${tag}`
+      }));
+    } else {
+      // If keyword is empty, just set the tag
+      setFormData(prev => ({
+        ...prev,
+        propertyKeyword: tag
+      }));
+    }
+  };
+
   // Available amenities list
   const availableAmenities = [
     'Shared Gym',
@@ -179,6 +217,22 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
+              
+              {/* Keyword Tags Suggestions */}
+              <div className={styles.keywordTagsContainer}>
+                <span className={styles.keywordTagsLabel}>Suggested tags:</span>
+                {keywordTags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className={styles.keywordTag}
+                    onClick={() => handleTagClick(tag)}
+                    title={`Click to add "${tag}"`}
+                  >
+                    {tag}
+                    <span className={styles.keywordTagIcon}>+</span>
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Address */}

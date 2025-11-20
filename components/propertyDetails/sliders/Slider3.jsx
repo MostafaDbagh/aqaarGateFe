@@ -21,30 +21,123 @@ const fallbackImages = [
 export default function Slider3({ property }) {
   const [swiperRef, setSwiperRef] = useState(null);
   
+  // Helper function to resolve image URL
+  const resolveImageUrl = (value) => {
+    if (!value) return null;
+    
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed) return null;
+      // If it's already a full URL or starts with /, return as is
+      if (trimmed.startsWith('http') || trimmed.startsWith('/')) {
+        return trimmed;
+      }
+      // Otherwise, assume it's a path and add leading slash
+      return `/${trimmed}`;
+    }
+    
+    if (typeof value === 'object' && value !== null) {
+      return value.url || value.secure_url || value.path || value.src || null;
+    }
+    
+    return null;
+  };
+
   // Memoize images processing to prevent hydration issues
   const images = useMemo(() => {
-    // Get images from property or use fallback
-    const propertyImages = property?.images && property.images.length > 0
-      ? property.images
-          .map((img, idx) => {
-            // Handle different image formats (object with url/src, or direct string)
-            let src = '';
-            if (typeof img === 'string') {
-              src = img;
-            } else if (img && typeof img === 'object') {
-              src = img.url || img.src || '';
-            }
-            
-            return {
-              src: src || `/images/section/box-house-${(idx % 3) + 1}.jpg`, // Fallback to default images
-              alt: `${property?.propertyType || 'Property'} - Image ${idx + 1}`,
-            };
-          })
-          .filter(img => img.src && typeof img.src === 'string' && img.src.trim() !== '') // Filter out empty src values
-      : fallbackImages;
+    if (!property) return fallbackImages;
     
-    return propertyImages.length > 0 ? propertyImages : fallbackImages;
-  }, [property?.images, property?.propertyType]);
+    const urls = [];
+    
+    const pushUrl = (value) => {
+      const resolved = resolveImageUrl(value);
+      if (resolved) {
+        urls.push(resolved);
+      }
+    };
+
+    // Try images array (can be array of objects with url property or array of strings)
+    if (Array.isArray(property.images) && property.images.length > 0) {
+      property.images.forEach((item) => {
+        // Handle object format: { url: "...", publicId: "...", ... }
+        if (typeof item === 'object' && item !== null) {
+          pushUrl(item.url || item.secure_url || item.path || item.src);
+        } else {
+          // Handle string format
+          pushUrl(item);
+        }
+      });
+    }
+
+    // Try galleryImages array
+    if (Array.isArray(property.galleryImages) && property.galleryImages.length > 0) {
+      property.galleryImages.forEach((item) => {
+        if (typeof item === 'object' && item !== null) {
+          pushUrl(item.url || item.secure_url || item.path || item.src);
+        } else {
+          pushUrl(item);
+        }
+      });
+    }
+
+    // Try imageNames array (usually strings)
+    if (Array.isArray(property.imageNames) && property.imageNames.length > 0) {
+      property.imageNames.forEach((name) => pushUrl(name));
+    }
+
+    // Try single image properties
+    pushUrl(property.coverImage);
+    pushUrl(property.featuredImage);
+    pushUrl(property.mainImage);
+
+    // Remove duplicates and filter out nulls
+    const uniqueUrls = urls
+      .filter(Boolean)
+      .filter((url, index, arr) => arr.indexOf(url) === index);
+
+    // Convert to image objects with alt text
+    const propertyImages = uniqueUrls.map((url, idx) => ({
+      src: url,
+      alt: `${property?.propertyKeyword || property?.propertyType || 'Property'} - Image ${idx + 1}`,
+    }));
+
+    // Return property images if found, otherwise empty array (we'll show a message instead)
+    return propertyImages;
+  }, [property]);
+  // If no images, show a message instead of fallback images
+  if (images.length === 0) {
+    return (
+      <div className="single-property-gallery style-1">
+        <div className="position-relative">
+          <div style={{
+            width: '100%',
+            minHeight: '520px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f8f9fa',
+            border: '2px dashed #dee2e6',
+            borderRadius: '8px',
+            padding: '40px 20px'
+          }}>
+            <div style={{
+              textAlign: 'center',
+              color: '#6c757d'
+            }}>
+              <i className="icon-image" style={{ fontSize: '48px', marginBottom: '16px', display: 'block' }} />
+              <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600', color: '#495057' }}>
+                No Images Available
+              </h3>
+              <p style={{ margin: 0, fontSize: '14px' }}>
+                This property does not have any images uploaded yet.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="single-property-gallery style-1">
       <div className="position-relative">

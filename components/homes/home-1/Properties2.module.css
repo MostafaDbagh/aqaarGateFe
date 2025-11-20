@@ -761,3 +761,24 @@
     padding: 20px 12px;
   }
 }
+
+/* Property Keyword Tags */
+.keywordTagsContainer {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.keywordTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+}

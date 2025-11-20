@@ -455,7 +455,7 @@ export default function PropertyGridItems({ listings = [] }) {
               <Link href={`/property-detail/${property._id}`} className="image-link">
               <Image
                 className="lazyload property-img"
-                alt={property.propertyKeyword || property.propertyTitle || 'Property'}
+                alt={ property.propertyTitle || 'Property'}
                 src={activeImage}
                 width={339}
                 height={245}
@@ -554,17 +554,30 @@ export default function PropertyGridItems({ listings = [] }) {
             </div>
           </div>
           <div className="content">
-            <div className={styles.propertyTypeTitleContainer}>
+            <div >
               {property.propertyType && (
                 <p className={`property-type text-1 ${styles.propertyType}`}>
                   {property.propertyType}
                 </p>
               )}
-              <h5 className={`title ${styles.titleBadge}`}>
-                <Link href={`/property-detail/${property._id}`} className={styles.titleLink}>
-                  {property.propertyTitle || property.propertyKeyword || 'Property'}
-                </Link>
-              </h5>
+              {/* Property Keyword Tags */}
+              {property.propertyKeyword ? (
+                <div className={styles.keywordTagsContainer}>
+                  {property.propertyKeyword.split(',').map((keyword, index) => {
+                    const trimmedKeyword = keyword.trim();
+                    if (!trimmedKeyword) return null;
+                    return (
+                      <span key={index} className={styles.keywordTag}>
+                        {trimmedKeyword}
+                      </span>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className={`title`} style={{ fontSize: '14px', fontWeight: '600', color: '#6b7280',margin:'16px auto' }}>
+                  {property.propertyTitle || 'Property'}
+                </p>
+              )}
             </div>
   
             <p className={`location text-1 flex items-center gap-6 ${styles.locationText}`}>

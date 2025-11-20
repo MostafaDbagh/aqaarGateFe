@@ -230,8 +230,22 @@ export default function Properties2() {
                         {/* Title and Location below image */}
                         <div className={styles.titleSection}>
                           <h6 className={styles.propertyTitle}>
-                            {property.propertyKeyword || property.propertyType || 'Property'}
+                            {property.propertyType || 'Property'}
                           </h6>
+                          {/* Property Keyword Tags */}
+                          {property.propertyKeyword && (
+                            <div className={styles.keywordTagsContainer}>
+                              {property.propertyKeyword.split(',').map((keyword, index) => {
+                                const trimmedKeyword = keyword.trim();
+                                if (!trimmedKeyword) return null;
+                                return (
+                                  <span key={index} className={styles.keywordTag}>
+                                    {trimmedKeyword}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
                           <p className={styles.propertyLocation}>
                             <i className="icon-location" />
                             {property.address}, {property.state}

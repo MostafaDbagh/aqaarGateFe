@@ -38,7 +38,6 @@ export default function PropertyOverview({ property }) {
     <>
       <div className="heading flex justify-between">
         <div className={`title text-5 fw-6 text-color-heading ${styles.titleWrapper}`}>
-          <span>{property?.propertyType || 'Property Title'}</span>
           <span className={`${styles.statusBadge} ${getBadgeClass()}`}>
             {statusBadge.text}
           </span>
@@ -60,6 +59,20 @@ export default function PropertyOverview({ property }) {
           </span>
         </div>
       </div>
+      {/* Property Keyword Tags */}
+      {property?.propertyKeyword && (
+        <div className={styles.keywordTagsContainer}>
+          {property.propertyKeyword.split(',').map((keyword, index) => {
+            const trimmedKeyword = keyword.trim();
+            if (!trimmedKeyword) return null;
+            return (
+              <span key={index} className={styles.keywordTag}>
+                {trimmedKeyword}
+              </span>
+            );
+          })}
+        </div>
+      )}
       <div className="info flex justify-between">
         <div className="feature">
           <p className="location text-1 flex items-center gap-10">

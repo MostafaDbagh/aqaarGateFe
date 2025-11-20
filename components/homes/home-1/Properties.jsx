@@ -6,6 +6,7 @@ import '@/components/properties/PropertyImageFix.css';
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import LocationLoader from "@/components/common/LocationLoader";
+import styles from "./Properties.module.css";
 
 export default function Properties({ listings, isLoading, isError }) {
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
@@ -374,11 +375,27 @@ export default function Properties({ listings, isLoading, isError }) {
         </div>
 
         <div className="content">
+          <div >
           <h5 className="title">
             <Link href={`/property-detail/${listing._id}`}>
-              {listing.propertyType}
+              {listing.propertyType} 
             </Link>
           </h5>
+          {/* Property Keyword Tags */}
+          {listing.propertyKeyword && (
+            <div className={styles.keywordTagsContainer}>
+              {listing.propertyKeyword.split(',').map((keyword, index) => {
+                const trimmedKeyword = keyword.trim();
+                if (!trimmedKeyword) return null;
+                return (
+                  <span key={index} className={styles.keywordTag}>
+                    {trimmedKeyword}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+          </div>
 
           <p className="location text-1 line-clamp-1">
             <i className="icon-location" /><span style={{ color: '#f1913d',fontWeight: '600' }}>{listing.state}</span>-{listing.address}

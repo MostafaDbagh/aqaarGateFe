@@ -241,9 +241,36 @@ export default function Favorites() {
                                     href={`/property-detail/${property._id}`}
                                     className="link"
                                   >
-                                    {property.propertyKeyword || 'Property'}
+                                    {property.propertyType || 'Property'}
                                   </Link>
                                 </div>
+                                {/* Property Keyword Tags */}
+                                {property.propertyKeyword && (
+                                  <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                    {property.propertyKeyword.split(',').map((keyword, index) => {
+                                      const trimmedKeyword = keyword.trim();
+                                      if (!trimmedKeyword) return null;
+                                      return (
+                                        <span 
+                                          key={index} 
+                                          style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            padding: '4px 10px',
+                                            backgroundColor: '#f0f0f0',
+                                            border: '1px solid #e0e0e0',
+                                            borderRadius: '20px',
+                                            fontSize: '12px',
+                                            color: '#333',
+                                            fontWeight: '500'
+                                          }}
+                                        >
+                                          {trimmedKeyword}
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
+                                )}
                                 <div className="text-date">
                                   Added: {formatDate(favorite.createdAt || favorite.addedAt)}
                                 </div>

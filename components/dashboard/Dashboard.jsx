@@ -595,9 +595,36 @@ export default function Dashboard() {
                                       href={`/property-detail/${listing._id}`}
                                     className="link"
                                   >
-                                      {listing.propertyKeyword || 'Property Listing'}
+                                      {listing.propertyType || 'Property Listing'}
                                   </Link>
                                 </div>
+                                {/* Property Keyword Tags */}
+                                {listing.propertyKeyword && (
+                                  <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                    {listing.propertyKeyword.split(',').map((keyword, index) => {
+                                      const trimmedKeyword = keyword.trim();
+                                      if (!trimmedKeyword) return null;
+                                      return (
+                                        <span 
+                                          key={index} 
+                                          style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            padding: '4px 10px',
+                                            backgroundColor: '#f0f0f0',
+                                            border: '1px solid #e0e0e0',
+                                            borderRadius: '20px',
+                                            fontSize: '12px',
+                                            color: '#333',
+                                            fontWeight: '500'
+                                          }}
+                                        >
+                                          {trimmedKeyword}
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
+                                )}
                                 <div className="text-date">
                                     Posted: {formatDate(listing.createdAt)}
                                 </div>
@@ -740,7 +767,34 @@ export default function Dashboard() {
                           }}>
                             <div style={{ flex: 1 }}>
                               <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>
-                                {listing.propertyKeyword || 'Property Listing'}
+                                {listing.propertyType || 'Property Listing'}
+                                {/* Property Keyword Tags */}
+                                {listing.propertyKeyword && (
+                                  <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                    {listing.propertyKeyword.split(',').map((keyword, index) => {
+                                      const trimmedKeyword = keyword.trim();
+                                      if (!trimmedKeyword) return null;
+                                      return (
+                                        <span 
+                                          key={index} 
+                                          style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            padding: '4px 10px',
+                                            backgroundColor: '#f0f0f0',
+                                            border: '1px solid #e0e0e0',
+                                            borderRadius: '20px',
+                                            fontSize: '12px',
+                                            color: '#333',
+                                            fontWeight: '500'
+                                          }}
+                                        >
+                                          {trimmedKeyword}
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
+                                )}
                               </div>
                               <div style={{ fontSize: '12px', color: '#6c757d' }}>
                                 ${listing.propertyPrice?.toLocaleString()}
