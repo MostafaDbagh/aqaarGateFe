@@ -433,7 +433,6 @@
 ============================================================================*/
 .main-menu {
     position: relative;
-    margin-left: 30px;
     @include mixin.transition3();
     margin-right: 10px;
     .navigation {

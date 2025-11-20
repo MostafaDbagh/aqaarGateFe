@@ -28,6 +28,11 @@ export default function Properties2() {
     return searchResponse?.data || [];
   })();
 
+  // Hide section if listings array is empty
+  if (!isLoading && !isError && (!listings || listings.length === 0)) {
+    return null;
+  }
+
   // Function to get image source
   const getImageSource = (property) => {
     // Try different possible image sources
