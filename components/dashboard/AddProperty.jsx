@@ -14,7 +14,7 @@ import { sanitizeInput, validateFileUpload } from "@/utils/security";
 
 export default function AddProperty({ isAdminMode = false }) {
   const router = useRouter();
-  const { showSuccessModal } = useGlobalModal();
+  const { showSuccessModal, showLoginModal } = useGlobalModal();
   const [user, setUser] = useState(null);
   const [toast, setToast] = useState(null);
   
@@ -105,7 +105,7 @@ export default function AddProperty({ isAdminMode = false }) {
       const storedUser = localStorage.getItem("user");
       if (!storedUser) {
         setToast({ type: "error", message: "Please login to add property" });
-        setTimeout(() => router.push("/login"), 2000);
+        setTimeout(() => showLoginModal(), 2000);
         return;
       }
 
@@ -390,7 +390,7 @@ export default function AddProperty({ isAdminMode = false }) {
     if (!user) {
       logger.error("❌ User not logged in");
       setToast({ type: "error", message: "Please login to add property" });
-      setTimeout(() => router.push("/login"), 2000);
+      setTimeout(() => showLoginModal(), 2000);
       return;
     }
     

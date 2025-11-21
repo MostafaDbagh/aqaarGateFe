@@ -8,8 +8,10 @@ import DropdownSelect from "../common/DropdownSelect";
 import { syrianProvinces } from "@/constants/provinces";
 import logger from "@/utlis/logger";
 import styles from "./Profile.module.css";
+import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 
 export default function Profile() {
+  const { showLoginModal } = useGlobalModal();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -96,7 +98,7 @@ export default function Profile() {
       try {
         const storedUser = localStorage.getItem("user");
         if (!storedUser) {
-          window.location.href = "/login";
+          showLoginModal();
           return;
         }
 

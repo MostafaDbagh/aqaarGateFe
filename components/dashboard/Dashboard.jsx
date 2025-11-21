@@ -890,7 +890,7 @@ export default function Dashboard() {
             <div className="widget-box-2 mess-box">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="title mb-0">Recent Reviews</h5>
-                <Link href="/reviews" className="btn-view-all" style={{ 
+                <Link href="/review" className="btn-view-all" style={{ 
                   fontSize: '12px', 
                   color: '#F1913D', 
                   textDecoration: 'none',

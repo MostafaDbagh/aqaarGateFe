@@ -53,6 +53,71 @@ const nextConfig = {
     compress: true,
     poweredByHeader: false,
     output: 'standalone',
+    async redirects() {
+      return [
+        // Blog redirects
+        { source: '/blog-list', destination: '/blog-grid', permanent: true },
+        { source: '/blog', destination: '/blog-grid', permanent: true },
+        { source: '/blogs', destination: '/blog-grid', permanent: true },
+        
+        // Property listing redirects
+        { source: '/properties', destination: '/property-list', permanent: true },
+        { source: '/listings', destination: '/property-list', permanent: true },
+        { source: '/listing', destination: '/property-list', permanent: true },
+        
+        // Property detail redirects
+        { source: '/property/:id', destination: '/property-detail/:id', permanent: true },
+        { source: '/properties/:id', destination: '/property-detail/:id', permanent: true },
+        { source: '/listing/:id', destination: '/property-detail/:id', permanent: true },
+        
+        // Agent redirects
+        { source: '/agent/:id', destination: '/agents-details/:id', permanent: true },
+        { source: '/agent-details/:id', destination: '/agents-details/:id', permanent: true },
+        
+        // About redirects
+        { source: '/about', destination: '/about-us', permanent: true },
+        
+        // Contact redirects
+        { source: '/contact-us', destination: '/contact', permanent: true },
+        { source: '/contacts', destination: '/contact', permanent: true },
+        
+        // Terms redirects
+        { source: '/terms', destination: '/terms-and-conditions', permanent: true },
+        { source: '/terms-of-use', destination: '/terms-and-conditions', permanent: true },
+        
+        // Privacy redirects
+        { source: '/privacy', destination: '/privacy-policy', permanent: true },
+        
+        // FAQ redirects
+        { source: '/faqs', destination: '/faq', permanent: true },
+        { source: '/frequently-asked-questions', destination: '/faq', permanent: true },
+        
+        // Career redirects
+        { source: '/careers', destination: '/career', permanent: true },
+        { source: '/jobs', destination: '/career', permanent: true },
+        
+        // Rental service redirects
+        { source: '/rental-service', destination: '/property-rental-service', permanent: true },
+        { source: '/rental-services', destination: '/property-rental-service', permanent: true },
+        { source: '/rentals', destination: '/property-rental-service', permanent: true },
+        
+        // Dashboard redirects
+        { source: '/dashboard/my-properties', destination: '/my-property', permanent: true },
+        { source: '/dashboard/favorites', destination: '/my-favorites', permanent: true },
+        { source: '/dashboard/messages', destination: '/messages', permanent: true },
+        { source: '/dashboard/profile', destination: '/my-profile', permanent: true },
+        { source: '/dashboard/reviews', destination: '/review', permanent: true },
+        { source: '/dashboard/package', destination: '/my-package', permanent: true },
+        { source: '/dashboard/add-property', destination: '/add-property', permanent: true },
+        
+        // Admin redirects
+        { source: '/admin/dashboard', destination: '/admin/overview', permanent: true },
+        { source: '/admin', destination: '/admin/overview', permanent: true },
+        
+        // 404 page redirect
+        { source: '/404', destination: '/', permanent: false },
+      ];
+    },
     async headers() {
       return [
         {

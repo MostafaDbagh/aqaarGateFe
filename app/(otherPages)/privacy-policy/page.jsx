@@ -65,7 +65,7 @@ export default function PrivacyPolicy() {
             }}>
               Home
             </Link>
-            <Link href="/about" style={{
+            <Link href="/about-us" style={{
               fontSize: '16px',
               color: '#000000',
               textDecoration: 'none',
@@ -995,7 +995,7 @@ export default function PrivacyPolicy() {
             }}>
               Home
             </Link>
-            <Link href="/about" style={{
+            <Link href="/about-us" style={{
               fontSize: '14px',
               color: '#666666',
               textDecoration: 'none',
