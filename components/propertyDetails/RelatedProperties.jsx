@@ -36,17 +36,6 @@ export default function RelatedProperties({ currentProperty }) {
   // Fetch similar properties
   const { data: listingsData, isLoading, isError, error } = useSearchListings(searchParams);
 
-  // Debug logging (remove in production)
-  React.useEffect(() => {
-    if (listingsData) {
-      console.log('RelatedProperties - Search params:', searchParams);
-      console.log('RelatedProperties - API response:', listingsData);
-    }
-    if (isError) {
-      console.error('RelatedProperties - Error:', error);
-    }
-  }, [listingsData, isError, error, searchParams]);
-
   // Filter out the current property and prioritize best matches
   const similarProperties = useMemo(() => {
     if (!listingsData?.data && !Array.isArray(listingsData)) return [];
@@ -64,8 +53,6 @@ export default function RelatedProperties({ currentProperty }) {
     );
     
     if (filteredListings.length === 0) {
-      // If no results with property type + status, try just property type
-      console.log('RelatedProperties - No results with filters, trying broader search');
       return [];
     }
     
@@ -142,11 +129,26 @@ export default function RelatedProperties({ currentProperty }) {
   }
 
   if (isError) {
-    // Show error state or return null
-    return null;
+    // Show "No related listings" message on error
+    return (
+      <section className="section-similar-properties tf-spacing-3">
+        <div className="tf-container">
+          <div className="row">
+            <div className="col-12">
+              <div className="heading-section mb-32">
+                <h2 className="title">Similar Listings</h2>
+              </div>
+              <div className={styles.noListingsMessage}>
+                <p>No related listings to show</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
-  // Show section if we have at least 1 property
+  // Show section even if no similar properties - display message
   if (similarProperties.length === 0) {
     // Try to show any approved properties of same type as fallback
     if (listingsData) {
@@ -247,7 +249,24 @@ export default function RelatedProperties({ currentProperty }) {
         );
       }
     }
-    return null; // Don't show the section if no similar properties at all
+    
+    // Show "No related listings" message
+    return (
+      <section className="section-similar-properties tf-spacing-3">
+        <div className="tf-container">
+          <div className="row">
+            <div className="col-12">
+              <div className="heading-section mb-32">
+                <h2 className="title">Similar Listings</h2>
+              </div>
+              <div className={styles.noListingsMessage}>
+                <p>No related listings to show</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

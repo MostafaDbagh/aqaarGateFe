@@ -6,36 +6,20 @@ import Image from "next/image";
 import DashboardNav from "./DashboardNav";
 import { PhoneIcon } from "@/components/icons";
 import { useAuthState } from "@/store/hooks/useAuth";
-import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 
 export default function Header1({ parentClass = "header" }) {
   // Use Redux for auth state
   const { isAuthenticated: isLoggedIn, isAgent, user } = useAuthState();
-  const { showSuccessModal } = useGlobalModal();
+  const { showMakeMeAgentModal } = useGlobalModal();
   
   // Check if user is admin
   const isAdmin = user?.role === 'admin';
 
-  const makeAgent = async (e) => {
+  const makeAgent = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user && user._id) {
-        const result = await authAPI.makeAgent(user._id);
-        
-        // Show success modal
-        showSuccessModal(
-          'Congratulations! 🎉', 
-          'You are now a Property Agent! You can now list and manage properties.',
-          user.email
-        );
-      }
-    } catch (error) {
-      // Handle error silently or show error modal
-    }
+    showMakeMeAgentModal();
   };
 
   return (

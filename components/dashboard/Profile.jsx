@@ -653,8 +653,8 @@ export default function Profile() {
                   onChange={(e) => setFormData(prev => ({ ...prev, whatsappCountryCode: e.target.value }))}
                   className={styles.countryCodeSelect}
                 >
-                  {countryCodes.map((country) => (
-                    <option key={country.code} value={country.code}>
+                  {countryCodes.map((country, index) => (
+                    <option key={`${country.code}-${country.country}-${index}`} value={country.code}>
                       {country.flag} {country.code}
                     </option>
                   ))}
@@ -673,7 +673,7 @@ export default function Profile() {
 
             
 
-            <div className="box">
+            <div className="box" style={{ marginTop: '32px' }}>
               <button 
                 type="submit"
                 className="tf-btn bg-color-primary pd-10"
@@ -699,6 +699,7 @@ export default function Profile() {
                     placeholder="Old Password"
                     value={passwordData.oldPassword}
                     onChange={handlePasswordChange}
+                    autoComplete="current-password"
                   />
                 </div>
               </div>
@@ -714,6 +715,7 @@ export default function Profile() {
                     placeholder="New Password"
                     value={passwordData.newPassword}
                     onChange={handlePasswordChange}
+                    autoComplete="new-password"
                   />
                 </div>
               </div>
@@ -729,6 +731,7 @@ export default function Profile() {
                     placeholder="Confirm Password"
                     value={passwordData.confirmPassword}
                     onChange={handlePasswordChange}
+                    autoComplete="new-password"
                   />
                 </div>
               </div>

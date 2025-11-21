@@ -5,7 +5,7 @@
 
 export const countryCodes = [
   { code: "+963", flag: "🇸🇾", country: "Syria" },
-  { code: "+1", flag: "🇺🇸", country: "USA" },
+  { code: "+1", flag: "🇺🇸", country: "USA/Canada" },
   { code: "+44", flag: "🇬🇧", country: "UK" },
   { code: "+49", flag: "🇩🇪", country: "Germany" },
   { code: "+33", flag: "🇫🇷", country: "France" },
@@ -23,7 +23,6 @@ export const countryCodes = [
   { code: "+212", flag: "🇲🇦", country: "Morocco" },
   { code: "+213", flag: "🇩🇿", country: "Algeria" },
   { code: "+216", flag: "🇹🇳", country: "Tunisia" },
-  { code: "+961", flag: "🇱🇧", country: "Lebanon" },
   { code: "+7", flag: "🇷🇺", country: "Russia" },
   { code: "+86", flag: "🇨🇳", country: "China" },
   { code: "+81", flag: "🇯🇵", country: "Japan" },
@@ -34,7 +33,6 @@ export const countryCodes = [
   { code: "+27", flag: "🇿🇦", country: "South Africa" },
   { code: "+55", flag: "🇧🇷", country: "Brazil" },
   { code: "+52", flag: "🇲🇽", country: "Mexico" },
-  { code: "+1", flag: "🇨🇦", country: "Canada" },
 ];
 
 // Default country code (Syria)

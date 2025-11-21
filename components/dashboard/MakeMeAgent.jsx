@@ -387,8 +387,8 @@ export default function MakeMeAgent() {
                     onChange={(e) => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
                     className={styles.countryCodeSelect}
                   >
-                    {countryCodes.map((country) => (
-                      <option key={country.code} value={country.code}>
+                    {countryCodes.map((country, index) => (
+                      <option key={`${country.code}-${country.country}-${index}`} value={country.code}>
                         {country.flag} {country.code}
                       </option>
                     ))}
@@ -654,7 +654,7 @@ export default function MakeMeAgent() {
               </div>
             </fieldset>
 
-            <div className="box">
+            <div className="box" >
               <button 
                 type="submit"
                 className="tf-btn bg-color-primary pd-10"

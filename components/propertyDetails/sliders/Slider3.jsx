@@ -45,55 +45,97 @@ export default function Slider3({ property }) {
 
   // Memoize images processing to prevent hydration issues
   const images = useMemo(() => {
-    if (!property) return fallbackImages;
+    if (!property) return [];
     
     const urls = [];
+    const seenUrls = new Set(); // Track seen URLs to prevent duplicates
     
     const pushUrl = (value) => {
       const resolved = resolveImageUrl(value);
-      if (resolved) {
-        urls.push(resolved);
+      if (resolved && !seenUrls.has(resolved)) {
+        // Only add if it's a valid URL and not already seen
+        // Filter out placeholder/fallback images
+        const isPlaceholder = resolved.includes('box-house-2.jpg') || 
+                              resolved.includes('property-details-v') ||
+                              resolved.includes('placeholder') ||
+                              resolved.includes('default');
+        
+        // Validate URL format
+        const isValidUrl = resolved.startsWith('http') || 
+                           resolved.startsWith('/') || 
+                           resolved.startsWith('data:') ||
+                           resolved.startsWith('blob:');
+        
+        if (!isPlaceholder && isValidUrl) {
+          urls.push(resolved);
+          seenUrls.add(resolved);
+        }
       }
     };
 
-    // Try images array (can be array of objects with url property or array of strings)
+    // Priority: Use images array first (primary source)
     if (Array.isArray(property.images) && property.images.length > 0) {
       property.images.forEach((item) => {
-        // Handle object format: { url: "...", publicId: "...", ... }
         if (typeof item === 'object' && item !== null) {
           pushUrl(item.url || item.secure_url || item.path || item.src);
-        } else {
-          // Handle string format
+        } else if (typeof item === 'string' && item.trim()) {
           pushUrl(item);
         }
       });
     }
 
-    // Try galleryImages array
+    // If we have images from the primary array, use only those (don't mix sources)
+    if (urls.length > 0) {
+      // Filter out any invalid URLs
+      const validUrls = urls.filter(url => {
+        if (!url || typeof url !== 'string') return false;
+        const trimmed = url.trim();
+        return trimmed && trimmed !== '/' && trimmed !== '//';
+      });
+
+      // Remove duplicates (final check)
+      const uniqueUrls = validUrls.filter((url, index, arr) => arr.indexOf(url) === index);
+
+      // Convert to image objects
+      return uniqueUrls.map((url, idx) => ({
+        src: url,
+        alt: `${property?.propertyKeyword || property?.propertyType || 'Property'} - Image ${idx + 1}`,
+      }));
+    }
+
+    // Fallback: Try other sources only if images array is empty
     if (Array.isArray(property.galleryImages) && property.galleryImages.length > 0) {
       property.galleryImages.forEach((item) => {
         if (typeof item === 'object' && item !== null) {
           pushUrl(item.url || item.secure_url || item.path || item.src);
-        } else {
+        } else if (typeof item === 'string' && item.trim()) {
           pushUrl(item);
         }
       });
     }
 
-    // Try imageNames array (usually strings)
     if (Array.isArray(property.imageNames) && property.imageNames.length > 0) {
-      property.imageNames.forEach((name) => pushUrl(name));
+      property.imageNames.forEach((name) => {
+        if (typeof name === 'string' && name.trim()) {
+          pushUrl(name);
+        }
+      });
     }
 
-    // Try single image properties
+    // Single image properties as last resort
     pushUrl(property.coverImage);
     pushUrl(property.featuredImage);
     pushUrl(property.mainImage);
 
-    // Remove duplicates and filter out nulls
-    const uniqueUrls = urls
-      .filter(Boolean)
-      .filter((url, index, arr) => arr.indexOf(url) === index);
+    // Filter out any invalid URLs
+    const validUrls = urls.filter(url => {
+      if (!url || typeof url !== 'string') return false;
+      const trimmed = url.trim();
+      return trimmed && trimmed !== '/' && trimmed !== '//';
+    });
+
+    // Remove duplicates (final check)
+    const uniqueUrls = validUrls.filter((url, index, arr) => arr.indexOf(url) === index);
 
     // Convert to image objects with alt text
     const propertyImages = uniqueUrls.map((url, idx) => ({
@@ -101,7 +143,7 @@ export default function Slider3({ property }) {
       alt: `${property?.propertyKeyword || property?.propertyType || 'Property'} - Image ${idx + 1}`,
     }));
 
-    // Return property images if found, otherwise empty array (we'll show a message instead)
+    // Return only actual property images (no fallbacks)
     return propertyImages;
   }, [property]);
   // If no images, show a message instead of fallback images

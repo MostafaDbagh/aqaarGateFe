@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import Login from '../modals/Login';
 import ForgotPasswordFlow from '../modals/ForgotPasswordFlow';
 import OTPVerification from '../modals/OTPVerification';
+import MakeMeAgentModal from '../modals/MakeMeAgentModal';
 import logger from '@/utlis/logger';
 
 const GlobalModalContext = createContext();
@@ -46,6 +47,10 @@ export const GlobalModalProvider = ({ children }) => {
     userData: null,
     email: '',
     type: 'signup'
+  });
+
+  const [makeMeAgentModalState, setMakeMeAgentModalState] = useState({
+    isOpen: false
   });
 
   const showSuccessModal = (title, message, userEmail = '', showLoginButton = false) => {
@@ -130,6 +135,18 @@ export const GlobalModalProvider = ({ children }) => {
     });
   };
 
+  const showMakeMeAgentModal = () => {
+    setMakeMeAgentModalState({
+      isOpen: true
+    });
+  };
+
+  const closeMakeMeAgentModal = () => {
+    setMakeMeAgentModalState({
+      isOpen: false
+    });
+  };
+
   const hideAllModals = () => {
     setModalState(prev => ({ ...prev, isOpen: false }));
     setRegisterModalState({ isOpen: false });
@@ -141,6 +158,7 @@ export const GlobalModalProvider = ({ children }) => {
       email: '',
       type: 'signup'
     });
+    setMakeMeAgentModalState({ isOpen: false });
   };
 
   // Unified modal show function
@@ -185,6 +203,9 @@ export const GlobalModalProvider = ({ children }) => {
     showOTPModal,
     closeOTPModal,
     otpModalState,
+    showMakeMeAgentModal,
+    closeMakeMeAgentModal,
+    makeMeAgentModalState,
     showModal,
     hideAllModals
   };
@@ -228,6 +249,10 @@ export const GlobalModalProvider = ({ children }) => {
         userData={otpModalState.userData}
         email={otpModalState.email}
         type={otpModalState.type}
+      />
+      <MakeMeAgentModal
+        isOpen={makeMeAgentModalState.isOpen}
+        onClose={closeMakeMeAgentModal}
       />
     </GlobalModalContext.Provider>
   );

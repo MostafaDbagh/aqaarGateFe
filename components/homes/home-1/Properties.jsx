@@ -122,17 +122,7 @@ export default function Properties({ listings, isLoading, isError }) {
     // Return first image or fallback
     const finalUrl = uniqueUrls.length > 0 ? uniqueUrls[0] : "/images/section/box-house-2.jpg";
     
-    // Debug logging
-    if (process.env.NODE_ENV === 'development' && uniqueUrls.length === 0) {
-      console.warn('No images found for listing:', {
-        id: listing._id,
-        hasImages: !!listing.images,
-        imagesLength: listing.images?.length || 0,
-        hasImageNames: !!listing.imageNames,
-        imageNamesLength: listing.imageNames?.length || 0,
-        listing: listing
-      });
-    }
+    // Debug logging removed for production
     
     return finalUrl;
   };
@@ -140,18 +130,6 @@ export default function Properties({ listings, isLoading, isError }) {
   // Function to get image source from listing
   const getImageSource = (listing) => {
     const imageUrl = extractImageUrls(listing);
-    // Debug: Log image extraction
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Listing image extraction:', {
-        listingId: listing._id,
-        hasImages: !!listing.images,
-        imagesLength: listing.images?.length || 0,
-        hasImageNames: !!listing.imageNames,
-        imageNamesLength: listing.imageNames?.length || 0,
-        extractedUrl: imageUrl,
-        listing: listing
-      });
-    }
     return imageUrl;
   };
 
@@ -293,7 +271,6 @@ export default function Properties({ listings, isLoading, isError }) {
                 display: 'block'
               }}
               onError={(e) => {
-                console.error('Image failed to load:', e.target.src);
                 // Try fallback image
                 if (e.target.src !== "/images/section/box-house-2.jpg" && !e.target.src.includes('box-house-2.jpg')) {
                   e.target.src = "/images/section/box-house-2.jpg";
@@ -307,9 +284,6 @@ export default function Properties({ listings, isLoading, isError }) {
                 }
               }}
               onLoad={(e) => {
-                if (process.env.NODE_ENV === 'development') {
-                  console.log('Image loaded successfully:', e.target.src);
-                }
                 // Hide placeholder if image loads
                 const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
                 if (placeholder) {
