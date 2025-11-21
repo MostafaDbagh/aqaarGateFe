@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { userAPI } from "@/apis";
+import { useRouter } from "next/navigation";
+import { userAPI, authAPI } from "@/apis";
 import Toast from "../common/Toast";
 import LocationLoader from "../common/LocationLoader";
 import DropdownSelect from "../common/DropdownSelect";
@@ -11,8 +12,9 @@ import logger from "@/utlis/logger";
 import styles from "./Profile.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 
-export default function Profile() {
+export default function MakeMeAgent() {
   const { showLoginModal } = useGlobalModal();
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -30,13 +32,13 @@ export default function Profile() {
     job: "",
     phone: "",
     countryCode: DEFAULT_COUNTRY_CODE,
+    whatsapp: "",
+    whatsappCountryCode: DEFAULT_COUNTRY_CODE,
     location: "",
     city: "",
     facebook: "",
     twitter: "",
     linkedin: "",
-    whatsapp: "",
-    whatsappCountryCode: DEFAULT_COUNTRY_CODE,
     servicesAndExpertise: [],
     responseTime: "",
     availability: "",
@@ -82,20 +84,25 @@ export default function Profile() {
     "Evenings only",
     "Flexible",
   ];
+
   // City options (Syrian cities/provinces)
   const cityOptions = [
     "Select City",
     ...syrianProvinces
   ];
 
+  // Required fields for making agent
+  const requiredFields = ['username', 'phone', 'email'];
 
-
-  // Password form data
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
+  // Check if required fields are filled
+  const isFormValid = () => {
+    return requiredFields.every(field => {
+      if (field === 'phone') {
+        return formData.phone && formData.phone.trim() !== '';
+      }
+      return formData[field] && formData[field].trim() !== '';
+    });
+  };
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -107,6 +114,13 @@ export default function Profile() {
         }
 
         const userData = JSON.parse(storedUser);
+        
+        // Check if user is already an agent
+        if (userData.role === 'agent') {
+          router.push('/my-profile');
+          return;
+        }
+
         setUser(userData);
 
         // Fetch latest profile data
@@ -116,12 +130,23 @@ export default function Profile() {
         let phoneNumber = profile.phone || "";
         let countryCode = DEFAULT_COUNTRY_CODE;
         
-        // Try to extract country code from phone number
         if (phoneNumber) {
           const extracted = extractCountryCode(phoneNumber);
           if (extracted) {
             countryCode = extracted.countryCode;
             phoneNumber = extracted.phoneNumber;
+          }
+        }
+
+        // Extract WhatsApp country code
+        let whatsappNumber = profile.whatsapp || "";
+        let whatsappCountryCode = DEFAULT_COUNTRY_CODE;
+        
+        if (whatsappNumber) {
+          const extracted = extractCountryCode(whatsappNumber);
+          if (extracted) {
+            whatsappCountryCode = extracted.countryCode;
+            whatsappNumber = extracted.phoneNumber;
           }
         }
         
@@ -136,19 +161,19 @@ export default function Profile() {
           job: profile.job || "",
           phone: phoneNumber,
           countryCode: profile.countryCode || countryCode,
+          whatsapp: whatsappNumber,
+          whatsappCountryCode: whatsappCountryCode,
           location: profile.location || "",
           city: profile.city || "",
           facebook: profile.facebook || "",
           twitter: profile.twitter || "",
           linkedin: profile.linkedin || "",
-          whatsapp: profile.whatsapp ? (extractCountryCode(profile.whatsapp)?.phoneNumber || profile.whatsapp.replace(/^\+\d+/, '')) : "",
-          whatsappCountryCode: profile.whatsapp ? (extractCountryCode(profile.whatsapp)?.countryCode || DEFAULT_COUNTRY_CODE) : DEFAULT_COUNTRY_CODE,
           servicesAndExpertise: profile.servicesAndExpertise || [],
           responseTime: profile.responseTime || "",
           availability: profile.availability || "",
           yearsExperience: profile.yearsExperience || "",
         });
-        setUser(profile);
+
         if (profile.avatar) {
           setAvatarPreview(profile.avatar);
         }
@@ -161,20 +186,20 @@ export default function Profile() {
     };
 
     loadProfile();
-  }, []);
+  }, [showLoginModal, router]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
-      [id]: value,
+      [id]: value
     }));
   };
 
   const handleServiceChange = (service, checked) => {
     setFormData(prev => ({
       ...prev,
-      servicesAndExpertise: checked 
+      servicesAndExpertise: checked
         ? [...prev.servicesAndExpertise, service]
         : prev.servicesAndExpertise.filter(s => s !== service)
     }));
@@ -183,8 +208,11 @@ export default function Profile() {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setToast({ type: "error", message: "File size must be less than 5MB" });
+        return;
+      }
       setAvatarFile(file);
-      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
@@ -193,16 +221,14 @@ export default function Profile() {
     }
   };
 
-  const handlePasswordChange = (e) => {
-    const { id, value } = e.target;
-    setPasswordData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
-  const handleSubmitProfile = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!isFormValid()) {
+      setToast({ type: "error", message: "Please fill in all required fields (Name, Email, Phone)" });
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -223,6 +249,7 @@ export default function Profile() {
         updateData.avatar = avatarFile;
       }
 
+      // First update the profile
       const updatedUser = await userAPI.updateProfile(user._id, updateData);
       
       // Clear avatar file state after successful upload
@@ -231,51 +258,23 @@ export default function Profile() {
         setAvatarPreview(updatedUser.avatar || null);
       }
       
-      // Update localStorage
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
+      // Then make the user an agent
+      const agentResult = await authAPI.makeAgent(user._id);
       
-      setToast({ type: "success", message: "Profile updated successfully!" });
+      // Update localStorage with new user data
+      const finalUser = agentResult.user || updatedUser;
+      localStorage.setItem("user", JSON.stringify(finalUser));
+      setUser(finalUser);
+      
+      setToast({ type: "success", message: "Congratulations! You are now an agent!" });
+      
+      // Redirect to dashboard after 2 seconds
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 2000);
     } catch (error) {
-      logger.error("Error updating profile:", error);
-      setToast({ type: "error", message: "Failed to update profile" });
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleSubmitPassword = async (e) => {
-    e.preventDefault();
-
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setToast({ type: "error", message: "Passwords do not match" });
-      return;
-    }
-
-    if (passwordData.newPassword.length < 6) {
-      setToast({ type: "error", message: "Password must be at least 6 characters" });
-      return;
-    }
-
-    setSaving(true);
-
-    try {
-      await userAPI.changePassword(
-        user._id,
-        passwordData.oldPassword,
-        passwordData.newPassword
-      );
-      
-      setPasswordData({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-      
-      setToast({ type: "success", message: "Password changed successfully!" });
-    } catch (error) {
-      logger.error("Error changing password:", error);
-      setToast({ type: "error", message: "Failed to change password" });
+      logger.error("Error making agent:", error);
+      setToast({ type: "error", message: error.message || "Failed to become an agent" });
     } finally {
       setSaving(false);
     }
@@ -286,7 +285,7 @@ export default function Profile() {
       <div className={styles.loadingOverlay}>
         <LocationLoader 
           size="large" 
-          message="Loading your profile..."
+          message="Loading..."
         />
       </div>
     );
@@ -299,28 +298,22 @@ export default function Profile() {
           <span className="body-1">Show Dashboard</span>
         </div>
         <div className="widget-box-2">
-          {user?.role === "agent" && (
-            <div className="box">
-              <h3 className="title">Account Settings</h3>
-              <div className="box-agent-account">
-                <h6>Agent Account</h6>
-                <p className="note">
-                  Your current account type is set to agent. You have access to all agent features
-                  including property management and analytics.
-                </p>
-                <div className={styles.pointsBalance}>
-                  <strong>Points Balance:</strong> {user.pointsBalance || 'unlimited'} points
-                </div>
-              </div>
+          <div className="box">
+            <h3 className="title">Become an Agent</h3>
+            <div className="box-agent-account">
+              <h6>Agent Application</h6>
+              <p className="note">
+                Fill in your information below to become a property agent. Once approved, you'll be able to list and manage properties.
+              </p>
             </div>
-          )}
+          </div>
           
           <div className="box">
             <h5 className="title">Avatar</h5>
             <div className="box-agent-avt">
               <div className="avatar">
                 <Image
-                  alt={user?.fullName || "User avatar"}
+                  alt={user?.username || "User avatar"}
                   loading="lazy"
                   width={128}
                   height={128}
@@ -343,7 +336,7 @@ export default function Profile() {
           </div>
 
           <h5 className="title">Information</h5>
-          <form onSubmit={handleSubmitProfile}>
+          <form onSubmit={handleSubmit}>
             <fieldset className="box box-fieldset">
               <label htmlFor="username">
                 Full name:<span>*</span>
@@ -354,6 +347,7 @@ export default function Profile() {
                 value={formData.username}
                 onChange={handleInputChange}
                 className="form-control"
+                required
               />
             </fieldset>
             
@@ -369,6 +363,7 @@ export default function Profile() {
                   onChange={handleInputChange}
                   className="form-control"
                   disabled={!!formData.email}
+                  required
                   style={formData.email ? { 
                     backgroundColor: '#f5f5f5', 
                     cursor: 'not-allowed',
@@ -377,20 +372,19 @@ export default function Profile() {
                 />
                 {formData.email && (
                   <p className={styles.emailHelperText}>
-                    Email cannot be changed once set
+                    Email cannot be changed
                   </p>
                 )}
               </fieldset>
               <fieldset className="box-fieldset">
                 <label htmlFor="phone">
-                  Your Phone:
+                  Your Phone:<span>*</span>
                 </label>
                 <div className={styles.phoneInputContainer}>
                   <select
                     id="countryCode"
                     value={formData.countryCode}
                     onChange={(e) => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
-                    disabled={!!formData.phone}
                     className={styles.countryCodeSelect}
                   >
                     {countryCodes.map((country) => (
@@ -406,15 +400,10 @@ export default function Profile() {
                     onChange={handleInputChange}
                     className={styles.phoneInput}
                     placeholder="Phone number"
-                    disabled={!!formData.phone}
                     autoComplete="off"
+                    required
                   />
                 </div>
-                {formData.phone && (
-                  <p className={styles.phoneHelperText}>
-                    Phone number cannot be changed once set
-                  </p>
-                )}
               </fieldset>
             </div>
 
@@ -430,58 +419,56 @@ export default function Profile() {
               />
             </fieldset>
 
-            {user?.role === "agent" && (
-              <fieldset className="box grid-layout-4 gap-30">
-                <div className="box-fieldset">
-                  <label htmlFor="company">
-                    Your Company:
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="box-fieldset">
-                  <label htmlFor="position">
-                    Position:
-                  </label>
-                  <input
-                    type="text"
-                    id="position"
-                    value={formData.position}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="box-fieldset">
-                  <label htmlFor="officeNumber">
-                    Office Number:
-                  </label>
-                  <input
-                    type="text"
-                    id="officeNumber"
-                    value={formData.officeNumber}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="box-fieldset">
-                  <label htmlFor="officeAddress">
-                    Office Address:
-                  </label>
-                  <input
-                    type="text"
-                    id="officeAddress"
-                    value={formData.officeAddress}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-              </fieldset>
-            )}
+            <fieldset className="box grid-layout-4 gap-30">
+              <div className="box-fieldset">
+                <label htmlFor="company">
+                  Your Company:
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="box-fieldset">
+                <label htmlFor="position">
+                  Position:
+                </label>
+                <input
+                  type="text"
+                  id="position"
+                  value={formData.position}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="box-fieldset">
+                <label htmlFor="officeNumber">
+                  Office Number:
+                </label>
+                <input
+                  type="text"
+                  id="officeNumber"
+                  value={formData.officeNumber}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="box-fieldset">
+                <label htmlFor="officeAddress">
+                  Office Address:
+                </label>
+                <input
+                  type="text"
+                  id="officeAddress"
+                  value={formData.officeAddress}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+            </fieldset>
 
             <div className="box grid-layout-3 gap-30 box-info-2">
               <div className="box-fieldset">
@@ -521,10 +508,6 @@ export default function Profile() {
                 />
               </div>
             </div>
-
-            
-
-
 
             {/* Services & Expertise - Checkboxes */}
             <fieldset className="box box-fieldset" style={{ width: '100%' }}>
@@ -606,7 +589,7 @@ export default function Profile() {
               </div>
             </div>
 
-<div className="box box-fieldset">
+            <div className="box box-fieldset">
               <label htmlFor="facebook">
                 Facebook:
               </label>
@@ -671,77 +654,23 @@ export default function Profile() {
               </div>
             </fieldset>
 
-            
-
             <div className="box">
               <button 
                 type="submit"
                 className="tf-btn bg-color-primary pd-10"
-                disabled={saving}
+                disabled={saving || !isFormValid()}
+                style={{
+                  opacity: (!isFormValid() || saving) ? 0.6 : 1,
+                  cursor: (!isFormValid() || saving) ? 'not-allowed' : 'pointer'
+                }}
               >
-                {saving ? "Saving..." : "Save & Update"}
+                {saving ? "Processing..." : "Make Me Agent"}
               </button>
-            </div>
-          </form>
-
-          <h5 className="title" style={{ marginTop: '32px' }}>Change password</h5>
-          <form onSubmit={handleSubmitPassword}>
-            <div className="box grid-layout-3 gap-30">
-              <div className="box-fieldset">
-                <label htmlFor="oldPassword">
-                  Old Password:<span>*</span>
-                </label>
-                <div className="box-password">
-                  <input
-                    type="password"
-                    id="oldPassword"
-                    className="form-contact password-field"
-                    placeholder="Old Password"
-                    value={passwordData.oldPassword}
-                    onChange={handlePasswordChange}
-                  />
-                </div>
-              </div>
-              <div className="box-fieldset">
-                <label htmlFor="newPassword">
-                  New Password:<span>*</span>
-                </label>
-                <div className="box-password">
-                  <input
-                    type="password"
-                    id="newPassword"
-                    className="form-contact password-field2"
-                    placeholder="New Password"
-                    value={passwordData.newPassword}
-                    onChange={handlePasswordChange}
-                  />
-                </div>
-              </div>
-              <div className="box-fieldset mb-30">
-                <label htmlFor="confirmPassword">
-                  Confirm Password:<span>*</span>
-                </label>
-                <div className="box-password">
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    className="form-contact password-field3"
-                    placeholder="Confirm Password"
-                    value={passwordData.confirmPassword}
-                    onChange={handlePasswordChange}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="box">
-              <button 
-                type="submit" 
-                className="tf-btn bg-color-primary pd-20"
-                disabled={saving}
-              >
-                {saving ? "Updating..." : "Update Password"}
-              </button>
+              {!isFormValid() && (
+                <p style={{ marginTop: '8px', fontSize: '12px', color: '#dc3545' }}>
+                  Please fill in all required fields (Name, Email, Phone) to become an agent
+                </p>
+              )}
             </div>
           </form>
         </div>
@@ -773,3 +702,4 @@ export default function Profile() {
     </div>
   );
 }
+

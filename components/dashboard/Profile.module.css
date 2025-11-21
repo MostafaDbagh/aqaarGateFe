@@ -14,4 +14,113 @@
   font-size: 14px;
 }
 
+/* Phone Number Input Container */
+.phoneInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  height: 54px !important;
+}
+
+.phoneInputContainer:focus-within {
+  border-color: #F1913D;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+}
+
+.phoneInputContainer:has(.phoneInput:disabled) {
+  background-color: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+/* Country Code Selector - Inside Input */
+.countryCodeSelect {
+  position: relative;
+  padding: 0 28px 0 12px;
+  border: none;
+  border-right: 1px solid #e0e0e0;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 80px;
+  max-height: 54px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  color: #1a1a1a;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+
+
+.countryCodeSelect:focus {
+  outline: none;
+}
+
+.countryCodeSelect:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Phone Number Input */
+.phoneInput {
+  flex: 1;
+  border: none;
+  padding: 13px 15px 13px 8px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  min-width: 0;
+  color: #1a1a1a;
+  height: 100%;
+}
+
+.phoneInput:disabled {
+  background-color: transparent;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.phoneInput:focus {
+  outline: none;
+}
+
+.phoneInput::placeholder {
+  color: #9ca3af;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Helper Text */
+.phoneHelperText {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* Email Helper Text */
+.emailHelperText {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
 
