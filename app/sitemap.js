@@ -205,12 +205,7 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/blog-list`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
+    // Note: blog-list page removed - redirects to blog-grid
     
     // Service pages
     {
