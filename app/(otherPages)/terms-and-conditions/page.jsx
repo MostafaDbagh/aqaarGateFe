@@ -283,6 +283,28 @@ export default function TermsAndConditions() {
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Listing Verification Process:</strong> All property listings posted by agents must go through our manual verification and approval process before they appear on our website and mobile application. This is a manual review process where our administrative team carefully examines each listing to ensure it meets our quality standards, accuracy requirements, and complies with our terms and conditions. The verification process is designed to protect users and maintain the integrity of our platform. The verification process will not take long, and you will be notified once your listing is approved or if any changes are required.
+                </p>
+                <p style={{ 
+                  marginBottom: '20px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Admin Rights to Manage Listings:</strong> AqaarGate administrators reserve all rights to delete or change the status of any property listing at any time if we notice any unusual actions, suspicious behavior, or violations of our terms and conditions. This includes but is not limited to: scam activities, failure to respond to client inquiries, mock or fake listings, misleading information, fraudulent property details, or any other actions that compromise the integrity of our platform or harm users. Administrators may immediately remove listings, change their approval status, or take any other necessary actions to protect users and maintain platform quality. Agents will be notified of any administrative actions taken on their listings.
+                </p>
+                <p style={{ 
+                  marginBottom: '20px',
+                  fontSize: '16px',
+                  color: '#000000',
                   lineHeight: '1.6',
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
@@ -340,6 +362,28 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif'
                 }}>
                   <strong>Third-Party Content Disclaimer:</strong> Some property listings and related information are submitted by third parties, including users and real estate professionals. SyProperty does not verify, endorse, or guarantee such information and is not responsible for any inaccuracies, errors, or omissions.
+                </p>
+                <p style={{ 
+                  marginBottom: '20px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Holiday Homes - Admin-Only Posting:</strong> Holiday Home property listings can only be posted by AqaarGate administrators. Agents cannot post Holiday Home listings directly. When users submit a rental service request for a Holiday Home property, the listing will be reviewed and processed by our administrators. Once the rental agreement is finalized and agreed upon by both parties (Party A and Party B), the Holiday Home listing will be posted by AqaarGate administrators. This process ensures proper verification and compliance with our platform standards.
+                </p>
+                <p style={{ 
+                  marginBottom: '20px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Rent Period Restrictions:</strong> For all property listings except Villa and Farm properties, the minimum rent period is three (3) months. This restriction is implemented to avoid misuse of properties and to ensure responsible rental practices. Villa and Farm properties are excluded from this restriction and can be rented on a daily basis or for any period as specified by the property owner or agent. This policy applies to all rental listings on our platform.
                 </p>
 
                 <h2 style={{ 
@@ -414,7 +458,7 @@ export default function TermsAndConditions() {
                   </li>
                 </ul>
                 <p style={{ 
-                  marginBottom: '30px',
+                  marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
@@ -422,6 +466,17 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif'
                 }}>
                   <strong>Account Suspension and Termination:</strong> We reserve the right to suspend or terminate your account, without prior notice, if we suspect fraudulent activity, violation of these Terms, or misuse of our platform. You are responsible for maintaining the confidentiality of your account and password.
+                </p>
+                <p style={{ 
+                  marginBottom: '30px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Account Deletion:</strong> Once you delete your account, you will no longer be able to access the Service or perform any actions. Your account and all associated data will be permanently deleted from our records. This includes but is not limited to your profile information, property listings, messages, favorites, reviews, and any other data associated with your account. Account deletion is irreversible, and we cannot restore your account or data after deletion. Please ensure you have saved any important information before proceeding with account deletion.
                 </p>
 
                 <h2 style={{ 
@@ -542,6 +597,28 @@ export default function TermsAndConditions() {
                 }}>
                   6. Agent and Broker Services
                 </h2>
+                <p style={{ 
+                  marginBottom: '20px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Agent Verification Requirement:</strong> All agents must be verified through their phone number and email address before they can perform any actions from their dashboard. Once an agent is authorized and verified by AqaarGate administrators, they will have full access to all dashboard features and functionalities. During the verification process, agents are required to provide accurate contact information. Once verified, the phone number and email address in the agent's profile will be disabled and cannot be changed. This ensures account security and prevents unauthorized modifications to verified contact information.
+                </p>
+                <p style={{ 
+                  marginBottom: '20px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Agent Blocking Policy:</strong> AqaarGate administrators reserve the right to block any agent's account at any time if the agent violates our terms and conditions, breaks any rules, performs scam actions, fails to respond to client inquiries in a timely manner, or if there are legitimate complaints filed against the agent. Once an agent is blocked by an administrator, all of their property listings will immediately disappear from the platform and will not be visible or accessible to clients. Blocked agents will lose access to their dashboard and all platform features. This policy is implemented to protect users, maintain platform integrity, and ensure quality service standards. Agents who are blocked may be subject to permanent account termination depending on the severity of the violation.
+                </p>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
