@@ -206,6 +206,29 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Users */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.USERS ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.USERS);
+                        router.replace('/admin/users');
+                      }
+                    }}
+                  >
+                    <i className="icon-user" />
+                    <span>Users</span>
+                  </button>
+                </li>
+
                 {/* Rental Services */}
                 <li
                   className={`nav-menu-item ${

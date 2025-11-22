@@ -189,6 +189,29 @@ export const adminAPI = {
     }
   },
 
+  // Users (read-only)
+  getAllUsers: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.search) params.append('search', filters.search);
+      if (filters.role) params.append('role', filters.role);
+      if (filters.isBlocked !== undefined && filters.isBlocked !== '') {
+        params.append('isBlocked', filters.isBlocked);
+      }
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = `/admin/users${queryString ? `?${queryString}` : ''}`;
+      const response = await Axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   // Agents
   getAllAgents: async (filters = {}) => {
     try {

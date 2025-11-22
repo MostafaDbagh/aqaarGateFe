@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { userAPI, authAPI } from "@/apis";
 import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/constants/countryCodes";
+import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import logger from "@/utlis/logger";
 import styles from "./MakeMeAgentModal.module.css";
 
 export default function MakeMeAgentModal({ isOpen, onClose }) {
+  const { showSuccessModal } = useGlobalModal();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -110,13 +112,20 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
       const finalUser = agentResult.user || user;
       localStorage.setItem("user", JSON.stringify(finalUser));
       
-      // Close modal and show success
+      // Close modal
       onClose();
+      
+      // Show success message with verification notice
+      showSuccessModal(
+        "Congratulations! 🎉",
+        "You are now an agent! Your account is pending admin verification. Once verified by an admin, you'll be able to list and manage properties.",
+        finalUser.email
+      );
       
       // Reload page to reflect changes
       setTimeout(() => {
         window.location.reload();
-      }, 500);
+      }, 2000);
     } catch (error) {
       logger.error("Error making agent:", error);
       setErrors({ submit: error.message || "Failed to become an agent. Please try again." });

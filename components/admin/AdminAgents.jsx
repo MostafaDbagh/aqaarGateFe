@@ -16,7 +16,7 @@ export default function AdminAgents() {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [filters, setFilters] = useState({
     search: "",
-    isBlocked: "",
+    isBlocked: "", // Show all agents by default
     page: 1,
     limit: 20
   });
@@ -180,7 +180,7 @@ export default function AdminAgents() {
                   <td>
                     {agent.isBlocked ? (
                       <span className={`${styles.badge} ${styles.badgeBlocked}`}>
-                        Blocked
+                        {agent.blockedReason?.includes('New agent') ? 'Pending Verification' : 'Blocked'}
                       </span>
                     ) : (
                       <span className={`${styles.badge} ${styles.badgeActive}`}>

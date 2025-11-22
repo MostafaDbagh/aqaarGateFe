@@ -7,6 +7,7 @@ import AdminAddProperty from "./AdminAddProperty";
 import AdminSoldProperties from "./AdminSoldProperties";
 import AdminDeletedProperties from "./AdminDeletedProperties";
 import AdminAgents from "./AdminAgents";
+import AdminUsers from "./AdminUsers";
 import AdminRentalServices from "./AdminRentalServices";
 import AdminContacts from "./AdminContacts";
 import AdminReviews from "./AdminReviews";
@@ -20,6 +21,7 @@ export const TABS = {
   SOLD_PROPERTIES: 'sold-properties',
   DELETED_PROPERTIES: 'deleted-properties',
   AGENTS: 'agents',
+  USERS: 'users',
   RENTAL_SERVICES: 'rental-services',
   CONTACTS: 'contacts',
   REVIEWS: 'reviews',
@@ -57,6 +59,8 @@ export default function AdminDashboardMain() {
         tabToSet = TABS.DELETED_PROPERTIES;
       } else if (pathname.includes('/admin/agents')) {
         tabToSet = TABS.AGENTS;
+      } else if (pathname.includes('/admin/users')) {
+        tabToSet = TABS.USERS;
       } else if (pathname.includes('/admin/rental-services')) {
         tabToSet = TABS.RENTAL_SERVICES;
       } else if (pathname.includes('/admin/contacts')) {
@@ -94,6 +98,8 @@ export default function AdminDashboardMain() {
         return <AdminDeletedProperties />;
       case TABS.AGENTS:
         return <AdminAgents />;
+      case TABS.USERS:
+        return <AdminUsers />;
       case TABS.RENTAL_SERVICES:
         return <AdminRentalServices />;
       case TABS.CONTACTS:
