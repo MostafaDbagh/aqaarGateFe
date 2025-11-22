@@ -624,6 +624,17 @@ export default function PrivacyPolicy() {
                 }}>
                   We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
                 </p>
+                <p style={{ 
+                  marginBottom: '16px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Password Encryption:</strong> Your password is encrypted using industry-standard encryption algorithms. No one, including SyProperty administrators, can access or view your password in plain text. Only you, as the account owner, can change your password. We cannot retrieve or reset your password without your authorization through the password reset process. Your password security is your responsibility, and you should never share your password with anyone.
+                </p>
 
                 <h2 style={{ 
                   color: '#000000', 
@@ -714,7 +725,7 @@ export default function PrivacyPolicy() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  7. Data Retention
+                  7. Data Retention and Account Deletion
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -725,6 +736,17 @@ export default function PrivacyPolicy() {
                   fontFamily: 'sans-serif'
                 }}>
                   We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When we no longer need your information, we will securely delete or anonymize it.
+                </p>
+                <p style={{ 
+                  marginBottom: '16px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  lineHeight: '1.8',
+                  textAlign: 'left',
+                  fontFamily: 'sans-serif',
+                  fontWeight: '600'
+                }}>
+                  <strong>Account Deletion:</strong> Once you delete your account, you will no longer be able to access the Service or perform any actions. Your account and all associated data will be permanently deleted from our records. This includes but is not limited to your profile information, property listings, messages, favorites, and any other data associated with your account. Account deletion is irreversible, and we cannot restore your account or data after deletion. Please ensure you have saved any important information before proceeding with account deletion.
                 </p>
 
                 <h2 style={{ 
