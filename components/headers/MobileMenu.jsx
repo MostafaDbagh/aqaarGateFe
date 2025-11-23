@@ -171,6 +171,48 @@ export default function MobileMenu() {
               </div>
             </li>
             <li
+              className={`menu-item ${
+                pathname?.split("/")[1] === "agents" ? "current-menu-item" : ""
+              }`}
+            >
+              <Link
+                href="/agents"
+                className="item-menu-mobile"
+                onClick={() => {
+                  const offcanvas = document.getElementById('menu-mobile');
+                  if (offcanvas) {
+                    const closeButton = offcanvas.querySelector('[data-bs-dismiss="offcanvas"]');
+                    if (closeButton) {
+                      closeButton.click();
+                    }
+                  }
+                }}
+              >
+                Agents
+              </Link>
+            </li>
+            <li
+              className={`menu-item ${
+                pathname?.split("/")[1] === "property-rental-service" ? "current-menu-item" : ""
+              }`}
+            >
+              <Link
+                href="/property-rental-service"
+                className="item-menu-mobile"
+                onClick={() => {
+                  const offcanvas = document.getElementById('menu-mobile');
+                  if (offcanvas) {
+                    const closeButton = offcanvas.querySelector('[data-bs-dismiss="offcanvas"]');
+                    if (closeButton) {
+                      closeButton.click();
+                    }
+                  }
+                }}
+              >
+                Rental Service
+              </Link>
+            </li>
+            <li
               className={`menu-item  ${
                 isParentActive(blogMenu) ? "current-menu-item" : ""
               } `}

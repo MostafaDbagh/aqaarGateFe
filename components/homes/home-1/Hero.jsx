@@ -36,6 +36,86 @@ export default function Hero({
           position: relative;
           z-index: 2;
         }
+        
+        @media (max-width: 768px) {
+          .hero-background .form-title {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            align-items: center;
+            gap: 10px;
+          }
+          
+          .hero-background .box-item.wrap-btn {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center;
+            gap: 8px;
+            width: 100% !important;
+            margin-top: 0 !important;
+            flex-shrink: 0 !important;
+          }
+          
+          .hero-background .box-item.wrap-btn .btn-filter {
+            flex-shrink: 0 !important;
+            width: 50px !important;
+            min-width: 50px !important;
+            max-width: 50px !important;
+            height: 50px !important;
+          }
+          
+          .hero-background .box-item.wrap-btn .tf-btn {
+            flex: 1 !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            white-space: nowrap !important;
+            height: 50px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .hero-background .form-title {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            align-items: center;
+            gap: 8px;
+          }
+          
+          .hero-background .box-item.wrap-btn {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center;
+            gap: 6px;
+            width: 100% !important;
+            margin-top: 0 !important;
+            flex-shrink: 0 !important;
+          }
+          
+          .hero-background .box-item.wrap-btn .btn-filter {
+            flex-shrink: 0 !important;
+            width: 44px !important;
+            min-width: 44px !important;
+            max-width: 44px !important;
+            height: 44px !important;
+          }
+          
+          .hero-background .box-item.wrap-btn .tf-btn {
+            flex: 1 !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            white-space: nowrap !important;
+            height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+        }
       `}</style>
       
       <div className="page-title home01 hero-background">
