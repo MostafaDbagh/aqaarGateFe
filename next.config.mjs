@@ -143,6 +143,16 @@ const nextConfig = {
           // Apply security headers to all routes
           source: '/:path*',
           headers: [
+            // Cloudflare-specific headers to disable interfering features
+            {
+              key: 'CF-Cache-Status',
+              value: 'DYNAMIC'
+            },
+            // Disable Cloudflare Rocket Loader (causes Next.js navigation issues)
+            {
+              key: 'X-Rocket-Loader',
+              value: 'disabled'
+            },
             // XSS Protection
             {
               key: 'X-XSS-Protection',

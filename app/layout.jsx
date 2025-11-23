@@ -141,6 +141,21 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="AqaarGate Real Estate" />
         
+        {/* Disable Cloudflare Rocket Loader - interferes with Next.js client-side routing */}
+        <script 
+          data-cfasync="false" 
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Disable Cloudflare Rocket Loader
+              if (typeof window !== 'undefined') {
+                window.__CF = window.__CF || {};
+                window.__CF.rocketLoader = false;
+                window.__NEXT_DATA__ = window.__NEXT_DATA__ || {};
+              }
+            `
+          }}
+        />
+        
         {/* Performance Optimization */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -151,11 +166,8 @@ export default function RootLayout({ children }) {
         <meta httpEquiv="Cache-Control" content="public, max-age=31536000" />
         <meta httpEquiv="Expires" content="31536000" />
         
-        {/* Security Headers - Additional layer */}
+        {/* Security Headers - Note: X-Frame-Options, X-Content-Type-Options, and Referrer-Policy are set via HTTP headers in middleware.js, not meta tags */}
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta httpEquiv="X-Frame-Options" content="DENY" />
-        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       </head>
       <body className="popup-loader">
         <KeywordsMetaTag />
