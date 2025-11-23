@@ -22,8 +22,10 @@
   width: 100%;
   max-height: 98vh;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   padding: 24px 20px 20px;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .closeButton {
@@ -364,31 +366,89 @@
 }
 
 /* Responsive Design */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .modalOverlay {
-    padding: 16px;
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 20px;
   }
   
   .modalContent {
-    padding: 32px 24px 24px;
+    padding: 20px 16px 16px;
     max-width: 100%;
+    max-height: calc(100vh - 40px);
+    margin: 0 auto;
+    border-radius: 12px;
   }
   
-  .modalTitle {
-    font-size: 20px;
+  .closeButton {
+    top: 12px;
+    right: 12px;
+    padding: 6px;
   }
   
-  .modalSubtitle {
-    font-size: 14px;
+  .modalHeader {
+    margin-bottom: 16px;
   }
   
   .iconWrapper {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
   }
   
   .iconWrapper i {
-    font-size: 28px;
+    font-size: 20px;
+  }
+  
+  .modalTitle {
+    font-size: 18px;
+  }
+  
+  .modalSubtitle {
+    font-size: 12px;
+  }
+  
+  .form {
+    gap: 12px;
+  }
+  
+  .formInput,
+  .roleSelect {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 10px 12px;
+  }
+  
+  .submitButton {
+    padding: 12px 18px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-start;
+    padding-top: 10px;
+  }
+  
+  .modalContent {
+    padding: 18px 14px 14px;
+    max-height: calc(100vh - 20px);
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .closeButton {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .modalTitle {
+    font-size: 17px;
+  }
+  
+  .form {
+    gap: 10px;
   }
   
   .formInput,
