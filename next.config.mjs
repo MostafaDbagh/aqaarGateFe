@@ -53,6 +53,25 @@ const nextConfig = {
     compress: true,
     poweredByHeader: false,
     output: 'standalone',
+    webpack: (config, { isServer }) => {
+      // Fix webpack module loading issues
+      if (!isServer) {
+        config.resolve.fallback = {
+          ...config.resolve.fallback,
+          fs: false,
+          net: false,
+          tls: false,
+        };
+      }
+      
+      // Handle module loading errors gracefully
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'deterministic',
+      };
+      
+      return config;
+    },
     async redirects() {
       return [
         // Blog redirects
