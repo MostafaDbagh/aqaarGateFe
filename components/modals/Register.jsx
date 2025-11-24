@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { UserIcon, EmailIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
-import { countryCodes, DEFAULT_COUNTRY_CODE } from "@/constants/countryCodes";
 import styles from "./Register.module.css";
 
 export default function Register({ isOpen, onClose }) {
@@ -16,10 +15,6 @@ export default function Register({ isOpen, onClose }) {
     password: "",
     confirmPassword: "",
     role: "user",
-    phone: "",
-    countryCode: DEFAULT_COUNTRY_CODE,
-    company: "",
-    job: "",
     agreeToTerms: false
   });
   const [fieldErrors, setFieldErrors] = useState({});
@@ -39,10 +34,6 @@ export default function Register({ isOpen, onClose }) {
       password: "",
       confirmPassword: "",
       role: "user",
-      phone: "",
-      countryCode: DEFAULT_COUNTRY_CODE,
-      company: "",
-      job: "",
       agreeToTerms: false
     });
     setFieldErrors({});
@@ -80,24 +71,10 @@ export default function Register({ isOpen, onClose }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    // If role is changing from agent to user, clear agent-specific fields
-    if (name === 'role' && value === 'user') {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
-        phone: "",
-        company: "",
-        job: "",
-        countryCode: DEFAULT_COUNTRY_CODE
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      }));
-    }
-    
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
     // Clear field error when user types
     setFieldErrors(prev => ({
       ...prev,
@@ -143,22 +120,6 @@ export default function Register({ isOpen, onClose }) {
           error = "Passwords do not match";
         }
         break;
-      case "phone":
-        if (formData.role === "agent") {
-          if (!formData.phone || formData.phone.trim() === "") {
-            error = "Phone number is required for agents";
-          } else if (formData.phone.length < 8) {
-            error = "Please enter a valid phone number";
-          }
-        }
-        break;
-      case "company":
-        if (formData.role === "agent") {
-          if (!formData.company || formData.company.trim() === "") {
-            error = "Company name is required for agents";
-          }
-        }
-        break;
     }
     
     setFieldErrors(prev => ({
@@ -172,33 +133,10 @@ export default function Register({ isOpen, onClose }) {
     setIsLoading(true);
     setError('');
 
-    // Validate agent-specific fields
-    if (formData.role === "agent") {
-      if (!formData.phone || formData.phone.trim() === "") {
-        setError("Phone number is required for agents");
-        setIsLoading(false);
-        return;
-      }
-      if (!formData.company || formData.company.trim() === "") {
-        setError("Company name is required for agents");
-        setIsLoading(false);
-        return;
-      }
-    }
-
     try {
-      // Prepare user data for registration
+      // Use the original form data without any modifications
       const userDataForRegistration = {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        role: formData.role,
-        // Add phone with country code for agents
-        ...(formData.role === "agent" && {
-          phone: formData.phone ? `${formData.countryCode}${formData.phone}` : "",
-          company: formData.company,
-          job: formData.job || ""
-        })
+        ...formData
       };
       
       // Send OTP API call for signup
@@ -220,7 +158,7 @@ export default function Register({ isOpen, onClose }) {
   };
 
   const isFormValid = () => {
-    const baseValid = formData.username &&
+    return formData.username &&
            formData.email &&
            formData.password &&
            formData.confirmPassword &&
@@ -228,17 +166,6 @@ export default function Register({ isOpen, onClose }) {
            formData.password.length >= 6 &&
            formData.agreeToTerms &&
            Object.values(fieldErrors).every(error => !error);
-    
-    // For agents, also require phone and company
-    if (formData.role === "agent") {
-      return baseValid && 
-             formData.phone && 
-             formData.phone.trim() !== "" &&
-             formData.company && 
-             formData.company.trim() !== "";
-    }
-    
-    return baseValid;
   };
 
   const handleSwitchToLogin = (e) => {
@@ -352,89 +279,6 @@ export default function Register({ isOpen, onClose }) {
                 <option value="agent">🏢 Property Agent - List and manage properties</option>
               </select>
             </div>
-
-            {/* Agent-specific fields */}
-            {formData.role === "agent" && (
-              <>
-                <div className={styles.formGroup}>
-                  <label htmlFor="phone" className={styles.label}>
-                    Phone Number <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.phoneInputContainer}>
-                    <select
-                      className={styles.countryCodeSelect}
-                      value={formData.countryCode}
-                      onChange={(e) => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
-                    >
-                      {countryCodes.map((country, index) => (
-                        <option key={`${country.code}-${country.country}-${index}`} value={country.code}>
-                          {country.flag} {country.code}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      onBlur={() => validateField("phone")}
-                      placeholder="Enter your phone number"
-                      className={styles.phoneInput}
-                      required
-                    />
-                  </div>
-                  {fieldErrors.phone && (
-                    <span className={styles.errorSpan}>
-                      {fieldErrors.phone}
-                    </span>
-                  )}
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="company" className={styles.label}>
-                    Company Name <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.inputWithIcon}>
-                    <UserIcon className={styles.inputIcon} />
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      onBlur={() => validateField("company")}
-                      placeholder="Enter your company name"
-                      className={styles.formInput}
-                      required
-                    />
-                  </div>
-                  {fieldErrors.company && (
-                    <span className={styles.errorSpan}>
-                      {fieldErrors.company}
-                    </span>
-                  )}
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="job" className={styles.label}>
-                    Job Title
-                  </label>
-                  <div className={styles.inputWithIcon}>
-                    <UserIcon className={styles.inputIcon} />
-                    <input
-                      type="text"
-                      id="job"
-                      name="job"
-                      value={formData.job}
-                      onChange={handleChange}
-                      placeholder="Enter your job title (optional)"
-                      className={styles.formInput}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
 
             <div className={styles.formGroup}>
               <label htmlFor="pass2" className={styles.label}>Password</label>

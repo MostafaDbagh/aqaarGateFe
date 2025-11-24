@@ -9,10 +9,10 @@ import { useSearchListings } from "@/apis/hooks";
 import { cleanParams } from "@/utlis/cleanedParams";
 
 // Lazy load heavy components for better performance
-const Categories = lazy(() => import("@/components/common/Categories").catch(() => ({ default: () => <div>Categories unavailable</div> })));
-const Properties = lazy(() => import("@/components/homes/home-1/Properties").catch(() => ({ default: () => <div>Properties unavailable</div> })));
-const Cities = lazy(() => import("@/components/homes/home-1/Cities").catch(() => ({ default: () => <div>Cities unavailable</div> })));
-const Properties2 = lazy(() => import("@/components/homes/home-1/Properties2").catch(() => ({ default: () => <div>Properties2 unavailable</div> })));
+const Categories = lazy(() => import("@/components/common/Categories"));
+const Properties = lazy(() => import("@/components/homes/home-1/Properties"));
+const Cities = lazy(() => import("@/components/homes/home-1/Cities"));
+const Properties2 = lazy(() => import("@/components/homes/home-1/Properties2"));
 
 // Loading component for Suspense fallback
 const ComponentLoader = ({ name }) => (

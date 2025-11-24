@@ -20,8 +20,9 @@ export default function PerformanceOptimization() {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
     <!-- Resource Hints -->
-    <link rel="preload" href="/icons/icomoon/fonts/icomoon.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="/fonts/icomoon.woff" as="font" type="font/woff" crossorigin />
     <link rel="preload" href="/css/bootstrap.css" as="style" />
+    <link rel="preload" href="/css/style.css" as="style" />
     
     <!-- Critical CSS -->
     <style>

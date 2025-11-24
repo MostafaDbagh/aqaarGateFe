@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import SplitTextAnimation from "./SplitTextAnimation";
 import LocationLoader from "./LocationLoader";
-import categoryAPI from "@/apis/category";
+import { categoryAPI } from "@/apis/category";
 
 export default function Categories({
   parentClass = "tf-spacing-1 section-categories pb-0",
@@ -17,43 +17,24 @@ export default function Categories({
   // Use new category API - much more efficient than fetching all listings
   const { data: categoryStatsResponse, isLoading, isError, error } = useQuery({
     queryKey: ['categories', 'stats'],
-    queryFn: async () => {
-      try {
-        const response = await categoryAPI.getCategoryStats();
-        return response;
-      } catch (err) {
-        // Return empty data structure if API fails
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('Categories API failed, using fallback:', err);
-        }
-        return { data: { categories: [] } };
-      }
-    },
+    queryFn: () => categoryAPI.getCategoryStats(),
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    retry: 1, // Only retry once
-    retryDelay: 1000,
   });
   
   // Extract categories data from API response
   const categoriesData = useMemo(() => {
-    // Handle different response structures
-    if (categoryStatsResponse?.data?.categories) {
-      return categoryStatsResponse.data.categories;
+    if (!categoryStatsResponse?.data?.categories) {
+      // Log for debugging
+      console.log('Categories API Response:', categoryStatsResponse);
+      return [];
     }
-    if (categoryStatsResponse?.categories) {
-      return categoryStatsResponse.categories;
-    }
-    if (Array.isArray(categoryStatsResponse)) {
-      return categoryStatsResponse;
-    }
-    // Return empty array if no valid data
-    return [];
+    return categoryStatsResponse.data.categories;
   }, [categoryStatsResponse]);
   
-  // Log error if any (only in development)
-  if (isError && process.env.NODE_ENV === 'development') {
+  // Log error if any
+  if (isError) {
     console.error('Categories API Error:', error);
   }
 

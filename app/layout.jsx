@@ -4,17 +4,165 @@ import KeywordOptimization from '@/components/seo/KeywordOptimization'
 import AdvancedSEO from '@/components/seo/AdvancedSEO'
 import PerformanceOptimization from '@/components/seo/PerformanceOptimization'
 import InternationalSEO from '@/components/seo/InternationalSEO'
-import KeywordsMetaTag from '@/components/seo/KeywordsMetaTag'
-import EnhancedSEO from '@/components/seo/EnhancedSEO'
-import { keywordsArray } from '@/constants/keywords'
 
 export const metadata = {
   title: {
     default: 'AqaarGate Real Estate - Find Your Dream Property',
     template: '%s | AqaarGate Real Estate'
   },
-  description: 'Discover premium properties for sale and rent in Syria and Lattakia. AqaarGate Real Estate offers luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties for sale and rent (بيع وتأجير). Perfect for expats from Germany, Netherlands, EU countries, and Arab Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman). Expert guidance for international property buyers. Browse 500+ verified properties with photos, virtual tours, and expert agent support.',
-  keywords: keywordsArray,
+  description: 'Discover premium properties for sale and rent in Syria and Lattakia. AqaarGate Real Estate offers luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties for sale and rent (بيع وتأجير). Perfect for expats from Germany, Netherlands, EU countries, and Arab Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman). Expert guidance for international property buyers.',
+  keywords: [
+    // Syria and Lattakia keywords
+    'real estate syria',
+    'properties syria',
+    'syria real estate',
+    'lattakia properties',
+    'lattakia real estate',
+    'properties for sale syria',
+    'properties for rent syria',
+    'syria apartments',
+    'syria houses',
+    'lattakia apartments',
+    'lattakia houses',
+    'syria holiday homes',
+    'syria vacation rentals',
+    'lattakia holiday homes',
+    'lattakia vacation rentals',
+    'syria property listings',
+    'lattakia property listings',
+    'real estate lattakia',
+    'property management syria',
+    'syria real estate agent',
+    'lattakia real estate agent',
+    'syria home buying',
+    'syria home selling',
+    'lattakia home buying',
+    'lattakia home selling',
+    'syria commercial properties',
+    'lattakia commercial properties',
+    'syria luxury homes',
+    'lattakia luxury homes',
+    'syria property search',
+    'lattakia property search',
+    'syria real estate listings',
+    'lattakia real estate listings',
+    'syria property investment',
+    'lattakia property investment',
+    'syria beach properties',
+    'lattakia beach properties',
+    'syria coastal properties',
+    'lattakia coastal properties',
+    'syria villas',
+    'lattakia villas',
+    'syria condos',
+    'lattakia condos',
+    'syria land for sale',
+    'lattakia land for sale',
+    'syria rental properties',
+    'lattakia rental properties',
+    // International keywords - EU countries searching for Syria properties
+    'syria real estate from germany',
+    'syria properties germany',
+    'syria real estate deutschland',
+    'syria properties netherlands',
+    'syria real estate netherlands',
+    'syria properties from netherlands',
+    'syria real estate from europe',
+    'syria properties eu',
+    'syria real estate europe',
+    'buy property syria from germany',
+    'buy property syria from netherlands',
+    'buy property syria from europe',
+    'syria real estate for expats',
+    'syria properties expats',
+    'syria real estate expatriates',
+    'syria property investment germany',
+    'syria property investment netherlands',
+    'syria property investment europe',
+    'syria holiday homes expats',
+    'syria vacation rentals expats',
+    'syria real estate for germans',
+    'syria real estate for dutch',
+    // International keywords - Arab Gulf countries searching for Syria properties
+    'syria real estate from uae',
+    'syria properties uae',
+    'syria real estate dubai',
+    'syria properties dubai',
+    'syria real estate from saudi arabia',
+    'syria properties saudi arabia',
+    'syria real estate riyadh',
+    'syria properties riyadh',
+    'syria real estate from qatar',
+    'syria properties qatar',
+    'syria real estate doha',
+    'syria properties doha',
+    'syria real estate from kuwait',
+    'syria properties kuwait',
+    'syria real estate kuwait city',
+    'syria properties kuwait city',
+    'syria real estate from bahrain',
+    'syria properties bahrain',
+    'syria real estate manama',
+    'syria properties manama',
+    'syria real estate from oman',
+    'syria properties oman',
+    'syria real estate muscat',
+    'syria properties muscat',
+    'syria real estate gulf',
+    'syria properties gulf countries',
+    'buy property syria from uae',
+    'buy property syria from saudi arabia',
+    'buy property syria from qatar',
+    'buy property syria from kuwait',
+    'buy property syria from bahrain',
+    'buy property syria from oman',
+    'invest syria from gulf',
+    'syria property investment uae',
+    'syria property investment saudi arabia',
+    'syria property investment qatar',
+    'syria property investment kuwait',
+    'syria property investment bahrain',
+    'syria property investment oman',
+    'syria real estate for emirates',
+    'syria real estate for saudis',
+    'syria real estate for qataris',
+    'syria real estate for kuwaitis',
+    // Local search variations - Arabic keywords
+    'عقارات سوريا',
+    'عقارات اللاذقية',
+    'شراء عقار في سوريا',
+    'استثمار عقاري في سوريا',
+    'عقارات سوريا من الإمارات',
+    'عقارات سوريا من السعودية',
+    'عقارات سوريا من قطر',
+    'عقارات سوريا من الكويت',
+    // Holiday homes in Arabic
+    'بيوت عطلات',
+    'بيوت عطلات سوريا',
+    'بيوت عطلات اللاذقية',
+    'بيوت عطلات للبيع',
+    'بيوت عطلات للإيجار',
+    'بيع بيوت عطلات',
+    'تأجير بيوت عطلات',
+    'بيوت عطلات للبيع في سوريا',
+    'بيوت عطلات للإيجار في سوريا',
+    'بيع وتأجير بيوت',
+    'بيع وتأجير بيوت عطلات',
+    'بيع وتأجير بيوت في سوريا',
+    'بيع وتأجير بيوت عطلات في سوريا',
+    'بيوت عطلات على الشاطئ',
+    'بيوت عطلات ساحلية',
+    // Vacation rentals in Arabic
+    'إيجار منازل عطلات',
+    'منازل عطلات للايجار',
+    'استئجار بيت عطلة',
+    'بيوت عطلات للعائلات',
+    // Holiday homes for expats in Arabic
+    'بيوت عطلات للعرب',
+    'بيوت عطلات للخليجيين',
+    'بيوت عطلات في سوريا للعرب',
+    'بيوت عطلات في سوريا للخليجيين'
+  ],
   authors: [{ name: 'AqaarGate Real Estate Team' }],
   creator: 'AqaarGate Real Estate',
   publisher: 'AqaarGate Real Estate',
@@ -117,8 +265,6 @@ export default function RootLayout({ children }) {
         <meta name="msvalidate.01" content={process.env.BING_VERIFICATION || "your-bing-verification-code"} />
         <meta name="yandex-verification" content={process.env.YANDEX_VERIFICATION || "your-yandex-verification-code"} />
         
-        {/* Keywords Meta Tag - Added via KeywordsMetaTag component for better compatibility */}
-        
         {/* Geographic Meta Tags - Target Syria and International Markets */}
         <meta name="geo.region" content="SY" />
         <meta name="geo.placename" content="Syria" />
@@ -141,21 +287,6 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="AqaarGate Real Estate" />
         
-        {/* Disable Cloudflare Rocket Loader - interferes with Next.js client-side routing */}
-        <script 
-          data-cfasync="false" 
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Disable Cloudflare Rocket Loader
-              if (typeof window !== 'undefined') {
-                window.__CF = window.__CF || {};
-                window.__CF.rocketLoader = false;
-                window.__NEXT_DATA__ = window.__NEXT_DATA__ || {};
-              }
-            `
-          }}
-        />
-        
         {/* Performance Optimization */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -166,12 +297,13 @@ export default function RootLayout({ children }) {
         <meta httpEquiv="Cache-Control" content="public, max-age=31536000" />
         <meta httpEquiv="Expires" content="31536000" />
         
-        {/* Security Headers - Note: X-Frame-Options, X-Content-Type-Options, and Referrer-Policy are set via HTTP headers in middleware.js, not meta tags */}
+        {/* Security Headers - Additional layer */}
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       </head>
       <body className="popup-loader">
-        <KeywordsMetaTag />
-        <EnhancedSEO />
         <StructuredData />
         <KeywordOptimization />
         <AdvancedSEO />

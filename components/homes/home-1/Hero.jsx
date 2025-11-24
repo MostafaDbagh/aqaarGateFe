@@ -1,7 +1,6 @@
 "use client";
 import SearchForm from "@/components/common/SearchForm";
 import React, { useState } from "react";
-import styles from "./Hero.module.css";
 
 export default function Hero({
   searchParams,
@@ -22,7 +21,6 @@ export default function Hero({
 
   return (
     <>
-<<<<<<< HEAD
       <style jsx>{`
         .hero-background {
           background-image: url('/images/cities/hero.jpg');
@@ -121,9 +119,6 @@ export default function Hero({
       `}</style>
       
       <div className="page-title home01 hero-background">
-=======
-      <div className={`page-title home01 ${styles.heroBackground}`}>
->>>>>>> 85012c66afa4d5c6616916182e4b11494833f0f6
       <div className="tf-container ">
         <div className="row justify-center relative">
           <div className="col-lg-8 ">

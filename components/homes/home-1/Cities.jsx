@@ -3,7 +3,7 @@ import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useQuery } from "@tanstack/react-query";
-import cityAPI from "@/apis/city";
+import { cityAPI } from "@/apis/city";
 import { useRouter } from "next/navigation";
 
 export default function Cities() {
@@ -12,43 +12,24 @@ export default function Cities() {
   // Use new city API - much more efficient than fetching all listings
   const { data: cityStatsResponse, isLoading, isError, error } = useQuery({
     queryKey: ['cities', 'stats'],
-    queryFn: async () => {
-      try {
-        const response = await cityAPI.getCityStats();
-        return response;
-      } catch (err) {
-        // Return empty data structure if API fails
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('Cities API failed, using fallback:', err);
-        }
-        return { data: { cities: [] } };
-      }
-    },
+    queryFn: () => cityAPI.getCityStats(),
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    retry: 1, // Only retry once
-    retryDelay: 1000,
   });
   
   // Extract cities data from API response
   const citiesData = useMemo(() => {
-    // Handle different response structures
-    if (cityStatsResponse?.data?.cities) {
-      return cityStatsResponse.data.cities;
+    if (!cityStatsResponse?.data?.cities) {
+      // Log for debugging
+      console.log('Cities API Response:', cityStatsResponse);
+      return [];
     }
-    if (cityStatsResponse?.cities) {
-      return cityStatsResponse.cities;
-    }
-    if (Array.isArray(cityStatsResponse)) {
-      return cityStatsResponse;
-    }
-    // Return empty array if no valid data
-    return [];
+    return cityStatsResponse.data.cities;
   }, [cityStatsResponse]);
   
-  // Log error if any (only in development)
-  if (isError && process.env.NODE_ENV === 'development') {
+  // Log error if any
+  if (isError) {
     console.error('Cities API Error:', error);
   }
 

@@ -2,11 +2,10 @@
 import { homes, otherPages, propertyLinks } from "@/constants/menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useCallback } from "react";
+import React from "react";
 
 export default function Nav() {
   const pathname = usePathname();
-  
   const isParentActive = (menus) =>
     menus.some((menu) =>
       menu.submenu
@@ -19,38 +18,14 @@ export default function Nav() {
           )
         : menu.href.split("/")[1] === pathname.split("/")[1]
     );
-  
-  const handleNavClick = useCallback((e, href) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // If already on the target page, do nothing
-    if (pathname === href) {
-      return;
-    }
-    
-    // Use window.location.href for immediate, reliable navigation
-    // This works on first click and bypasses all Next.js/Cloudflare issues
-    if (typeof window !== 'undefined') {
-      window.location.href = href;
-    }
-  }, [pathname]);
-  
   return (
     <>
-      <li 
-        style={{ padding: '12px 8px' }}
+      <li style={{ padding: '12px 8px' }}
         className={`${
           homes.some((elm) => elm.href == pathname) ? "current-menu" : ""
         }`}
       >
-        <a 
-          href="/"
-          onClick={(e) => handleNavClick(e, '/')}
-          style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-        >
-          Home
-        </a>
+        <a href="/">Home</a>
 
       </li>
       <li
@@ -58,13 +33,7 @@ export default function Nav() {
           isParentActive(propertyLinks) ? "current-menu" : ""
         } `}
       >
-        <a 
-          href="/property-list"
-          onClick={(e) => handleNavClick(e, '/property-list')}
-          style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-        >
-          Listing
-        </a>
+        <a href="/property-list">Listing</a>
 
       </li>
       <li
@@ -72,7 +41,7 @@ export default function Nav() {
           isParentActive(otherPages) ? "current-menu" : ""
         } `}
       >
-        <a href="#" onClick={(e) => e.preventDefault()}>Pages</a>
+        <a href="#">Pages</a>
         <ul className="submenu">
           {otherPages.map((menu, index) => (
             <li
@@ -87,7 +56,7 @@ export default function Nav() {
             >
               {menu.submenu ? (
                 <>
-                  <a href="#" onClick={(e) => e.preventDefault()}>{menu.title}</a>
+                  <a href="#">{menu.title}</a>
                   <ul className="submenu">
                     {menu.submenu.map((item, subIndex) => (
                       <li
@@ -115,37 +84,17 @@ export default function Nav() {
           pathname?.split("/")[1] === "agents" ? "current-menu" : ""
         } `}
       >
-        <a 
-          href="/agents"
-          onClick={(e) => handleNavClick(e, '/agents')}
-          style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-        >
-          Agents
-        </a>
+        <Link href="/agents">Agents</Link>
       </li>
       <li
         className={` ${
           pathname?.split("/")[1] === "property-rental-service" ? "current-menu" : ""
         } `}
       >
-        <a 
-          href="/property-rental-service"
-          onClick={(e) => handleNavClick(e, '/property-rental-service')}
-          style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-        >
-          Rental Service
-        </a>
+        <Link href="/property-rental-service">Rental Service</Link>
       </li>
-      <li 
-        className={"/contact" == pathname ? "current-menu" : ""}
-      >
-        <a 
-          href="/contact"
-          onClick={(e) => handleNavClick(e, '/contact')}
-          style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-        >
-          Contact
-        </a>
+      <li className={"/contact" == pathname ? "current-menu" : ""}>
+        <Link href={`/contact`}>Contact</Link>
       </li>
     </>
   );
