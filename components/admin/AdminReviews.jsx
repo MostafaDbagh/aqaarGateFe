@@ -125,7 +125,6 @@ export default function AdminReviews() {
         setAdminReviews(filteredReviews);
         lastProcessedDataRef.current = currentData;
       } catch (error) {
-        console.error('Error filtering admin reviews:', error);
         setAdminReviews(allReviews); // Fallback to all reviews
         lastProcessedDataRef.current = currentData;
       } finally {

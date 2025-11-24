@@ -1,0 +1,640 @@
+{
+  "common": {
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "submit": "Submit",
+    "required": "Required",
+    "optional": "Optional",
+    "select": "Select",
+    "guest": "Guest"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Join our community and start your property journey today.",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "registerAs": "Register as",
+    "roleUser": "👤 Regular User - Browse and favorite properties",
+    "roleAgent": "🏢 Property Agent - List and manage properties",
+    "phoneNumber": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "companyName": "Company Name",
+    "companyPlaceholder": "Enter your company name",
+    "jobTitle": "Job Title",
+    "jobPlaceholder": "Enter your job title",
+    "agreeToTerms": "I agree to the",
+    "termsAndConditions": "Terms and Conditions",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "errors": {
+      "usernameMinLength": "Username must be at least 3 characters",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "passwordsNotMatch": "Passwords do not match",
+      "phoneRequired": "Phone number is required for agents",
+      "phoneInvalid": "Please enter a valid phone number",
+      "companyRequired": "Company name is required for agents",
+      "jobRequired": "Job title is required for agents",
+      "otpFailed": "Failed to send OTP. Please try again."
+    }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your account to continue",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "dontHaveAccount": "Don't have an account?",
+    "register": "Register",
+    "loginFailed": "Login failed. Please try again."
+  },
+  "forgotPassword": {
+    "title": "Forgot Password?",
+    "subtitle": "No worries! Enter your email and we'll send you a reset code.",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "sendResetCode": "Send Reset Code",
+    "sending": "Sending...",
+    "backToLogin": "Back to Login",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "sendFailed": "Failed to send reset code. Please try again."
+  },
+  "newPassword": {
+    "title": "Create New Password",
+    "subtitle": "Your new password must be different from previously used passwords.",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "resetPassword": "Reset Password",
+    "resetting": "Resetting...",
+    "passwordRequired": "Password is required",
+    "confirmRequired": "Please confirm your password",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "passwordsNotMatch": "Passwords do not match",
+    "mustBe6Chars": "Must be at least 6 characters",
+    "resetFailed": "Failed to reset password. Please try again."
+  },
+  "otpVerification": {
+    "title": "Verify Your Email",
+    "titleForgotPassword": "Email Verification for Reset Password",
+    "sentCode": "We've sent a 6-digit code to",
+    "sentResetCode": "We've sent a password reset code to",
+    "otpExpires": "OTP will expire after 5 minutes",
+    "enterCode": "Enter verification code",
+    "verifyAndComplete": "Verify & Complete Registration",
+    "verifyAndReset": "Verify & Reset Password",
+    "verifying": "Verifying...",
+    "completing": "Completing Registration...",
+    "didntReceive": "Didn't receive the code?",
+    "resendCode": "Resend Code",
+    "resending": "Sending...",
+    "resendIn": "Resend in",
+    "enterAllDigits": "Please enter all 6 digits",
+    "invalidOTP": "Invalid OTP. Please try again.",
+    "verificationFailed": "OTP verification failed. Please try again."
+  },
+  "passwordResetSuccess": {
+    "title": "Password Reset Successful!",
+    "message": "Your password has been reset successfully. You can now log in with your new password.",
+    "loginNow": "Login Now",
+    "close": "Close"
+  },
+  "passwordResetError": {
+    "title": "Password Reset Failed",
+    "defaultMessage": "We couldn't reset your password. Please try again or contact support if the problem persists.",
+    "tryAgain": "Try Again",
+    "close": "Close"
+  },
+  "makeMeAgent": {
+    "title": "Become an Agent",
+    "email": "Email address",
+    "emailCannotBeChanged": "Email cannot be changed",
+    "phoneNumber": "Phone number",
+    "phonePlaceholder": "Phone number",
+    "job": "Job",
+    "jobPlaceholder": "e.g. Real Estate Agent",
+    "company": "Company",
+    "companyPlaceholder": "Your company name",
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "makeMeAgent": "Make Me Agent",
+    "errors": {
+      "phoneRequired": "Phone number is required",
+      "jobRequired": "Job is required",
+      "companyRequired": "Company is required",
+      "submitFailed": "Failed to become an agent. Please try again."
+    },
+    "success": {
+      "title": "Congratulations! 🎉",
+      "message": "You are now an agent! Your account is pending admin verification. Once verified by an admin, you'll be able to list and manage properties."
+    }
+  },
+  "globalStatus": {
+    "login": "Login",
+    "close": "Close",
+    "continue": "Continue",
+    "accountCreatedFor": "Account created for:",
+    "email": "Email:"
+  },
+  "registrationSuccess": {
+    "title": "Registration Successful!",
+    "message": "Your account has been created successfully. You can now login with your credentials."
+  },
+  "hero": {
+    "title": "Search your Dream Homes",
+    "subtitle": "Alot of homes enthusiasts just like you visit our website.",
+    "forSale": "For sale",
+    "forRent": "For rent",
+    "searchPlaceholder": "Place, neighborhood, school or agent...",
+    "searchButton": "Search"
+  },
+  "navigation": {
+    "home": "Home",
+    "listing": "Listing",
+    "pages": "Pages",
+    "agents": "Agents",
+    "rentalService": "Rental Service",
+    "contact": "Contact",
+    "aboutUs": "About Us",
+    "ourVision": "Our Vision",
+    "career": "Career",
+    "faq": "FAQ's",
+    "blog": "Blog"
+  },
+  "footer": {
+    "aboutUs": "About us",
+    "popularHouse": "Popular house",
+    "quickLinks": "Quick links",
+    "downloadApp": "Download Our App",
+    "comingSoon": "Coming soon",
+    "callUs": "Call us",
+    "needLiveHelp": "Need live help",
+    "followUs": "Follow us",
+    "copyright": "Copyright ©",
+    "designedBy": "Designed & Developed by",
+    "links": {
+      "contact": "Contact",
+      "ourVision": "Our Vision",
+      "aboutUs": "About Us",
+      "careers": "Careers with realty",
+      "blogs": "Blogs",
+      "agents": "Agents",
+      "holidayHomes": "# Holiday Homes",
+      "apartments": "# Apartments",
+      "villas": "# Villas",
+      "offices": "# Offices",
+      "shops": "# Shops",
+      "lands": "# Lands",
+      "termsOfUse": "Terms of use",
+      "privacyPolicy": "Privacy policy",
+      "rentalService": "Rental service",
+      "faqs": "FAQs"
+    }
+  },
+  "dashboardNav": {
+    "login": "login",
+    "register": "register",
+    "logout": "Logout",
+    "adminDashboard": "Admin Dashboard",
+    "properties": "Properties",
+    "agents": "Agents",
+    "rentalServices": "Rental Services",
+    "contactUs": "Contact Us",
+    "dashboard": "Dashboard",
+    "myPackage": "My package",
+    "myProfile": "My Profile",
+    "myFavorites": "My favorites",
+    "reviews": "Reviews",
+    "messages": "Messages",
+    "makeMeAgent": "Make me Agent",
+    "myProperties": "My properties",
+    "addProperty": "Add property"
+  },
+  "aboutUs": {
+    "pageName": "About Us",
+    "badge": "About Us",
+    "title": "A Group of Ambitious Young Syrians",
+    "subtitle": "Showcasing the beauty, diversity, and real estate potential of Syria",
+    "modernArchitecture": {
+      "title": "Modern Architecture",
+      "text": "Blending contemporary design with Syria's rich architectural heritage to showcase properties that stand the test of time."
+    },
+    "ancientHeritage": {
+      "title": "Ancient Heritage",
+      "text": "Preserving and celebrating Syria's historical legacy while building a bright future for real estate development."
+    },
+    "brightFuture": {
+      "title": "Bright Future",
+      "text": "Symbolizing progress, unity, and hope as we work together to rebuild and showcase Syria's real estate potential."
+    },
+    "showcasingCities": {
+      "title": "Showcasing Syria's Vibrant Cities",
+      "text": "We highlight Syria's most beautiful and diverse cities — from the ancient streets of Damascus and Aleppo to the coastal charm of Latakia and Tartous, and the historical significance of Homs. Each city represents a unique blend of culture, heritage, and modern development, creating a tapestry of real estate opportunities that reflect the true spirit of Syria."
+    },
+    "development": {
+      "title": "Development",
+      "text": "Promoting sustainable development and growth across Syria's real estate landscape"
+    },
+    "culture": {
+      "title": "Culture",
+      "text": "Celebrating Syria's rich cultural heritage and architectural diversity"
+    },
+    "prideInHomeland": {
+      "title": "Pride in Homeland",
+      "text": "Demonstrating our deep love and pride for Syria through our work"
+    },
+    "inspiringHope": {
+      "title": "Inspiring Hope & Unity",
+      "text": "Our mission is to inspire hope and unity through the lens of real estate. We believe that by showcasing Syria's beauty, diversity, and potential, we can contribute to a brighter future. With warm lighting, clean urban visuals, and a professional, elegant approach, we emphasize development, culture, and pride in our homeland."
+    },
+    "visionForSyria": {
+      "title": "Our Vision for Syria",
+      "text": "We see Syria not just as a place, but as a promise. A promise of restoration, growth, and prosperity. Through our platform, we aim to connect people with properties that reflect Syria's enduring spirit — combining ancient wisdom with modern innovation, creating spaces where history meets the future."
+    },
+    "buildingTogether": {
+      "title": "Building Together",
+      "text": "We are a team of passionate young Syrians dedicated to showcasing the real estate potential of our homeland. Every property we feature tells a story — of resilience, beauty, and the unwavering spirit of Syria. Together, we're building a platform that honors our past while embracing our future."
+    },
+    "footerNote": "From Damascus to Aleppo, from Latakia to Tartous — we're here to showcase Syria's real estate potential to the world."
+  },
+  "ourVision": {
+    "pageName": "Our Vision",
+    "badge": "Our Vision",
+    "title": "We Want to Change the Game",
+    "noCommentPoints": {
+      "title": "No Comment Points for Prices",
+      "text": "No need to leave comments or use points to get prices. Everything is transparent and clear from the start."
+    },
+    "singleClearPrice": {
+      "title": "Single Clear Price",
+      "text": "No multi-price based on your country, work, or anything else. One clear price for everyone, everywhere."
+    },
+    "displaySyria": {
+      "title": "Display Syria to the World",
+      "text": "Show Syria's beautiful properties to the world with modern standards like Europe and the Gulf."
+    },
+    "browseListings": {
+      "title": "Let Syrians and All People Browse Beautiful Listings",
+      "text": "We want to let Syrians and people from all around the world browse and see how beautiful our property listings are. Search your way with many filters applied to give you the best experience."
+    },
+    "simpleEasy": {
+      "title": "Simple & Easy",
+      "text": "Make things simple and easy for everyone to use"
+    },
+    "manyFilters": {
+      "title": "Many Filters",
+      "text": "Search with many filters applied up to users' preferences"
+    },
+    "privacySearch": {
+      "title": "Privacy Search",
+      "text": "No one from your Facebook relatives will observe you searching for your dream property"
+    },
+    "madeWithLove": {
+      "title": "Made with Love",
+      "text": "We want you to know that this app will keep having modifications and improvements. We are committed to continuously enhancing our user experience to give you the best possible experience."
+    },
+    "feedbackMatters": {
+      "title": "Your Feedback Matters",
+      "text": "Positive and negative comments are welcome! We value your input and use it to make SyProperty better every day. Your feedback helps us understand what works and what needs improvement, ensuring we deliver the best experience for everyone."
+    },
+    "featuresComingSoon": {
+      "title": "Many Features Coming Soon",
+      "text": "Many, many features will come soon! We are constantly working on new enhancements, tools, and capabilities to make your property search and browsing experience even better. Stay tuned for exciting updates!"
+    },
+    "footerNote": "We're here to serve you, and we appreciate every piece of feedback that helps us grow."
+  },
+  "propertyList": {
+    "title": "Property listing",
+    "filter": "Filter",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "showingResults": "Showing {start}-{end} of {total} results.",
+    "noResults": "No properties found. Try adjusting your filters.",
+    "loadingMessage": "Finding amazing properties for you...",
+    "errorMessage": "Error loading properties"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "propertyGridFullWidth": "Property Grid Full Width",
+    "propertyListing": "Property Listing",
+    "propertyDetails": "Property Details"
+  },
+  "contact": {
+    "pageName": "Contact",
+    "title": "We Would Love to Hear From You",
+    "subtitle": "We'll get to know you to understand your selling goals, explain the selling process so you know what to expect.",
+    "name": "Name:",
+    "namePlaceholder": "Your name",
+    "email": "Email:",
+    "emailPlaceholder": "Email",
+    "phoneNumber": "Phone number:",
+    "phonePlaceholder": "Your phone number",
+    "interestedIn": "What are you interested in?",
+    "selectOption": "Select",
+    "location": "Location",
+    "rent": "Rent",
+    "sale": "Sale",
+    "yourMessage": "Your Message:",
+    "messagePlaceholder": "Message",
+    "contactExperts": "Contact our experts"
+  },
+  "homeSections": {
+    "trySearchingFor": "Try Searching For",
+    "trySearchingForSubtitle": "Alot of Featured homes enthusiasts just like you have found their dream home",
+    "todaysListings": "Today's Listings",
+    "todaysListingsSubtitle": "Alot of homes enthusiasts just like you visit our website.",
+    "todaysLuxuryListings": "Today's Luxury Listings",
+    "todaysLuxuryListingsSubtitle": "Thousands of luxury home enthusiasts just like you visit our website.",
+    "exploreSyriaCities": "Explore Syria Cities Offerings",
+    "exploreSyriaCitiesSubtitle": "Discover beautiful properties across Syria's major cities",
+    "noSyrianCitiesAvailable": "No Syrian Cities Available",
+    "noSyrianCitiesAvailableText": "There are currently no properties available to show Syrian cities.",
+    "noPropertiesAvailable": "No properties available at the moment",
+    "holidayHomesListings": "Holiday Homes Listings",
+    "holidayHomesListingsSubtitle": "Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties."
+  },
+  "rentalService": {
+    "pageName": "Property Rental Service",
+    "title": "Property Rental Management Service",
+    "subtitle": "Let AqaarGate handle your property rental needs with our comprehensive, professional management service",
+    "fullServiceManagement": {
+      "title": "Full-Service Property Management",
+      "text": "Our specialized maintenance team ensures your property remains in excellent condition throughout the rental period. We guarantee to maintain the property in the same condition as when we received it."
+    },
+    "formalAgreement": {
+      "title": "Formal Rental Agreement",
+      "text": "We operate under a formal agreement between AqaarGate and the property owner. Both parties agree on rental duration and rental price, ensuring transparency and mutual understanding."
+    },
+    "howItWorks": "How It Works",
+    "submitProperty": {
+      "title": "Submit Your Property Details",
+      "text": "Fill out our comprehensive property submission form with all relevant details including property type, size, bedrooms, bathrooms, features, and location."
+    },
+    "propertyInspection": {
+      "title": "Property Inspection",
+      "text": "Our professional team will visit your property to conduct a thorough inspection and assessment."
+    },
+    "agreementFinalization": {
+      "title": "Agreement Finalization",
+      "text": "After inspection, we'll finalize the rental agreement, including rental duration, rental price, and commission terms (minimum 25% commission)."
+    },
+    "managementBegins": {
+      "title": "Property Management Begins",
+      "text": "Once the agreement is signed, we take over property management, maintenance, and rental operations, ensuring your property is well-maintained and generating income."
+    },
+    "commissionStructure": "Commission Structure",
+    "commissionText": "Our company charges a minimum commission of",
+    "commissionPercent": "25%",
+    "commissionText2": "of the rental amount. Additional terms and details can be negotiated between both parties to ensure a mutually beneficial agreement.",
+    "agreementTerms": "Agreement Terms Include:",
+    "agreementTermsText": "Rental duration, rental price, commission percentage, maintenance responsibilities, and any additional negotiated terms.",
+    "submitPropertyForm": "Submit Your Property",
+    "formSubtitle": "Fill out the form below to get started with our property rental management service",
+    "ownerName": "Owner Name",
+    "ownerNamePlaceholder": "Your full name",
+    "emailAddress": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "phoneNumber": "Phone Number",
+    "phonePlaceholder": "+963 999 123 456",
+    "propertyType": "Property Type",
+    "selectPropertyType": "Select property type",
+    "apartment": "Apartment",
+    "villa": "Villa",
+    "house": "House",
+    "land": "Land",
+    "commercial": "Commercial",
+    "office": "Office",
+    "shop": "Shop",
+    "other": "Other",
+    "propertySize": "Property Size (Sqft)",
+    "propertySizePlaceholder": "e.g., 1200",
+    "numberOfBedrooms": "Number of Bedrooms",
+    "bedroomsPlaceholder": "e.g., 3",
+    "numberOfBathrooms": "Number of Bathrooms",
+    "bathroomsPlaceholder": "e.g., 2",
+    "propertyLocation": "Property Location",
+    "locationPlaceholder": "e.g., Damascus, Al-Mazzeh, Main Street",
+    "propertyFeatures": "Property Features",
+    "featuresPlaceholder": "Describe your property features (e.g., furnished, parking, garden, balcony, etc.)",
+    "additionalDetails": "Additional Details (Optional)",
+    "additionalDetailsPlaceholder": "Any additional information about your property or rental preferences...",
+    "submitting": "Submitting...",
+    "submitPropertyButton": "Submit Property for Rental Service",
+    "whyChoose": "Why Choose AqaarGate Property Rental Service?",
+    "specializedMaintenance": {
+      "title": "Specialized Maintenance Team",
+      "text": "Our dedicated maintenance team ensures your property stays in perfect condition throughout the rental period."
+    },
+    "conditionGuarantee": {
+      "title": "Condition Guarantee",
+      "text": "We guarantee to maintain your property in the same excellent condition as when we received it."
+    },
+    "formalAgreementBenefit": {
+      "title": "Formal Agreement",
+      "text": "All terms are clearly defined in a formal agreement, ensuring transparency and peace of mind."
+    },
+    "successMessage": "Thank you! Your property rental service request has been submitted successfully. Our team will contact you shortly to schedule a property inspection.",
+    "errorMessage": "There was an error submitting your request. Please try again or contact us directly."
+  },
+  "cta": {
+    "title": "Find a Local Real Estate Agent Today",
+    "subtitle": "If you're looking to buy or sell a home. We'll help you make the most money possible.",
+    "button": "Find your location agent"
+  },
+  "career": {
+    "pageTitle": {
+      "title": "A Culture of Inclusivity and Belonging",
+      "subtitle": "Thousands of luxury home enthusiasts just like you visit our website.",
+      "forSale": "For sale",
+      "forRent": "For rent",
+      "searchPlaceholder": "Find job here",
+      "searchButton": "Search"
+    },
+    "jobs": {
+      "title": "Best Job For You At AqaarGate",
+      "subtitle": "We connect you directly to the person that knows the most about a property for sale, the listing agent.",
+      "joinTeam": {
+        "title": "Join Our Growing Team at AqaarGate",
+        "subtitle": "We're building something amazing in real estate, and we're looking for talented individuals to join our journey. While we're not currently hiring, we're always excited to connect with potential future team members.",
+        "noOpenPositions": "No Open Positions Right Now",
+        "description": "We're focused on growing our platform and serving our clients better. Check back regularly as we expand our team with exciting opportunities in real estate, technology, and customer service.",
+        "wantToKnow": "Want to be the first to know about new openings?",
+        "getInTouch": "Get in touch"
+      },
+      "department": "Department",
+      "location": "Location",
+      "month": "Month",
+      "applyNow": "Apply now",
+      "loadMore": "Load more"
+    },
+    "benefits": {
+      "title": "Benefits when you work at AqaarGate",
+      "healthCare": "Health care",
+      "attractiveSalary": "Attractive salary and bonus",
+      "familyLife": "Family life",
+      "joinOurTeam": "Join our team"
+    },
+    "reviews": {
+      "title": "Reviews from employees working at AqaarGate",
+      "moreStories": "More stories"
+    }
+  },
+  "reviews": {
+    "guestReviews": "Guest Reviews",
+    "leaveReview": "Leave a Review",
+    "emailNotPublished": "Your email address will not be published",
+    "name": "Name",
+    "namePlaceholder": "Your Name*",
+    "email": "Email",
+    "emailPlaceholder": "Your Email*",
+    "rating": "Rating",
+    "review": "Review",
+    "reviewPlaceholder": "Share your experience with this property...",
+    "submitting": "Submitting...",
+    "postReview": "Post Review",
+    "noReviewsYet": "No reviews yet. Be the first to leave a review!",
+    "viewAllReviews": "View all reviews",
+    "reviewSubmitted": "Review submitted successfully!",
+    "reviewFailed": "Failed to submit review. Please try again."
+  },
+  "faq": {
+    "pageName": "FAQS",
+    "title": "Frequently Asked Questions",
+    "overview": "Overview",
+    "costsAndPayments": "Costs and Payments",
+    "safetyAndSecurity": "Safety and Security",
+    "questions": {
+      "whyChooseOurService": {
+        "title": "Why Choose Our Service?",
+        "answer": "Discover a modern and elegant way to showcase real estate in Syria. Our platform is designed to present every property with clarity, sophistication, and professionalism, ensuring that all details about the property and its owner are easily accessible — no extra explanations needed.\n\nWe do not act as intermediaries between buyers and sellers. Our role is simply to provide a trusted, transparent space where listings can be displayed beautifully and efficiently.\n\nWhether you're in Syria or living abroad, our platform makes it easy to browse, explore, and choose your future home from anywhere in the world. With a sleek design and user-friendly experience, finding your dream property has never been simpler."
+      },
+      "howSecureAreYourServices": {
+        "title": "How Secure Are Your Services?",
+        "answer": "Your security is our top priority. We use advanced technologies to keep your data and account safe, including password encryption with bcrypt, JWT authentication, and protected APIs. Access to features and data is controlled through role-based permissions (for users and agents), and all communications occur over secure HTTPS connections. We also ensure secure token storage and transmission to maintain complete protection at every step."
+      },
+      "customerSupportService": {
+        "title": "Customer Support Service",
+        "answer": "We're here for you — anytime, anywhere. Our customer support team is available 24/7, ready to help with any inquiries or issues you may have. You can also reach us through our dedicated complaints email, and we'll make sure to respond within 24 hours."
+      },
+      "howCanIUpdateMyAccountInformation": {
+        "title": "How Can I Update My Account Information?",
+        "answer": "Updating your account information is quick, simple, and secure. You can easily make any changes directly through your user dashboard, and no additional approval is required.\n\nIf any major updates or changes occur, we'll make sure to notify you in advance via in-app notifications and email alerts, so you're always informed and up to date with your account details."
+      },
+      "howDoYouCalculateFees": {
+        "title": "How Do You Calculate Fees?",
+        "answer": "Good news! Our platform is completely free for the first six months. If we introduce any fees in the future, we'll give you a full month's notice via email and our communication channels, so you'll always be informed in advance."
+      },
+      "howDoIPayMyInvoices": {
+        "title": "How Do I Pay My Invoices?",
+        "answer": "You can pay your invoices via bank transfer through Al-Haram or any money transfer center. Once the payment is confirmed, your points will be added to your account. You can also pay using Sertel Cash or MTN Cash. This process is fast and usually takes no more than 3 hours."
+      },
+      "areThereAnyHiddenFees": {
+        "title": "Are There Any Hidden Fees Not Displayed In The Pricing Table?",
+        "answer": "No, there are no hidden fees on our platform. Everything is transparent and clearly displayed, which is one of the key standards we pride ourselves on. We do not take any commission between buyers and sellers—we simply provide a modern, professional platform to showcase properties and holiday homes. If any changes occur, all users will be notified at least one month in advance."
+      },
+      "whatIsTheRefundProcedure": {
+        "title": "What Is The Refund Procedure?",
+        "answer": "This feature will be available soon. We'll provide full details on how to request a refund once it's launched."
+      },
+      "isThereFinancialOrAccountingSupport": {
+        "title": "Is There Financial Or Accounting Support?",
+        "answer": "Absolutely! Our dedicated financial support team is here to help. Rest assured, your funds and points are always safe and fully protected."
+      },
+      "whatLanguagesDoesYourServiceSupport": {
+        "title": "What Languages Does Your Service Support?",
+        "answer": "Our service currently supports English, and Arabic will be available soon."
+      },
+      "whatAreTheSafetyFeatures": {
+        "title": "What Are The Safety Features Of Your System?",
+        "answer": "Our platform implements comprehensive security protocols to protect users and data:\n\nJWT-Based Authentication: Secure and stateless user sessions.\n\nEncrypted Password Storage: Passwords stored using strong hashing algorithms.\n\nAuthorized API Access: Protected API endpoints requiring valid tokens.\n\nRole-Based Access Control (RBAC): Fine-grained permissions for agents and regular users.\n\nHTTPS Data Transmission: All data transmitted securely over encrypted channels.\n\nAuthorization Enforcement: Users can only access or modify their own resources.\n\nSecure Critical Operations: Sensitive actions like creating, updating, or deleting listings require verified authentication."
+      },
+      "howCanIRequestNewFeatures": {
+        "title": "How Can I Request New Features?",
+        "answer": "We love hearing from you! Whether it's a suggestion or constructive feedback, your ideas help us make the platform better. You can share your requests in any of these ways:\n\nCall Us: Reach us at the phone number listed on our Contact Us page.\n\nEmail Us: Send your ideas to the email address on the same page.\n\nSubmit a Form: Fill out the form on our website to send your feature request or suggestion directly.\n\nYour feedback matters, and we're always excited to bring new features to life based on what our users need!"
+      },
+      "isMyDataProtected": {
+        "title": "Is My Data Protected?",
+        "answer": "Absolutely! Your data is safe with us. Passwords are securely hashed, all communications are encrypted, and only authorized users can access sensitive info. From personal details to property listings, we use multiple layers of security to keep your information private and protected."
+      },
+      "havingTechnicalIssues": {
+        "title": "Having Technical Issues?",
+        "answer": "Report it quickly via phone, email, or our website form, and our team will help you get back on track."
+      }
+    }
+  },
+  "blog": {
+    "pageName": "Blog Grid",
+    "comingSoon": "Blogs Coming Soon",
+    "subtitle": "We're working hard to bring you amazing content about real estate, property tips, and market insights. Stay tuned for exciting articles coming your way!",
+    "features": {
+      "realEstateTips": "Real Estate Tips",
+      "marketInsights": "Market Insights",
+      "investmentGuide": "Investment Guide"
+    }
+  },
+  "agents": {
+    "pageName": "Agents",
+    "title": "Our Agents",
+    "searchPlaceholder": "Search agent name or company",
+    "allLocation": "All location",
+    "sortBy": {
+      "default": "Sort by (Default)",
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+    "loading": "Finding the best real estate agents for you...",
+    "error": {
+      "title": "Error Loading Agents",
+      "message": "Failed to load agents. Please try again later."
+    },
+    "empty": {
+      "title": "No Agents Found",
+      "message": "We couldn't find any agents matching your current search criteria. Try adjusting your filters or search terms.",
+      "resetFilters": "Reset Filters",
+      "viewAll": "View All {count} Agents"
+    },
+    "contactAndFollow": "Contact & Follow",
+    "agentName": "Agent Name",
+    "realEstateAgent": "Real Estate Agent",
+    "copied": "Copied!",
+    "emailCopied": "Email copied to clipboard",
+    "emailCopyFailed": "Failed to copy email",
+    "cities": {
+      "latakia": "Latakia",
+      "damascus": "Damascus",
+      "aleppo": "Aleppo",
+      "homs": "Homs",
+      "hama": "Hama",
+      "idlib": "Idlib",
+      "deirEzZor": "Deir ez-Zor",
+      "daraa": "Daraa",
+      "tartous": "Tartous"
+    }
+  }
+}

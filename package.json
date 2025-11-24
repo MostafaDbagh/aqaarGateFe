@@ -23,6 +23,7 @@
     "chart.js": "^4.4.7",
     "gsap": "^3.12.7",
     "next": "15.1.7",
+    "next-intl": "^4.5.5",
     "odometer": "^0.4.8",
     "photoswipe": "^5.4.4",
     "rc-slider": "^11.1.8",

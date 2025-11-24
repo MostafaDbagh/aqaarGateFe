@@ -43,6 +43,12 @@
   z-index: 10;
 }
 
+/* RTL Support for Close Button */
+[dir="rtl"] .closeButton {
+  right: auto;
+  left: 16px;
+}
+
 .closeButton:hover {
   background-color: #f3f4f6;
   color: #374151;
@@ -141,6 +147,7 @@
 
 .inputWithIcon .formInput {
   padding-left: 38px;
+  padding-right: 12px;
 }
 
 .passwordToggle {
@@ -166,6 +173,30 @@
 .forgotPasswordLink {
   text-align: right;
   margin-top: 4px;
+}
+
+/* RTL Support for Password Inputs */
+[dir="rtl"] .inputIcon {
+  left: auto;
+  right: 12px;
+}
+
+[dir="rtl"] .inputWithIcon .formInput {
+  padding-left: 12px;
+  padding-right: 38px;
+}
+
+[dir="rtl"] .passwordToggle {
+  right: auto;
+  left: 12px;
+}
+
+[dir="rtl"] .inputWithIcon .formInput:has(+ .passwordToggle) {
+  padding-right: 50px;
+}
+
+[dir="rtl"] .forgotPasswordLink {
+  text-align: right;
 }
 
 .forgotPasswordLink button {

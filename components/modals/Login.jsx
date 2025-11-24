@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import { UserIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -8,6 +9,14 @@ import styles from "./Login.module.css";
 
 export default function Login({ isOpen, onClose }) {
   const router = useRouter();
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('login');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -88,7 +97,7 @@ export default function Login({ isOpen, onClose }) {
       // Users can access their dashboards through the sidebar or navigation
       
     } catch (error) {
-      setError(error.message || 'Login failed. Please try again.');
+      setError(error.message || t('loginFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -99,6 +108,7 @@ export default function Login({ isOpen, onClose }) {
   return (
     <div 
       className={styles.modalOverlay}
+      dir={isRTL ? 'rtl' : 'ltr'}
       onClick={(e) => {
         // Prevent closing modal when clicking outside - only X button can close
         // Only prevent if clicking directly on overlay (not on container or its children)
@@ -122,15 +132,15 @@ export default function Login({ isOpen, onClose }) {
           <div className={styles.iconWrapper}>
             <i className="icon-login" />
           </div>
-          <h2 className={styles.modalTitle}>Welcome Back</h2>
+          <h2 className={styles.modalTitle}>{t('title')}</h2>
           <p className={styles.modalSubtitle}>
-            Sign in to your account to continue.
+            {t('subtitle')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>Email Address</label>
+            <label htmlFor="email" className={styles.label}>{t('email')}</label>
             <div className={styles.inputWithIcon}>
               <UserIcon className={styles.inputIcon} />
               <input
@@ -139,7 +149,7 @@ export default function Login({ isOpen, onClose }) {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="Enter your email"
+                placeholder={t('emailPlaceholder')}
                 className={styles.formInput}
                 required
               />
@@ -147,7 +157,7 @@ export default function Login({ isOpen, onClose }) {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>Password</label>
+            <label htmlFor="password" className={styles.label}>{t('password')}</label>
             <div className={styles.inputWithIcon}>
               <LockIcon className={styles.inputIcon} />
               <input
@@ -156,7 +166,7 @@ export default function Login({ isOpen, onClose }) {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                placeholder="Enter your password"
+                placeholder={t('passwordPlaceholder')}
                 className={styles.formInput}
                 required
               />
@@ -177,7 +187,7 @@ export default function Login({ isOpen, onClose }) {
                 type="button"
                 onClick={handleForgotPasswordClick}
               >
-                Forgot password?
+                {t('forgotPassword')}
               </button>
             </div>
           </div>
@@ -197,24 +207,24 @@ export default function Login({ isOpen, onClose }) {
             {isLoading ? (
               <>
                 <span className={styles.spinner} />
-                Login
+                {t('signingIn')}
               </>
             ) : (
               <>
                 <i className="icon-login" />
-                Login
+                {t('signIn')}
               </>
             )}
           </button>
 
           <div className={styles.signUpLink}>
-            Don't have an account?{" "}
+            {t('dontHaveAccount')}{" "}
             <a
             style={{fontSize:'16px'}}
               href="#"
               onClick={handleSwitchToRegister}
             >
-              Register
+              {t('register')}
             </a>
           </div>
         </form>

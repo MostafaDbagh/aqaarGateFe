@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./OTPVerification.module.css"
@@ -12,6 +14,14 @@ export default function OTPVerification({
   email,
   type = 'signup'
 }) {
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('otpVerification');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -79,7 +89,7 @@ export default function OTPVerification({
     if (e) e.preventDefault();
     const otpString = otp.join('');
     if (otpString.length !== 6) {
-      setError('Please enter all 6 digits');
+      setError(t('enterAllDigits'));
       return;
     }
     setIsLoading(true);
@@ -109,13 +119,13 @@ export default function OTPVerification({
           onSuccess(otpString);
         }
       } else {
-        setError('Invalid OTP. Please try again.');
+        setError(t('invalidOTP'));
         setOtp(['', '', '', '', '', '']);
         inputRefs.current[0]?.focus();
       }
     } catch (error) {
       // Extract error message from different error formats
-      let errorMsg = 'OTP verification failed. Please try again.';
+      let errorMsg = t('verificationFailed');
       if (error?.message) {
         errorMsg = error.message;
       } else if (error?.error) {
@@ -147,7 +157,7 @@ export default function OTPVerification({
       await authAPI.sendOTP(email, type);
       setResendCooldown(30);
     } catch (error) {
-      setError('Failed to resend OTP. Please try again.');
+      setError(t('verificationFailed'));
     } finally {
       setIsSendingOTP(false);
     }
@@ -166,6 +176,7 @@ export default function OTPVerification({
   return (
     <div 
       className={styles.overlay}
+      dir={isRTL ? 'rtl' : 'ltr'}
       onClick={(e) => {
         // Prevent closing modal when clicking outside - only X button can close
         // Only prevent if clicking directly on overlay (not on container or its children)
@@ -184,7 +195,7 @@ export default function OTPVerification({
         {/* Header */}
         <div className={styles.header}>
           <h4 className={styles.title}>
-            {type === 'forgot_password' ? 'Email Verification for Reset Password' : 'Verify Your Email'}
+            {type === 'forgot_password' ? t('titleForgotPassword') : t('title')}
           </h4>
           <span
             onClick={handleClose}
@@ -198,7 +209,7 @@ export default function OTPVerification({
         <div className={styles.emailSection}>
           <div className={styles.emailIcon}>📧</div>
           <p className={styles.emailText}>
-            {type === 'forgot_password' ? "We've sent a password reset code to" : "We've sent a 6-digit code to"}
+            {type === 'forgot_password' ? t('sentResetCode') : t('sentCode')}
           </p>
           <p className={styles.emailAddress}>
             {email}
@@ -208,7 +219,7 @@ export default function OTPVerification({
           <div className={styles.warningBox}>
             <p className={styles.warningText}>
               <span>⏰</span>
-              OTP will expire after 5 minutes
+              {t('otpExpires')}
             </p>
           </div>
         </div>
@@ -217,7 +228,7 @@ export default function OTPVerification({
         <form onSubmit={handleVerifyOTP}>
           <div className={styles.otpBlock}>
             <label className={styles.otpLabel}>
-              Enter verification code
+              {t('enterCode')}
             </label>
             <div className={styles.otpInputs}>
               {otp.map((digit, index) => (
@@ -250,8 +261,8 @@ export default function OTPVerification({
               className={`${styles.submitButton} ${otp.join('').length === 6 && !isLoading ? styles.submitEnabled : styles.submitDisabled}`}
             >
               {type === 'forgot_password' 
-                ? (isLoading ? 'Verifying...' : 'Verify & Reset Password')
-                : (isLoading ? 'Verifying...' : otpVerified ? 'Completing Registration...' : 'Verify & Complete Registration')
+                ? (isLoading ? t('verifying') : t('verifyAndReset'))
+                : (isLoading ? t('verifying') : otpVerified ? t('completing') : t('verifyAndComplete'))
               }
             </button>
           </div>
@@ -259,7 +270,7 @@ export default function OTPVerification({
           {/* Resend section */}
           <div className={styles.resendSection}>
             <p className={styles.resendText}>
-              Didn't receive the code?
+              {t('didntReceive')}
             </p>
             <button
               type="button"
@@ -267,9 +278,9 @@ export default function OTPVerification({
               disabled={resendCooldown > 0 || isSendingOTP}
               className={styles.resendButton}
             >
-              {isSendingOTP ? 'Sending...' : 
-               resendCooldown > 0 ? 'Resend in ' + resendCooldown + 's' : 
-               'Resend Code'}
+              {isSendingOTP ? t('resending') : 
+               resendCooldown > 0 ? t('resendIn') + ' ' + resendCooldown + 's' : 
+               t('resendCode')}
             </button>
           </div>
         </form>

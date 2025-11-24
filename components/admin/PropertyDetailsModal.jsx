@@ -28,12 +28,8 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
       setLoading(true);
       setError(null);
       const property = await listingAPI.getListingById(propertyId);
-      console.log('Property Details API Response:', property);
-      console.log('Property Data:', property);
-      console.log('Property Images:', property?.images);
       setProperty(property);
     } catch (err) {
-      console.error('Error fetching property details:', err);
       setError(err.message || err.error?.message || "Failed to load property details");
     } finally {
       setLoading(false);
@@ -141,11 +137,6 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
   
   // Debug logging
   useEffect(() => {
-    if (property) {
-      console.log('Property Details Modal - Property:', property);
-      console.log('Property Details Modal - Images extracted:', images);
-      console.log('Property Details Modal - Main image:', mainImage);
-    }
   }, [property, images, mainImage]);
 
   if (!isOpen) return null;
@@ -191,11 +182,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                         className={styles.mainImage}
                         unoptimized
                         onError={(e) => {
-                          console.error('Main image failed to load:', e.target.src);
                           e.target.src = '/images/section/property-1.jpg';
-                        }}
-                        onLoad={() => {
-                          console.log('Main image loaded successfully:', mainImage);
                         }}
                       />
                       {images.length > 1 && (
@@ -236,7 +223,6 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                               className={styles.thumbnailImage}
                               unoptimized
                               onError={(e) => {
-                                console.error('Thumbnail failed to load:', e.target.src);
                                 e.target.src = '/images/section/property-1.jpg';
                               }}
                             />

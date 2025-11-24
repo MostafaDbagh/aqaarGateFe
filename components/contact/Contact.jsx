@@ -1,8 +1,11 @@
 "use client";
 import React from "react";
+import { useTranslations } from 'next-intl';
 import DropdownSelect from "../common/DropdownSelect";
 
 export default function Contact() {
+  const t = useTranslations('contact');
+  
   return (
     <>
       <style jsx>{`
@@ -68,30 +71,29 @@ export default function Contact() {
                 className="form-contact"
               >
                 <div className="heading-section">
-                  <h2 className="title">We Would Love to Hear From You</h2>
+                  <h2 className="title">{t('title')}</h2>
                   <p className="text-1">
-                    We'll get to know you to understand your selling goals,
-                    explain the selling process so you know what to expect.
+                    {t('subtitle')}
                   </p>
                 </div>
                 <div className="cols">
                   <fieldset>
-                    <label htmlFor="name">Name:</label>
+                    <label htmlFor="name">{t('name')}</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Your name"
+                      placeholder={t('namePlaceholder')}
                       name="name"
                       id="name"
                       required
                     />
                   </fieldset>
                   <fieldset>
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="email">{t('email')}</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Email"
+                      placeholder={t('emailPlaceholder')}
                       name="email"
                       id="email-contact"
                       required
@@ -100,11 +102,11 @@ export default function Contact() {
                 </div>
                 <div className="cols">
                   <fieldset className="phone">
-                    <label htmlFor="phone">Phone number:</label>
+                    <label htmlFor="phone">{t('phoneNumber')}</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Your phone number"
+                      placeholder={t('phonePlaceholder')}
                       name="phone"
                       id="phone"
                       required
@@ -112,22 +114,22 @@ export default function Contact() {
                   </fieldset>
                   <div className="select">
                     <label className="text-1 fw-6 mb-12">
-                      What are you interested in?
+                      {t('interestedIn')}
                     </label>
 
                     <DropdownSelect
-                      options={["Select", "Location", "Rent", "Sale"]}
+                      options={[t('selectOption'), t('location'), t('rent'), t('sale')]}
                       addtionalParentClass=""
                     />
                   </div>
                 </div>
                 <fieldset>
-                  <label htmlFor="message">Your Message:</label>
+                  <label htmlFor="message">{t('yourMessage')}</label>
                   <textarea
                     name="message"
                     cols={30}
                     rows={10}
-                    placeholder="Message"
+                    placeholder={t('messagePlaceholder')}
                     id="message"
                     required
                     defaultValue={""}
@@ -138,7 +140,7 @@ export default function Contact() {
                     className="tf-btn bg-color-primary fw-7 pd-8"
                     type="submit"
                   >
-                    Contact our experts
+                    {t('contactExperts')}
                   </button>
                 </div>
               </form>

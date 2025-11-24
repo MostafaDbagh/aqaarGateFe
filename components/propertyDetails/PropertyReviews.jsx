@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 import LocationLoader from "@/components/common/LocationLoader";
 import { useReviewsByProperty, useCreateReview } from "@/apis/hooks";
 import { useQueryClient } from "@tanstack/react-query";
@@ -8,6 +9,7 @@ import logger from "@/utlis/logger";
 import styles from "./PropertyReviews.module.css";
 
 export default function PropertyReviews({ propertyId }) {
+  const t = useTranslations('reviews');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -64,12 +66,12 @@ export default function PropertyReviews({ propertyId }) {
         review: '',
         rating: 5
       });
-      setSubmitMessage('Review submitted successfully!');
+      setSubmitMessage(t('reviewSubmitted'));
       
       // Invalidate reviews query to refresh the list
       queryClient.invalidateQueries(['reviews', 'property', propertyId]);
     } catch (error) {
-      setSubmitMessage('Failed to submit review. Please try again.');
+      setSubmitMessage(t('reviewFailed'));
       logger.error('Review submission error:', error);
     } finally {
       setIsSubmitting(false);
@@ -146,7 +148,7 @@ export default function PropertyReviews({ propertyId }) {
   return (
     <>
             <div className={styles.wrapComment}>
-              <h4 className={styles.reviewTitle}>Guest Reviews</h4>
+              <h4 className={styles.reviewTitle}>{t('guestReviews')}</h4>
               
               {recentReviews.length > 0 ? (
                 <ul className="comment-list">
@@ -190,13 +192,13 @@ export default function PropertyReviews({ propertyId }) {
                 </ul>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-muted">No reviews yet. Be the first to leave a review!</p>
+                  <p className="text-muted">{t('noReviewsYet')}</p>
                 </div>
               )}
 
               {reviewsData?.data?.length > 5 && (
                 <a href="#" className="tf-btn style-border fw-7 pd-1">
-                  <span>View all reviews ({reviewsData.data.length}) <i className="icon-arrow-right-2 fw-4" /></span>
+                  <span>{t('viewAllReviews')} ({reviewsData.data.length}) <i className="icon-arrow-right-2 fw-4" /></span>
                 </a>
               )}
             </div>
@@ -204,8 +206,8 @@ export default function PropertyReviews({ propertyId }) {
             {/* Add Review Form */}
             <div className={styles.boxSend}>
               <div className={styles.addHeadingBox}>
-                <h4 className={styles.addTitle}>Leave a Review</h4>
-                <p className={styles.addDescription}>Your email address will not be published</p>
+                <h4 className={styles.addTitle}>{t('leaveReview')}</h4>
+                <p className={styles.addDescription}>{t('emailNotPublished')}</p>
               </div>
               
               {submitMessage && (
@@ -221,11 +223,11 @@ export default function PropertyReviews({ propertyId }) {
               <form className={styles.addReviewForm} onSubmit={handleSubmit}>
                 <div className={styles.addCols}>
                   <fieldset className="name">
-                    <label className={styles.addFormField} htmlFor="name">Name</label>
+                    <label className={styles.addFormField} htmlFor="name">{t('name')}</label>
                     <input
                       type="text"
                       className={styles.addInput + " tf-input style-2"}
-                      placeholder="Your Name*"
+                      placeholder={t('namePlaceholder')}
                       id="name"
                       name="name"
                       value={formData.name}
@@ -234,11 +236,11 @@ export default function PropertyReviews({ propertyId }) {
                     />
                   </fieldset>
                   <fieldset className="email">
-                    <label className={styles.addFormField} htmlFor="email">Email</label>
+                    <label className={styles.addFormField} htmlFor="email">{t('email')}</label>
                     <input
                       type="email"
                       className={styles.addInput + " tf-input style-2"}
-                      placeholder="Your Email*"
+                      placeholder={t('emailPlaceholder')}
                       id="email"
                       name="email"
                       value={formData.email}
@@ -250,7 +252,7 @@ export default function PropertyReviews({ propertyId }) {
 
                 {/* Rating Selection */}
                 <fieldset className={styles.addRating + " rating"}>
-                  <label className={styles.addFormField + " text-1 fw-6"}>Rating</label>
+                  <label className={styles.addFormField + " text-1 fw-6"}>{t('rating')}</label>
                   <div className={styles.ratingStars + " rating-stars"}>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
@@ -266,13 +268,13 @@ export default function PropertyReviews({ propertyId }) {
                 </fieldset>
 
                 <fieldset className="message">
-                  <label className={styles.addFormField} htmlFor="message">Review</label>
+                  <label className={styles.addFormField} htmlFor="message">{t('review')}</label>
                   <textarea
                     id="message"
                     className={styles.addTextarea + " tf-input"}
                     name="review"
                     rows={4}
-                    placeholder="Share your experience with this property..."
+                    placeholder={t('reviewPlaceholder')}
                     value={formData.review}
                     onChange={handleInputChange}
                     required
@@ -284,7 +286,7 @@ export default function PropertyReviews({ propertyId }) {
                   type="submit"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Post Review'}
+                  {isSubmitting ? t('submitting') : t('postReview')}
                   <i className="icon-arrow-right-2 fw-4" />
                 </button>
               </form>

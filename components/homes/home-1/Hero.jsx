@@ -1,6 +1,7 @@
 "use client";
 import SearchForm from "@/components/common/SearchForm";
 import React, { useState } from "react";
+import { useTranslations } from 'next-intl';
 import styles from "./Hero.module.css";
 
 export default function Hero({
@@ -8,11 +9,12 @@ export default function Hero({
   onSearchChange,
   setTriggerSearch,
 }) {
-  const [activeItem, setActiveItem] = useState("For sale");
+  const t = useTranslations('hero');
+  const [activeItem, setActiveItem] = useState(t('forSale'));
 
   const statusOptions = [
-    { label: "For sale", value: "sale" },
-    { label: "For rent", value: "rent" },
+    { label: t('forSale'), value: "sale" },
+    { label: t('forRent'), value: "rent" },
   ];
   const handleChange = (key, value) => {
     if (onSearchChange) {
@@ -28,10 +30,9 @@ export default function Hero({
           <div className="col-lg-8 ">
             <div className="content-inner">
               <div className="heading-title">
-                <h1 className="title">Search your Dream Homes</h1>
+                <h1 className="title">{t('title')}</h1>
                 <p className="h6 fw-4">
-                  Alot of  homes enthusiasts just like you visit our
-                  website.
+                  {t('subtitle')}
                 </p>
               </div>
               <div className="wg-filter">
@@ -61,13 +62,13 @@ export default function Hero({
                   
                   <form onSubmit={(e) => e.preventDefault()}>
                     <fieldset>
-                      <input
-                        type="text"
-                        placeholder="Place, neighborhood, school or agent..."
-                        onChange={(e) =>
-                          onSearchChange({ keyword: e.target.value })
-                        }
-                      />
+                        <input
+                          type="text"
+                          placeholder={t('searchPlaceholder')}
+                          onChange={(e) =>
+                            onSearchChange({ keyword: e.target.value })
+                          }
+                        />
                     </fieldset>
                   </form>
                   <div className="box-item wrap-btn">
@@ -145,13 +146,13 @@ export default function Hero({
                         </svg>
                       </div>
                     </div>
-                    <a
-                      href="#"
-                      className="tf-btn bg-color-primary pd-3"
-                      onClick={() => setTriggerSearch(true)}
-                    >
-                      Search <i className="icon-MagnifyingGlass fw-6" />
-                    </a>
+                      <a
+                        href="#"
+                        className="tf-btn bg-color-primary pd-3"
+                        onClick={() => setTriggerSearch(true)}
+                      >
+                        {t('searchButton')} <i className="icon-MagnifyingGlass fw-6" />
+                      </a>
                   </div>
                 </div>
                 <SearchForm

@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 import styles from "./PropertyRentalService.module.css";
 import { propertyRentalAPI } from "@/apis";
 
 export default function PropertyRentalService() {
+  const t = useTranslations('rentalService');
   const [formData, setFormData] = useState({
     propertyType: "",
     propertySize: "",
@@ -64,11 +66,10 @@ export default function PropertyRentalService() {
           additionalDetails: ""
         });
       } else {
-        setSubmitMessage("There was an error submitting your request. Please try again or contact us directly.");
+        setSubmitMessage(t('errorMessage'));
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      const errorMessage = error?.message || error?.error || "There was an error submitting your request. Please try again or contact us directly.";
+      const errorMessage = error?.message || error?.error || t('errorMessage');
       setSubmitMessage(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -89,10 +90,10 @@ export default function PropertyRentalService() {
                   <i className="icon-home" />
                 </div>
                 <h1 className={`title split-text effect-right ${styles.heroTitle}`}>
-                  Property Rental Management Service
+                  {t('title')}
                 </h1>
                 <p className={`text-1 split-text split-lines-transform ${styles.heroSubtitle}`}>
-                  Let AqaarGate handle your property rental needs with our comprehensive, professional management service
+                  {t('subtitle')}
                 </p>
               </div>
 
@@ -105,10 +106,10 @@ export default function PropertyRentalService() {
                         <i className="icon-home" />
                       </div>
                       <h3 className={styles.serviceCardTitle}>
-                        <i className="icon-home" /> Full-Service Property Management
+                        <i className="icon-home" /> {t('fullServiceManagement.title')}
                       </h3>
                       <p className={styles.serviceCardText}>
-                        Our specialized maintenance team ensures your property remains in excellent condition throughout the rental period. We guarantee to maintain the property in the same condition as when we received it.
+                        {t('fullServiceManagement.text')}
                       </p>
                     </div>
                   </div>
@@ -140,10 +141,10 @@ export default function PropertyRentalService() {
                           <path d="M235.656 227.352C248.017 211.693 272.226 178.413 284.956 162.912C296.461 148.902 295.801 135.225 316.285 148.828C332.535 159.622 316.949 170.237 307.48 183.104C305.858 185.306 260.957 245.463 259.98 245.302C251.825 243.948 242.427 227.833 233.675 230.014C232.292 230.358 222.373 262.4 221.817 265.159C219.947 274.467 248.921 251.813 256.699 248.71" stroke="currentColor" strokeOpacity="0.9" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
                           <path opacity="0.502093" d="M219.436 270.196C218.823 237.421 198.241 279.401 190.363 280.408C185.311 281.052 186.408 263.032 178.096 260.908C170.513 258.973 168.995 272.75 162.647 274.372C156.97 275.823 146.425 272.395 137.664 274.836" stroke="currentColor" strokeOpacity="0.9" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        Formal Rental Agreement
+                        {t('formalAgreement.title')}
                       </h3>
                       <p className={styles.serviceCardText}>
-                        We operate under a formal agreement between AqaarGate and the property owner. Both parties agree on rental duration and rental price, ensuring transparency and mutual understanding.
+                        {t('formalAgreement.text')}
                       </p>
                     </div>
                   </div>
@@ -156,7 +157,7 @@ export default function PropertyRentalService() {
                   <div className="col-lg-8 col-md-12 mx-auto">
                     <div className={styles.detailsBox}>
                       <h2 className={styles.detailsBoxTitle}>
-                        How It Works
+                        {t('howItWorks')}
                       </h2>
                       
                       <div className={styles.stepsList}>
@@ -179,10 +180,10 @@ export default function PropertyRentalService() {
                                 <path d="M16 17H8" stroke="#f1913d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 <path d="M10 9H9H8" stroke="#f1913d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                               </svg>
-                              Submit Your Property Details
+                              {t('submitProperty.title')}
                             </h4>
                             <p className={styles.stepContentText}>
-                              Fill out our comprehensive property submission form with all relevant details including property type, size, bedrooms, bathrooms, features, and location.
+                              {t('submitProperty.text')}
                             </p>
                           </div>
                         </div>
@@ -193,10 +194,10 @@ export default function PropertyRentalService() {
                           </div>
                           <div className={styles.stepContent}>
                             <h4 className={styles.stepContentTitle}>
-                              <i className="icon-location" /> Property Inspection
+                              <i className="icon-location" /> {t('propertyInspection.title')}
                             </h4>
                             <p className={styles.stepContentText}>
-                              Our professional team will visit your property to conduct a thorough inspection and assessment.
+                              {t('propertyInspection.text')}
                             </p>
                           </div>
                         </div>
@@ -207,10 +208,10 @@ export default function PropertyRentalService() {
                           </div>
                           <div className={styles.stepContent}>
                             <h4 className={styles.stepContentTitle}>
-                              <i className="icon-shield" /> Agreement Finalization
+                              <i className="icon-shield" /> {t('agreementFinalization.title')}
                             </h4>
                             <p className={styles.stepContentText}>
-                              After inspection, we'll finalize the rental agreement, including rental duration, rental price, and commission terms (minimum 25% commission).
+                              {t('agreementFinalization.text')}
                             </p>
                           </div>
                         </div>
@@ -221,10 +222,10 @@ export default function PropertyRentalService() {
                           </div>
                           <div className={styles.stepContent}>
                             <h4 className={styles.stepContentTitle}>
-                              <i className="icon-home" /> Property Management Begins
+                              <i className="icon-home" /> {t('managementBegins.title')}
                             </h4>
                             <p className={styles.stepContentText}>
-                              Once the agreement is signed, we take over property management, maintenance, and rental operations, ensuring your property is well-maintained and generating income.
+                              {t('managementBegins.text')}
                             </p>
                           </div>
                         </div>
@@ -240,14 +241,14 @@ export default function PropertyRentalService() {
                   <div className="col-lg-10 col-md-12 mx-auto">
                     <div className={styles.commissionBox}>
                       <h3 className={styles.commissionTitle}>
-                        Commission Structure
+                        {t('commissionStructure')}
                       </h3>
                       <p className={styles.commissionText}>
-                        Our company charges a minimum commission of <strong className={styles.commissionHighlight}>25%</strong> of the rental amount. Additional terms and details can be negotiated between both parties to ensure a mutually beneficial agreement.
+                        {t('commissionText')} <strong className={styles.commissionHighlight}>{t('commissionPercent')}</strong> {t('commissionText2')}
                       </p>
                       <div className={styles.highlightBox}>
                         <p className={styles.highlightBoxText}>
-                          <strong>Agreement Terms Include:</strong> Rental duration, rental price, commission percentage, maintenance responsibilities, and any additional negotiated terms.
+                          <strong>{t('agreementTerms')}</strong> {t('agreementTermsText')}
                         </p>
                       </div>
                     </div>
@@ -261,10 +262,10 @@ export default function PropertyRentalService() {
                   <div className="col-lg-8 col-md-12 mx-auto">
                     <div className={styles.formContainer}>
                       <h2 className={styles.formTitle}>
-                        Submit Your Property
+                        {t('submitPropertyForm')}
                       </h2>
                       <p className={styles.formSubtitle}>
-                        Fill out the form below to get started with our property rental management service
+                        {t('formSubtitle')}
                       </p>
 
                       {submitMessage && (
@@ -279,7 +280,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="ownerName" className={styles.formLabel}>
-                                <i className="icon-agent" /> Owner Name <span className={styles.requiredStar}>*</span>
+                                <i className="icon-agent" /> {t('ownerName')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -287,7 +288,7 @@ export default function PropertyRentalService() {
                                   id="ownerName"
                                   name="ownerName"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="Your full name"
+                                  placeholder={t('ownerNamePlaceholder')}
                                   value={formData.ownerName}
                                   onChange={handleInputChange}
                                   required
@@ -299,7 +300,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="ownerEmail" className={styles.formLabel}>
-                                <i className="icon-mail" /> Email Address <span className={styles.requiredStar}>*</span>
+                                <i className="icon-mail" /> {t('emailAddress')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -307,7 +308,7 @@ export default function PropertyRentalService() {
                                   id="ownerEmail"
                                   name="ownerEmail"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="your.email@example.com"
+                                  placeholder={t('emailPlaceholder')}
                                   value={formData.ownerEmail}
                                   onChange={handleInputChange}
                                   required
@@ -319,7 +320,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="ownerPhone" className={styles.formLabel}>
-                                <i className="icon-phone-1" /> Phone Number <span className={styles.requiredStar}>*</span>
+                                <i className="icon-phone-1" /> {t('phoneNumber')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -327,7 +328,7 @@ export default function PropertyRentalService() {
                                   id="ownerPhone"
                                   name="ownerPhone"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="+963 999 123 456"
+                                  placeholder={t('phonePlaceholder')}
                                   value={formData.ownerPhone}
                                   onChange={handleInputChange}
                                   required
@@ -340,7 +341,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="propertyType" className={styles.formLabel}>
-                                <i className="icon-home" /> Property Type <span className={styles.requiredStar}>*</span>
+                                <i className="icon-home" /> {t('propertyType')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <select
@@ -351,15 +352,15 @@ export default function PropertyRentalService() {
                                   onChange={handleInputChange}
                                   required
                                 >
-                                  <option value="">Select property type</option>
-                                  <option value="apartment">Apartment</option>
-                                  <option value="villa">Villa</option>
-                                  <option value="house">House</option>
-                                  <option value="land">Land</option>
-                                  <option value="commercial">Commercial</option>
-                                  <option value="office">Office</option>
-                                  <option value="shop">Shop</option>
-                                  <option value="other">Other</option>
+                                  <option value="">{t('selectPropertyType')}</option>
+                                  <option value="apartment">{t('apartment')}</option>
+                                  <option value="villa">{t('villa')}</option>
+                                  <option value="house">{t('house')}</option>
+                                  <option value="land">{t('land')}</option>
+                                  <option value="commercial">{t('commercial')}</option>
+                                  <option value="office">{t('office')}</option>
+                                  <option value="shop">{t('shop')}</option>
+                                  <option value="other">{t('other')}</option>
                                 </select>
                               </div>
                             </fieldset>
@@ -368,7 +369,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="propertySize" className={styles.formLabel}>
-                                <i className="icon-compare" /> Property Size (Sqft) <span className={styles.requiredStar}>*</span>
+                                <i className="icon-compare" /> {t('propertySize')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -376,7 +377,7 @@ export default function PropertyRentalService() {
                                   id="propertySize"
                                   name="propertySize"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="e.g., 1200"
+                                  placeholder={t('propertySizePlaceholder')}
                                   value={formData.propertySize}
                                   onChange={handleInputChange}
                                   required
@@ -389,7 +390,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="bedrooms" className={styles.formLabel}>
-                                <i className="icon-bed" /> Number of Bedrooms <span className={styles.requiredStar}>*</span>
+                                <i className="icon-bed" /> {t('numberOfBedrooms')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -397,7 +398,7 @@ export default function PropertyRentalService() {
                                   id="bedrooms"
                                   name="bedrooms"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="e.g., 3"
+                                  placeholder={t('bedroomsPlaceholder')}
                                   value={formData.bedrooms}
                                   onChange={handleInputChange}
                                   required
@@ -410,7 +411,7 @@ export default function PropertyRentalService() {
                           <div className="col-md-6 mb-20">
                             <fieldset>
                               <label htmlFor="bathrooms" className={styles.formLabel}>
-                                <i className="icon-bath" /> Number of Bathrooms <span className={styles.requiredStar}>*</span>
+                                <i className="icon-bath" /> {t('numberOfBathrooms')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -418,7 +419,7 @@ export default function PropertyRentalService() {
                                   id="bathrooms"
                                   name="bathrooms"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="e.g., 2"
+                                  placeholder={t('bathroomsPlaceholder')}
                                   value={formData.bathrooms}
                                   onChange={handleInputChange}
                                   required
@@ -431,7 +432,7 @@ export default function PropertyRentalService() {
                           <div className="col-12 mb-20">
                             <fieldset>
                               <label htmlFor="location" className={styles.formLabel}>
-                                <i className="icon-location" /> Property Location <span className={styles.requiredStar}>*</span>
+                                <i className="icon-location" /> {t('propertyLocation')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.inputWrapper}>
                                 <input
@@ -439,7 +440,7 @@ export default function PropertyRentalService() {
                                   id="location"
                                   name="location"
                                   className={`tf-input style-2 ${styles.formInput}`}
-                                  placeholder="e.g., Damascus, Al-Mazzeh, Main Street"
+                                  placeholder={t('locationPlaceholder')}
                                   value={formData.location}
                                   onChange={handleInputChange}
                                   required
@@ -451,7 +452,7 @@ export default function PropertyRentalService() {
                           <div className="col-12 mb-20">
                             <fieldset>
                               <label htmlFor="features" className={styles.formLabel}>
-                                <i className="icon-star" /> Property Features <span className={styles.requiredStar}>*</span>
+                                <i className="icon-star" /> {t('propertyFeatures')} <span className={styles.requiredStar}>*</span>
                               </label>
                               <div className={styles.textareaWrapper}>
                                 <textarea
@@ -459,7 +460,7 @@ export default function PropertyRentalService() {
                                   name="features"
                                   className={`tf-input style-2 ${styles.formTextarea}`}
                                   rows={4}
-                                  placeholder="Describe your property features (e.g., furnished, parking, garden, balcony, etc.)"
+                                  placeholder={t('featuresPlaceholder')}
                                   value={formData.features}
                                   onChange={handleInputChange}
                                   required
@@ -471,7 +472,7 @@ export default function PropertyRentalService() {
                           <div className="col-12 mb-20">
                             <fieldset>
                               <label htmlFor="additionalDetails" className={styles.formLabel}>
-                                <i className="icon-file" /> Additional Details (Optional)
+                                <i className="icon-file" /> {t('additionalDetails')}
                               </label>
                               <div className={styles.textareaWrapper}>
                                 <textarea
@@ -479,7 +480,7 @@ export default function PropertyRentalService() {
                                   name="additionalDetails"
                                   className={`tf-input style-2 ${styles.formTextarea}`}
                                   rows={4}
-                                  placeholder="Any additional information about your property or rental preferences..."
+                                  placeholder={t('additionalDetailsPlaceholder')}
                                   value={formData.additionalDetails}
                                   onChange={handleInputChange}
                                 />
@@ -493,7 +494,7 @@ export default function PropertyRentalService() {
                               className={`tf-btn bg-color-primary w-full ${styles.submitButton}`}
                               disabled={isSubmitting}
                             >
-                              <i className="icon-file" /> {isSubmitting ? 'Submitting...' : 'Submit Property for Rental Service'}
+                              <i className="icon-file" /> {isSubmitting ? t('submitting') : t('submitPropertyButton')}
                             </button>
                           </div>
                         </div>
@@ -508,7 +509,7 @@ export default function PropertyRentalService() {
                 <div className="row">
                   <div className="col-12">
                     <h2 className={styles.benefitsTitle}>
-                      Why Choose AqaarGate Property Rental Service?
+                      {t('whyChoose')}
                     </h2>
                   </div>
                 </div>
@@ -519,10 +520,10 @@ export default function PropertyRentalService() {
                         <i className="icon-Hammer" />
                       </div>
                       <h4 className={styles.benefitTitle}>
-                        Specialized Maintenance Team
+                        {t('specializedMaintenance.title')}
                       </h4>
                       <p className={styles.benefitText}>
-                        Our dedicated maintenance team ensures your property stays in perfect condition throughout the rental period.
+                        {t('specializedMaintenance.text')}
                       </p>
                     </div>
                   </div>
@@ -533,10 +534,10 @@ export default function PropertyRentalService() {
                         <i className="icon-shield" />
                       </div>
                       <h4 className={styles.benefitTitle}>
-                        Condition Guarantee
+                        {t('conditionGuarantee.title')}
                       </h4>
                       <p className={styles.benefitText}>
-                        We guarantee to maintain your property in the same excellent condition as when we received it.
+                        {t('conditionGuarantee.text')}
                       </p>
                     </div>
                   </div>
@@ -557,10 +558,10 @@ export default function PropertyRentalService() {
                         </svg>
                       </div>
                       <h4 className={styles.benefitTitle}>
-                        Formal Agreement
+                        {t('formalAgreementBenefit.title')}
                       </h4>
                       <p className={styles.benefitText}>
-                        All terms are clearly defined in a formal agreement, ensuring transparency and peace of mind.
+                        {t('formalAgreementBenefit.text')}
                       </p>
                     </div>
                   </div>

@@ -45,6 +45,12 @@
   z-index: 10;
 }
 
+/* RTL Support for Close Button */
+[dir="rtl"] .closeButton {
+  right: auto;
+  left: 16px;
+}
+
 .closeButton:hover {
   background-color: #f3f4f6;
   color: #374151;
@@ -143,6 +149,7 @@
 
 .inputWithIcon .formInput {
   padding-left: 38px;
+  padding-right: 12px;
 }
 
 .passwordToggle {
@@ -158,6 +165,26 @@
   border-radius: 6px;
   transition: all 0.2s ease;
   z-index: 2;
+}
+
+/* RTL Support for Password Inputs */
+[dir="rtl"] .inputIcon {
+  left: auto;
+  right: 12px;
+}
+
+[dir="rtl"] .inputWithIcon .formInput {
+  padding-left: 12px;
+  padding-right: 38px;
+}
+
+[dir="rtl"] .passwordToggle {
+  right: auto;
+  left: 12px;
+}
+
+[dir="rtl"] .inputWithIcon .formInput:has(+ .passwordToggle) {
+  padding-right: 50px;
 }
 
 .passwordToggle:hover {
@@ -176,11 +203,19 @@
   background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
+  padding-right: 36px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+/* RTL Support for Role Select */
+[dir="rtl"] .roleSelect {
+  background-position: left 12px center;
+  padding-right: 12px;
+  padding-left: 36px;
 }
 
 .roleSelect:hover {
@@ -391,8 +426,9 @@
   padding: 4px 8px 4px 8px;
   border: 1px solid #e5e7eb;
   border-right: none;
-  border-radius: 12px;
+  border-radius: 12px 0 0 12px;
   margin-right: 4px;
+  margin-left: 0;
   font-size: 14px;
   cursor: pointer;
   min-width: 90px;
@@ -409,8 +445,21 @@
   background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
+  padding-right: 28px;
   background-color: white;
   box-sizing: border-box;
+}
+
+/* RTL Support for Country Code Selector */
+[dir="rtl"] .countryCodeSelect {
+  border-right: 1px solid #e5e7eb;
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  margin-right: 0;
+  margin-left: 4px;
+  background-position: left 8px center;
+  padding-right: 8px;
+  padding-left: 28px;
 }
 
 .countryCodeSelect:hover {
@@ -442,6 +491,13 @@
   min-width: 0;
   color: #111827;
   box-sizing: border-box;
+}
+
+/* RTL Support for Phone Input */
+[dir="rtl"] .phoneInput {
+  border-left: 2px solid #e5e7eb;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
 }
 
 .phoneInput:focus {
@@ -486,6 +542,11 @@
     padding: 6px;
   }
   
+  [dir="rtl"] .closeButton {
+    right: auto;
+    left: 12px;
+  }
+  
   .modalHeader {
     margin-bottom: 16px;
   }
@@ -522,6 +583,10 @@
   .countryCodeSelect {
     font-size: 16px;
     padding: 10px 28px 10px 12px;
+  }
+  
+  [dir="rtl"] .countryCodeSelect {
+    padding: 10px 12px 10px 28px;
   }
   
   .phoneInputContainer {
