@@ -1,11 +1,15 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
+
 export default function Reviews() {
+  const t = useTranslations('reviews');
+  
   return (
     <>
       <div className="wrap-comment">
-        <h4 className="title">Guest Reviews</h4>
+        <h4 className="title">{t('guestReviews')}</h4>
         <ul className="comment-list">
           <li>
             <div className="comment-item">

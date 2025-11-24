@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useTranslations } from 'next-intl';
 import '@/components/properties/PropertyImageFix.css';
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
@@ -9,6 +10,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import styles from "./Properties.module.css";
 
 export default function Properties({ listings, isLoading, isError }) {
+  const t = useTranslations('homeSections');
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
 
@@ -140,11 +142,10 @@ export default function Properties({ listings, isLoading, isError }) {
           <div className="col-12">
             <div className="heading-section text-center">
               <h2 className="title split-text effect-right">
-                Today's Luxury Listings
+                {t('todaysLuxuryListings')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                Thousands of luxury home enthusiasts just like you visit our
-                website.
+                {t('todaysLuxuryListingsSubtitle')}
               </p>
             </div>
             <div style={{ padding: '60px 20px', textAlign: 'center' }}>
@@ -195,16 +196,15 @@ export default function Properties({ listings, isLoading, isError }) {
             <div className="col-12">
               <div className="heading-section text-center">
                 <h2 className="title split-text effect-right">
-                  Today's  Listings
+                  {t('todaysListings')}
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
-                  Alot of  homes enthusiasts just like you visit our
-                  website.
+                  {t('todaysListingsSubtitle')}
                 </p>
               </div>
               <div style={{ padding: '60px 20px', textAlign: 'center' }}>
                 <div style={{ color: '#6B7280', fontSize: '18px', fontWeight: '500' }}>
-                  No properties available at the moment
+                  {t('noPropertiesAvailable')}
                 </div>
               </div>
             </div>
@@ -221,11 +221,10 @@ export default function Properties({ listings, isLoading, isError }) {
           <div className="col-12">
             <div className="heading-section text-center ">
               <h2 className="title split-text effect-right">
-                Today's  Listings
+                {t('todaysListings')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                Alot of  homes enthusiasts just like you visit our
-                website.
+                {t('todaysListingsSubtitle')}
               </p>
             </div>
             

@@ -4,6 +4,7 @@ import Nav from "./Nav";
 import Link from "next/link";
 import Image from "next/image";
 import DashboardNav from "./DashboardNav";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { PhoneIcon } from "@/components/icons";
 import { useAuthState } from "@/store/hooks/useAuth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -23,7 +24,7 @@ export default function Header1({ parentClass = "header" }) {
   };
 
   return (
-    <header id="header-main" className={parentClass}>
+    <header id="header-main" className={parentClass} dir="ltr">
       <div className="header-inner">
         <div className="tf-container xl">
           <div className="row">
@@ -53,6 +54,7 @@ export default function Header1({ parentClass = "header" }) {
                     </div>
                     <p>+963995278383</p>
                   </div>
+                  <LanguageSwitcher />
                   <DashboardNav />
                   
                   {/* Add Property Button - Only for Agents */}

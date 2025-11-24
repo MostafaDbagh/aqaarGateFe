@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import styles from './About.module.css';
 
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const t = useTranslations('aboutUs');
 
   useEffect(() => {
     setIsVisible(true);
@@ -32,12 +34,12 @@ const About = () => {
         <div className={styles.glassSection}>
           <div className={`${styles.heroSection} ${isVisible ? styles.visible : styles.hidden}`}>
             <div className={styles.heroBadge}>
-              <span>About Us</span>
+              <span>{t('badge')}</span>
             </div>
-            <h1 className={styles.heroTitle}>A Group of Ambitious Young Syrians</h1>
+            <h1 className={styles.heroTitle}>{t('title')}</h1>
             <div className={styles.heroDivider} />
             <p className={styles.heroSubtitle}>
-              Showcasing the beauty, diversity, and real estate potential of Syria
+              {t('subtitle')}
             </p>
           </div>
 
@@ -49,9 +51,9 @@ const About = () => {
                   <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
               </div>
-              <h3 className={styles.visionPointTitle}>Modern Architecture</h3>
+              <h3 className={styles.visionPointTitle}>{t('modernArchitecture.title')}</h3>
               <p className={styles.visionPointText}>
-                Blending contemporary design with Syria's rich architectural heritage to showcase properties that stand the test of time.
+                {t('modernArchitecture.text')}
               </p>
             </div>
 
@@ -62,9 +64,9 @@ const About = () => {
                   <circle cx="12" cy="10" r="3" />
                 </svg>
               </div>
-              <h3 className={styles.visionPointTitle}>Ancient Heritage</h3>
+              <h3 className={styles.visionPointTitle}>{t('ancientHeritage.title')}</h3>
               <p className={styles.visionPointText}>
-                Preserving and celebrating Syria's historical legacy while building a bright future for real estate development.
+                {t('ancientHeritage.text')}
               </p>
             </div>
 
@@ -75,20 +77,17 @@ const About = () => {
                   <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
               </div>
-              <h3 className={styles.visionPointTitle}>Bright Future</h3>
+              <h3 className={styles.visionPointTitle}>{t('brightFuture.title')}</h3>
               <p className={styles.visionPointText}>
-                Symbolizing progress, unity, and hope as we work together to rebuild and showcase Syria's real estate potential.
+                {t('brightFuture.text')}
               </p>
             </div>
           </div>
 
           <div className={`${styles.visionStatement} ${isVisible ? styles.visible : styles.hidden}`}>
-            <h2 className={styles.visionStatementTitle}>Showcasing Syria's Vibrant Cities</h2>
+            <h2 className={styles.visionStatementTitle}>{t('showcasingCities.title')}</h2>
             <p className={styles.visionStatementText}>
-              We highlight Syria's most beautiful and diverse cities — from the ancient streets of Damascus and Aleppo 
-              to the coastal charm of Latakia and Tartous, and the historical significance of Homs. Each city represents 
-              a unique blend of culture, heritage, and modern development, creating a tapestry of real estate opportunities 
-              that reflect the true spirit of Syria.
+              {t('showcasingCities.text')}
             </p>
           </div>
 
@@ -108,20 +107,20 @@ const About = () => {
           <div className={styles.featuresGrid}>
             <div className={`${styles.featureCard} ${isVisible ? styles.visible : styles.hidden}`}>
               <div className={styles.featureIcon}>🏗️</div>
-              <h4 className={styles.featureTitle}>Development</h4>
-              <p className={styles.featureText}>Promoting sustainable development and growth across Syria's real estate landscape</p>
+              <h4 className={styles.featureTitle}>{t('development.title')}</h4>
+              <p className={styles.featureText}>{t('development.text')}</p>
             </div>
 
             <div className={`${styles.featureCard} ${isVisible ? styles.visible : styles.hidden}`}>
               <div className={styles.featureIcon}>🎨</div>
-              <h4 className={styles.featureTitle}>Culture</h4>
-              <p className={styles.featureText}>Celebrating Syria's rich cultural heritage and architectural diversity</p>
+              <h4 className={styles.featureTitle}>{t('culture.title')}</h4>
+              <p className={styles.featureText}>{t('culture.text')}</p>
             </div>
 
             <div className={`${styles.featureCard} ${isVisible ? styles.visible : styles.hidden}`}>
               <div className={styles.featureIcon}>🇸🇾</div>
-              <h4 className={styles.featureTitle}>Pride in Homeland</h4>
-              <p className={styles.featureText}>Demonstrating our deep love and pride for Syria through our work</p>
+              <h4 className={styles.featureTitle}>{t('prideInHomeland.title')}</h4>
+              <p className={styles.featureText}>{t('prideInHomeland.text')}</p>
             </div>
           </div>
         </div>
@@ -130,24 +129,18 @@ const About = () => {
           <div className={styles.decorativeHeart}>🇸🇾</div>
           <div className={styles.decorativeHeart}>🏛️</div>
           <div className={styles.loveIcon}>💙</div>
-          <h2 className={styles.loveTitle}>Inspiring Hope & Unity</h2>
+          <h2 className={styles.loveTitle}>{t('inspiringHope.title')}</h2>
           <p className={styles.loveText}>
-            Our mission is to inspire hope and unity through the lens of real estate. We believe that by showcasing 
-            Syria's beauty, diversity, and potential, we can contribute to a brighter future. With warm lighting, 
-            clean urban visuals, and a professional, elegant approach, we emphasize development, culture, and pride 
-            in our homeland.
+            {t('inspiringHope.text')}
           </p>
 
           <div className={styles.feedbackCard}>
             <h3 className={styles.feedbackTitle}>
               <span>🌟</span>
-              <span>Our Vision for Syria</span>
+              <span>{t('visionForSyria.title')}</span>
             </h3>
             <p className={styles.feedbackText}>
-              <strong>We see Syria not just as a place, but as a promise.</strong> A promise of restoration, growth, 
-              and prosperity. Through our platform, we aim to connect people with properties that reflect Syria's 
-              enduring spirit — combining ancient wisdom with modern innovation, creating spaces where history meets 
-              the future.
+              <strong>{t('visionForSyria.text')}</strong>
             </p>
           </div>
 
@@ -157,17 +150,14 @@ const About = () => {
               <span>🏛️</span>
               <span>🌆</span>
             </div>
-            <h3 className={styles.feedbackTitle}>Building Together</h3>
+            <h3 className={styles.feedbackTitle}>{t('buildingTogether.title')}</h3>
             <p className={styles.feedbackText}>
-              <strong>We are a team of passionate young Syrians</strong> dedicated to showcasing the real estate 
-              potential of our homeland. Every property we feature tells a story — of resilience, beauty, and 
-              the unwavering spirit of Syria. Together, we're building a platform that honors our past while 
-              embracing our future.
+              <strong>{t('buildingTogether.text')}</strong>
             </p>
           </div>
 
           <div className={styles.footerNote}>
-            From Damascus to Aleppo, from Latakia to Tartous — we're here to showcase Syria's real estate potential to the world.
+            {t('footerNote')}
           </div>
         </div>
       </div>

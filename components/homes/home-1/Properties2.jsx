@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useTranslations } from 'next-intl';
 import Link from "next/link";
 import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
@@ -13,6 +14,7 @@ import "swiper/css/pagination";
 import styles from "./Properties2.module.css";
 
 export default function Properties2() {
+  const t = useTranslations('homeSections');
   // Use search endpoint to get ONLY Holiday Home properties
   const { data: searchResponse, isLoading, isError, error } = useSearchListings({ 
     propertyType: 'Holiday Home', // ONLY show Holiday Homes
@@ -64,10 +66,10 @@ export default function Properties2() {
             <div className="col-12">
               <div className="heading-section text-center mb-48">
                 <h2 className="title split-text effect-right">
-                  Holiday Homes Listings
+                  {t('holidayHomesListings')}
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
-                  Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
+                  {t('holidayHomesListingsSubtitle')}
                 </p>
               </div>
               <div className={styles.loaderContainer}>
@@ -89,10 +91,10 @@ export default function Properties2() {
             <div className="col-12">
               <div className="heading-section text-center mb-48">
                 <h2 className="title">
-                  Holiday Homes Listings
+                  {t('holidayHomesListings')}
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
-                  Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
+                  {t('holidayHomesListingsSubtitle')}
                 </p>
               </div>
               <div className="text-center">
@@ -117,10 +119,10 @@ export default function Properties2() {
             <div className="col-12">
               <div className="heading-section text-center mb-48">
                 <h2 className="title split-text effect-right">
-                  Holiday Homes Listings
+                  {t('holidayHomesListings')}
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
-                  Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
+                  {t('holidayHomesListingsSubtitle')}
                 </p>
               </div>
               <div className="text-center">
@@ -143,10 +145,10 @@ export default function Properties2() {
           <div className="col-12">
             <div className="heading-section text-center mb-48">
               <h2 className="title split-text effect-right">
-                Holiday Homes Listings
+                {t('holidayHomesListings')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.
+                {t('holidayHomesListingsSubtitle')}
               </p>
             </div>
             

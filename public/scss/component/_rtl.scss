@@ -57,11 +57,65 @@
     .nice-select {
         &::after {
             right: unset !important;
-            left: 10px;
+            left: 16px !important;
+        }
+        padding-left: 40px !important;
+        padding-right: 16px !important;
+        > span {
+            padding-right: 0 !important;
+            padding-left: 35px !important;
+            text-align: right !important;
+            direction: rtl !important;
+        }
+        &.select-filter,
+        &.list-sort,
+        &.select-sort {
+            &::after {
+                right: unset !important;
+                left: 16px !important;
+            }
+            padding-left: 40px !important;
+            padding-right: 16px !important;
+            > span {
+                padding-right: 0 !important;
+                padding-left: 35px !important;
+                text-align: right !important;
+                direction: rtl !important;
+            }
+        }
+        > .list {
+            left: auto;
+            right: 0;
+            top: 100% !important;
+            bottom: auto !important;
+            transform-origin: 50% 0 !important;
+            -webkit-transform-origin: 50% 0 !important;
+            -ms-transform-origin: 50% 0 !important;
+            -webkit-transform: scale(0.75) translateY(0) !important;
+            -ms-transform: scale(0.75) translateY(0) !important;
+            transform: scale(0.75) translateY(0) !important;
+        }
+        &.open > .list {
+            top: 100% !important;
+            bottom: auto !important;
+            transform: scale(1) translateY(0) !important;
+            -webkit-transform: scale(1) translateY(0) !important;
+            -ms-transform: scale(1) translateY(0) !important;
+            -moz-transform: scale(1) translateY(0) !important;
+            -o-transform: scale(1) translateY(0) !important;
         }
         > .list .option.selected::after {
             right: unset;
             left: 18px;
+        }
+        > .list .option {
+            text-align: right;
+            padding-right: 16px;
+            padding-left: 40px;
+        }
+        > span {
+            padding-right: 0;
+            padding-left: 0;
         }
     }
 

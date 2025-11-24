@@ -1,8 +1,18 @@
 "use client";
 import React from "react";
+import { usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import styles from "./PasswordResetError.module.css";
 
 export default function PasswordResetError({ isOpen, onClose, onRetry, errorMessage }) {
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('passwordResetError');
   if (!isOpen) return null;
 
   const handleRetryClick = () => {
@@ -52,10 +62,10 @@ export default function PasswordResetError({ isOpen, onClose, onRetry, errorMess
             </svg>
           </div>
 
-          <h2 className={styles.title}>Password Reset Failed</h2>
+          <h2 className={styles.title}>{t('title')}</h2>
           
           <p className={styles.message}>
-            {errorMessage || "We couldn't reset your password. Please try again or contact support if the problem persists."}
+            {errorMessage || t('defaultMessage')}
           </p>
 
           <div className={styles.buttonContainer}>
@@ -80,7 +90,7 @@ export default function PasswordResetError({ isOpen, onClose, onRetry, errorMess
                   strokeLinejoin="round"
                 />
               </svg>
-              Try Again
+              {t('tryAgain')}
             </button>
             
             <button
@@ -88,7 +98,7 @@ export default function PasswordResetError({ isOpen, onClose, onRetry, errorMess
               className={styles.closeButtonSecondary}
               onClick={handleCloseClick}
             >
-              Close
+              {t('close')}
             </button>
           </div>
         </div>

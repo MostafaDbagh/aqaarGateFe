@@ -1,6 +1,23 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
+
 export default function Breadcumb({ pageName = "Property Listing" }) {
+  const t = useTranslations('breadcrumb');
+  
+  // Map page names to translation keys
+  const getTranslatedPageName = (name) => {
+    if (name === "Property Grid Full Width") {
+      return t('propertyGridFullWidth');
+    } else if (name === "Property Listing") {
+      return t('propertyListing');
+    } else if (name === "Property Details") {
+      return t('propertyDetails');
+    }
+    return name; // Fallback to original if no translation found
+  };
+
   return (
     <section className="flat-title">
       <div className="tf-container">
@@ -10,10 +27,10 @@ export default function Breadcumb({ pageName = "Property Listing" }) {
               <ul className="breadcrumb">
                 <li>
                   <Link className="home fw-6 text-color-3" href={`/`}>
-                    Home
+                    {t('home')}
                   </Link>
                 </li>
-                <li>{pageName}</li>
+                <li>{getTranslatedPageName(pageName)}</li>
               </ul>
             </div>
           </div>

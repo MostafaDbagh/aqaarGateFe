@@ -1,18 +1,22 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 export default function Faqs() {
+  const t = useTranslations('faq');
+  
   return (
     <section className="section-faq">
       <div className="tf-container">
         <div className="row">
           <div className="col-xl-8 col-lg-7">
             <div className="heading-section mb-48">
-              <h2 className="title">Frequently Asked Questions</h2>
+              <h2 className="title">{t('title')}</h2>
             </div>
             <div className="tf-faq mb-49">
-              <h3 className="fw-8 title mb-24">Overview</h3>
+              <h3 className="fw-8 title mb-24">{t('overview')}</h3>
               <ul className="box-faq" id="wrapper-faq">
                 <li className="faq-item active">
                   <a
@@ -22,7 +26,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion-faq-one"
                   >
-                    Why Choose Our Service?
+                    {t('questions.whyChooseOurService.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -31,11 +35,12 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq"
                   >
                     <p className="faq-body">
-                      Discover a modern and elegant way to showcase real estate in Syria. Our platform is designed to present every property with clarity, sophistication, and professionalism, ensuring that all details about the property and its owner are easily accessible — no extra explanations needed.
-                      <br /><br />
-                      We do not act as intermediaries between buyers and sellers. Our role is simply to provide a trusted, transparent space where listings can be displayed beautifully and efficiently.
-                      <br /><br />
-                      Whether you're in Syria or living abroad, our platform makes it easy to browse, explore, and choose your future home from anywhere in the world. With a sleek design and user-friendly experience, finding your dream property has never been simpler.
+                      {t('questions.whyChooseOurService.answer').split('\n\n').map((paragraph, idx, arr) => (
+                        <React.Fragment key={idx}>
+                          {paragraph}
+                          {idx < arr.length - 1 && <><br /><br /></>}
+                        </React.Fragment>
+                      ))}
                     </p>
                   </div>
                 </li>
@@ -47,7 +52,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion-faq-two"
                   >
-                    How Secure Are Your Services?
+                    {t('questions.howSecureAreYourServices.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -56,7 +61,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq"
                   >
                     <p className="faq-body">
-                      Your security is our top priority. We use advanced technologies to keep your data and account safe, including password encryption with bcrypt, JWT authentication, and protected APIs. Access to features and data is controlled through role-based permissions (for users and agents), and all communications occur over secure HTTPS connections. We also ensure secure token storage and transmission to maintain complete protection at every step.
+                      {t('questions.howSecureAreYourServices.answer')}
                     </p>
                   </div>
                 </li>
@@ -68,7 +73,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion-faq-three"
                   >
-                    Customer Support Service
+                    {t('questions.customerSupportService.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -77,7 +82,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq"
                   >
                     <p className="faq-body">
-                      We're here for you — anytime, anywhere. Our customer support team is available 24/7, ready to help with any inquiries or issues you may have. You can also reach us through our dedicated complaints email, and we'll make sure to respond within 24 hours.
+                      {t('questions.customerSupportService.answer')}
                     </p>
                   </div>
                 </li>
@@ -89,7 +94,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion-faq-four"
                   >
-                    How Can I Update My Account Information?
+                    {t('questions.howCanIUpdateMyAccountInformation.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -98,16 +103,19 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq"
                   >
                     <p className="faq-body">
-                      Updating your account information is quick, simple, and secure. You can easily make any changes directly through your user dashboard, and no additional approval is required.
-                      <br /><br />
-                      If any major updates or changes occur, we'll make sure to notify you in advance via in-app notifications and email alerts, so you're always informed and up to date with your account details.
+                      {t('questions.howCanIUpdateMyAccountInformation.answer').split('\n\n').map((paragraph, idx, arr) => (
+                        <React.Fragment key={idx}>
+                          {paragraph}
+                          {idx < arr.length - 1 && <><br /><br /></>}
+                        </React.Fragment>
+                      ))}
                     </p>
                   </div>
                 </li>
               </ul>
             </div>
             <div className="tf-faq mb-49">
-              <h3 className="fw-8 title mb-24">Costs and Payments</h3>
+              <h3 className="fw-8 title mb-24">{t('costsAndPayments')}</h3>
               <ul className="box-faq" id="wrapper-faq-2">
                 <li className="faq-item">
                   <a
@@ -117,7 +125,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion2-faq-one"
                   >
-                    How Do You Calculate Fees?
+                    {t('questions.howDoYouCalculateFees.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -126,7 +134,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-2"
                   >
                     <p className="faq-body">
-                      Good news! Our platform is completely free for the first six months. If we introduce any fees in the future, we'll give you a full month's notice via email and our communication channels, so you'll always be informed in advance.
+                      {t('questions.howDoYouCalculateFees.answer')}
                     </p>
                   </div>
                 </li>
@@ -138,7 +146,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion2-faq-two"
                   >
-                    How Do I Pay My Invoices?
+                    {t('questions.howDoIPayMyInvoices.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -147,7 +155,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-2"
                   >
                     <p className="faq-body">
-                      You can pay your invoices via bank transfer through Al-Haram or any money transfer center. Once the payment is confirmed, your points will be added to your account. You can also pay using Sertel Cash or MTN Cash. This process is fast and usually takes no more than 3 hours.
+                      {t('questions.howDoIPayMyInvoices.answer')}
                     </p>
                   </div>
                 </li>
@@ -159,8 +167,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion2-faq-four"
                   >
-                    Are There Any Hidden Fees Not Displayed In The Pricing
-                    Table?
+                    {t('questions.areThereAnyHiddenFees.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -169,7 +176,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-2"
                   >
                     <p className="faq-body">
-                      No, there are no hidden fees on our platform. Everything is transparent and clearly displayed, which is one of the key standards we pride ourselves on. We do not take any commission between buyers and sellers—we simply provide a modern, professional platform to showcase properties and holiday homes. If any changes occur, all users will be notified at least one month in advance.
+                      {t('questions.areThereAnyHiddenFees.answer')}
                     </p>
                   </div>
                 </li>
@@ -181,7 +188,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion2-faq-five"
                   >
-                    What Is The Refund Procedure?
+                    {t('questions.whatIsTheRefundProcedure.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -190,7 +197,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-2"
                   >
                     <p className="faq-body">
-                      This feature will be available soon. We'll provide full details on how to request a refund once it's launched.
+                      {t('questions.whatIsTheRefundProcedure.answer')}
                     </p>
                   </div>
                 </li>
@@ -202,7 +209,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion2-faq-six"
                   >
-                    Is There Financial Or Accounting Support?
+                    {t('questions.isThereFinancialOrAccountingSupport.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -211,14 +218,14 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-2"
                   >
                     <p className="faq-body">
-                      Absolutely! Our dedicated financial support team is here to help. Rest assured, your funds and points are always safe and fully protected.
+                      {t('questions.isThereFinancialOrAccountingSupport.answer')}
                     </p>
                   </div>
                 </li>
               </ul>
             </div>
             <div className="tf-faq">
-              <h3 className="fw-8 title mb-24">Safety and Security</h3>
+              <h3 className="fw-8 title mb-24">{t('safetyAndSecurity')}</h3>
               <ul className="box-faq" id="wrapper-faq-3">
                 <li className="faq-item">
                   <a
@@ -228,7 +235,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion3-faq-one"
                   >
-                    What Languages Does Your Service Support?
+                    {t('questions.whatLanguagesDoesYourServiceSupport.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -237,7 +244,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-3"
                   >
                     <p className="faq-body">
-                      Our service currently supports English, and Arabic will be available soon.
+                      {t('questions.whatLanguagesDoesYourServiceSupport.answer')}
                     </p>
                   </div>
                 </li>
@@ -249,7 +256,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion3-faq-three"
                   >
-                    What Are The Safety Features Of Your System?
+                    {t('questions.whatAreTheSafetyFeatures.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -258,21 +265,12 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-3"
                   >
                     <p className="faq-body">
-                      Our platform implements comprehensive security protocols to protect users and data:
-                      <br /><br />
-                      <strong>JWT-Based Authentication:</strong> Secure and stateless user sessions.
-                      <br /><br />
-                      <strong>Encrypted Password Storage:</strong> Passwords stored using strong hashing algorithms.
-                      <br /><br />
-                      <strong>Authorized API Access:</strong> Protected API endpoints requiring valid tokens.
-                      <br /><br />
-                      <strong>Role-Based Access Control (RBAC):</strong> Fine-grained permissions for agents and regular users.
-                      <br /><br />
-                      <strong>HTTPS Data Transmission:</strong> All data transmitted securely over encrypted channels.
-                      <br /><br />
-                      <strong>Authorization Enforcement:</strong> Users can only access or modify their own resources.
-                      <br /><br />
-                      <strong>Secure Critical Operations:</strong> Sensitive actions like creating, updating, or deleting listings require verified authentication.
+                      {t('questions.whatAreTheSafetyFeatures.answer').split('\n\n').map((paragraph, idx, arr) => (
+                        <React.Fragment key={idx}>
+                          {paragraph}
+                          {idx < arr.length - 1 && <><br /><br /></>}
+                        </React.Fragment>
+                      ))}
                     </p>
                   </div>
                 </li>
@@ -284,7 +282,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion3-faq-four"
                   >
-                    How Can I Request New Features?
+                    {t('questions.howCanIRequestNewFeatures.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -293,15 +291,12 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-3"
                   >
                     <p className="faq-body">
-                      We love hearing from you! Whether it's a suggestion or constructive feedback, your ideas help us make the platform better. You can share your requests in any of these ways:
-                      <br /><br />
-                      <strong>Call Us:</strong> Reach us at the phone number listed on our Contact Us page.
-                      <br /><br />
-                      <strong>Email Us:</strong> Send your ideas to the email address on the same page.
-                      <br /><br />
-                      <strong>Submit a Form:</strong> Fill out the form on our website to send your feature request or suggestion directly.
-                      <br /><br />
-                      Your feedback matters, and we're always excited to bring new features to life based on what our users need!
+                      {t('questions.howCanIRequestNewFeatures.answer').split('\n\n').map((paragraph, idx, arr) => (
+                        <React.Fragment key={idx}>
+                          {paragraph}
+                          {idx < arr.length - 1 && <><br /><br /></>}
+                        </React.Fragment>
+                      ))}
                     </p>
                   </div>
                 </li>
@@ -313,7 +308,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion3-faq-five"
                   >
-                    Is My Data Protected?
+                    {t('questions.isMyDataProtected.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -322,7 +317,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-3"
                   >
                     <p className="faq-body">
-                      Absolutely! Your data is safe with us. Passwords are securely hashed, all communications are encrypted, and only authorized users can access sensitive info. From personal details to property listings, we use multiple layers of security to keep your information private and protected.
+                      {t('questions.isMyDataProtected.answer')}
                     </p>
                   </div>
                 </li>
@@ -334,7 +329,7 @@ export default function Faqs() {
                     aria-expanded="false"
                     aria-controls="accordion3-faq-six"
                   >
-                    Having Technical Issues?
+                    {t('questions.havingTechnicalIssues.title')}
                     <i className="icon-CaretDown" />
                   </a>
                   <div
@@ -343,7 +338,7 @@ export default function Faqs() {
                     data-bs-parent="#wrapper-faq-3"
                   >
                     <p className="faq-body">
-                      Report it quickly via phone, email, or our website form, and our team will help you get back on track.
+                      {t('questions.havingTechnicalIssues.answer')}
                     </p>
                   </div>
                 </li>

@@ -1,6 +1,11 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
+
 export default function Cta() {
+  const t = useTranslations('cta');
+  
   return (
     <section className="section-CTA" style={{marginTop:'64px'}}>
       <div className="tf-container">
@@ -10,15 +15,14 @@ export default function Cta() {
          
               <div className="content">
                 <h4 className="text_white mb-8">
-                  Find a Local Real Estate Agent Today
+                  {t('title')}
                 </h4>
                 <p className="text_white text-1">
-                  If you’re looking to buy or sell a home. We’ll help you make
-                  the most money possible.
+                  {t('subtitle')}
                 </p>
               </div>
               <a href="#" className="tf-btn style-2 fw-6">
-                Find your location agent
+                {t('button')}
                 <i className="icon-MagnifyingGlass fw-6" />
               </a>
             </div>

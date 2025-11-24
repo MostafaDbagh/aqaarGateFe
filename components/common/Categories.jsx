@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
+import { useTranslations } from 'next-intl';
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -14,6 +15,8 @@ export default function Categories({
   onSearchChange,
   setCategory
 }) {
+  const t = useTranslations('homeSections');
+  
   // Use new category API - much more efficient than fetching all listings
   const { data: categoryStatsResponse, isLoading, isError, error } = useQuery({
     queryKey: ['categories', 'stats'],
@@ -27,16 +30,11 @@ export default function Categories({
   const categoriesData = useMemo(() => {
     if (!categoryStatsResponse?.data?.categories) {
       // Log for debugging
-      console.log('Categories API Response:', categoryStatsResponse);
       return [];
     }
     return categoryStatsResponse.data.categories;
   }, [categoryStatsResponse]);
   
-  // Log error if any
-  if (isError) {
-    console.error('Categories API Error:', error);
-  }
 
   // Memoize categories with icons and formatting
   const categories = useMemo(() => {
@@ -73,11 +71,10 @@ export default function Categories({
         <div className="tf-container">
           <div className="heading-section text-center mb-48">
             <h2 className="title split-text effect-right">
-              <SplitTextAnimation text="Try Searching For" />
+              <SplitTextAnimation text={t('trySearchingFor')} />
             </h2>
             <p className="text-1 split-text split-lines-transform">
-              Alot of Featured homes enthusiasts just like you have found their
-              dream home
+              {t('trySearchingForSubtitle')}
             </p>
           </div>
           <div style={{ padding: '40px 20px' }}>
@@ -93,11 +90,10 @@ export default function Categories({
       <div className="tf-container">
         <div className="heading-section text-center mb-48">
           <h2 className="title split-text effect-right">
-            Try Searching For
+            {t('trySearchingFor')}
           </h2>
           <p className="text-1 split-text split-lines-transform">
-            Alot of Featured homes enthusiasts just like you have found their
-            dream home
+            {t('trySearchingForSubtitle')}
           </p>
         </div>
 

@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
 export default function PageTitle() {
+  const t = useTranslations('career.pageTitle');
+  
   // State to track the active item
-  const [activeItem, setActiveItem] = useState("For sale");
+  const [activeItem, setActiveItem] = useState(t('forSale'));
 
   // Array of items to render
-  const items = ["For sale", "For rent"];
+  const items = [t('forSale'), t('forRent')];
   return (
     <>
       <style jsx>{`
@@ -44,11 +47,10 @@ export default function PageTitle() {
             <div className="content-inner">
               <div className="heading-title">
                 <h1 className="title">
-                  A Culture of Inclusivity and Belonging
+                  {t('title')}
                 </h1>
                 <p className="h6 fw-4">
-                  Thousands of luxury home enthusiasts just like you visit our
-                  website.
+                  {t('subtitle')}
                 </p>
               </div>
               <div className="wg-filter">
@@ -74,12 +76,12 @@ export default function PageTitle() {
                   </div>
                   <form>
                     <fieldset>
-                      <input type="text" placeholder="Find job here" />
+                      <input type="text" placeholder={t('searchPlaceholder')} />
                     </fieldset>
                   </form>
                   <div className="wrap-btn">
                     <a href="#" className="tf-btn bg-color-primary fw-7 pd-3">
-                      Search <i className="icon-MagnifyingGlass fw-6" />
+                      {t('searchButton')} <i className="icon-MagnifyingGlass fw-6" />
                     </a>
                   </div>
                 </div>

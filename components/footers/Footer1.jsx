@@ -2,11 +2,42 @@
 import React, { useEffect, useCallback, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 import { footerData } from "@/constants/footerLinks";
 import AppleStoreIcon from "@/components/icons/AppleStoreIcon";
 import GooglePlayIcon from "@/components/icons/GooglePlayIcon";
 import styles from "./Footer1.module.css";
 function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
+  const t = useTranslations('footer');
+  
+  // Translate footer data
+  const translatedFooterData = footerData.map(column => ({
+    ...column,
+    title: column.title === "About us" ? t('aboutUs') : 
+           column.title === "Popular house" ? t('popularHouse') : 
+           column.title === "Quick links" ? t('quickLinks') : 
+           column.title,
+    links: column.links.map(link => ({
+      ...link,
+      text: link.text === "Contact" ? t('links.contact') :
+            link.text === "Our Vision" ? t('links.ourVision') :
+            link.text === "About Us" ? t('links.aboutUs') :
+            link.text === "Careers with realty" ? t('links.careers') :
+            link.text === "Blogs" ? t('links.blogs') :
+            link.text === "Agents" ? t('links.agents') :
+            link.text === "# Holiday Homes" || link.text === "# Holiday Homes" ? t('links.holidayHomes') :
+            link.text === "# Apartments" || link.text === "# Apartments" ? t('links.apartments') :
+            link.text === "# Villas" || link.text === "# Villas" ? t('links.villas') :
+            link.text === "# Offices" || link.text === "# Offices" ? t('links.offices') :
+            link.text === "# Shops" || link.text === "# Shops" ? t('links.shops') :
+            link.text === "# Lands" || link.text === "# Lands" ? t('links.lands') :
+            link.text === "Terms of use" ? t('links.termsOfUse') :
+            link.text === "Privacy policy" ? t('links.privacyPolicy') :
+            link.text === "Rental service" ? t('links.rentalService') :
+            link.text === "FAQs" ? t('links.faqs') :
+            link.text
+    }))
+  }));
   const toggleOpen = useCallback((event) => {
     const parent = event.target.closest(".footer-col-block");
     const content = parent?.querySelector(".tf-collapse-content");
@@ -36,9 +67,9 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
       });
     };
   }, [toggleOpen]);
-  return (
-    <footer id="footer">
-      <div className="tf-container">
+    return (
+      <footer id="footer" dir="ltr">
+        <div className="tf-container">
         <div className="row">
           <div className="col-12">
             <div className="footer-top">
@@ -61,7 +92,7 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
                     <i className="icon-phone-2" />
                   </div>
                   <div className="content">
-                    <div className="title text-1">Call us</div>
+                    <div className="title text-1">{t('callUs')}</div>
                     <h6>
                       <a href="#"> +963995278383</a>
                     </h6>
@@ -72,7 +103,7 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
                     <i className="icon-letter-2" />
                   </div>
                   <div className="content">
-                    <div className="title text-1">Nee live help</div>
+                    <div className="title text-1">{t('needLiveHelp')}</div>
                     <h6 className="fw-4">
                       <a href="#">mohammaddbagh0@gmail.com</a>
                     </h6>
@@ -83,7 +114,7 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
           </div>
           <div className="footer-main">
             <div className="row">
-              {footerData.map((column, index) => (
+              {translatedFooterData.map((column, index) => (
                 <div className="col-lg-3 col-md-6" key={index}>
                   <div
                     className={`footer-menu-list footer-col-block ${
@@ -110,19 +141,19 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
               ))}
               <div className="col-lg-3 col-md-6">
                 <div className="footer-menu-list">
-                  <h5 className="title lh-30 mb-19">Download Our App</h5>
+                  <h5 className="title lh-30 mb-19">{t('downloadApp')}</h5>
                   <div className={styles.appStoreContainer}>
                     <div className={`hover-tooltip ${styles.appStoreIconWrapper}`}>
                       <a href="#" onClick={(e) => e.preventDefault()} className={styles.appStoreIconLink}>
                         <AppleStoreIcon width={150} height={50} className={styles.appStoreIcon} />
                       </a>
-                      <span className="tooltip">Coming soon</span>
+                      <span className="tooltip">{t('comingSoon')}</span>
                     </div>
                     <div className={`hover-tooltip ${styles.appStoreIconWrapper}`}>
                       <a href="#" onClick={(e) => e.preventDefault()} className={styles.appStoreIconLink}>
                         <GooglePlayIcon width={150} height={50} className={styles.appStoreIcon} />
                       </a>
-                      <span className="tooltip">Coming soon</span>
+                      <span className="tooltip">{t('comingSoon')}</span>
                     </div>
                   </div>
                 </div>
@@ -133,13 +164,12 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
         <div className="col-12">
           <div className="footer-bottom">
             <p>
-              Copyright © {new Date().getFullYear()}{" "}
-              <span className="fw-7">AqaarGate - REAL ESTATE</span> . Designed &amp;
-              Developed by
+              {t('copyright')} {new Date().getFullYear()}{" "}
+              <span className="fw-7">AqaarGate - REAL ESTATE</span> . {t('designedBy')}{" "}
               <a href="#" className={styles.developerName}>Mostafa Dbagh</a>
             </p>
             <div className="wrap-social">
-              <div className="text-3  fw-6 text_white">Follow us</div>
+              <div className="text-3  fw-6 text_white">{t('followUs')}</div>
               <ul className="tf-social ">
                 <li>
                   <a href="#">

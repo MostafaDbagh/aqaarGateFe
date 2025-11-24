@@ -1,11 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/react-query"; 
-import ReduxProvider from "@/store/ReduxProvider";
-import { GlobalModalProvider } from "@/components/contexts/GlobalModalContext";
-import { FavoritesProvider } from "@/components/contexts/FavoritesContext";
 import { useIdleLogout } from "@/hooks/useIdleLogout";
 import { useAuthState } from "@/store/hooks/useAuth";
 
@@ -89,18 +84,14 @@ export default function ClientLayout({ children }) {
   }, []);
 
   return (
-    <ReduxProvider>
-      <GlobalModalProvider>
-        <FavoritesProvider>
-          <QueryClientProvider client={queryClient}>
-            <IdleLogoutHandler />
-            {children}
-            <MobileMenu />
-            <BackToTop />
-          </QueryClientProvider>
-        </FavoritesProvider>
-      </GlobalModalProvider>
-    </ReduxProvider>
+    <>
+      {/* Providers are now in root layout.jsx to ensure all pages have access */}
+      {/* This component only handles client-side features */}
+      <IdleLogoutHandler />
+      {children}
+      <MobileMenu />
+      <BackToTop />
+    </>
   );
 }
 

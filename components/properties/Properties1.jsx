@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations, useLocale } from 'next-intl';
 import DropdownSelect from "../common/DropdownSelect";
 import PropertyGridItems from "./PropertyGridItems";
 import PropertyListItems from "./PropertyListItems";
@@ -11,6 +12,9 @@ import { cleanParams } from "@/utlis/cleanedParams";
 import LocationLoader from "../common/LocationLoader";
 
 function Properties1Content({ defaultGrid = false }) {
+  const t = useTranslations('propertyList');
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
   const searchParamsFromUrl = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   
@@ -222,109 +226,227 @@ function Properties1Content({ defaultGrid = false }) {
           grid-column: 1 / -1 !important;
           color: #dc3545 !important;
         }
+        
+        /* Fix dropdown to show downward in RTL */
+        [dir="rtl"] .nice-select > .list,
+        html[dir="rtl"] .nice-select > .list {
+          top: 100% !important;
+          bottom: auto !important;
+          transform-origin: 50% 0 !important;
+          -webkit-transform-origin: 50% 0 !important;
+          -ms-transform-origin: 50% 0 !important;
+        }
+        
+        [dir="rtl"] .nice-select.open > .list,
+        html[dir="rtl"] .nice-select.open > .list {
+          transform: scale(1) translateY(0) !important;
+          -webkit-transform: scale(1) translateY(0) !important;
+          -ms-transform: scale(1) translateY(0) !important;
+        }
       `}</style>
       
       <section className="section-property-layout">
         <div className="tf-container">
           <div className="row">
             <div className="col-12">
-              <div className="box-title">
-                <h2>Property listing</h2>
-                <div className="right">
-                  <div
-                    className="filter-popup"
-                    data-bs-toggle="modal"
-                    href="#modalFilter"
-                    role="button"
-                  >
-                    Filter
-                    <div className="icons">
-                      <svg width={20}
-                        height={20}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                       aria-hidden="true">
-                        <path
-                          d="M21 4H14"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M10 4H3"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M21 12H12"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M8 12H3"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M21 20H16"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 20H3"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M14 2V6"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M8 10V14"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M16 18V22"
-                          stroke="#F1913D"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+              <div className="box-title" style={{ marginBottom: '64px' }}>
+                {isRTL ? (
+                  <>
+                    <div className="right" style={{ display: 'flex', gap: '12px', alignItems: 'center', flexDirection: 'row-reverse' }}>
+                      <div
+                        className="filter-popup"
+                        data-bs-toggle="modal"
+                        href="#modalFilter"
+                        role="button"
+                      >
+                        {t('filter')}
+                        <div className="icons">
+                          <svg width={20}
+                            height={20}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                           aria-hidden="true">
+                            <path
+                              d="M21 4H14"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M10 4H3"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M21 12H12"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M8 12H3"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M21 20H16"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M12 20H3"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M14 2V6"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M8 10V14"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M16 18V22"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <ul className="nav-tab-filter group-layout" role="tablist">
+                        <LayoutHandler defaultGrid={defaultGrid} />
+                      </ul>
+                      <DropdownSelect
+                        addtionalParentClass="select-filter list-sort"
+                        options={[t('newest'), t('oldest')]}
+                        value={searchParams.sort === "newest" ? t('newest') : t('oldest')}
+                        onChange={(value) => {
+                          const sortValue = value === t('newest') ? "newest" : "oldest";
+                          handleSearchChange({ sort: sortValue });
+                        }}
+                      />
                     </div>
-                  </div>
-                  <ul className="nav-tab-filter group-layout" role="tablist">
-                    <LayoutHandler defaultGrid={defaultGrid} />
-                  </ul>
-
-                  <DropdownSelect
-                    addtionalParentClass="select-filter list-sort"
-                    options={["Newest", "Oldest"]}
-                    value={searchParams.sort === "newest" ? "Newest" : "Oldest"}
-                    onChange={(value) => {
-                      const sortValue = value === "Newest" ? "newest" : "oldest";
-                      handleSearchChange({ sort: sortValue });
-                    }}
-                  />
-                </div>
+                    <h2>{t('title')}</h2>
+                  </>
+                ) : (
+                  <>
+                    <h2>{t('title')}</h2>
+                    <div className="right" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <DropdownSelect
+                        addtionalParentClass="select-filter list-sort"
+                        options={[t('newest'), t('oldest')]}
+                        value={searchParams.sort === "newest" ? t('newest') : t('oldest')}
+                        onChange={(value) => {
+                          const sortValue = value === t('newest') ? "newest" : "oldest";
+                          handleSearchChange({ sort: sortValue });
+                        }}
+                      />
+                      <ul className="nav-tab-filter group-layout" role="tablist">
+                        <LayoutHandler defaultGrid={defaultGrid} />
+                      </ul>
+                      <div
+                        className="filter-popup"
+                        data-bs-toggle="modal"
+                        href="#modalFilter"
+                        role="button"
+                      >
+                        {t('filter')}
+                        <div className="icons">
+                          <svg width={20}
+                            height={20}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                           aria-hidden="true">
+                            <path
+                              d="M21 4H14"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M10 4H3"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M21 12H12"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M8 12H3"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M21 20H16"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M12 20H3"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M14 2V6"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M8 10V14"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M16 18V22"
+                              stroke="#F1913D"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="flat-animate-tab">
                 <div className="tab-content">
@@ -376,7 +498,11 @@ function Properties1Content({ defaultGrid = false }) {
               </div>
               <div className="wrap-pagination">
                 <p className="text-1">
-                  Showing {((pagination.page - 1) * pagination.limit) + 1}-{Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} results.
+                  {t('showingResults', {
+                    start: ((pagination.page - 1) * pagination.limit) + 1,
+                    end: Math.min(pagination.page * pagination.limit, pagination.total),
+                    total: pagination.total
+                  })}
                 </p>
                 <ul className="wg-pagination">
                   {Math.ceil(pagination.total / pagination.limit) > 1 ? generatePaginationItems() : (

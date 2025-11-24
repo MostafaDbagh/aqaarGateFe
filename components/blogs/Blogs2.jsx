@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useTranslations } from 'next-intl';
 import LocationLoader from "@/components/common/LocationLoader";
 
 export default function Blogs2() {
+  const t = useTranslations('blog');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function Blogs2() {
                 lineHeight: '1.2',
                 padding: '0 20px'
               }}>
-                Blogs Coming Soon
+                {t('comingSoon')}
               </h1>
 
               {/* Subtitle */}
@@ -88,7 +90,7 @@ export default function Blogs2() {
                 lineHeight: '1.6',
                 padding: '0 20px'
               }}>
-                We're working hard to bring you amazing content about real estate, property tips, and market insights. Stay tuned for exciting articles coming your way!
+                {t('subtitle')}
               </p>
 
               {/* Features List */}
@@ -99,7 +101,7 @@ export default function Blogs2() {
                       <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
               </div>
-                  <span className="feature-text">Real Estate Tips</span>
+                  <span className="feature-text">{t('features.realEstateTips')}</span>
             </div>
 
                 <div className="feature-card">
@@ -108,7 +110,7 @@ export default function Blogs2() {
                       <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                       </div>
-                  <span className="feature-text">Market Insights</span>
+                  <span className="feature-text">{t('features.marketInsights')}</span>
                     </div>
 
                 <div className="feature-card">
@@ -117,7 +119,7 @@ export default function Blogs2() {
                       <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
-                  <span className="feature-text">Investment Guide</span>
+                  <span className="feature-text">{t('features.investmentGuide')}</span>
                   </div>
                 </div>
 

@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import { UserIcon, EmailIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -10,6 +11,14 @@ import styles from "./Register.module.css";
 
 export default function Register({ isOpen, onClose }) {
   const router = useRouter();
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('register');
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -130,45 +139,45 @@ export default function Register({ isOpen, onClose }) {
     switch(fieldName) {
       case "username":
         if (formData.username && formData.username.length < 3) {
-          error = "Username must be at least 3 characters";
+          error = t('errors.usernameMinLength');
         }
         break;
       case "email":
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (formData.email && !emailRegex.test(formData.email)) {
-          error = "Please enter a valid email address";
+          error = t('errors.emailInvalid');
         }
         break;
       case "password":
         if (formData.password && formData.password.length < 6) {
-          error = "Password must be at least 6 characters";
+          error = t('errors.passwordMinLength');
         }
         break;
       case "confirmPassword":
         if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
-          error = "Passwords do not match";
+          error = t('errors.passwordsNotMatch');
         }
         break;
       case "phone":
         if (formData.role === "agent") {
           if (!formData.phone || formData.phone.trim() === "") {
-            error = "Phone number is required for agents";
+            error = t('errors.phoneRequired');
           } else if (!/^\d{6,15}$/.test(formData.phone.replace(/\s/g, ""))) {
-            error = "Please enter a valid phone number";
+            error = t('errors.phoneInvalid');
           }
         }
         break;
       case "company":
         if (formData.role === "agent") {
           if (!formData.company || formData.company.trim() === "") {
-            error = "Company name is required for agents";
+            error = t('errors.companyRequired');
           }
         }
         break;
       case "job":
         if (formData.role === "agent") {
           if (!formData.job || formData.job.trim() === "") {
-            error = "Job title is required for agents";
+            error = t('errors.jobRequired');
           }
         }
         break;
@@ -203,7 +212,7 @@ export default function Register({ isOpen, onClose }) {
       }, 300);
       
     } catch (error) {
-      setError(error.message || 'Failed to send OTP. Please try again.');
+      setError(error.message || t('errors.otpFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -260,11 +269,11 @@ export default function Register({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  return (
-    <>
-      {/* Clean Modern Register Modal */}
-      <div className={styles.modalOverlay} onClick={handleOverlayClick}>
-        <div className={styles.modalContent}>
+    return (
+      <>
+        {/* Clean Modern Register Modal */}
+        <div className={styles.modalOverlay} dir={isRTL ? 'rtl' : 'ltr'} onClick={handleOverlayClick}>
+          <div className={styles.modalContent}>
           <button 
             className={styles.closeButton} 
             onClick={closeModal} 
@@ -277,15 +286,15 @@ export default function Register({ isOpen, onClose }) {
             <div className={styles.iconWrapper}>
               <i className="icon-user-plus" />
             </div>
-            <h2 className={styles.modalTitle}>Create Account</h2>
+            <h2 className={styles.modalTitle}>{t('title')}</h2>
             <p className={styles.modalSubtitle}>
-              Join our community and start your property journey today.
+              {t('subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formGroup}>
-              <label htmlFor="username" className={styles.label}>Username</label>
+              <label htmlFor="username" className={styles.label}>{t('username')}</label>
               <div className={styles.inputWithIcon}>
                 <UserIcon className={styles.inputIcon} />
                 <input
@@ -295,7 +304,7 @@ export default function Register({ isOpen, onClose }) {
                   value={formData.username}
                   onChange={handleChange}
                   onBlur={() => validateField("username")}
-                  placeholder="Enter your username"
+                  placeholder={t('usernamePlaceholder')}
                   className={styles.formInput}
                   required
                 />
@@ -308,7 +317,7 @@ export default function Register({ isOpen, onClose }) {
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.label}>Email Address</label>
+              <label htmlFor="email" className={styles.label}>{t('email')}</label>
               <div className={styles.inputWithIcon}>
                 <EmailIcon className={styles.inputIcon} />
                 <input
@@ -318,7 +327,7 @@ export default function Register({ isOpen, onClose }) {
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={() => validateField("email")}
-                  placeholder="Enter your email"
+                  placeholder={t('emailPlaceholder')}
                   className={styles.formInput}
                   required
                 />
@@ -331,7 +340,7 @@ export default function Register({ isOpen, onClose }) {
             </div>
             
             <div className={styles.formGroup}>
-              <label htmlFor="role" className={styles.label}>Register as</label>
+              <label htmlFor="role" className={styles.label}>{t('registerAs')}</label>
               <select
                 className={styles.roleSelect}
                 id="role"
@@ -340,8 +349,8 @@ export default function Register({ isOpen, onClose }) {
                 onChange={handleChange}
                 required
               >
-                <option value="user">👤 Regular User - Browse and favorite properties</option>
-                <option value="agent">🏢 Property Agent - List and manage properties</option>
+                <option value="user">{t('roleUser')}</option>
+                <option value="agent">{t('roleAgent')}</option>
               </select>
             </div>
 
@@ -350,7 +359,7 @@ export default function Register({ isOpen, onClose }) {
               <>
                 <div className={styles.formGroup}>
                   <label htmlFor="phone" className={styles.label}>
-                    Phone Number <span className={styles.required}>*</span>
+                    {t('phoneNumber')} <span className={styles.required}>*</span>
                   </label>
                   <div className={styles.phoneInputContainer}>
                     <select
@@ -373,7 +382,7 @@ export default function Register({ isOpen, onClose }) {
                       value={formData.phone}
                       onChange={handleChange}
                       onBlur={() => validateField("phone")}
-                      placeholder="Enter your phone number"
+                      placeholder={t('phonePlaceholder')}
                       className={styles.phoneInput}
                       required
                     />
@@ -387,7 +396,7 @@ export default function Register({ isOpen, onClose }) {
 
                 <div className={styles.formGroup}>
                   <label htmlFor="company" className={styles.label}>
-                    Company Name <span className={styles.required}>*</span>
+                    {t('companyName')} <span className={styles.required}>*</span>
                   </label>
                   <div className={styles.inputWithIcon}>
                     <UserIcon className={styles.inputIcon} />
@@ -398,7 +407,7 @@ export default function Register({ isOpen, onClose }) {
                       value={formData.company}
                       onChange={handleChange}
                       onBlur={() => validateField("company")}
-                      placeholder="Enter your company name"
+                      placeholder={t('companyPlaceholder')}
                       className={styles.formInput}
                       required
                     />
@@ -412,7 +421,7 @@ export default function Register({ isOpen, onClose }) {
 
                 <div className={styles.formGroup}>
                   <label htmlFor="job" className={styles.label}>
-                    Job Title <span className={styles.required}>*</span>
+                    {t('jobTitle')} <span className={styles.required}>*</span>
                   </label>
                   <div className={styles.inputWithIcon}>
                     <UserIcon className={styles.inputIcon} />
@@ -423,7 +432,7 @@ export default function Register({ isOpen, onClose }) {
                       value={formData.job}
                       onChange={handleChange}
                       onBlur={() => validateField("job")}
-                      placeholder="Enter your job title"
+                      placeholder={t('jobPlaceholder')}
                       className={styles.formInput}
                       required
                     />
@@ -438,7 +447,7 @@ export default function Register({ isOpen, onClose }) {
             )}
 
             <div className={styles.formGroup}>
-              <label htmlFor="pass2" className={styles.label}>Password</label>
+              <label htmlFor="pass2" className={styles.label}>{t('password')}</label>
               <div className={styles.inputWithIcon}>
                 <LockIcon className={styles.inputIcon} />
                 <input
@@ -448,7 +457,7 @@ export default function Register({ isOpen, onClose }) {
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={() => validateField("password")}
-                  placeholder="Enter your password"
+                  placeholder={t('passwordPlaceholder')}
                   className={styles.formInput}
                   required
                 />
@@ -472,7 +481,7 @@ export default function Register({ isOpen, onClose }) {
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="confirm" className={styles.label}>Confirm Password</label>
+              <label htmlFor="confirm" className={styles.label}>{t('confirmPassword')}</label>
               <div className={styles.inputWithIcon}>
                 <LockIcon className={styles.inputIcon} />
                 <input
@@ -482,7 +491,7 @@ export default function Register({ isOpen, onClose }) {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   onBlur={() => validateField("confirmPassword")}
-                  placeholder="Confirm your password"
+                  placeholder={t('confirmPasswordPlaceholder')}
                   className={styles.formInput}
                   required
                 />
@@ -525,21 +534,21 @@ export default function Register({ isOpen, onClose }) {
                     required
                   />
                   <span className={styles.checkboxText}>
-                    I agree to the{" "}
+                    {t('agreeToTerms')}{" "}
                     <Link
                       href="/terms-and-conditions"
                       className={styles.termsLink}
                       onClick={(event) => handlePolicyLinkClick(event, "/terms-and-conditions")}
                     >
-                      Terms and Conditions
+                      {t('termsAndConditions')}
                     </Link>{" "}
-                    and{" "}
+                    {t('and')}{" "}
                     <Link
                       href="/privacy-policy"
                       className={styles.termsLink}
                       onClick={(event) => handlePolicyLinkClick(event, "/privacy-policy")}
                     >
-                      Privacy Policy
+                      {t('privacyPolicy')}
                     </Link>
                   </span>
                 </label>
@@ -554,23 +563,23 @@ export default function Register({ isOpen, onClose }) {
               {isLoading ? (
                 <>
                   <span className={styles.spinner} />
-                  Creating Account...
+                  {t('creatingAccount')}
                 </>
               ) : (
                 <>
                   <i className="icon-user-plus" />
-                  Create Account
+                  {t('createAccount')}
                 </>
               )}
             </button>
 
             <div className={styles.signInLink}>
-              Already have an account?{" "}
+              {t('alreadyHaveAccount')}{" "}
               <a
                 href="#"
                 onClick={handleSwitchToLogin}
               >
-                Login
+                {t('login')}
               </a>
             </div>
           </form>

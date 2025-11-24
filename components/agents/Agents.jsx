@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslations, useLocale } from 'next-intl';
 import DropdownSelect from "../common/DropdownSelect";
 import { useAgents } from "@/apis/hooks";
 import LocationLoader from "../common/LocationLoader";
@@ -10,9 +11,12 @@ import Toast from "../common/Toast";
 import styles from "./Agents.module.css";
 
 export default function Agents() {
+  const t = useTranslations('agents');
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
   const [searchTerm, setSearchTerm] = useState("");
-  const [locationFilter, setLocationFilter] = useState("All location");
-  const [sortBy, setSortBy] = useState("Sort by (Default)");
+  const [locationFilter, setLocationFilter] = useState(t('allLocation'));
+  const [sortBy, setSortBy] = useState(t('sortBy.default'));
   const [copiedEmail, setCopiedEmail] = useState(null);
   const [toast, setToast] = useState({
     isVisible: false,
@@ -31,7 +35,7 @@ export default function Agents() {
       agent.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       agent.companyName?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesLocation = locationFilter === "All location" || 
+    const matchesLocation = locationFilter === t('allLocation') || 
       agent.location?.toLowerCase().includes(locationFilter.toLowerCase());
     
     return matchesSearch && matchesLocation;
@@ -40,9 +44,9 @@ export default function Agents() {
   // Sort agents
   const sortedAgents = [...filteredAgents].sort((a, b) => {
     switch (sortBy) {
-      case "Newest":
+      case t('sortBy.newest'):
         return new Date(b.createdAt) - new Date(a.createdAt);
-      case "Oldest":
+      case t('sortBy.oldest'):
         return new Date(a.createdAt) - new Date(b.createdAt);
       default:
         return 0;
@@ -62,10 +66,10 @@ export default function Agents() {
     try {
       await navigator.clipboard.writeText(email);
       setCopiedEmail(agentId);
-      showToast('Email copied to clipboard');
+      showToast(t('emailCopied'));
       setTimeout(() => setCopiedEmail(null), 2000);
     } catch (error) {
-      showToast('Failed to copy email', 'error');
+      showToast(t('emailCopyFailed'), 'error');
     }
   };
 
@@ -77,7 +81,7 @@ export default function Agents() {
             <div className="col-12 text-center py-5">
               <LocationLoader 
                 size="large" 
-                message="Finding the best real estate agents for you..."
+                message={t('loading')}
               />
             </div>
           </div>
@@ -93,8 +97,8 @@ export default function Agents() {
           <div className="row">
             <div className="col-12 text-center py-5">
               <div className="alert alert-danger">
-                <h4>Error Loading Agents</h4>
-                <p>{error?.message || "Failed to load agents. Please try again later."}</p>
+                <h4>{t('error.title')}</h4>
+                <p>{error?.message || t('error.message')}</p>
               </div>
             </div>
           </div>
@@ -509,6 +513,14 @@ export default function Agents() {
           font-size: 15px;
           font-weight: 500;
           transition: all 0.3s ease;
+          text-align: left;
+          direction: ltr;
+        }
+        
+        [dir="rtl"] .box-title .wrap-sort input[type="text"],
+        html[dir="rtl"] .box-title .wrap-sort input[type="text"] {
+          text-align: right;
+          direction: rtl;
         }
         
         .box-title .wrap-sort input[type="text"]:focus {
@@ -521,19 +533,31 @@ export default function Agents() {
           color: #a0aec0;
           font-weight: 400;
         }
+        
+        /* Fix dropdown text alignment for English */
+        .box-title .wrap-sort .nice-select > span {
+          text-align: left !important;
+          direction: ltr !important;
+        }
+        
+        [dir="rtl"] .box-title .wrap-sort .nice-select > span,
+        html[dir="rtl"] .box-title .wrap-sort .nice-select > span {
+          text-align: right !important;
+          direction: rtl !important;
+        }
       `}</style>
     <section className="section-agent">
       <div className="tf-container">
         <div className="row">
           <div className="box-title style-2 mb-48">
-            <h2>Our Agents</h2>
+            <h2>{t('title')}</h2>
             <div className="wrap-sort">
               <form onSubmit={(e) => e.preventDefault()}>
                 <fieldset>
                   <input
                     className=""
                     type="text"
-                    placeholder="Search agent name or company"
+                    placeholder={t('searchPlaceholder')}
                     name="name"
                     tabIndex={2}
                     aria-required="true"
@@ -546,16 +570,16 @@ export default function Agents() {
               <div className={`city-dropdown ${styles.cityDropdown}`}>
                 <DropdownSelect
                   options={[
-                    "All location",
-                    "Latakia",
-                    "Damascus",
-                    "Aleppo",
-                    "Homs",
-                    "Hama",
-                    "Idlib",
-                    "Deir ez-Zor",
-                    "Daraa",
-                    "Tartous",
+                    t('allLocation'),
+                    t('cities.latakia'),
+                    t('cities.damascus'),
+                    t('cities.aleppo'),
+                    t('cities.homs'),
+                    t('cities.hama'),
+                    t('cities.idlib'),
+                    t('cities.deirEzZor'),
+                    t('cities.daraa'),
+                    t('cities.tartous'),
                   ]}
                   addtionalParentClass=""
                   selectedValue={locationFilter}
@@ -564,7 +588,7 @@ export default function Agents() {
               </div>
 
               <DropdownSelect
-                options={["Sort by (Default)", "Newest", "Oldest"]}
+                options={[t('sortBy.default'), t('sortBy.newest'), t('sortBy.oldest')]}
                 addtionalParentClass="select-sort style-2"
                 selectedValue={sortBy}
                 onChange={(value) => setSortBy(value)}
@@ -577,28 +601,28 @@ export default function Agents() {
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>🔍</div>
                 <h3 className={styles.emptyTitle}>
-                  No Agents Found
+                  {t('empty.title')}
                 </h3>
                 <p className={styles.emptyText}>
-                  We couldn't find any agents matching your current search criteria. Try adjusting your filters or search terms.
+                  {t('empty.message')}
                 </p>
                 <div className={styles.emptyActions}>
                   <button
                     className={styles.resetBtn}
                     onClick={() => {
                       setSearchTerm('');
-                      setLocationFilter('All location');
-                      setSortBy('Sort by (Default)');
+                      setLocationFilter(t('allLocation'));
+                      setSortBy(t('sortBy.default'));
                     }}
                   >
-                    Reset Filters
+                    {t('empty.resetFilters')}
                   </button>
                   {agents.length > 0 && (
                     <Link 
                       href="/agents"
                       className={styles.viewAllLink}
                     >
-                      View All {agents.length} Agents
+                      {t('empty.viewAll', { count: agents.length })}
                     </Link>
                   )}
                 </div>
@@ -613,7 +637,7 @@ export default function Agents() {
                       <Link href={`/agents-details/${agent._id}`}>
                         <Image
                           className="lazyload property-img"
-                          alt={agent.fullName || "Agent"}
+                          alt={agent.fullName || t('agentName')}
                           width={435}
                           height={450}
                           src={agent.avatar || "/images/avatar/agent-1.jpg"}
@@ -627,11 +651,11 @@ export default function Agents() {
                             href={`/agents-details/${agent._id}`}
                             className={"agent-name-link " + styles.agentNameLink}
                           >
-                            {agent.fullName || "Agent Name"}
+                            {agent.fullName || t('agentName')}
                           </Link>
                         </h5>
                         <p className={styles.positionText + " text-2 lh-18"}>
-                          {agent.position || agent.job || 'Real Estate Agent'}
+                          {agent.position || agent.job || t('realEstateAgent')}
                         </p>
                         {agent.companyName && (
                           <p className={styles.companyText + " text-3 lh-18"}>
@@ -652,7 +676,7 @@ export default function Agents() {
                         <div className={styles.iconsSection + " all-icons-section"}>
                           <h6
                             className={styles.sectionHeader}
-                          >Contact & Follow</h6>
+                          >{t('contactAndFollow')}</h6>
                           {/* Email and Phone Icons */}
                           <div className={styles.iconsRow}>
                             {/* Email Icon */}
@@ -680,7 +704,7 @@ export default function Agents() {
                                 </button>
                                 {/* Tooltip */}
                                 <div className={"email-tooltip " + styles.tooltip}>
-                                  {copiedEmail === agent._id ? 'Copied!' : agent.email}
+                                  {copiedEmail === agent._id ? t('copied') : agent.email}
                                   <div className={styles.tooltipArrow}></div>
                                 </div>
                               </div>

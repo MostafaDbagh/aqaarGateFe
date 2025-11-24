@@ -1,6 +1,9 @@
+"use client";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 export default function Jobs() {
+  const t = useTranslations('career.jobs');
   // Toggle this to show/hide job listings
   const showJobListings = false; // Set to true when you have jobs to display
 
@@ -18,16 +21,14 @@ export default function Jobs() {
                     data-wow-duration="1s"
                     data-wow-delay="0s"
                   >
-                    Best Job For You At AqaarGate
+                    {t('title')}
                   </h2>
                   <p
                     className="text-1 wow animate__fadeInUp animate__animated"
                     data-wow-duration="1s"
                     data-wow-delay="0s"
                   >
-                    We connect you directly to the person that knows the most about
-                    a property for sale, <br />
-                    the listing agent.
+                    {t('subtitle')}
                   </p>
                 </div>
                 <div className="tf-grid-layout-2 mb-48">
@@ -43,29 +44,29 @@ export default function Jobs() {
                         <ul className="list-info">
                           <li className="text-4">
                             <i className="icon-bag" />
-                            {item.department}
+                            {t('department')}: {item.department}
                           </li>
                           <li className="text-4">
                             <i className="icon-location" />
-                            {item.location}
+                            {t('location')}: {item.location}
                           </li>
                           <li className="text-4">
                             <i className="icon-money" />
                             <span className="fw-7 text-color-primary">
                               {item.salary}
                             </span>
-                            Month
+                            {t('month')}
                           </li>
                         </ul>
                       </div>
                       <a href="#" className="tf-btn style-border pd-10">
-                        Apply now
+                        {t('applyNow')}
                       </a>
                     </div>
                   ))}
                 </div>
                 <a href="#" className="tf-btn bg-color-primary fw-7 pd-16 mx-auto">
-                  Load more
+                  {t('loadMore')}
                 </a>
               </>
             ) : (
@@ -76,15 +77,14 @@ export default function Jobs() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  Join Our Growing Team at AqaarGate
+                  {t('joinTeam.title')}
                 </h2>
                 <p
                   className="text-1 wow animate__fadeInUp animate__animated"
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  We're building something amazing in real estate, and we're looking for talented individuals to join our journey. <br />
-                  While we're not currently hiring, we're always excited to connect with potential future team members.
+                  {t('joinTeam.subtitle')}
                 </p>
                 
                 {/* Enhanced message with icons and styling */}
@@ -116,7 +116,7 @@ export default function Jobs() {
                             fontWeight: '600'
                           }}
                         >
-                          No Open Positions Right Now
+                          {t('joinTeam.noOpenPositions')}
                         </h4>
                         <p 
                           className="mb-4"
@@ -126,9 +126,7 @@ export default function Jobs() {
                             lineHeight: '1.6'
                           }}
                         >
-                          We're focused on growing our platform and serving our clients better. 
-                          Check back regularly as we expand our team with exciting opportunities 
-                          in real estate, technology, and customer service.
+                          {t('joinTeam.description')}
                         </p>
                         <div 
                           className="mt-4"
@@ -138,9 +136,9 @@ export default function Jobs() {
                           }}
                         >
                           <i className="icon-mail me-2" />
-                          Want to be the first to know about new openings? 
+                          {t('joinTeam.wantToKnow')}{' '}
                           <a href="/contact" className="text-color-primary ms-1">
-                            Get in touch
+                            {t('joinTeam.getInTouch')}
                           </a>
                         </div>
                       </div>

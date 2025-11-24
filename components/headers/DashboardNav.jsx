@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslations } from 'next-intl';
 import { useAuthState } from "@/store/hooks/useAuth";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -19,6 +20,8 @@ import {
 export default function DashboardNav({ color = "" }) {
   const [isDDOpen, setIsDDOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const t = useTranslations('dashboardNav');
+  const tCommon = useTranslations('common');
   
   // Use Redux for auth state
   const { 
@@ -113,7 +116,7 @@ export default function DashboardNav({ color = "" }) {
         <UserAvatarIcon />
       </div>
       <div className={`name ${color} dashboard-nav-name`}>
-        {displayName}
+        {displayName === 'Guest' ? tCommon('guest') : displayName}
         {isLoggedIn && <i className="icon-CaretDown" />}
       </div>
       <div 
@@ -140,7 +143,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <DashboardIcon />
-              Admin Dashboard
+              {t('adminDashboard')}
             </Link>
 
 
@@ -161,7 +164,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <PropertyIcon />
-              Properties
+              {t('properties')}
             </Link>
 
             {/* Agents */}
@@ -181,7 +184,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <AddPropertyIcon />
-              Agents
+              {t('agents')}
             </Link>
 
             {/* Rental Services */}
@@ -201,7 +204,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <PropertyIcon />
-              Rental Services
+              {t('rentalServices')}
             </Link>
 
             {/* Contact Us */}
@@ -221,7 +224,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <ReviewIcon />
-              Contact Us
+              {t('contactUs')}
             </Link>
           </>
         )}
@@ -247,7 +250,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <DashboardIcon />
-                Dashboard
+                {t('dashboard')}
               </Link>
             )}
 
@@ -270,7 +273,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <PackageIcon />
-                My package
+                {t('myPackage')}
               </Link>
             )}
 
@@ -291,7 +294,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <ProfileIcon />
-              My Profile
+              {t('myProfile')}
             </Link>
 
             {/* My Favorites - For ALL logged in users (disabled on mobile only) */}
@@ -311,7 +314,7 @@ export default function DashboardNav({ color = "" }) {
               }}
             >
               <i className="icon-bookmark" />
-              My favorites
+              {t('myFavorites')}
             </Link>
 
             {/* Reviews - Only for logged in agents (disabled on mobile only) */}
@@ -332,7 +335,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <ReviewIcon />
-                Reviews
+                {t('reviews')}
               </Link>
             )}
 
@@ -354,7 +357,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <i className="icon-message" />
-                Messages
+                {t('messages')}
               </Link>
             )}
 
@@ -378,7 +381,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <AddPropertyIcon />
-                Make me Agent
+                {t('makeMeAgent')}
               </button>
             )}
 
@@ -400,7 +403,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <PropertyIcon />
-                My properties
+                {t('myProperties')}
               </Link>
             )}
 
@@ -422,7 +425,7 @@ export default function DashboardNav({ color = "" }) {
                 }}
               >
                 <AddPropertyIcon />
-                Add property
+                {t('addProperty')}
               </Link>
             )}
           </>
@@ -444,7 +447,7 @@ export default function DashboardNav({ color = "" }) {
                 onClick={(e) => { e.preventDefault(); showLoginModal(); }}
                 style={{ color: 'var(--Primary)', textDecoration: 'none', fontWeight: '500' }}
               >
-                login
+                {t('login')}
               </a>
               <span style={{ color: 'var(--Note)' }}>/</span>
               <a 
@@ -452,7 +455,7 @@ export default function DashboardNav({ color = "" }) {
                 onClick={(e) => { e.preventDefault(); showRegisterModal(); }}
                 style={{ color: 'var(--Primary)', textDecoration: 'none', fontWeight: '500' }}
               >
-                register
+                {t('register')}
               </a>
             </div>
           </div>
@@ -471,7 +474,7 @@ export default function DashboardNav({ color = "" }) {
             }}
           >
             <LogoutIcon />
-            Logout
+            {t('logout')}
           </button>
         )}
       </div>

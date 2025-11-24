@@ -1,0 +1,192 @@
+.languageSwitcher {
+  position: relative;
+  display: inline-block;
+}
+
+.langButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.langButton:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.flag {
+  font-size: 18px;
+  line-height: 1;
+  display: block;
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+  background: transparent;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  bottom: auto;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  min-width: 140px;
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.option:hover {
+  background: rgba(241, 145, 61, 0.1);
+}
+
+.option.active {
+  background: rgba(241, 145, 61, 0.15);
+  color: #F1913D;
+  font-weight: 600;
+}
+
+.optionFlag {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.optionName {
+  flex: 1;
+  font-size: 14px;
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
+  color: #F1913D;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Footer specific styles */
+#footer .languageSwitcher .langButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#footer .languageSwitcher .langButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+#footer .languageSwitcher .chevron {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#footer .languageSwitcher .dropdown {
+  background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  top: calc(100% + 8px) !important;
+  bottom: auto !important;
+}
+
+#footer .languageSwitcher .option {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+#footer .languageSwitcher .option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#footer .languageSwitcher .option.active {
+  background: rgba(241, 145, 61, 0.3);
+  color: #F1913D;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .langButton {
+    padding: 6px 10px;
+    font-size: 13px;
+    gap: 6px;
+  }
+  
+  .flag {
+    font-size: 16px;
+  }
+  
+  .dropdown {
+    min-width: 120px;
+  }
+  
+  .option {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+

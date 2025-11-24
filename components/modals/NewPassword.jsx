@@ -1,10 +1,20 @@
 "use client";
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import { EyeIcon, EyeOffIcon } from "@/components/icons";
 import styles from "./NewPassword.module.css";
 import logger from "@/utlis/logger";
 
 export default function NewPassword({ isOpen, onClose, onSubmit }) {
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('newPassword');
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: ""
@@ -37,11 +47,11 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
     
     if (fieldName === "password") {
       if (formData.password && formData.password.length < 6) {
-        error = "Password must be at least 6 characters";
+        error = t('passwordMinLength');
       }
     } else if (fieldName === "confirmPassword") {
       if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
-        error = "Passwords do not match";
+        error = t('passwordsNotMatch');
       }
     }
     
@@ -53,10 +63,10 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
 
   const validatePassword = () => {
     if (formData.password.length < 6) {
-      return "Password must be at least 6 characters long";
+      return t('passwordMinLength');
     }
     if (formData.password !== formData.confirmPassword) {
-      return "Passwords do not match";
+      return t('passwordsNotMatch');
     }
     return null;
   };
@@ -66,14 +76,14 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
     
     // Validate both fields are filled
     if (!formData.password || formData.password.trim().length === 0) {
-      setError("Password is required");
-      setFieldErrors(prev => ({ ...prev, password: "Password is required" }));
+      setError(t('passwordRequired'));
+      setFieldErrors(prev => ({ ...prev, password: t('passwordRequired') }));
       return;
     }
     
     if (!formData.confirmPassword || formData.confirmPassword.trim().length === 0) {
-      setError("Please confirm your password");
-      setFieldErrors(prev => ({ ...prev, confirmPassword: "Please confirm your password" }));
+      setError(t('confirmRequired'));
+      setFieldErrors(prev => ({ ...prev, confirmPassword: t('confirmRequired') }));
       return;
     }
     
@@ -92,7 +102,7 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
       setError(""); // Clear any errors on success
     } catch (err) {
       // Extract error message from different error formats
-      let errorMsg = "Failed to reset password. Please try again.";
+      let errorMsg = t('resetFailed');
       if (err?.message) {
         errorMsg = err.message;
       } else if (err?.error) {
@@ -125,7 +135,7 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+    <div className={styles.modalOverlay} dir={isRTL ? 'rtl' : 'ltr'} onClick={handleOverlayClick}>
       <div className={styles.modalContent}>
         <button 
           className={styles.closeButton} 
@@ -139,15 +149,15 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
           <div className={styles.iconWrapper}>
             <i className="icon-lock" />
           </div>
-          <h2 className={styles.modalTitle}>Create New Password</h2>
+          <h2 className={styles.modalTitle}>{t('title')}</h2>
           <p className={styles.modalSubtitle}>
-            Your new password must be different from previously used passwords.
+            {t('subtitle')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>New Password</label>
+            <label htmlFor="password" className={styles.label}>{t('newPassword')}</label>
             <div className={styles.passwordWrapper}>
               <input
                 type={showPassword ? "text" : "password"}
@@ -156,7 +166,7 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
                 value={formData.password}
                 onChange={handleChange}
                 onBlur={() => validateField("password")}
-                placeholder="Enter new password"
+                placeholder={t('newPasswordPlaceholder')}
                 className={styles.formInput}
                 required
               />
@@ -171,13 +181,13 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
             {fieldErrors.password ? (
               <span className={styles.errorSpan}>{fieldErrors.password}</span>
             ) : (
-              <p className={styles.hint}>Must be at least 6 characters</p>
+              <p className={styles.hint}>{t('mustBe6Chars')}</p>
             )}
           </div>
 
           <div className={styles.formGroup}>
             <label htmlFor="confirmPassword" className={styles.label}>
-              Confirm Password
+              {t('confirmPassword')}
             </label>
             <div className={styles.passwordWrapper}>
               <input
@@ -187,7 +197,7 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 onBlur={() => validateField("confirmPassword")}
-                placeholder="Confirm new password"
+                placeholder={t('confirmPasswordPlaceholder')}
                 className={styles.formInput}
                 required
               />
@@ -225,12 +235,12 @@ export default function NewPassword({ isOpen, onClose, onSubmit }) {
             {isSubmitting ? (
               <>
                 <span className={styles.spinner} />
-                Resetting...
+                {t('resetting')}
               </>
             ) : (
               <>
                 <i className="icon-check" />
-                Reset Password
+                {t('resetPassword')}
               </>
             )}
           </button>

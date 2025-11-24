@@ -1,4 +1,6 @@
+"use client";
 import React, { useMemo } from "react";
+import { useTranslations } from 'next-intl';
 import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
 import LocationLoader from "@/components/common/LocationLoader";
@@ -8,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Cities() {
   const router = useRouter();
+  const t = useTranslations('homeSections');
   
   // Use new city API - much more efficient than fetching all listings
   const { data: cityStatsResponse, isLoading, isError, error } = useQuery({
@@ -21,17 +24,10 @@ export default function Cities() {
   // Extract cities data from API response
   const citiesData = useMemo(() => {
     if (!cityStatsResponse?.data?.cities) {
-      // Log for debugging
-      console.log('Cities API Response:', cityStatsResponse);
       return [];
     }
     return cityStatsResponse.data.cities;
   }, [cityStatsResponse]);
-  
-  // Log error if any
-  if (isError) {
-    console.error('Cities API Error:', error);
-  }
 
   // Memoize locations array to prevent recreation on every render
   const locations = useMemo(() => {
@@ -69,10 +65,10 @@ export default function Cities() {
           <div className="col-12">
             <div className="heading-section text-center mb-48">
                 <h2 className="title">
-                  Explore Syria Cities Offerings
+                  {t('exploreSyriaCities')}
                 </h2>
               <p className="text-1 split-text split-lines-transform">
-                Discover beautiful properties across Syria's major cities
+                {t('exploreSyriaCitiesSubtitle')}
               </p>
             </div>
             <div style={{ padding: '40px 20px' }}>
@@ -92,16 +88,16 @@ export default function Cities() {
           <div className="col-12">
             <div className="heading-section text-center mb-48">
               <h2 className="title">
-                Explore Syria Cities Offerings
+                {t('exploreSyriaCities')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                Discover beautiful properties across Syria's major cities
+                {t('exploreSyriaCitiesSubtitle')}
               </p>
             </div>
             <div className="text-center">
               <div className="alert alert-info">
-                <h4>No Syrian Cities Available</h4>
-                <p>There are currently no properties available to show Syrian cities.</p>
+                <h4>{t('noSyrianCitiesAvailable')}</h4>
+                <p>{t('noSyrianCitiesAvailableText')}</p>
               </div>
             </div>
           </div>
@@ -305,10 +301,10 @@ export default function Cities() {
           <div className="col-12">
           <div className="heading-section text-center mb-48">
             <h2 className="title">
-                Explore Syria Cities Offerings
+              {t('exploreSyriaCities')}
             </h2>
             <p className="text-1 split-text split-lines-transform">
-              Discover beautiful properties across Syria's major cities
+              {t('exploreSyriaCitiesSubtitle')}
             </p>
           </div>
           <div className="row g-4">

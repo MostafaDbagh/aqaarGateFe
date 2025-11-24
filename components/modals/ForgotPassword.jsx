@@ -1,8 +1,18 @@
 "use client";
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import styles from "./ForgotPassword.module.css";
 
 export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('forgotPassword');
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -11,7 +21,7 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email && !emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address");
+      setEmailError(t('emailInvalid'));
       return false;
     }
     setEmailError("");
@@ -31,7 +41,7 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
     
     // Validate email is not empty
     if (!email || email.trim().length === 0) {
-      setEmailError("Email is required");
+      setEmailError(t('emailRequired'));
       return;
     }
     
@@ -49,7 +59,7 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
       setEmailError("");
     } catch (err) {
       // Extract error message from different error formats
-      let errorMsg = "Failed to send reset code. Please try again.";
+      let errorMsg = t('sendFailed');
       if (err?.message) {
         errorMsg = err.message;
       } else if (err?.error) {
@@ -82,7 +92,7 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+    <div className={styles.modalOverlay} dir={isRTL ? 'rtl' : 'ltr'} onClick={handleOverlayClick}>
       <div className={styles.modalContent}>
         <button 
           className={styles.closeButton} 
@@ -96,15 +106,15 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
           <div className={styles.iconWrapper}>
             <i className="icon-mail" />
           </div>
-          <h2 className={styles.modalTitle}>Forgot Password?</h2>
+          <h2 className={styles.modalTitle}>{t('title')}</h2>
           <p className={styles.modalSubtitle}>
-            No worries! Enter your email and we'll send you a reset code.
+            {t('subtitle')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>Email Address</label>
+            <label htmlFor="email" className={styles.label}>{t('email')}</label>
             <input
               type="email"
               id="email"
@@ -112,7 +122,7 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
               value={email}
               onChange={handleEmailChange}
               onBlur={validateEmail}
-              placeholder="Enter your email"
+              placeholder={t('emailPlaceholder')}
               className={styles.formInput}
               autoComplete="email"
               autoFocus
@@ -137,12 +147,12 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
             {isSubmitting ? (
               <>
                 <span className={styles.spinner} />
-                Sending...
+                {t('sending')}
               </>
             ) : (
               <>
                 <i className="icon-mail" />
-                Send Reset Code
+                {t('sendResetCode')}
               </>
             )}
           </button>
@@ -153,7 +163,7 @@ export default function ForgotPassword({ isOpen, onClose, onSubmit }) {
             className={styles.backButton}
           >
             <i className="icon-arrow-left-1" />
-            Back to Login
+            {t('backToLogin')}
           </button>
         </form>
       </div>

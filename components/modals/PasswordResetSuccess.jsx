@@ -1,8 +1,18 @@
 "use client";
 import React from "react";
+import { usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import styles from "./PasswordResetSuccess.module.css";
 
 export default function PasswordResetSuccess({ isOpen, onClose, onLogin }) {
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook that works even without provider
+  const t = useSafeTranslations('passwordResetSuccess');
   if (!isOpen) return null;
 
   const handleLoginClick = () => {
@@ -60,10 +70,10 @@ export default function PasswordResetSuccess({ isOpen, onClose, onLogin }) {
             </svg>
           </div>
 
-          <h2 className={styles.title}>Password Reset Successful!</h2>
+          <h2 className={styles.title}>{t('title')}</h2>
           
           <p className={styles.message}>
-            Your password has been reset successfully. You can now log in with your new password.
+            {t('message')}
           </p>
 
           <div className={styles.buttonContainer}>
@@ -81,7 +91,7 @@ export default function PasswordResetSuccess({ isOpen, onClose, onLogin }) {
                   strokeLinejoin="round"
                 />
               </svg>
-              Login Now
+              {t('loginNow')}
             </button>
             
             <button
@@ -89,7 +99,7 @@ export default function PasswordResetSuccess({ isOpen, onClose, onLogin }) {
               className={styles.closeButtonSecondary}
               onClick={handleCloseClick}
             >
-              Close
+              {t('close')}
             </button>
           </div>
         </div>
