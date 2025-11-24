@@ -180,6 +180,9 @@
             transition: 0.25s ease-in-out;
         }
     }
+    .title-desktop {
+        display: block;
+    }
     &.open {
         .title-mobile {
             &::before {
@@ -187,6 +190,25 @@
             }
             &::after {
                 transform: translate(0%, -50%) rotate(-180deg);
+            }
+        }
+    }
+    @media (max-width: 767px) {
+        .title-mobile {
+            display: block !important;
+            cursor: pointer;
+        }
+        .title-desktop {
+            display: none !important;
+        }
+        .tf-collapse-content {
+            display: block !important;
+        }
+        &.open {
+            .tf-collapse-content {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
         }
     }

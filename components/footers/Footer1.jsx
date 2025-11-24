@@ -47,9 +47,29 @@ function Footer1({ logo = "/images/logo/logo-2@2x.png" }) {
     if (parent.classList.contains("open")) {
       parent.classList.remove("open");
       content.classList.remove("open");
+      // Reset inline styles when closing
+      if (window.innerWidth <= 767) {
+        content.style.removeProperty("max-height");
+        content.style.removeProperty("height");
+        content.style.removeProperty("min-height");
+        content.style.removeProperty("opacity");
+        content.style.removeProperty("visibility");
+        content.style.removeProperty("overflow");
+        content.style.removeProperty("display");
+      }
     } else {
       parent.classList.add("open");
       content.classList.add("open");
+      // Force visibility on mobile with inline styles
+      if (window.innerWidth <= 767) {
+        content.style.setProperty("max-height", "2000px", "important");
+        content.style.setProperty("height", "auto", "important");
+        content.style.setProperty("min-height", "auto", "important");
+        content.style.setProperty("opacity", "1", "important");
+        content.style.setProperty("visibility", "visible", "important");
+        content.style.setProperty("overflow", "visible", "important");
+        content.style.setProperty("display", "block", "important");
+      }
     }
   }, []);
 

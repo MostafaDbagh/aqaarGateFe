@@ -132,16 +132,46 @@
       .title-mobile {
         transition: 0.3s;
         margin-bottom: 0px;
+        display: block !important;
+        cursor: pointer;
+      }
+      .title-desktop {
+        display: none !important;
       }
       .tf-collapse-content {
-        overflow-y: hidden;
-        display: block;
-        height: 0;
-        transition: 0.5s;
+        display: block !important;
+        overflow: hidden !important;
+        max-height: 0 !important;
+        transition: max-height 0.5s ease, opacity 0.3s ease !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
       }
       &.open {
         .title-mobile {
           margin-bottom: 20px;
+        }
+        .tf-collapse-content {
+          max-height: 2000px !important;
+          height: auto !important;
+          min-height: auto !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          overflow: visible !important;
+          display: block !important;
+        }
+        .tf-collapse-content ul {
+          display: block !important;
+          visibility: visible !important;
+        }
+        .tf-collapse-content li {
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+        .tf-collapse-content a {
+          display: inline-block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
         }
       }
     }

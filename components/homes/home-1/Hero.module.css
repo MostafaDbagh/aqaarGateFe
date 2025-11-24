@@ -9,6 +9,13 @@
   position: relative !important;
 }
 
+/* Mobile: Use scroll instead of fixed for better performance */
+@media (max-width: 768px) {
+  .heroBackground {
+    background-attachment: scroll !important;
+  }
+}
+
 .heroBackground :global(.tf-container) {
   position: relative;
   z-index: 2;

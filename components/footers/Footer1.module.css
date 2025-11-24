@@ -72,11 +72,50 @@
 .footer-col-block .tf-collapse-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.5s ease;
 }
 
 .footer-col-block.open .tf-collapse-content {
   max-height: 1000px;
+}
+
+/* Mobile: Ensure links are visible when open */
+@media (max-width: 767px) {
+  #footer .footer-col-block .tf-collapse-content {
+    display: block !important;
+  }
+  
+  #footer .footer-col-block.open .tf-collapse-content {
+    max-height: 2000px !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #footer .footer-col-block.open .tf-collapse-content ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+  }
+  
+  #footer .footer-col-block.open .tf-collapse-content li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+  }
+  
+  #footer .footer-col-block.open .tf-collapse-content a {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
 }
 
 .footer-language-switcher {
