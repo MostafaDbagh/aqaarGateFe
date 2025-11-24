@@ -252,7 +252,8 @@ function Properties1Content({ defaultGrid = false }) {
               <div className="box-title" style={{ marginBottom: '64px' }}>
                 {isRTL ? (
                   <>
-                    <div className="right" style={{ display: 'flex', gap: '12px', alignItems: 'center', flexDirection: 'row-reverse' }}>
+                    <h2>{t('title')}</h2>
+                    <div className="left" style={{ display: 'flex', gap: '12px', alignItems: 'center', flexDirection: 'row-reverse' }}>
                       <div
                         className="filter-popup"
                         data-bs-toggle="modal"
@@ -346,7 +347,6 @@ function Properties1Content({ defaultGrid = false }) {
                         }}
                       />
                     </div>
-                    <h2>{t('title')}</h2>
                   </>
                 ) : (
                   <>

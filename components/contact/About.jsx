@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
+import { useTranslations } from "next-intl";
+
 export default function About() {
+  const t = useTranslations("contact.about");
+  
   return (
     <>
       <style jsx>{`
@@ -20,11 +24,10 @@ export default function About() {
             <div className="box-contact">
               <div className="heading-section mb-48">
                 <h2 className="title split-text split-lines-transform">
-                  We provide the most suitable and quality real estate.
+                  {t("title")}
                 </h2>
                 <p className="text-1">
-                  Estimate your payment with our easy-to-use loan calculator.
-                  Then get pre-qualified to buy by a local lender.
+                  {t("subtitle")}
                 </p>
               </div>
               <ul className="list-info">
@@ -57,8 +60,8 @@ export default function About() {
                     </svg>
                   </div>
                   <div className="content">
-                    <div className="sub">Office address</div>
-                    <p>Baghdad street, Latakia, Syria</p>
+                    <div className="sub">{t("officeAddress")}</div>
+                    <p>{t("officeLocation")}</p>
                   </div>
                 </li>
                 <li>
@@ -100,7 +103,7 @@ export default function About() {
                     </svg>
                   </div>
                   <div className="content">
-                    <div className="sub">Phone number</div>
+                    <div className="sub">{t("phoneNumberLabel")}</div>
                     <div className="phone">+963995278383</div>
                   </div>
                 </li>
@@ -175,7 +178,7 @@ export default function About() {
                     </svg>
                   </div>
                   <div className="content">
-                    <div className="sub">Email address</div>
+                    <div className="sub">{t("emailAddressLabel")}</div>
                     <a href="#">mohammaddbagh0@gmail.com</a>
                   </div>
                 </li>

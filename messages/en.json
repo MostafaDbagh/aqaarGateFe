@@ -362,7 +362,15 @@
     "sale": "Sale",
     "yourMessage": "Your Message:",
     "messagePlaceholder": "Message",
-    "contactExperts": "Contact our experts"
+    "contactExperts": "Contact our experts",
+    "about": {
+      "title": "We provide the most suitable and quality real estate.",
+      "subtitle": "Estimate your payment with our easy-to-use loan calculator. Then get pre-qualified to buy by a local lender.",
+      "officeAddress": "Office address",
+      "officeLocation": "Baghdad street, Latakia, Syria",
+      "phoneNumberLabel": "Phone number",
+      "emailAddressLabel": "Email address"
+    }
   },
   "homeSections": {
     "trySearchingFor": "Try Searching For",
@@ -521,7 +529,25 @@
     "noReviewsYet": "No reviews yet. Be the first to leave a review!",
     "viewAllReviews": "View all reviews",
     "reviewSubmitted": "Review submitted successfully!",
-    "reviewFailed": "Failed to submit review. Please try again."
+    "reviewFailed": "Failed to submit review. Please try again.",
+    "loadingReviews": "Loading reviews..."
+  },
+  "similarListings": {
+    "title": "Similar Listings",
+    "similarProperties": "Similar Properties",
+    "loading": "Loading similar properties...",
+    "noRelatedListings": "No related listings to show",
+    "subtitle": "Properties with similar type, rooms, baths, and price",
+    "otherProperties": "Other {type} you might like",
+    "specialOffer": "Special Offer",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "beds": "Beds",
+    "baths": "Baths",
+    "sqft": "Sqft",
+    "garage": "Garage",
+    "no": "No",
+    "details": "Details"
   },
   "faq": {
     "pageName": "FAQS",
@@ -636,5 +662,18 @@
       "daraa": "Daraa",
       "tartous": "Tartous"
     }
+  },
+  "mobileMenu": {
+    "home": "Home",
+    "listing": "Listing",
+    "pages": "Pages",
+    "agents": "Agents",
+    "rentalService": "Rental Service",
+    "blogs": "Blogs",
+    "contact": "Contact",
+    "needHelp": "Need help?",
+    "callUsNow": "Call Us Now:",
+    "support247": "Support 24/7:",
+    "followUs": "Follow us:"
   }
 }

@@ -136,7 +136,7 @@ export default function PropertyReviews({ propertyId }) {
           <div className="row">
             <div className="col-12">
               <div style={{ padding: '40px 20px' }}>
-                <LocationLoader size="medium" message="Loading reviews..." />
+                <LocationLoader size="medium" message={t('loadingReviews')} />
               </div>
             </div>
           </div>

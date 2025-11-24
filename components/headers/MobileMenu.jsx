@@ -4,9 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function MobileMenu() {
   const pathname = usePathname();
+  const t = useTranslations("mobileMenu");
+  const tNav = useTranslations("navigation");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const isParentActive = (menus) =>
     menus.some((menu) =>
       menu.submenu
@@ -37,7 +42,7 @@ export default function MobileMenu() {
             />
           </Link>
         </div>
-        <div data-bs-dismiss="offcanvas" aria-label="Close">
+        <div data-bs-dismiss="offcanvas" aria-label={tCommon("close")}>
           <i className="icon-close" />
         </div>
       </div>
@@ -64,7 +69,7 @@ export default function MobileMenu() {
                   }
                 }}
               >
-                Home
+                {t("home")}
               </Link>
             </li>
             <li
@@ -85,7 +90,7 @@ export default function MobileMenu() {
                   }
                 }}
               >
-                Listing
+                {t("listing")}
               </Link>
             </li>
             <li
@@ -100,7 +105,7 @@ export default function MobileMenu() {
                 aria-expanded="true"
                 aria-controls="dropdown-menu-four"
               >
-                Pages
+                {t("pages")}
               </a>
               <div
                 id="dropdown-menu-four"
@@ -147,7 +152,12 @@ export default function MobileMenu() {
                                     href={link.href}
                                     className="item-menu-mobile"
                                   >
-                                    {link.label}
+                                    {link.href === "/about-us" ? tNav("aboutUs") :
+                                     link.href === "/vision" ? tNav("ourVision") :
+                                     link.href === "/career" ? tNav("career") :
+                                     link.href === "/faq" ? tNav("faq") :
+                                     link.href === "/blog-grid" ? tNav("blog") :
+                                     link.label}
                                   </Link>
                                 </li>
                               ))}
@@ -162,7 +172,14 @@ export default function MobileMenu() {
                               : ""
                           }`}
                         >
-                          <Link href={links.href}>{links.label}</Link>
+                          <Link href={links.href}>
+                            {links.href === "/about-us" ? tNav("aboutUs") :
+                             links.href === "/vision" ? tNav("ourVision") :
+                             links.href === "/career" ? tNav("career") :
+                             links.href === "/faq" ? tNav("faq") :
+                             links.href === "/blog-grid" ? tNav("blog") :
+                             links.label}
+                          </Link>
                         </li>
                       )}
                     </React.Fragment>
@@ -188,7 +205,7 @@ export default function MobileMenu() {
                   }
                 }}
               >
-                Agents
+                {t("agents")}
               </Link>
             </li>
             <li
@@ -209,7 +226,7 @@ export default function MobileMenu() {
                   }
                 }}
               >
-                Rental Service
+                {t("rentalService")}
               </Link>
             </li>
             <li
@@ -230,7 +247,7 @@ export default function MobileMenu() {
                   }
                 }}
               >
-                Blogs
+                {t("blogs")}
               </Link>
             </li>
             <li
@@ -240,25 +257,25 @@ export default function MobileMenu() {
             >
               <Link href={`/contact`} className="tem-menu-mobile">
                 {" "}
-                Contact
+                {t("contact")}
               </Link>
             </li>
           </ul>
           <div className="support">
             <Link href="/contact" className="text-need">
               {" "}
-              Need help?
+              {t("needHelp")}
             </Link>
             <ul className="mb-info">
               <li>
-                Call Us Now: <span className="number">+971 50 666 6666</span>
+                {t("callUsNow")} <span className="number">+971 50 666 6666</span>
               </li>
               <li>
-                Support 24/7: <a href="mailto:support@aqaargate.com">support@aqaargate.com</a>
+                {t("support247")} <a href="mailto:support@aqaargate.com">support@aqaargate.com</a>
               </li>
               <li>
                 <div className="wrap-social">
-                  <p>Follow us:</p>
+                  <p>{t("followUs")}</p>
                   <ul className="tf-social style-2">
                     <li>
                       <a href="https://www.facebook.com/aqaargate" target="_blank" rel="noopener noreferrer">

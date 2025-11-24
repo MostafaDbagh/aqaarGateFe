@@ -362,7 +362,15 @@
     "sale": "بيع",
     "yourMessage": "رسالتك:",
     "messagePlaceholder": "الرسالة",
-    "contactExperts": "اتصل بخبرائنا"
+    "contactExperts": "اتصل بخبرائنا",
+    "about": {
+      "title": "نوفر العقارات الأنسب والأعلى جودة.",
+      "subtitle": "قدّر دفعتك باستخدام حاسبة القروض سهلة الاستخدام لدينا. ثم احصل على موافقة مسبقة للشراء من مقرض محلي.",
+      "officeAddress": "عنوان المكتب",
+      "officeLocation": "شارع بغداد، اللاذقية، سوريا",
+      "phoneNumberLabel": "رقم الهاتف",
+      "emailAddressLabel": "عنوان البريد الإلكتروني"
+    }
   },
   "homeSections": {
     "trySearchingFor": "جرب البحث عن",
@@ -521,7 +529,25 @@
     "noReviewsYet": "لا توجد تقييمات بعد. كن أول من يترك تقييماً!",
     "viewAllReviews": "عرض جميع التقييمات",
     "reviewSubmitted": "تم إرسال التقييم بنجاح!",
-    "reviewFailed": "فشل إرسال التقييم. يرجى المحاولة مرة أخرى."
+    "reviewFailed": "فشل إرسال التقييم. يرجى المحاولة مرة أخرى.",
+    "loadingReviews": "جاري تحميل التقييمات..."
+  },
+  "similarListings": {
+    "title": "قوائم مشابهة",
+    "similarProperties": "عقارات مشابهة",
+    "loading": "جاري تحميل العقارات المشابهة...",
+    "noRelatedListings": "لا توجد قوائم ذات صلة للعرض",
+    "subtitle": "عقارات بنوع وغرف وحمامات وسعر مشابه",
+    "otherProperties": "عقارات {type} أخرى قد تعجبك",
+    "specialOffer": "عرض خاص",
+    "forSale": "للبيع",
+    "forRent": "للإيجار",
+    "beds": "غرف",
+    "baths": "حمامات",
+    "sqft": "قدم مربع",
+    "garage": "مرآب",
+    "no": "لا",
+    "details": "التفاصيل"
   },
   "faq": {
     "pageName": "الأسئلة الشائعة",
@@ -636,5 +662,18 @@
       "daraa": "درعا",
       "tartous": "طرطوس"
     }
+  },
+  "mobileMenu": {
+    "home": "الرئيسية",
+    "listing": "القوائم",
+    "pages": "الصفحات",
+    "agents": "الوكلاء",
+    "rentalService": "خدمة الإيجار",
+    "blogs": "المدونات",
+    "contact": "اتصل بنا",
+    "needHelp": "تحتاج مساعدة؟",
+    "callUsNow": "اتصل بنا الآن:",
+    "support247": "الدعم على مدار الساعة:",
+    "followUs": "تابعنا:"
   }
 }

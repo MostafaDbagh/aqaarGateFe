@@ -2,12 +2,15 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
 import { getPropertyImage, getPropertyTitle } from "@/utlis/propertyHelpers";
 import styles from "./RelatedProperties.module.css";
 
 export default function RelatedProperties({ currentProperty }) {
+  const t = useTranslations('similarListings');
+  
   // Calculate search parameters - remove price filter to get more results
   const searchParams = useMemo(() => {
     if (!currentProperty) return {};
@@ -116,10 +119,10 @@ export default function RelatedProperties({ currentProperty }) {
           <div className="row">
             <div className="col-12">
               <div className="heading-section mb-32">
-                <h2 className="title">Similar Properties</h2>
+                <h2 className="title">{t('similarProperties')}</h2>
               </div>
               <div style={{ padding: '40px 20px' }}>
-                <LocationLoader size="medium" message="Loading similar properties..." />
+                <LocationLoader size="medium" message={t('loading')} />
               </div>
             </div>
           </div>
@@ -136,10 +139,10 @@ export default function RelatedProperties({ currentProperty }) {
           <div className="row">
             <div className="col-12">
               <div className="heading-section mb-32">
-                <h2 className="title">Similar Listings</h2>
+                <h2 className="title">{t('title')}</h2>
               </div>
               <div className={styles.noListingsMessage}>
-                <p>No related listings to show</p>
+                <p>{t('noRelatedListings')}</p>
               </div>
             </div>
           </div>
@@ -170,9 +173,9 @@ export default function RelatedProperties({ currentProperty }) {
               <div className="row">
                 <div className="col-12">
                   <div className="heading-section mb-32">
-                    <h2 className="title">Similar Listings</h2>
+                    <h2 className="title">{t('title')}</h2>
                     <p className="subtitle" style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>
-                      Other {currentProperty?.propertyType || 'properties'} you might like
+                      {t('otherProperties', { type: currentProperty?.propertyType || 'properties' })}
                     </p>
                   </div>
                   <div className={styles.propertiesGrid}>
@@ -197,11 +200,11 @@ export default function RelatedProperties({ currentProperty }) {
                               />
                             </Link>
                             {property.offer && (
-                              <span className={styles.offerBadge}>Special Offer</span>
+                              <span className={styles.offerBadge}>{t('specialOffer')}</span>
                             )}
                             {property.status && (
                               <span className={`${styles.statusBadge} ${getBadgeClass()}`}>
-                                {property.status === 'sale' ? 'For Sale' : 'For Rent'}
+                                {property.status === 'sale' ? t('forSale') : t('forRent')}
                               </span>
                             )}
                           </div>
@@ -257,10 +260,10 @@ export default function RelatedProperties({ currentProperty }) {
           <div className="row">
             <div className="col-12">
               <div className="heading-section mb-32">
-                <h2 className="title">Similar Listings</h2>
+                <h2 className="title">{t('title')}</h2>
               </div>
               <div className={styles.noListingsMessage}>
-                <p>No related listings to show</p>
+                <p>{t('noRelatedListings')}</p>
               </div>
             </div>
           </div>
