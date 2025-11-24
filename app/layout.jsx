@@ -224,7 +224,7 @@ export default function RootLayout({ children }) {
   // The [locale]/layout.jsx will provide locale-specific <html> with lang/dir
   // Next.js will use the nested layout's <html> instead of this one
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body>
         <Providers>
           <IntlProvider>

@@ -52,7 +52,7 @@ export default function PropertyRentalService() {
       });
 
       if (response.success) {
-        setSubmitMessage(response.message || "Thank you! Your property rental service request has been submitted successfully. Our team will contact you shortly to schedule a property inspection.");
+        setSubmitMessage(response.message || t('successMessage'));
         setFormData({
           propertyType: "",
           propertySize: "",

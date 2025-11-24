@@ -122,15 +122,26 @@
     .inner-mobile-nav
         #menu-mobile-menu
         li.menu-item-has-children-mobile
-        > a::after,
+        > a {
+        padding-right: 0;
+        padding-left: 30px;
+        &::after {
+            right: unset;
+            left: 0;
+        }
+    }
     .inner-mobile-nav
         #menu-mobile-menu
         li.menu-item-has-children-mobile
         ul
         > .menu-item-has-children-mobile-2
-        > a::after {
-        right: unset;
-        left: 0;
+        > a {
+        padding-right: 0;
+        padding-left: 30px;
+        &::after {
+            right: unset;
+            left: 0;
+        }
     }
     .navigation li.has-child > a::after {
         left: 0;

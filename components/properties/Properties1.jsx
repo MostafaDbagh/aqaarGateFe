@@ -250,10 +250,8 @@ function Properties1Content({ defaultGrid = false }) {
           <div className="row">
             <div className="col-12">
               <div className="box-title" style={{ marginBottom: '64px' }}>
-                {isRTL ? (
-                  <>
-                    <h2>{t('title')}</h2>
-                    <div className="left" style={{ display: 'flex', gap: '12px', alignItems: 'center', flexDirection: 'row-reverse' }}>
+                <h2>{t('title')}</h2>
+                <div className="right" style={{ display: 'flex', gap: '12px', alignItems: 'center', ...(isRTL ? { flexDirection: 'row-reverse' } : {}) }}>
                       <div
                         className="filter-popup"
                         data-bs-toggle="modal"
@@ -347,106 +345,6 @@ function Properties1Content({ defaultGrid = false }) {
                         }}
                       />
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <h2>{t('title')}</h2>
-                    <div className="right" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <DropdownSelect
-                        addtionalParentClass="select-filter list-sort"
-                        options={[t('newest'), t('oldest')]}
-                        value={searchParams.sort === "newest" ? t('newest') : t('oldest')}
-                        onChange={(value) => {
-                          const sortValue = value === t('newest') ? "newest" : "oldest";
-                          handleSearchChange({ sort: sortValue });
-                        }}
-                      />
-                      <ul className="nav-tab-filter group-layout" role="tablist">
-                        <LayoutHandler defaultGrid={defaultGrid} />
-                      </ul>
-                      <div
-                        className="filter-popup"
-                        data-bs-toggle="modal"
-                        href="#modalFilter"
-                        role="button"
-                      >
-                        {t('filter')}
-                        <div className="icons">
-                          <svg width={20}
-                            height={20}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                           aria-hidden="true">
-                            <path
-                              d="M21 4H14"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M10 4H3"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M21 12H12"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M8 12H3"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M21 20H16"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M12 20H3"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M14 2V6"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M8 10V14"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M16 18V22"
-                              stroke="#F1913D"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
               </div>
               <div className="flat-animate-tab">
                 <div className="tab-content">

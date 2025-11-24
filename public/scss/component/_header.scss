@@ -852,20 +852,22 @@
             }
             &.menu-item-has-children-mobile {
                 > a {
+                    padding-right: 30px;
+                    position: relative;
                     &::after {
                         content: "\e902";
                         position: absolute;
                         font-family: "icomoon";
                         font-weight: 300;
-                        position: absolute;
                         font-size: 20px;
                         right: 0;
-                        top: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
                         @include mixin.transition3();
                     }
                     &:not(.collapsed) {
                         &::after {
-                            transform: rotate(-180deg);
+                            transform: translateY(-50%) rotate(-180deg);
                         }
                     }
                 }
@@ -873,21 +875,23 @@
                     > .menu-item-has-children-mobile-2 {
                         position: relative;
                         > a {
+                            padding-right: 30px;
+                            position: relative;
                             &::after {
                                 content: "\e902";
                                 position: absolute;
                                 font-family: "icomoon";
                                 font-weight: 300;
-                                position: absolute;
                                 font-size: 20px;
                                 right: 0;
-                                top: 8px;
+                                top: 50%;
+                                transform: translateY(-50%);
                                 @include mixin.transition3();
                             }
 
                             &:not(.collapsed) {
                                 &::after {
-                                    transform: rotate(-180deg);
+                                    transform: translateY(-50%) rotate(-180deg);
                                 }
                             }
                         }

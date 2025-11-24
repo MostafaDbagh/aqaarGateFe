@@ -343,7 +343,8 @@
     "home": "Home",
     "propertyGridFullWidth": "Property Grid Full Width",
     "propertyListing": "Property Listing",
-    "propertyDetails": "Property Details"
+    "propertyDetails": "Property Details",
+    "propertyRentalService": "Property Rental Service"
   },
   "contact": {
     "pageName": "Contact",

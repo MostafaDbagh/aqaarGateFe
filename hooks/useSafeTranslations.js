@@ -23,18 +23,12 @@ export function useSafeTranslations(namespace) {
     // Hooks can't be in try-catch, so we'll use a different approach
   }
   
-  // Check if provider is available by trying to use the hook
+  // Check if provider is available by checking if hook is a function
   useEffect(() => {
     // Check if we can actually use the translations
-    try {
-      if (translationsHook && typeof translationsHook === 'function') {
-        // Try calling it with a test key
-        translationsHook('test');
-        setHasProvider(true);
-      } else {
-        setHasProvider(false);
-      }
-    } catch (error) {
+    if (translationsHook && typeof translationsHook === 'function') {
+      setHasProvider(true);
+    } else {
       setHasProvider(false);
     }
   }, [translationsHook]);

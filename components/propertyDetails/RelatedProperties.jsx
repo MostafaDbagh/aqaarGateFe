@@ -220,16 +220,16 @@ export default function RelatedProperties({ currentProperty }) {
                             </div>
                             <div className={styles.metaInfo}>
                               <div className={styles.metaItem}>
-                                Beds <span>{property.bedrooms || 0}</span>
+                                {t('beds')} <span>{property.bedrooms || 0}</span>
                               </div>
                               <div className={styles.metaItem}>
-                                Baths <span>{property.bathrooms || 0}</span>
+                                {t('baths')} <span>{property.bathrooms || 0}</span>
                               </div>
                               <div className={styles.metaItem}>
-                                Sqft <span>{property.size || 0}</span>
+                                {t('sqft')} <span>{property.size || 0}</span>
                               </div>
                               <div className={styles.metaItem}>
-                                Garage <span>{property.garage || 'No'}</span>
+                                {t('garage')} <span>{property.garage || t('no')}</span>
                               </div>
                             </div>
                             <div className={styles.cardFooter}>
@@ -237,7 +237,7 @@ export default function RelatedProperties({ currentProperty }) {
                                 ${property.propertyPrice?.toLocaleString()}
                               </h4>
                               <Link href={`/property-detail/${property._id}`} className={styles.detailsBtn}>
-                                Details
+                                {t('details')}
                               </Link>
                             </div>
                           </div>
@@ -278,9 +278,9 @@ export default function RelatedProperties({ currentProperty }) {
         <div className="row">
           <div className="col-12">
             <div className="heading-section mb-32">
-              <h2 className="title">Similar Listings</h2>
+              <h2 className="title">{t('title')}</h2>
               <p className="subtitle" style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>
-                Properties with similar type, rooms, baths, and price
+                {t('subtitle')}
               </p>
             </div>
             <div className={styles.propertiesGrid}>
@@ -330,16 +330,16 @@ export default function RelatedProperties({ currentProperty }) {
 
                       <div className={styles.metaInfo}>
                         <div className={styles.metaItem}>
-                          Beds <span>{property.bedrooms || 0}</span>
+                          {t('beds')} <span>{property.bedrooms || 0}</span>
                         </div>
                         <div className={styles.metaItem}>
-                          Baths <span>{property.bathrooms || 0}</span>
+                          {t('baths')} <span>{property.bathrooms || 0}</span>
                         </div>
                         <div className={styles.metaItem}>
-                          Sqft <span>{property.size || 0}</span>
+                          {t('sqft')} <span>{property.size || 0}</span>
                         </div>
                         <div className={styles.metaItem}>
-                          Garage <span>{property.garage || 'No'}</span>
+                          {t('garage')} <span>{property.garage || t('no')}</span>
                         </div>
                       </div>
 
@@ -348,7 +348,7 @@ export default function RelatedProperties({ currentProperty }) {
                           ${property.propertyPrice?.toLocaleString()}
                         </h4>
                         <Link href={`/property-detail/${property._id}`} className={styles.detailsBtn}>
-                          Details
+                          {t('details')}
                         </Link>
                       </div>
                     </div>
