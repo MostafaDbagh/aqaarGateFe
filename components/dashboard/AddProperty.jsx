@@ -702,7 +702,43 @@ export default function AddProperty({ isAdminMode = false }) {
           </div>
 
           {/* Price Section */}
-
+          <div className="widget-box-2 mb-20">
+            <h3 className="title">Price</h3>
+            <div className="box-price-property">
+              <div className="box grid-2 gap-30">
+                <fieldset className="box-fieldset mb-30">
+                  <label htmlFor="propertyPrice">
+                    Price:<span>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="propertyPrice"
+                    className="form-control"
+                    placeholder="Example: 250000"
+                    value={formData.propertyPrice}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                  {errors.propertyPrice && <span className="text-danger">{errors.propertyPrice}</span>}
+                </fieldset>
+                
+                <fieldset className="box-fieldset mb-30">
+                  <label htmlFor="currency">
+                    Currency:<span>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="currency"
+                    className={`form-control ${styles.disabledInput}`}
+                    value="USD"
+                    disabled
+                    readOnly
+                  />
+                  {errors.currency && <span className="text-danger">{errors.currency}</span>}
+                </fieldset>
+              </div>
+            </div>
+          </div>
 
           {/* Additional Information Section */}
           <div className="widget-box-2 mb-20">
@@ -901,43 +937,6 @@ export default function AddProperty({ isAdminMode = false }) {
                 onChange={handleInputChange}
               />
             </fieldset>
-          </div>
-          <div className="widget-box-2 mb-20">
-            <h3 className="title">Price</h3>
-            <div className="box-price-property">
-              <div className="box grid-2 gap-30">
-                <fieldset className="box-fieldset mb-30">
-                  <label htmlFor="propertyPrice">
-                    Price:<span>*</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="propertyPrice"
-                    className="form-control"
-                    placeholder="Example: 250000"
-                    value={formData.propertyPrice}
-                    onChange={handleInputChange}
-                    min="0"
-                  />
-                  {errors.propertyPrice && <span className="text-danger">{errors.propertyPrice}</span>}
-                </fieldset>
-                
-                <fieldset className="box-fieldset mb-30">
-                  <label htmlFor="currency">
-                    Currency:<span>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="currency"
-                    className={`form-control ${styles.disabledInput}`}
-                    value="USD"
-                    disabled
-                    readOnly
-                  />
-                  {errors.currency && <span className="text-danger">{errors.currency}</span>}
-                </fieldset>
-              </div>
-            </div>
           </div>
 
           {/* Amenities Section */}
