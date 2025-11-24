@@ -852,7 +852,7 @@
             }
             &.menu-item-has-children-mobile {
                 > a {
-                    padding-right: 30px;
+                    padding-left: 30px;
                     position: relative;
                     &::after {
                         content: "\e902";
@@ -860,7 +860,7 @@
                         font-family: "icomoon";
                         font-weight: 300;
                         font-size: 20px;
-                        right: 0;
+                        left: 0;
                         top: 50%;
                         transform: translateY(-50%);
                         @include mixin.transition3();
@@ -875,7 +875,7 @@
                     > .menu-item-has-children-mobile-2 {
                         position: relative;
                         > a {
-                            padding-right: 30px;
+                            padding-left: 30px;
                             position: relative;
                             &::after {
                                 content: "\e902";
@@ -883,7 +883,7 @@
                                 font-family: "icomoon";
                                 font-weight: 300;
                                 font-size: 20px;
-                                right: 0;
+                                left: 0;
                                 top: 50%;
                                 transform: translateY(-50%);
                                 @include mixin.transition3();

@@ -123,10 +123,8 @@
         #menu-mobile-menu
         li.menu-item-has-children-mobile
         > a {
-        padding-right: 0;
         padding-left: 30px;
         &::after {
-            right: unset;
             left: 0;
         }
     }
@@ -136,10 +134,8 @@
         ul
         > .menu-item-has-children-mobile-2
         > a {
-        padding-right: 0;
         padding-left: 30px;
         &::after {
-            right: unset;
             left: 0;
         }
     }
