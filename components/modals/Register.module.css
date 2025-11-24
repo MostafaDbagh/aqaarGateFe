@@ -365,6 +365,105 @@
   text-decoration: underline;
 }
 
+/* Phone Input Container - Matches formInput style */
+.phoneInputContainer {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  overflow: visible;
+  box-sizing: border-box;
+  min-height: 38px; /* Match formInput height */
+}
+
+.phoneInputContainer:focus-within {
+  border: none;
+  box-shadow: none;
+}
+
+/* Country Code Selector - Inside Input */
+.countryCodeSelect {
+  position: relative;
+  padding: 4px 8px 4px 8px;
+  border: 1px solid #e5e7eb;
+  border-right: none;
+  border-radius: 12px;
+  margin-right: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 90px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  color: #111827;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.countryCodeSelect:hover {
+  background-color: #f9fafb;
+}
+
+.countryCodeSelect:focus {
+  outline: none;
+  border-color: #F1913D;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+  background-color: white;
+}
+
+.phoneInputContainer:focus-within .countryCodeSelect {
+  border-color: #F1913D;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+}
+
+/* Phone Number Input - Matches formInput style */
+.phoneInput {
+  flex: 1;
+  border: 2px solid #e5e7eb;
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  padding: 9px 12px;
+  font-size: 14px;
+  background-color: white;
+  transition: all 0.2s ease;
+  min-width: 0;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.phoneInput:focus {
+  outline: none;
+  border-color: #F1913D;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+}
+
+.phoneInputContainer:focus-within .phoneInput {
+  border-color: #F1913D;
+  box-shadow: 0 0 0 3px rgba(241, 145, 61, 0.1);
+}
+
+.phoneInput::placeholder {
+  color: #9ca3af;
+}
+
+.required {
+  color: #dc2626;
+  font-weight: 600;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .modalOverlay {
@@ -414,9 +513,20 @@
   }
   
   .formInput,
-  .roleSelect {
+  .roleSelect,
+  .phoneInput {
     font-size: 16px; /* Prevents zoom on iOS */
     padding: 10px 12px;
+  }
+  
+  .countryCodeSelect {
+    font-size: 16px;
+    padding: 10px 28px 10px 12px;
+  }
+  
+  .phoneInputContainer {
+    height: auto;
+    min-height: 48px;
   }
   
   .submitButton {

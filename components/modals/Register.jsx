@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { UserIcon, EmailIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import { countryCodes, DEFAULT_COUNTRY_CODE } from "@/constants/countryCodes";
 import styles from "./Register.module.css";
 
 export default function Register({ isOpen, onClose }) {
@@ -15,6 +16,10 @@ export default function Register({ isOpen, onClose }) {
     password: "",
     confirmPassword: "",
     role: "user",
+    phone: "",
+    countryCode: DEFAULT_COUNTRY_CODE,
+    company: "",
+    job: "",
     agreeToTerms: false
   });
   const [fieldErrors, setFieldErrors] = useState({});
@@ -34,6 +39,10 @@ export default function Register({ isOpen, onClose }) {
       password: "",
       confirmPassword: "",
       role: "user",
+      phone: "",
+      countryCode: DEFAULT_COUNTRY_CODE,
+      company: "",
+      job: "",
       agreeToTerms: false
     });
     setFieldErrors({});
@@ -71,10 +80,30 @@ export default function Register({ isOpen, onClose }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    
+    // If switching from agent to user, clear agent-specific fields
+    if (name === "role" && value === "user") {
+      setFormData(prev => ({
+        ...prev,
+        role: "user",
+        phone: "",
+        company: "",
+        job: "",
+        countryCode: DEFAULT_COUNTRY_CODE
+      }));
+      setFieldErrors(prev => ({
+        ...prev,
+        phone: "",
+        company: "",
+        job: ""
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+    }
+    
     // Clear field error when user types
     setFieldErrors(prev => ({
       ...prev,
@@ -120,6 +149,29 @@ export default function Register({ isOpen, onClose }) {
           error = "Passwords do not match";
         }
         break;
+      case "phone":
+        if (formData.role === "agent") {
+          if (!formData.phone || formData.phone.trim() === "") {
+            error = "Phone number is required for agents";
+          } else if (!/^\d{6,15}$/.test(formData.phone.replace(/\s/g, ""))) {
+            error = "Please enter a valid phone number";
+          }
+        }
+        break;
+      case "company":
+        if (formData.role === "agent") {
+          if (!formData.company || formData.company.trim() === "") {
+            error = "Company name is required for agents";
+          }
+        }
+        break;
+      case "job":
+        if (formData.role === "agent") {
+          if (!formData.job || formData.job.trim() === "") {
+            error = "Job title is required for agents";
+          }
+        }
+        break;
     }
     
     setFieldErrors(prev => ({
@@ -158,7 +210,7 @@ export default function Register({ isOpen, onClose }) {
   };
 
   const isFormValid = () => {
-    return formData.username &&
+    const baseValid = formData.username &&
            formData.email &&
            formData.password &&
            formData.confirmPassword &&
@@ -166,6 +218,19 @@ export default function Register({ isOpen, onClose }) {
            formData.password.length >= 6 &&
            formData.agreeToTerms &&
            Object.values(fieldErrors).every(error => !error);
+    
+    // If agent, also require phone, company, and job
+    if (formData.role === "agent") {
+      return baseValid &&
+             formData.phone &&
+             formData.phone.trim() !== "" &&
+             formData.company &&
+             formData.company.trim() !== "" &&
+             formData.job &&
+             formData.job.trim() !== "";
+    }
+    
+    return baseValid;
   };
 
   const handleSwitchToLogin = (e) => {
@@ -279,6 +344,98 @@ export default function Register({ isOpen, onClose }) {
                 <option value="agent">🏢 Property Agent - List and manage properties</option>
               </select>
             </div>
+
+            {/* Agent-specific fields */}
+            {formData.role === "agent" && (
+              <>
+                <div className={styles.formGroup}>
+                  <label htmlFor="phone" className={styles.label}>
+                    Phone Number <span className={styles.required}>*</span>
+                  </label>
+                  <div className={styles.phoneInputContainer}>
+                    <select
+                      id="countryCode"
+                      name="countryCode"
+                      value={formData.countryCode}
+                      onChange={handleChange}
+                      className={styles.countryCodeSelect}
+                    >
+                      {countryCodes.map((country, index) => (
+                        <option key={`${country.code}-${country.country}-${index}`} value={country.code}>
+                          {country.flag} {country.code}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      onBlur={() => validateField("phone")}
+                      placeholder="Enter your phone number"
+                      className={styles.phoneInput}
+                      required
+                    />
+                  </div>
+                  {fieldErrors.phone && (
+                    <span className={styles.errorSpan}>
+                      {fieldErrors.phone}
+                    </span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="company" className={styles.label}>
+                    Company Name <span className={styles.required}>*</span>
+                  </label>
+                  <div className={styles.inputWithIcon}>
+                    <UserIcon className={styles.inputIcon} />
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      onBlur={() => validateField("company")}
+                      placeholder="Enter your company name"
+                      className={styles.formInput}
+                      required
+                    />
+                  </div>
+                  {fieldErrors.company && (
+                    <span className={styles.errorSpan}>
+                      {fieldErrors.company}
+                    </span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="job" className={styles.label}>
+                    Job Title <span className={styles.required}>*</span>
+                  </label>
+                  <div className={styles.inputWithIcon}>
+                    <UserIcon className={styles.inputIcon} />
+                    <input
+                      type="text"
+                      id="job"
+                      name="job"
+                      value={formData.job}
+                      onChange={handleChange}
+                      onBlur={() => validateField("job")}
+                      placeholder="Enter your job title"
+                      className={styles.formInput}
+                      required
+                    />
+                  </div>
+                  {fieldErrors.job && (
+                    <span className={styles.errorSpan}>
+                      {fieldErrors.job}
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
 
             <div className={styles.formGroup}>
               <label htmlFor="pass2" className={styles.label}>Password</label>

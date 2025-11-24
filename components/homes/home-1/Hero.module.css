@@ -1,12 +1,12 @@
 /* Hero Background Styles */
 .heroBackground {
-  background-image: url('/images/cities/hero.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  min-height: 100vh;
-  position: relative;
+  background-image: url('/images/cities/hero.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  min-height: 100vh !important;
+  position: relative !important;
 }
 
 .heroBackground :global(.tf-container) {
