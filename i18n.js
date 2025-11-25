@@ -1,6 +1,9 @@
 import { getRequestConfig } from 'next-intl/server';
 import { routing } from './i18n/routing';
 
+// Global timeZone configuration
+export const timeZone = 'UTC';
+
 export default getRequestConfig(async ({ requestLocale }) => {
   // This typically corresponds to the `[locale]` segment
   let locale;
@@ -22,7 +25,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     return {
       locale,
       messages,
-      timeZone: 'UTC'
+      timeZone: timeZone
     };
   } catch (error) {
     // Fallback to default locale messages if import fails
@@ -30,7 +33,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     return {
       locale: routing.defaultLocale,
       messages: defaultMessages,
-      timeZone: 'UTC'
+      timeZone: timeZone
     };
   }
 });

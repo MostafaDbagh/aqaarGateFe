@@ -1,14 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 import { userAPI, authAPI } from "@/apis";
 import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/constants/countryCodes";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import logger from "@/utlis/logger";
 import styles from "./MakeMeAgentModal.module.css";
 
-export default function MakeMeAgentModal({ isOpen, onClose }) {
+// Wrapper component to ensure translations are available
+function MakeMeAgentModalContent({ isOpen, onClose }) {
   const { showSuccessModal } = useGlobalModal();
+  // Always call useTranslations - it should work since we're inside NextIntlClientProvider
+  const t = useTranslations('makeMeAgent');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -70,15 +74,15 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
     const newErrors = {};
     
     if (!formData.phone || formData.phone.trim() === "") {
-      newErrors.phone = "Phone number is required";
+      newErrors.phone = t('errors.phoneRequired');
     }
     
     if (!formData.job || formData.job.trim() === "") {
-      newErrors.job = "Job is required";
+      newErrors.job = t('errors.jobRequired');
     }
     
     if (!formData.company || formData.company.trim() === "") {
-      newErrors.company = "Company is required";
+      newErrors.company = t('errors.companyRequired');
     }
     
     setErrors(newErrors);
@@ -117,8 +121,8 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
       
       // Show success message with verification notice
       showSuccessModal(
-        "Congratulations! 🎉",
-        "You are now an agent! Your account is pending admin verification. Once verified by an admin, you'll be able to list and manage properties.",
+        t('success.title'),
+        t('success.message'),
         finalUser.email
       );
       
@@ -128,7 +132,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
       }, 2000);
     } catch (error) {
       logger.error("Error making agent:", error);
-      setErrors({ submit: error.message || "Failed to become an agent. Please try again." });
+      setErrors({ submit: error.message || t('errors.submitFailed') });
     } finally {
       setLoading(false);
     }
@@ -147,7 +151,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
     >
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>Become an Agent</h2>
+          <h2 className={styles.modalTitle}>{t('title')}</h2>
           <button 
             className={styles.closeButton}
             onClick={onClose}
@@ -160,7 +164,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
         <form onSubmit={handleSubmit} className={styles.modalForm}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
-              Email address:<span className={styles.required}>*</span>
+              {t('email')}:<span className={styles.required}>*</span>
             </label>
             <input
               type="email"
@@ -169,12 +173,12 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
               className={`${styles.input} ${styles.inputDisabled}`}
               disabled
             />
-            <p className={styles.helperText}>Email cannot be changed</p>
+            <p className={styles.helperText}>{t('emailCannotBeChanged')}</p>
           </div>
 
           <div className={styles.formGroup}>
             <label htmlFor="phone" className={styles.label}>
-              Phone number:<span className={styles.required}>*</span>
+              {t('phoneNumber')}:<span className={styles.required}>*</span>
             </label>
             <div className={styles.phoneInputContainer}>
               <select
@@ -195,7 +199,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
                 value={formData.phone}
                 onChange={handleInputChange}
                 className={`${styles.phoneInput} ${errors.phone ? styles.inputError : ''}`}
-                placeholder="Phone number"
+                placeholder={t('phonePlaceholder')}
                 autoComplete="off"
                 required
               />
@@ -205,7 +209,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
 
           <div className={styles.formGroup}>
             <label htmlFor="job" className={styles.label}>
-              Job:<span className={styles.required}>*</span>
+              {t('job')}:<span className={styles.required}>*</span>
             </label>
             <input
               type="text"
@@ -213,7 +217,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
               value={formData.job}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.job ? styles.inputError : ''}`}
-              placeholder="e.g. Real Estate Agent"
+              placeholder={t('jobPlaceholder')}
               required
             />
             {errors.job && <p className={styles.errorText}>{errors.job}</p>}
@@ -221,7 +225,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
 
           <div className={styles.formGroup}>
             <label htmlFor="company" className={styles.label}>
-              Company:<span className={styles.required}>*</span>
+              {t('company')}:<span className={styles.required}>*</span>
             </label>
             <input
               type="text"
@@ -229,7 +233,7 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
               value={formData.company}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.company ? styles.inputError : ''}`}
-              placeholder="Your company name"
+              placeholder={t('companyPlaceholder')}
               required
             />
             {errors.company && <p className={styles.errorText}>{errors.company}</p>}
@@ -248,14 +252,14 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
               onClick={onClose}
               disabled={loading}
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               className={styles.submitButton}
               disabled={loading}
             >
-              {loading ? "Processing..." : "Make Me Agent"}
+              {loading ? t('processing') : t('makeMeAgent')}
             </button>
           </div>
         </form>
@@ -263,6 +267,23 @@ export default function MakeMeAgentModal({ isOpen, onClose }) {
     </div>
   );
 
+  if (typeof window === 'undefined') return null;
   return createPortal(modalContent, document.body);
+}
+
+// Main component that conditionally renders the content
+export default function MakeMeAgentModal({ isOpen, onClose }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Only render if we're on the client, mounted, and modal is open
+  if (!mounted || typeof window === 'undefined' || !isOpen) {
+    return null;
+  }
+
+  return <MakeMeAgentModalContent isOpen={isOpen} onClose={onClose} />;
 }
 

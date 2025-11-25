@@ -18,6 +18,22 @@ const nextConfig = {
           resourceRegExp: /^@formatjs\/intl$/,
         })
       );
+      // Fix for axios vendor chunk issues
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          cacheGroups: {
+            ...config.optimization.splitChunks?.cacheGroups,
+            default: {
+              ...config.optimization.splitChunks?.cacheGroups?.default,
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
       return config;
     },
     // Skip static generation for dynamic routes that cause issues
