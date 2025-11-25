@@ -52,3 +52,4 @@ Already configured to read locale from URL pathname and send `Accept-Language` h
 - `aqaarGate-FE/axios/index.js` - Already sends Accept-Language header (no change needed)
 
 
+

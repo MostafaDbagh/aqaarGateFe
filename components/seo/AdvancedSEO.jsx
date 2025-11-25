@@ -8,8 +8,8 @@ export default function AdvancedSEO() {
     "name": "AqaarGate Real Estate",
     "description": "Premium real estate services in Syria and Lattakia. Perfect for expats from EU countries and Arab Gulf.",
     "url": baseUrl,
-    "logo": `${baseUrl}/images/logo/logo-2@2x.png`,
-    "image": `${baseUrl}/images/logo/logo-2@2x.png`,
+    "logo": `${baseUrl}/images/logo/logo@2x.png`,
+    "image": `${baseUrl}/images/logo/logo@2x.png`,
     "telephone": "+971549967817",
     "email": "info@aqaargate.com",
     "address": {

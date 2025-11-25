@@ -10,13 +10,13 @@ export const getStatusBadge = (status, t = null) => {
   if (normalizedStatus === 'rent') {
     return {
       text: t ? t('common.forRent') : 'For Rent',
-      bgColor: '#3B82F6', // Blue
+      bgColor: '#6b7280', // Gray
       textColor: '#FFFFFF'
     };
   } else if (normalizedStatus === 'sale') {
     return {
       text: t ? t('common.forSale') : 'For Sale',
-      bgColor: '#10B981', // Green
+      bgColor: '#10b981', // Green
       textColor: '#FFFFFF'
     };
   } else {

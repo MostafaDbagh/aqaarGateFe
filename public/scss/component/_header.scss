@@ -108,6 +108,38 @@
     .tf-btn {
         height: 44px;
         border-radius: 4px;
+        &:hover,
+        &:focus {
+            color: #f1913D !important;
+            border-color: #f1913D !important;
+            outline: none;
+        }
+        &:focus-visible {
+            outline: 2px solid #f1913D;
+            outline-offset: 2px;
+        }
+    }
+    .btn-add {
+        .tf-btn {
+            &:hover,
+            &:focus {
+                background: #f1913D !important;
+                color: var(--White) !important;
+                border-color: #f1913D !important;
+            }
+        }
+        button {
+            &:hover,
+            &:focus {
+                background: linear-gradient(135deg, #f1913D 0%, #e67e22 100%) !important;
+                outline: none;
+            }
+            &:focus-visible {
+                outline: 2px solid #f1913D;
+                outline-offset: 2px;
+                border-radius: 12px;
+            }
+        }
     }
     .icons {
         svg path {
@@ -443,12 +475,26 @@
         > li {
             &.current-menu {
                 > a {
-                    color: var(--Primary) !important;
+                    color: #f1913D !important;
                     font-weight: 700;
+                    &:hover,
+                    &:focus {
+                        color: #f1913D !important;
+                    }
                 }
             }
             > a {
                 padding: 29px 0px;
+                &:hover,
+                &:focus {
+                    color: #f1913D !important;
+                    outline: none;
+                }
+                &:focus-visible {
+                    outline: 2px solid #f1913D;
+                    outline-offset: 2px;
+                    border-radius: 4px;
+                }
             }
             &.has-child {
                 > a {
@@ -561,8 +607,31 @@
             line-height: 20px;
             color: var(--Heading);
             @include mixin.transition3();
+            &:hover,
+            &:focus {
+                color: #f1913D !important;
+                outline: none;
+            }
+            &:focus-visible {
+                outline: 2px solid #f1913D;
+                outline-offset: 2px;
+                border-radius: 4px;
+            }
+        }
+        &.current-menu {
+            > a {
+                color: #f1913D !important;
+                font-weight: 700;
+                &:hover,
+                &:focus {
+                    color: #f1913D !important;
+                }
+            }
         }
         &:hover {
+            > a {
+                color: #f1913D !important;
+            }
             ul {
                 li {
                     opacity: 1;
@@ -705,11 +774,21 @@
                 color: var(--Heading);
                 background: transparent;
                 border-radius: 4px;
+                &:hover,
+                &:focus {
+                    color: #f1913D !important;
+                    background-color: #f8f9fa;
+                    outline: none;
+                }
+                &:focus-visible {
+                    outline: 2px solid #f1913D;
+                    outline-offset: 2px;
+                }
             }
             &.current-item,
             &:hover {
                 > a {
-                    color: var(--Primary) !important;
+                    color: #f1913D !important;
                     background-color: #f8f9fa;
                 }
 

@@ -18,6 +18,21 @@
       padding-left: 0 !important;
     }
   }
+  
+  // RTL support for main-content
+  html[dir="rtl"] &,
+  [dir="rtl"] & {
+    .main-content {
+      padding-left: 0 !important;
+      padding-right: 280px !important;
+      
+      &.admin-add-property-page,
+      &.admin-reviews-page,
+      &.admin-messages-page {
+        padding-right: 0 !important;
+      }
+    }
+  }
   .main-content-inner {
     padding: 111px 56px 0;
     &.style-2 {
@@ -41,6 +56,14 @@
       display: flex;
       justify-content: center;
       gap: 10px;
+    }
+  }
+  
+  // RTL support for main-content-inner
+  html[dir="rtl"] &,
+  [dir="rtl"] & {
+    .main-content-inner {
+      padding: 111px 56px 0;
     }
   }
   .flat-counter-v2 {
@@ -134,12 +157,20 @@
   min-width: 304px;
   background: var(--White);
   top: 78px;
+  left: 0;
   padding: 32px;
   overflow-y: auto;
   z-index: 998;
   height: 100%;
   @include mixin.transition4;
   transform: translateX(0);
+  
+  // RTL support for sidebar
+  html[dir="rtl"] &,
+  [dir="rtl"] & {
+    left: auto;
+    right: 0;
+  }
   .box-menu-dashboard {
     .nav-menu-item {
       &:not(:last-child) {
@@ -175,6 +206,12 @@
         width: 100%;
         text-align: left;
         cursor: pointer;
+        
+        // RTL support
+        html[dir="rtl"] &,
+        [dir="rtl"] & {
+          text-align: right;
+        }
       }
     }
   }
@@ -185,8 +222,8 @@
 
 .overlay-dashboard {
   position: fixed;
-
   right: 0;
+  left: 0;
   top: 0;
   width: 100%;
   height: 100%;
@@ -195,6 +232,13 @@
   transition: all 0.3s ease 0s;
   visibility: hidden;
   opacity: 0;
+  
+  // RTL support
+  html[dir="rtl"] &,
+  [dir="rtl"] & {
+    right: 0;
+    left: 0;
+  }
 }
 
 .show-mb {
@@ -290,6 +334,12 @@
     font-size: 16px;
     line-height: 22.4px;
   }
+}
+
+// RTL support for widget-box-2
+html[dir="rtl"] .widget-box-2,
+[dir="rtl"] .widget-box-2 {
+  margin-right: 0;
 }
 
 .wrap-table {

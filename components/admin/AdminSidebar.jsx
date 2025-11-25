@@ -9,18 +9,18 @@ export default function AdminSidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const menuItems = [
-    { href: "/admin/overview", label: "Dashboard", icon: "icon-home" },
-    { href: "/admin/properties", label: "Properties", icon: "icon-home" },
-    { href: "/admin/agents", label: "Agents", icon: "icon-user" },
-    { href: "/admin/rental-services", label: "Rental Services", icon: "icon-home" },
-    { href: "/admin/contacts", label: "Contact Us", icon: "icon-mail" }
+    { href: "/en/admin/overview", label: "Dashboard", icon: "icon-home" },
+    { href: "/en/admin/properties", label: "Properties", icon: "icon-home" },
+    { href: "/en/admin/agents", label: "Agents", icon: "icon-user" },
+    { href: "/en/admin/rental-services", label: "Rental Services", icon: "icon-home" },
+    { href: "/en/admin/contacts", label: "Contact Us", icon: "icon-mail" }
   ];
 
   const isActive = (href) => {
-    if (href === "/admin/overview") {
-      return pathname === "/admin/overview";
+    if (href === "/en/admin/overview") {
+      return pathname === "/en/admin/overview" || pathname === "/admin/overview";
     }
-    return pathname?.startsWith(href);
+    return pathname?.startsWith(href) || pathname?.startsWith(href.replace('/en', ''));
   };
 
   return (

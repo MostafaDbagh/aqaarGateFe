@@ -171,3 +171,4 @@ All components that display API data will automatically show translated values:
 - [ ] Test categories section - should show translated category names
 
 
+

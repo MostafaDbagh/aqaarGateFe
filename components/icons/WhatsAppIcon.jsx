@@ -14,3 +14,4 @@ export default function WhatsAppIcon({ width = 20, height = 20, fill = "#25D366"
   );
 }
 
+

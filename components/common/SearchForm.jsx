@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import DropdownSelect from "./DropdownSelect";
 import DropdownTagSelect from "./DropdownTagSelect";
 import { provinceOptions } from "@/constants/provinces";
@@ -12,7 +13,36 @@ export default function SearchForm({
   searchParams = {},
   onSearchChange,
 }) {
+  const t = useTranslations('searchForm');
+  const tCommon = useTranslations('common');
+  const tAmenities = useTranslations('amenities');
   const searchFormRef = useRef();
+
+  // Map amenity names to translation keys
+  const getAmenityTranslationKey = (amenity) => {
+    const mapping = {
+      "Solar energy system": "solarEnergySystem",
+      "Star link internet": "starLinkInternet",
+      "Fiber internet": "fiberInternet",
+      "Basic internet": "basicInternet",
+      "Parking": "parking",
+      "Lift": "lift",
+      "A/C": "ac",
+      "Gym": "gym",
+      "Security cameras": "securityCameras",
+      "Reception (nator)": "receptionNator",
+      "Balcony": "balcony",
+      "Swimming pool": "swimmingPool",
+      "First aid kit": "firstAidKit",
+      "Fire alarms": "fireAlarms"
+    };
+    return mapping[amenity] || amenity;
+  };
+
+  const translateAmenity = (amenity) => {
+    const key = getAmenityTranslationKey(amenity);
+    return tAmenities(key);
+  };
 
   useEffect(() => {
     const searchFormToggler = document.querySelector(".searchFormToggler");
@@ -178,20 +208,28 @@ export default function SearchForm({
         }
 
         .range-reset {
-          position: absolute;
-          right: 18px;
-          top: 18px;
-          padding: 10px 18px;
-          border-radius: 12px;
-          border: none;
-          background: linear-gradient(135deg, #8f9bb2 0%, #5f6c83 100%);
-          color: white;
-          font-weight: 600;
-          font-size: 13px;
-          letter-spacing: 0.05em;
-          cursor: pointer;
-          box-shadow: 0 12px 24px rgba(95, 108, 131, 0.25);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          position: absolute !important;
+          top: 4px !important;
+          left:12px !important;
+          padding: 10px 18px !important;
+          border-radius: 12px !important;
+          border: none !important;
+          background: linear-gradient(135deg, #8f9bb2 0%, #5f6c83 100%) !important;
+          color: white !important;
+          font-weight: 600 !important;
+          font-size: 13px !important;
+          letter-spacing: 0.05em !important;
+          cursor: pointer !important;
+          box-shadow: 0 12px 24px rgba(95, 108, 131, 0.25) !important;
+          transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+        }
+
+        html[dir="rtl"] .range-reset,
+        html[dir="rtl"] .range-inputs .range-reset,
+        [dir="rtl"] .range-reset,
+        [dir="rtl"] .range-inputs .range-reset {
+          right: auto !important;
+          left: 18px !important;
         }
 
         .range-reset:hover {
@@ -379,23 +417,24 @@ export default function SearchForm({
         .wd-search-form .city-dropdown .nice-select .list::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
         }
+
       `}</style>
       <div className={parentClass} ref={searchFormRef}>
         <div className="search-form-header mb-32">
-          <h4 className="advanced-search-title">Advanced Search</h4>
+          <h4 className="advanced-search-title">{t('advancedSearch')}</h4>
         </div>
         
         {/* Property Type - First Input */}
         <div className="group-input mb-30 col-4">
         <div className="box-input form-row-item">
             <label className="mb-2 form-label" htmlFor="propertyId">
-              Property ID
+              {t('propertyId')}
             </label>
             <input
               type="text"
               id="propertyId"
               className="form-control form-input-enhanced"
-              placeholder="Enter Property ID"
+              placeholder={t('propertyIdPlaceholder')}
               value={searchParams.propertyId || ""}
               onChange={(e) => handleChange("propertyId", e.target.value)}
             />
@@ -407,13 +446,13 @@ export default function SearchForm({
         <div className="group-input mb-30 form-row-flex">
           <div className="box-input form-row-item">
             <label className="mb-2 form-label" htmlFor="syriaCitiesSelect">
-               City
+               {t('city')}
             </label>
             <div className="city-dropdown">
               <DropdownSelect
                 id="syriaCitiesSelect"
                 options={[
-                  "All Cities",
+                  t('allCities'),
                   "Latakia",
                   "Damascus",
                   "Aleppo",
@@ -425,21 +464,21 @@ export default function SearchForm({
                   "Tartous"
                 ]}
                 addtionalParentClass=""
-                selectedValue={searchParams.cities || "All Cities"}
-                onChange={(value) => handleChange("cities", value === "All Cities" ? "" : value)}
+                selectedValue={searchParams.cities || t('allCities')}
+                onChange={(value) => handleChange("cities", value === t('allCities') ? "" : value)}
               />
             </div>
           </div>
           <div className="box-input form-row-item" style={{ maxWidth: '50%', flex: '0 0 50%' }}>
             <label className="mb-2 form-label" htmlFor="propertyTypeSelect">
-              Property Type
+              {t('propertyType')}
             </label>
             <DropdownSelect
               id="propertyTypeSelect"
-              options={["Any", "Apartment", "Commercial", "Land", "Holiday Home", "Villa/farms", "Office"]}
+              options={[t('any'), "Apartment", "Commercial", "Land", tCommon('holidayHome'), "Villa/farms", "Office"]}
               addtionalParentClass=""
-              selectedValue={searchParams.propertyType || "Any"}
-              onChange={(value) => handleChange("propertyType", value === "Any" ? "" : value)}
+              selectedValue={searchParams.propertyType || t('any')}
+              onChange={(value) => handleChange("propertyType", value === t('any') ? "" : value)}
             />
           </div>
         </div>
@@ -449,12 +488,12 @@ export default function SearchForm({
         <div className="group-input mb-30">
           <div className="box-input">
             <label className="mb-2 form-label" htmlFor="citiesSelectStyle3">
-              Cities
+              {t('cities')}
             </label>
             <div className="city-dropdown">
               <DropdownSelect
                 options={[
-                  "All Cities",
+                  t('allCities'),
                   "Latakia",
                   "Damascus",
                   "Aleppo",
@@ -466,8 +505,8 @@ export default function SearchForm({
                   "Tartous",
                 ]}
                 addtionalParentClass=""
-                selectedValue={searchParams.state || "All Cities"}
-                onChange={(value) => handleChange("state", value === "All Cities" ? "" : value)}
+                selectedValue={searchParams.state || t('allCities')}
+                onChange={(value) => handleChange("state", value === t('allCities') ? "" : value)}
               />
             </div>
           </div>
@@ -481,8 +520,8 @@ export default function SearchForm({
           <div className="box-select">
           <DropdownTagSelect
             id="bedsSelect"
-            label="Rooms"
-            options={["Any", 'studio', "1", "2", "3", "4", "5", "6"]}
+            label={t('rooms')}
+            options={[t('any'), 'studio', "1", "2", "3", "4", "5", "6"]}
             addtionalParentClass=""
             value={searchParams.bedrooms || ""}
             onChange={(value) => handleChange("bedrooms", value)}
@@ -492,8 +531,8 @@ export default function SearchForm({
         <div className="box-select">
           <DropdownTagSelect
             id="bathsSelect"
-            label="Baths"
-            options={["Any", "1", "2", "3", "4", "5"]}
+            label={t('baths')}
+            options={[t('any'), "1", "2", "3", "4", "5"]}
             addtionalParentClass=""
             value={searchParams.bathrooms || ""}
             onChange={(value) => handleChange("bathrooms", value)}
@@ -502,23 +541,23 @@ export default function SearchForm({
 
         <div className="box-select">
   <label className="mb-2" htmlFor="furnishedSelect">
-    Furnishing
+    {t('furnishing')}
   </label>
   <DropdownSelect
     id="furnishedSelect"
-    options={["Any", "Furnished", "Unfurnished"]}
+    options={[t('any'), t('furnished'), t('unfurnished')]}
     addtionalParentClass=""
     value={
       searchParams.furnished === true
-        ? "Furnished"
+        ? t('furnished')
         : searchParams.furnished === false
-        ? "Unfurnished"
-        : "Any"
+        ? t('unfurnished')
+        : t('any')
     }
     onChange={(value) => {
       let furnishedValue;
-      if (value === "Furnished") furnishedValue = true;
-      else if (value === "Unfurnished") furnishedValue = false;
+      if (value === t('furnished')) furnishedValue = true;
+      else if (value === t('unfurnished')) furnishedValue = false;
       else furnishedValue = undefined; // "Any" clears the filter
       handleChange("furnished", furnishedValue);
     }}
@@ -530,28 +569,28 @@ export default function SearchForm({
       <div className="group-price mb-30">
         <div className="widget-price">
           <label className="mb-2 title-price" htmlFor="priceRange">
-            Price range 
+            {t('priceRange')}
           </label>
           <div className="box-title-price">
             <div className="range-inputs">
               <div className="range-input-group">
-                <span className="input-label">From</span>
+                <span className="input-label">{t('from')}</span>
                 <input
                   id="priceMin"
                   type="number"
                   className="range-input"
-                  placeholder="Min price"
+                  placeholder={t('minPrice')}
                   value={searchParams.priceMin ?? ""}
                   onChange={(e) => handleNumericInputChange("priceMin", e.target.value)}
                 />
               </div>
               <div className="range-input-group">
-                <span className="input-label">To</span>
+                <span className="input-label">{t('to')}</span>
                 <input
                   id="priceMax"
                   type="number"
                   className="range-input"
-                  placeholder="Max price"
+                  placeholder={t('maxPrice')}
                   value={searchParams.priceMax ?? ""}
                   onChange={(e) => handleNumericInputChange("priceMax", e.target.value)}
                 />
@@ -564,35 +603,35 @@ export default function SearchForm({
                   handleChange("priceMax", "");
                 }}
               >
-                Reset
+                {t('reset')}
               </button>
             </div>
           </div>
         </div>
         <div className="widget-price">
           <label className="mb-2 title-price" htmlFor="sizeRange">
-            Size range
+            {t('sizeRange')}
           </label>
           <div className="box-title-price">
             <div className="range-inputs">
               <div className="range-input-group">
-                <span className="input-label">From</span>
+                <span className="input-label">{t('from')}</span>
                 <input
                   id="sizeMin"
                   type="number"
                   className="range-input"
-                  placeholder="Min size (sqft)"
+                  placeholder={t('minSize')}
                   value={searchParams.sizeMin ?? ""}
                   onChange={(e) => handleNumericInputChange("sizeMin", e.target.value)}
                 />
               </div>
               <div className="range-input-group">
-                <span className="input-label">To</span>
+                <span className="input-label">{t('to')}</span>
                 <input
                   id="sizeMax"
                   type="number"
                   className="range-input"
-                  placeholder="Max size (sqft)"
+                  placeholder={t('maxSize')}
                   value={searchParams.sizeMax ?? ""}
                   onChange={(e) => handleNumericInputChange("sizeMax", e.target.value)}
                 />
@@ -605,14 +644,14 @@ export default function SearchForm({
                   handleChange("sizeMax", "");
                 }}
               >
-                Reset
+                {t('reset')}
               </button>
             </div>
           </div>
         </div>
       </div>
       <div className="group-checkbox">
-        <div className="title text-4 fw-6 mb-2">Amenities:</div>
+        <div className="title text-4 fw-6 mb-2">{t('amenities')}</div>
         <div className="group-amenities">
           {amenitiesList.map((amenity, idx) => (
             <fieldset
@@ -620,13 +659,13 @@ export default function SearchForm({
               key={amenity + idx}
             >
               <label>
-                <span className="text-4">{amenity}</span>
                 <input
                   type="checkbox"
                   checked={searchParams.amenities?.includes(amenity) || false}
                   onChange={() => handleAmenityChange(amenity)}
                 />
                 <span className="btn-checkbox" />
+                <span className="text-4">{translateAmenity(amenity)}</span>
               </label>
             </fieldset>
           ))}

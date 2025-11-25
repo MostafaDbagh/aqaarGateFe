@@ -347,9 +347,9 @@ export default function PropertyGridItems({ listings = [] }) {
         }
         
         .holiday-badge {
-          background: linear-gradient(135deg, #FF6B6B, #FF8E8E) !important;
-          border: 2px solid #FF4757 !important;
-          box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3) !important;
+          background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
+          border: 2px solid #2563eb !important;
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
         }
         
         .contact-section {

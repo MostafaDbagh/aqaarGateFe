@@ -750,6 +750,7 @@ a {
     padding-left: 20px;
     width: 1400px;
     max-width: 100%;
+    padding:64px auto 108px;
     .row {
         margin-left: -20px !important;
         margin-right: -20px !important;
@@ -1115,6 +1116,45 @@ a {
 }
 .bg-4 {
     background-color: rgba(247, 247, 247, 1);
+}
+
+/* Property Badge Colors - Consistent across all components */
+.badge-for-rent,
+.flat-tag.badge-for-rent,
+.badge-rent {
+    background-color: #6b7280 !important; /* Gray - For Rent */
+    color: #ffffff !important;
+}
+
+.badge-for-sale,
+.flat-tag.badge-for-sale,
+.badge-sale {
+    background-color: #10b981 !important; /* Green - For Sale */
+    color: #ffffff !important;
+}
+
+.badge-featured,
+.flat-tag.badge-featured,
+.bg-main {
+    background-color: #f1913d !important; /* Orange - Featured */
+    color: #ffffff !important;
+}
+
+.badge-holiday-home,
+.flat-tag.badge-holiday-home,
+.badge-holiday,
+.holiday-badge {
+    background-color: #3b82f6 !important; /* Blue - Holiday Home */
+    color: #ffffff !important;
+}
+
+/* Update bg-2 and bg-3 to match badge colors for backward compatibility */
+.bg-2 {
+    background-color: #6b7280 !important; /* For Rent - Gray */
+}
+
+.bg-3 {
+    background-color: #10b981 !important; /* For Sale - Green */
 }
 
 .bg-dashboard {

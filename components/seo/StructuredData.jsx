@@ -7,7 +7,7 @@ export default function StructuredData() {
     "name": "AqaarGate Real Estate",
     "description": "Premium real estate services for buying, selling, and renting properties",
     "url": baseUrl,
-    "logo": `${baseUrl}/images/logo/logo-2@2x.png`,
+    "logo": `${baseUrl}/images/logo/logo@2x.png`,
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+1-555-0123",

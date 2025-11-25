@@ -82,7 +82,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.OVERVIEW);
-                        router.replace('/admin/overview');
+                        router.replace('/en/admin/overview');
                       }
                     }}
                   >
@@ -105,7 +105,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.PROPERTIES);
-                        router.replace('/admin/properties');
+                        router.replace('/en/admin/properties');
                       }
                     }}
                   >
@@ -128,7 +128,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.ADD_PROPERTY);
-                        router.replace('/admin/add-property');
+                        router.replace('/en/admin/add-property');
                       }
                     }}
                   >
@@ -151,7 +151,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.SOLD_PROPERTIES);
-                        router.replace('/admin/sold-properties');
+                        router.replace('/en/admin/sold-properties');
                       }
                     }}
                   >
@@ -174,7 +174,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.DELETED_PROPERTIES);
-                        router.replace('/admin/deleted-properties');
+                        router.replace('/en/admin/deleted-properties');
                       }
                     }}
                   >
@@ -197,7 +197,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.AGENTS);
-                        router.replace('/admin/agents');
+                        router.replace('/en/admin/agents');
                       }
                     }}
                   >
@@ -220,7 +220,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.USERS);
-                        router.replace('/admin/users');
+                        router.replace('/en/admin/users');
                       }
                     }}
                   >
@@ -243,7 +243,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.RENTAL_SERVICES);
-                        router.replace('/admin/rental-services');
+                        router.replace('/en/admin/rental-services');
                       }
                     }}
                   >
@@ -266,7 +266,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.CONTACTS);
-                        router.replace('/admin/contacts');
+                        router.replace('/en/admin/contacts');
                       }
                     }}
                   >
@@ -289,7 +289,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.REVIEWS);
-                        router.replace('/admin/reviews');
+                        router.replace('/en/admin/reviews');
                       }
                     }}
                   >
@@ -312,7 +312,7 @@ export default function Sidebar() {
                       e.stopPropagation();
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.MESSAGES);
-                        router.replace('/admin/messages');
+                        router.replace('/en/admin/messages');
                       }
                     }}
                   >

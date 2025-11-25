@@ -49,27 +49,29 @@ export default function AdminDashboardMain() {
 
     if (pathname && context) {
       let tabToSet = TABS.OVERVIEW;
-      if (pathname.includes('/admin/properties')) {
+      // Check for both /admin/... and /en/admin/... paths
+      const normalizedPath = pathname.replace(/^\/(en|ar)/, '');
+      if (normalizedPath.includes('/admin/properties')) {
         tabToSet = TABS.PROPERTIES;
-      } else if (pathname.includes('/admin/add-property')) {
+      } else if (normalizedPath.includes('/admin/add-property')) {
         tabToSet = TABS.ADD_PROPERTY;
-      } else if (pathname.includes('/admin/sold-properties')) {
+      } else if (normalizedPath.includes('/admin/sold-properties')) {
         tabToSet = TABS.SOLD_PROPERTIES;
-      } else if (pathname.includes('/admin/deleted-properties')) {
+      } else if (normalizedPath.includes('/admin/deleted-properties')) {
         tabToSet = TABS.DELETED_PROPERTIES;
-      } else if (pathname.includes('/admin/agents')) {
+      } else if (normalizedPath.includes('/admin/agents')) {
         tabToSet = TABS.AGENTS;
-      } else if (pathname.includes('/admin/users')) {
+      } else if (normalizedPath.includes('/admin/users')) {
         tabToSet = TABS.USERS;
-      } else if (pathname.includes('/admin/rental-services')) {
+      } else if (normalizedPath.includes('/admin/rental-services')) {
         tabToSet = TABS.RENTAL_SERVICES;
-      } else if (pathname.includes('/admin/contacts')) {
+      } else if (normalizedPath.includes('/admin/contacts')) {
         tabToSet = TABS.CONTACTS;
-      } else if (pathname.includes('/admin/reviews')) {
+      } else if (normalizedPath.includes('/admin/reviews')) {
         tabToSet = TABS.REVIEWS;
-      } else if (pathname.includes('/admin/messages')) {
+      } else if (normalizedPath.includes('/admin/messages')) {
         tabToSet = TABS.MESSAGES;
-      } else if (pathname.includes('/admin/overview')) {
+      } else if (normalizedPath.includes('/admin/overview')) {
         tabToSet = TABS.OVERVIEW;
       }
       // Only set if different from current to avoid unnecessary updates

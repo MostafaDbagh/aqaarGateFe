@@ -331,7 +331,7 @@ export default function Sidebar() {
         <div className="logo relative z-5">
           <Image
             alt="Advertisement"
-            src="/images/logo/logo-2@2x.png"
+            src="/images/logo/logo@2x.png"
             width={272}
             height={85}
           />

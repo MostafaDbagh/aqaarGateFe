@@ -83,27 +83,6 @@ export default function DashboardNav({ color = "" }) {
     }
   };
 
-  const handleMakeAgent = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user && user._id) {
-        const result = await authAPI.makeAgent(user._id);
-        setIsDDOpen(false); // Close dropdown after successful role change
-        
-        // Show success modal
-        showSuccessModal(
-          'Congratulations! 🎉', 
-          'You are now a Property Agent! You can now list and manage properties.',
-          user.email
-        );
-      }
-    } catch (error) {
-      // You could show an error modal here if needed
-    }
-  };
 
   return (
     <div
@@ -129,7 +108,7 @@ export default function DashboardNav({ color = "" }) {
             {/* Admin Dashboard */}
             <Link 
               className="dropdown-item dashboard-disabled-mobile"
-              href="/admin/overview"
+              href="/en/admin/overview"
               onClick={(e) => {
                 if (typeof window !== 'undefined' && window.innerWidth <= 768) {
                   e.preventDefault();
@@ -150,7 +129,7 @@ export default function DashboardNav({ color = "" }) {
             {/* Properties */}
             <Link 
               className="dropdown-item dashboard-disabled-mobile" 
-              href="/admin/properties"
+              href="/en/admin/properties"
               onClick={(e) => {
                 if (typeof window !== 'undefined' && window.innerWidth <= 768) {
                   e.preventDefault();
@@ -170,7 +149,7 @@ export default function DashboardNav({ color = "" }) {
             {/* Agents */}
             <Link 
               className="dropdown-item dashboard-disabled-mobile" 
-              href="/admin/agents"
+              href="/en/admin/agents"
               onClick={(e) => {
                 if (typeof window !== 'undefined' && window.innerWidth <= 768) {
                   e.preventDefault();
@@ -190,7 +169,7 @@ export default function DashboardNav({ color = "" }) {
             {/* Rental Services */}
             <Link 
               className="dropdown-item dashboard-disabled-mobile" 
-              href="/admin/rental-services"
+              href="/en/admin/rental-services"
               onClick={(e) => {
                 if (typeof window !== 'undefined' && window.innerWidth <= 768) {
                   e.preventDefault();
@@ -210,7 +189,7 @@ export default function DashboardNav({ color = "" }) {
             {/* Contact Us */}
             <Link 
               className="dropdown-item dashboard-disabled-mobile" 
-              href="/admin/contacts"
+              href="/en/admin/contacts"
               onClick={(e) => {
                 if (typeof window !== 'undefined' && window.innerWidth <= 768) {
                   e.preventDefault();
@@ -359,30 +338,6 @@ export default function DashboardNav({ color = "" }) {
                 <i className="icon-message" />
                 {t('messages')}
               </Link>
-            )}
-
-            {/* Make me Agent - Only for regular users (not agents, not admin) (disabled on mobile only) */}
-            {!isAgentUser && (
-              <button 
-                type="button"
-                className="dropdown-item dashboard-nav-button dashboard-disabled-mobile" 
-                onClick={(e) => {
-                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                  }
-                  handleMakeAgent(e);
-                }}
-                style={{
-                  padding: '14px 12px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '24px'
-                }}
-              >
-                <AddPropertyIcon />
-                {t('makeMeAgent')}
-              </button>
             )}
 
             {/* My Properties - Only for logged in agents (disabled on mobile only) */}

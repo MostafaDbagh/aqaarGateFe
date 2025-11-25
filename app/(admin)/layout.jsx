@@ -8,12 +8,26 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import styles from "./AdminLayout.module.css";
 
+// Import CSS files for admin pages
+import "../../public/main.scss";
+import "../../public/css/components.css";
+import "odometer/themes/odometer-theme-default.css";
+import "photoswipe/style.css";
+import "rc-slider/assets/index.css";
+
 export default function AdminLayout({ children }) {
   const [activeTab, setActiveTab] = useState(TABS.OVERVIEW);
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
   const [isRedirecting, setIsRedirecting] = useState(false);
+
+  // Initialize Bootstrap and other client-side scripts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("bootstrap/dist/js/bootstrap.esm").then(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     // Force English locale for admin pages - check both locale and pathname

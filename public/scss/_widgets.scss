@@ -136,6 +136,27 @@
   }
 }
 
+// RTL support for checkboxes - checkbox on right, text on left
+html[dir="rtl"] .checkbox-item,
+[dir="rtl"] .checkbox-item {
+  label {
+    padding-left: 0 !important;
+    padding-right: 30px !important;
+    input {
+      left: auto !important;
+      right: 0 !important;
+    }
+    .btn-checkbox {
+      left: auto !important;
+      right: 0 !important;
+      &:after {
+        left: auto !important;
+        right: 1px !important;
+      }
+    }
+  }
+}
+
 .wrap-social {
   @include mixin.d-flex();
   align-items: center;

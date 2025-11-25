@@ -1,10 +1,41 @@
 "use client";
 import React from "react";
+import { useTranslations } from "next-intl";
 import DropdownSelect from "../common/DropdownSelect";
 import DropdownTagSelect from "../common/DropdownTagSelect";
 import { amenitiesList } from "@/constants/amenities";
 
 export default function FilterModal({ onSearchChange, searchParams = {} }) {
+  const t = useTranslations('filterModal');
+  const tCommon = useTranslations('common');
+  const tAmenities = useTranslations('amenities');
+  
+  // Map amenity names to translation keys
+  const getAmenityTranslationKey = (amenity) => {
+    const mapping = {
+      "Solar energy system": "solarEnergySystem",
+      "Star link internet": "starLinkInternet",
+      "Fiber internet": "fiberInternet",
+      "Basic internet": "basicInternet",
+      "Parking": "parking",
+      "Lift": "lift",
+      "A/C": "ac",
+      "Gym": "gym",
+      "Security cameras": "securityCameras",
+      "Reception (nator)": "receptionNator",
+      "Balcony": "balcony",
+      "Swimming pool": "swimmingPool",
+      "First aid kit": "firstAidKit",
+      "Fire alarms": "fireAlarms"
+    };
+    return mapping[amenity] || amenity;
+  };
+
+  const translateAmenity = (amenity) => {
+    const key = getAmenityTranslationKey(amenity);
+    return tAmenities(key);
+  };
+
   const handleChange = (key, value) => {
     if (onSearchChange) {
       onSearchChange({ [key]: value });
@@ -201,13 +232,46 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
         .modal-filter .city-dropdown .nice-select .list::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
         }
+
+        .range-reset {
+          position: absolute;
+          left: 2px;
+          top: 2px;
+          padding: 10px 18px;
+          border-radius: 12px;
+          border: none;
+          background: linear-gradient(135deg, #8f9bb2 0%, #5f6c83 100%);
+          color: white;
+          font-weight: 600;
+          font-size: 13px;
+          letter-spacing: 0.05em;
+          cursor: pointer;
+          box-shadow: 0 12px 24px rgba(95, 108, 131, 0.25);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        [dir="rtl"] .range-reset {
+          right: auto;
+          left: 18px;
+        }
+
+        .range-reset:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 16px 28px rgba(95, 108, 131, 0.3);
+        }
+
+        .range-reset:active {
+          transform: translateY(0);
+          box-shadow: 0 10px 20px rgba(95, 108, 131, 0.25);
+        }
+
       `}</style>
       <div className="modal modal-filter fade" id="modalFilter">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="wd-search-form style-3">
             <div className="title-box">
-              <h4>Advanced Search</h4>
+              <h4>{t('advancedSearch')}</h4>
               <span
                 className="close-modal icon-close"
                 data-bs-dismiss="modal"
@@ -216,13 +280,13 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             <div className="group-input mb-30">
               <div className="box-input">
                 <label className="mb-2" htmlFor="propertyId">
-                  Property ID
+                  {t('propertyId')}
                 </label>
                 <input
                   type="text"
                   id="propertyId"
                   className="form-control property-id-input"
-                  placeholder="Enter Property ID"
+                  placeholder={t('propertyIdPlaceholder')}
                   value={searchParams.propertyId || ""}
                   onChange={(e) => handleChange("propertyId", e.target.value)}
                 />
@@ -233,14 +297,14 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             <div className="group-input mb-30">
               <div className="box-input">
                 <label className="mb-2" htmlFor="propertyTypeSelect">
-                  Property Type
+                  {t('propertyType')}
                 </label>
                 <DropdownSelect
                   id="propertyTypeSelect"
-                  options={["Any", "Apartment", "Commercial", "Land", "Holiday Home", "Villa/farms", "Office"]}
+                  options={[t('any'), "Apartment", "Commercial", "Land", tCommon('holidayHome'), "Villa/farms", "Office"]}
                   addtionalParentClass=""
-                  selectedValue={searchParams.propertyType || "Any"}
-                  onChange={(value) => handleChange("propertyType", value === "Any" ? "" : value)}
+                  selectedValue={searchParams.propertyType || t('any')}
+                  onChange={(value) => handleChange("propertyType", value === t('any') ? "" : value)}
                 />
               </div>
             </div>
@@ -253,13 +317,13 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             <div className="group-input mb-30">
               <div className="box-input">
                 <label className="mb-2" htmlFor="citiesSelect">
-                   Cities
+                   {t('cities')}
                 </label>
                 <div className="city-dropdown">
                   <DropdownSelect
                     id="citiesSelect"
                     options={[
-                      "All Cities",
+                      t('allCities'),
                       "Latakia",
                       "Damascus", 
                       "Aleppo",
@@ -271,8 +335,8 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                       "Tartous"
                     ]}
                     addtionalParentClass=""
-                    selectedValue={searchParams.cities || "All Cities"}
-                    onChange={(value) => handleChange("cities", value === "All Cities" ? "" : value)}
+                    selectedValue={searchParams.cities || t('allCities')}
+                    onChange={(value) => handleChange("cities", value === t('allCities') ? "" : value)}
                   />
                 </div>
               </div>
@@ -280,23 +344,23 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             <div className="group-input mb-30">
               <div className="box-input">
                 <label className="mb-2" htmlFor="modalFurnishedSelect">
-                  Furnishing
+                  {t('furnishing')}
                 </label>
                 <DropdownSelect
                   id="modalFurnishedSelect"
-                  options={["Any", "Furnished", "Unfurnished"]}
+                  options={[t('any'), t('furnished'), t('unfurnished')]}
                   addtionalParentClass=""
                   selectedValue={
                     searchParams.furnished === true
-                      ? "Furnished"
+                      ? t('furnished')
                       : searchParams.furnished === false
-                      ? "Unfurnished"
-                      : "Any"
+                      ? t('unfurnished')
+                      : t('any')
                   }
                   onChange={(value) => {
                     let furnishedValue;
-                    if (value === "Furnished") furnishedValue = true;
-                    else if (value === "Unfurnished") furnishedValue = false;
+                    if (value === t('furnished')) furnishedValue = true;
+                    else if (value === t('unfurnished')) furnishedValue = false;
                     else furnishedValue = undefined;
                     handleChange("furnished", furnishedValue);
                   }}
@@ -308,8 +372,8 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                 <div className="box-select">
                 <DropdownTagSelect
                   id="bathsSelect"
-                  label="Baths"
-                  options={["Any", "1", "2", "3", "4", "5", "6"]}
+                  label={t('baths')}
+                  options={[t('any'), "1", "2", "3", "4", "5", "6"]}
                   addtionalParentClass=""
                   value={searchParams.bathrooms || ""}
                   onChange={(value) => handleChange("bathrooms", value)}
@@ -319,8 +383,8 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
               <div className="box-select">
                 <DropdownTagSelect
                   id="bedsSelect"
-                  label="Rooms"
-                  options={["Any", 'studio', "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                  label={t('rooms')}
+                  options={[t('any'), 'studio', "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
                   addtionalParentClass=""
                   value={searchParams.bedrooms || ""}
                   onChange={(value) => handleChange("bedrooms", value)}
@@ -332,26 +396,26 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             <div className="group-input mb-30">
               <div className="widget-price full-width">
                 <div className="box-title-price">
-                  <span className="title-price">Price</span>
+                  <span className="title-price">{t('price')}</span>
                   <div className="range-inputs">
                     <div className="range-input-group">
-                      <span className="input-label">From</span>
+                      <span className="input-label">{t('from')}</span>
                       <input
                         id="filterPriceMin"
                         type="number"
                         className="range-input"
-                        placeholder="Min price"
+                        placeholder={t('minPrice')}
                         value={searchParams.priceMin ?? ''}
                         onChange={(e) => handleNumericInputChange('priceMin', e.target.value)}
                       />
                     </div>
                     <div className="range-input-group">
-                      <span className="input-label">To</span>
+                      <span className="input-label">{t('to')}</span>
                       <input
                         id="filterPriceMax"
                         type="number"
                         className="range-input"
-                        placeholder="Max price"
+                        placeholder={t('maxPrice')}
                         value={searchParams.priceMax ?? ''}
                         onChange={(e) => handleNumericInputChange('priceMax', e.target.value)}
                       />
@@ -364,7 +428,7 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                         handleChange('priceMax', '');
                       }}
                     >
-                      Reset
+                      {t('reset')}
                     </button>
                   </div>
                 </div>
@@ -373,26 +437,26 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             <div className="group-input mb-30">
               <div className="widget-price full-width">
                 <div className="box-title-price">
-                  <span className="title-price">Size (sqft)</span>
+                  <span className="title-price">{t('size')}</span>
                   <div className="range-inputs">
                     <div className="range-input-group">
-                      <span className="input-label">From</span>
+                      <span className="input-label">{t('from')}</span>
                       <input
                         id="filterSizeMin"
                         type="number"
                         className="range-input"
-                        placeholder="Min size"
+                        placeholder={t('minSize')}
                         value={searchParams.sizeMin ?? ''}
                         onChange={(e) => handleNumericInputChange('sizeMin', e.target.value)}
                       />
                     </div>
                     <div className="range-input-group">
-                      <span className="input-label">To</span>
+                      <span className="input-label">{t('to')}</span>
                       <input
                         id="filterSizeMax"
                         type="number"
                         className="range-input"
-                        placeholder="Max size"
+                        placeholder={t('maxSize')}
                         value={searchParams.sizeMax ?? ''}
                         onChange={(e) => handleNumericInputChange('sizeMax', e.target.value)}
                       />
@@ -405,7 +469,7 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                         handleChange('sizeMax', '');
                       }}
                     >
-                      Reset
+                      {t('reset')}
                     </button>
                   </div>
                 </div>
@@ -413,12 +477,11 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
             </div>
       
             <div className="group-checkbox">
-              <div className="title text-4 fw-6">Amenities:</div>
+              <div className="title text-4 fw-6">{t('amenities')}</div>
               <div className="group-amenities">
                 {amenitiesList.map((amenity, index) => (
                   <fieldset key={amenity} className={`checkbox-item style-1 ${index > 0 ? 'mt-12' : ''}`}>
                     <label>
-                      <span className="text-4">{amenity}</span>
                       <input 
                         type="checkbox" 
                         checked={searchParams.amenities?.includes(amenity) || false}
@@ -433,6 +496,7 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                         }}
                       />
                       <span className="btn-checkbox" />
+                      <span className="text-4">{translateAmenity(amenity)}</span>
                     </label>
                   </fieldset>
                 ))}
