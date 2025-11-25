@@ -17,3 +17,6 @@ export const routing = defineRouting({
 export const { Link, redirect, usePathname, useRouter } =
   createNavigation(routing);
 
+// Default timeZone for next-intl
+export const timeZone = 'UTC';
+

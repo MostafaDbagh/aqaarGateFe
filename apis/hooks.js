@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useLocale } from 'next-intl';
 import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI } from './index';
 
 // Authentication hooks
@@ -44,8 +45,9 @@ export const useAuth = () => {
 
 // Listing hooks
 export const useListings = (params = {}) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['listings', params],
+    queryKey: ['listings', locale, params],
     queryFn: () => listingAPI.getListings(params),
     staleTime: 10 * 60 * 1000, // 10 minutes - increased for better performance
     gcTime: 15 * 60 * 1000, // 15 minutes garbage collection
@@ -58,8 +60,9 @@ export const useListings = (params = {}) => {
 
 // Search listings hook with debouncing
 export const useSearchListings = (searchParams = {}) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['listings', 'search', searchParams],
+    queryKey: ['listings', 'search', locale, searchParams],
     queryFn: () => listingAPI.searchListings(searchParams),
     enabled: true, // Always enabled for now to avoid build issues
     staleTime: 5 * 60 * 1000, // 5 minutes - increased for better performance
@@ -72,8 +75,9 @@ export const useSearchListings = (searchParams = {}) => {
 };
 
 export const useListing = (id) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['listing', id],
+    queryKey: ['listing', locale, id],
     queryFn: () => listingAPI.getListingById(id),
     enabled: !!id,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -245,15 +249,17 @@ export const useRemoveFavorite = () => {
 
 // Agent hooks
 export const useAgents = (params = {}) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['agents', params],
+    queryKey: ['agents', locale, params],
     queryFn: () => agentAPI.getAgents(params),
   });
 };
 
 export const useAgent = (id) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['agent', id],
+    queryKey: ['agent', locale, id],
     queryFn: () => agentAPI.getAgentById(id),
     enabled: !!id,
   });
@@ -261,8 +267,9 @@ export const useAgent = (id) => {
 
 // Get listings by agent with pagination and filtering
 export const useListingsByAgent = (agentId, params = {}) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['listings', 'agent', agentId, params],
+    queryKey: ['listings', 'agent', locale, agentId, params],
     queryFn: () => listingAPI.getListingsByAgent(agentId, params),
     enabled: !!agentId,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -271,8 +278,9 @@ export const useListingsByAgent = (agentId, params = {}) => {
 
 // Get most visited listings by agent
 export const useMostVisitedListings = (agentId, params = {}) => {
+  const locale = useLocale();
   return useQuery({
-    queryKey: ['listings', 'mostVisited', agentId, params],
+    queryKey: ['listings', 'mostVisited', locale, agentId, params],
     queryFn: () => listingAPI.getMostVisitedListings(agentId, params),
     enabled: true, // Always enabled, will use fallback agentId if needed
     staleTime: 5 * 60 * 1000, // 5 minutes

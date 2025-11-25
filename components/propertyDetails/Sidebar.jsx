@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 import MoreAboutPropertyModal from "../modals/MoreAboutPropertyModal";
 import { useCreateMessage } from "@/apis/hooks";
 
 export default function Sidebar({ property }) {
+  const t = useTranslations('propertyDetail');
   const [isMoreInfoModalOpen, setIsMoreInfoModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     senderName: '',
@@ -77,11 +79,11 @@ export default function Sidebar({ property }) {
         messageType: 'inquiry'
       });
 
-      setSubmitMessage('Message sent successfully!');
+      setSubmitMessage(t('messageSentSuccess'));
       setFormData({ senderName: '', message: '' });
     } catch (error) {
       const apiMessage = error?.response?.data?.message || error?.response?.data?.error || error?.message || error?.toString() || 'Unknown error';
-      setSubmitMessage(`Failed to send message: ${apiMessage}`);
+      setSubmitMessage(`${t('failedToSendMessage')} ${apiMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -94,7 +96,7 @@ export default function Sidebar({ property }) {
           className="form-contact-seller mb-30"
           onSubmit={handleSubmit}
         >
-          <h4 className="heading-title mb-30">Contact Agent</h4>
+          <h4 className="heading-title mb-30">{t('contactAgent')}</h4>
           <div className="seller-info">
             <div className="avartar">
               <Image
@@ -119,7 +121,7 @@ export default function Sidebar({ property }) {
               <ul className="contact">
                 <li>
                   <i className="icon-phone-1" />
-                  <span>{agentNumber && agentNumber !== "Not provided" ? agentNumber : "Phone number not provided"}</span>
+                  <span>{agentNumber && agentNumber !== "Not provided" ? agentNumber : t('phoneNotProvided')}</span>
                 </li>
                 {agentEmail && (
                   <li>
@@ -135,7 +137,7 @@ export default function Sidebar({ property }) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      WhatsApp
+                      {t('whatsapp')}
                     </a>
                   </li>
                 )}
@@ -170,7 +172,7 @@ export default function Sidebar({ property }) {
             <input
               type="text"
               className="form-control"
-              placeholder="Full Name"
+              placeholder={t('fullName')}
               name="senderName"
               id="name1"
               value={formData.senderName}
@@ -183,7 +185,7 @@ export default function Sidebar({ property }) {
               name="message"
               cols={30}
               rows={10}
-              placeholder="How can an agent help"
+              placeholder={t('howCanAgentHelp')}
               id="message1"
               value={formData.message}
               onChange={handleInputChange}
@@ -200,7 +202,7 @@ export default function Sidebar({ property }) {
               opacity: isSubmitting ? 0.7 : 1
             }}
           >
-            {isSubmitting ? 'Sending...' : 'Send message'}
+            {isSubmitting ? t('sending') : t('sendMessage')}
           </button>
         </form>
         

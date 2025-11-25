@@ -1,12 +1,59 @@
+"use client";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header1 from "@/components/headers/Header1";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
-export const metadata = {
-  title: "Dashboard || AqaarGate - Real Estate React Nextjs Template",
-  description: "AqaarGate - Real Estate React Nextjs Template",
-};
-export default function page({ children }) {
+export default function DashboardLayout({ children }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = useLocale();
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
+  useEffect(() => {
+    // Force English locale for dashboard pages - check both locale and pathname
+    if (typeof window === 'undefined') return;
+    
+    const currentPath = window.location.pathname;
+    const isArabicPath = currentPath.startsWith('/ar/') || currentPath === '/ar';
+    const needsRedirect = locale !== 'en' || isArabicPath;
+    
+    if (needsRedirect) {
+      setIsRedirecting(true);
+      
+      // Remove current locale from pathname
+      let pathWithoutLocale = currentPath.replace(/^\/(en|ar)/, '') || '';
+      if (!pathWithoutLocale.startsWith('/')) {
+        pathWithoutLocale = '/' + pathWithoutLocale;
+      }
+      
+      // Redirect to /en version
+      const newPath = `/en${pathWithoutLocale}`;
+      
+      // Use window.location.href for immediate redirect
+      if (currentPath !== newPath) {
+        window.location.href = newPath;
+      }
+    }
+  }, [locale, pathname]);
+
+  // Show loading state while redirecting
+  if (isRedirecting) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Redirecting to English...
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="bg-dashboard">

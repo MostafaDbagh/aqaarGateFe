@@ -21,14 +21,16 @@ export default getRequestConfig(async ({ requestLocale }) => {
     const messages = (await import(`./messages/${locale}.json`)).default;
     return {
       locale,
-      messages
+      messages,
+      timeZone: 'UTC'
     };
   } catch (error) {
     // Fallback to default locale messages if import fails
     const defaultMessages = (await import(`./messages/${routing.defaultLocale}.json`)).default;
     return {
       locale: routing.defaultLocale,
-      messages: defaultMessages
+      messages: defaultMessages,
+      timeZone: 'UTC'
     };
   }
 });

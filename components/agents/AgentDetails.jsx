@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useTranslations } from 'next-intl';
 import Listings from "./Listings";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import LocationLoader from "../common/LocationLoader";
 import styles from "./AgentDetails.module.css";
 
 export default function AgentDetails({ agentId }) {
+  const t = useTranslations('agentDetails');
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   
   // Fetch agent data from API
@@ -23,7 +25,7 @@ export default function AgentDetails({ agentId }) {
             <div className="col-12 text-center py-5">
               <LocationLoader 
                 size="large" 
-                message="Loading agent profile..."
+                message={t('loadingProfile')}
               />
             </div>
           </div>
@@ -39,10 +41,10 @@ export default function AgentDetails({ agentId }) {
           <div className="row">
             <div className="col-12 text-center py-5">
               <div className="alert alert-danger">
-                <h4>Agent Not Found</h4>
-                <p>{error?.message || "The requested agent could not be found."}</p>
+                <h4>{t('agentNotFound')}</h4>
+                <p>{error?.message || t('agentNotFoundMessage')}</p>
                 <Link href="/agents" className="btn btn-primary">
-                  Back to Agents
+                  {t('backToAgents')}
                 </Link>
               </div>
             </div>
@@ -62,7 +64,7 @@ export default function AgentDetails({ agentId }) {
                 <div className={`image-wrap ${styles.imageWrap}`}>
                   <Link href={`/agents-details/${agent._id}`}>
                     <Image
-                      alt={agent.fullName || "Agent"}
+                      alt={agent.fullName || t('agent')}
                       width={400}
                       height={400}
                       src={agent.avatar || "/images/section/agent-details.jpg"}
@@ -74,11 +76,11 @@ export default function AgentDetails({ agentId }) {
                   <div className="author">
                     <h4 className="name">
                       <Link href={`/agents-details/${agent._id}`}>
-                        {agent.fullName || "Agent Name"}
+                        {agent.fullName || t('agentName')}
                       </Link>
                     </h4>
                     <p className="font-poppins">
-                      {agent.position || agent.job || "Real Estate Agent"} at{" "}
+                      {agent.position || agent.job || t('realEstateAgent')} at{" "}
                       <a href="#" className="fw-7">
                         {agent.companyName || "AqaarGate Real Estate"}
                       </a>
@@ -151,7 +153,7 @@ export default function AgentDetails({ agentId }) {
                   
                   {/* Follow Me Section */}
                   <div className={styles.followMeSection}>
-                    <h6 className={styles.followMeTitle}>Follow Me</h6>
+                    <h6 className={styles.followMeTitle}>{t('followMe')}</h6>
                     <ul className={`tf-social style-3 ${styles.socialMedia}`}>
                       <li>
                         <a 
@@ -196,7 +198,7 @@ export default function AgentDetails({ agentId }) {
               {/* Second Row: Description and See More Button */}
               <div className={`${styles.descriptionRow} agent-content-section`}>
                 <div className="content">
-                  <h6 className="title">About {agent.fullName || "This Agent"}</h6>
+                  <h6 className="title">{agent.fullName ? t('aboutAgent', { name: agent.fullName }) : t('aboutThisAgent')}</h6>
                   <p className="text-1">
                     {agent.description || 
                       "Experienced real estate professional dedicated to helping clients achieve their property goals. With a deep understanding of the local market and a commitment to exceptional service, I'm here to guide you through every step of your real estate journey."
@@ -208,26 +210,26 @@ export default function AgentDetails({ agentId }) {
                     <div className={`additional-details ${styles.additionalDetails}`}>
                     {/* Professional Details */}
                     <div className={`details-section ${styles.detailsSection}`}>
-                      <h6 className={`title ${styles.sectionTitle}`}>Professional Details</h6>
+                      <h6 className={`title ${styles.sectionTitle}`}>{t('professionalDetails')}</h6>
                       
                       <div className={`details-grid ${styles.detailsGrid}`}>
                         <div className={`detail-item ${styles.detailItem}`}>
-                          <strong className={styles.detailLabel}>Company:</strong>
+                          <strong className={styles.detailLabel}>{t('company')}:</strong>
                           <span className={styles.detailValue}>
                             {agent.companyName || "AqaarGate Real Estate"}
                           </span>
                         </div>
                         
                         <div className={`detail-item ${styles.detailItem}`}>
-                          <strong className={styles.detailLabel}>Position:</strong>
+                          <strong className={styles.detailLabel}>{t('position')}:</strong>
                           <span className={styles.detailValue}>
-                            {agent.position || agent.job || "Real Estate Agent"}
+                            {agent.position || agent.job || t('realEstateAgent')}
                           </span>
                         </div>
                         
                         {agent.officeNumber && (
                           <div className={`detail-item ${styles.detailItem}`}>
-                            <strong className={styles.detailLabel}>Office Phone:</strong>
+                            <strong className={styles.detailLabel}>{t('officePhone')}:</strong>
                             <span className={styles.detailValue}>
                               {agent.officeNumber}
                             </span>
@@ -236,7 +238,7 @@ export default function AgentDetails({ agentId }) {
                         
                         {agent.officeAddress && (
                           <div className={`detail-item ${styles.detailItem}`}>
-                            <strong className={styles.detailLabel}>Office Address:</strong>
+                            <strong className={styles.detailLabel}>{t('officeAddress')}:</strong>
                             <span className={styles.detailValue}>
                               {agent.officeAddress}
                             </span>
@@ -244,7 +246,7 @@ export default function AgentDetails({ agentId }) {
                         )}
                         
                         <div className={`detail-item ${styles.detailItem}`}>
-                          <strong className={styles.detailLabel}>Member Since:</strong>
+                          <strong className={styles.detailLabel}>{t('memberSince')}:</strong>
                           <span className={styles.detailValue}>
                             {new Date(agent.createdAt).toLocaleDateString('en-US', { 
                               year: 'numeric', 
@@ -254,9 +256,9 @@ export default function AgentDetails({ agentId }) {
                         </div>
                         
                         <div className={`detail-item ${styles.detailItem}`}>
-                          <strong className={styles.detailLabel}>Specialization:</strong>
+                          <strong className={styles.detailLabel}>{t('specialization')}:</strong>
                           <span className={styles.detailValue}>
-                            Residential & Commercial Properties
+                            {t('residentialCommercial')}
                           </span>
                         </div>
                       </div>
@@ -264,77 +266,77 @@ export default function AgentDetails({ agentId }) {
 
                     {/* Services & Expertise */}
                     <div className={`services-section ${styles.servicesSection}`}>
-                      <h6 className={`title ${styles.sectionTitle}`}>Services & Expertise</h6>
+                      <h6 className={`title ${styles.sectionTitle}`}>{t('servicesExpertise')}</h6>
                       
                       <div className={`services-grid ${styles.servicesGrid}`}>
                         <div className={`service-item ${styles.serviceItem}`}>
                           <div className={styles.serviceIcon}>🏠</div>
-                          <strong className={styles.serviceTitle}>Property Sales</strong>
-                          <span className={styles.serviceDescription}>Residential & Commercial</span>
+                          <strong className={styles.serviceTitle}>{t('propertySales')}</strong>
+                          <span className={styles.serviceDescription}>{t('residentialCommercialDesc')}</span>
                         </div>
                         
                         <div className={`service-item ${styles.serviceItem}`}>
                           <div className={styles.serviceIcon}>🔑</div>
-                          <strong className={styles.serviceTitle}>Property Rentals</strong>
-                          <span className={styles.serviceDescription}>Long & Short Term</span>
+                          <strong className={styles.serviceTitle}>{t('propertyRentals')}</strong>
+                          <span className={styles.serviceDescription}>{t('longShortTerm')}</span>
                         </div>
                         
                         <div className={`service-item ${styles.serviceItem}`}>
                           <div className={styles.serviceIcon}>📊</div>
-                          <strong className={styles.serviceTitle}>Market Analysis</strong>
-                          <span className={styles.serviceDescription}>Price & Trend Reports</span>
+                          <strong className={styles.serviceTitle}>{t('marketAnalysis')}</strong>
+                          <span className={styles.serviceDescription}>{t('priceTrendReports')}</span>
                         </div>
                         
                         <div className={`service-item ${styles.serviceItem}`}>
                           <div className={styles.serviceIcon}>🤝</div>
-                          <strong className={styles.serviceTitle}>Negotiation</strong>
-                          <span className={styles.serviceDescription}>Expert Deal Making</span>
+                          <strong className={styles.serviceTitle}>{t('negotiation')}</strong>
+                          <span className={styles.serviceDescription}>{t('expertDealMaking')}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Professional Summary */}
                     <div className={`professional-summary ${styles.professionalSummary}`}>
-                      <h6 className={`title ${styles.sectionTitle}`}>Professional Summary</h6>
+                      <h6 className={`title ${styles.sectionTitle}`}>{t('professionalSummary')}</h6>
                       <p className={`text-1 ${styles.summaryText}`}>
-                        {agent.fullName || "This agent"} brings extensive experience in real estate transactions, 
+                        {agent.fullName || t('agent')} brings extensive experience in real estate transactions, 
                         market analysis, and client relations. With a proven track record of successful property 
-                        sales and satisfied clients, {agent.fullName?.split(' ')[0] || "they"} are committed to 
+                        sales and satisfied clients, {agent.fullName?.split(' ')[0] || t('agent')} are committed to 
                         providing personalized service and expert guidance throughout the buying and selling process.
                       </p>
                       
                       <div className={`achievements ${styles.achievements}`}>
                         <div className={`achievement-item ${styles.achievementItem}`}>
                           <div className={styles.achievementNumber}>50+</div>
-                          <span className={styles.achievementLabel}>Properties Sold</span>
+                          <span className={styles.achievementLabel}>{t('propertiesSold')}</span>
                         </div>
                         
                         <div className={`achievement-item ${styles.achievementItem}`}>
                           <div className={styles.achievementNumber}>5+</div>
-                          <span className={styles.achievementLabel}>Years Experience</span>
+                          <span className={styles.achievementLabel}>{t('yearsExperience')}</span>
                         </div>
                         
                         <div className={`achievement-item ${styles.achievementItem}`}>
                           <div className={styles.achievementNumber}>98%</div>
-                          <span className={styles.achievementLabel}>Client Satisfaction</span>
+                          <span className={styles.achievementLabel}>{t('clientSatisfaction')}</span>
                         </div>
                         
                         <div className={`achievement-item ${styles.achievementItem}`}>
                           <div className={styles.achievementNumber}>24/7</div>
-                          <span className={styles.achievementLabel}>Availability</span>
+                          <span className={styles.achievementLabel}>{t('availability')}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Contact Information */}
                     <div className={`contact-info ${styles.contactInfo}`}>
-                      <h6 className={`title ${styles.sectionTitle}`}>Contact Information</h6>
+                      <h6 className={`title ${styles.sectionTitle}`}>{t('contactInformation')}</h6>
                       
                       <div className={`contact-grid ${styles.contactGrid}`}>
                         <div className={`contact-item ${styles.contactItem}`}>
                           <div className={styles.contactIcon}>📧</div>
                           <div>
-                            <strong className={styles.contactLabel}>Email</strong>
+                            <strong className={styles.contactLabel}>{t('emailLabel')}</strong>
                             <span className={styles.contactValue}>{agent.email || 'contact@property.com'}</span>
                           </div>
                         </div>
@@ -343,7 +345,7 @@ export default function AgentDetails({ agentId }) {
                           <div className={`contact-item ${styles.contactItem}`}>
                             <div className={styles.contactIcon}>📞</div>
                             <div>
-                              <strong className={styles.contactLabel}>Phone</strong>
+                              <strong className={styles.contactLabel}>{t('phone')}</strong>
                               <span className={styles.contactValue}>{agent.phone}</span>
                             </div>
                           </div>
@@ -353,7 +355,7 @@ export default function AgentDetails({ agentId }) {
                           <div className={`contact-item ${styles.contactItem}`}>
                             <div className={styles.contactIcon}>📍</div>
                             <div>
-                              <strong className={styles.contactLabel}>Location</strong>
+                              <strong className={styles.contactLabel}>{t('location')}</strong>
                               <span className={styles.contactValue}>{agent.location}</span>
                             </div>
                           </div>
@@ -362,8 +364,8 @@ export default function AgentDetails({ agentId }) {
                         <div className={`contact-item ${styles.contactItem}`}>
                           <div className={styles.contactIcon}>⏰</div>
                           <div>
-                            <strong className={styles.contactLabel}>Response Time</strong>
-                            <span className={styles.contactValue}>Within 2 hours</span>
+                            <strong className={styles.contactLabel}>{t('responseTime')}</strong>
+                            <span className={styles.contactValue}>{t('within2Hours')}</span>
                           </div>
                         </div>
                       </div>
@@ -375,7 +377,7 @@ export default function AgentDetails({ agentId }) {
                     onClick={() => setShowMoreDetails(!showMoreDetails)}
                     className={`tf-btn-link ${styles.toggleButton}`}
                   >
-                    <span>{showMoreDetails ? 'Show Less' : 'Show More'}</span>
+                    <span>{showMoreDetails ? t('showLess') : t('showMore')}</span>
                     <svg width={20}
                       height={20}
                       viewBox="0 0 20 20"
@@ -423,12 +425,12 @@ export default function AgentDetails({ agentId }) {
                 onSubmit={(e) => e.preventDefault()}
                 className="form-contact-agent style-2 mb-30"
               >
-                <h4 className="heading-title mb-30">Contact Me</h4>
+                <h4 className="heading-title mb-30">{t('contactMe')}</h4>
                 <fieldset>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Your name"
+                    placeholder={t('yourName')}
                     name="name"
                     id="name"
                     required
@@ -438,7 +440,7 @@ export default function AgentDetails({ agentId }) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Email"
+                    placeholder={t('email')}
                     name="email"
                     id="email-contact"
                     required
@@ -448,7 +450,7 @@ export default function AgentDetails({ agentId }) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Your phone number"
+                    placeholder={t('yourPhoneNumber')}
                     name="phone"
                     id="phone"
                     required
@@ -459,7 +461,7 @@ export default function AgentDetails({ agentId }) {
                     name="message"
                     cols={30}
                     rows={10}
-                    placeholder="Message"
+                    placeholder={t('message')}
                     id="message"
                     required
                     defaultValue={""}
@@ -481,7 +483,7 @@ export default function AgentDetails({ agentId }) {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Send message
+                    {t('sendMessage')}
                   </a>
                   {agent.phone && (
                     <a href={`tel:${agent.phone}`} className="tf-btn style-border pd-24">
@@ -499,7 +501,7 @@ export default function AgentDetails({ agentId }) {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    Call
+                    {t('call')}
                   </a>
                   )}
                 </div>

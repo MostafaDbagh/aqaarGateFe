@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
 import LocationLoader from "@/components/common/LocationLoader";
@@ -11,10 +11,11 @@ import { useRouter } from "next/navigation";
 export default function Cities() {
   const router = useRouter();
   const t = useTranslations('homeSections');
+  const locale = useLocale();
   
   // Use new city API - much more efficient than fetching all listings
   const { data: cityStatsResponse, isLoading, isError, error } = useQuery({
-    queryKey: ['cities', 'stats'],
+    queryKey: ['cities', 'stats', locale],
     queryFn: () => cityAPI.getCityStats(),
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     refetchOnWindowFocus: false,
@@ -170,6 +171,8 @@ export default function Cities() {
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
           font-weight: 700 !important;
           line-height: 1.2;
+          direction: ltr !important;
+          text-align: left !important;
         }
         
         .city-count {
@@ -332,7 +335,7 @@ export default function Cities() {
                     <div className="city-overlay"></div>
                   </div>
                   <div className="city-content position-absolute bottom-0 start-0 end-0 p-4">
-                    <h4 className="text-white mb-3 fw-bold city-title">{location.city}</h4>
+                    <h4 className="text-white mb-3 fw-bold city-title" dir="ltr">{location.city}</h4>
                     <div className="d-flex align-items-center justify-content-between">
                       <span 
                         className="city-count" 

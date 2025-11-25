@@ -346,6 +346,8 @@
   font-weight: 600;
   color: #1a1a1a;
   margin: 0;
+  direction: ltr !important;
+  text-align: left !important;
 }
 
 /* Features Grid */

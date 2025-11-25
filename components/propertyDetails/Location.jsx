@@ -1,10 +1,13 @@
+"use client";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 export default function Location() {
+  const t = useTranslations('propertyDetail');
   return (
     <>
       <div className="wg-title text-11 fw-6 text-color-heading">
-        Location
+        {t('location')}
       </div>
       <iframe
         className="map"
@@ -17,29 +20,29 @@ export default function Location() {
       <div className="info-map">
         <ul className="box-left">
           <li>
-            <span className="label fw-6">Address</span>
+            <span className="label fw-6">{t('address')}</span>
             <div className="text text-variant-1">150 sqft</div>
           </li>
           <li>
-            <span className="label fw-6">City</span>
+            <span className="label fw-6">{t('city')}</span>
             <div className="text text-variant-1">#1234</div>
           </li>
           <li>
-            <span className="label fw-6">State/county</span>
+            <span className="label fw-6">{t('stateCounty')}</span>
             <div className="text text-variant-1">$7,500</div>
           </li>
         </ul>
         <ul className="box-right">
           <li>
-            <span className="label fw-6">Postal code</span>
+            <span className="label fw-6">{t('postalCode')}</span>
             <div className="text text-variant-1">7.328</div>
           </li>
           <li>
-            <span className="label fw-6">Area</span>
+            <span className="label fw-6">{t('area')}</span>
             <div className="text text-variant-1">7.328</div>
           </li>
           <li>
-            <span className="label fw-6">Country</span>
+            <span className="label fw-6">{t('country')}</span>
             <div className="text text-variant-1">2024</div>
           </li>
         </ul>

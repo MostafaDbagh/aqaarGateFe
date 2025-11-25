@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -16,10 +16,11 @@ export default function Categories({
   setCategory
 }) {
   const t = useTranslations('homeSections');
+  const locale = useLocale();
   
   // Use new category API - much more efficient than fetching all listings
   const { data: categoryStatsResponse, isLoading, isError, error } = useQuery({
-    queryKey: ['categories', 'stats'],
+    queryKey: ['categories', 'stats', locale],
     queryFn: () => categoryAPI.getCategoryStats(),
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     refetchOnWindowFocus: false,

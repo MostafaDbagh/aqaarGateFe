@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { useListing, useIncrementVisitCount } from "@/apis/hooks";
+import { useTranslations } from 'next-intl';
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Breadcumb from "@/components/common/Breadcumb";
@@ -12,6 +13,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import PropertyStructuredData from "@/components/seo/PropertyStructuredData";
 
 export default function PropertyDetailClient({ id }) {
+  const t = useTranslations('propertyDetail');
   const { data: property, isLoading, isError, error } = useListing(id);
   const incrementVisitCount = useIncrementVisitCount();
   const hasIncremented = useRef(false);
@@ -84,9 +86,9 @@ export default function PropertyDetailClient({ id }) {
     return (
       <div className="container mt-5">
         <div className="alert alert-danger">
-          <h4>Error Loading Property</h4>
-          <p>{error?.message || 'Failed to load property details'}</p>
-          <p>Please try again later or contact support.</p>
+          <h4>{t('errorLoading')}</h4>
+          <p>{error?.message || t('failedToLoad')}</p>
+          <p>{t('tryAgainLater')}</p>
         </div>
       </div>
     );
@@ -96,8 +98,8 @@ export default function PropertyDetailClient({ id }) {
     return (
       <div className="container mt-5">
         <div className="alert alert-warning">
-          <h4>Property Not Found</h4>
-          <p>The property you're looking for doesn't exist or has been removed.</p>
+          <h4>{t('propertyNotFound')}</h4>
+          <p>{t('propertyRemoved')}</p>
         </div>
       </div>
     );

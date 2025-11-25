@@ -1,6 +1,9 @@
+"use client";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 export default function Features({ property }) {
+  const t = useTranslations('propertyDetail');
   // Get amenities from property data or use empty array as fallback
   const amenities = property?.amenities || [];
 
@@ -15,10 +18,10 @@ export default function Features({ property }) {
     return (
       <>
         <div className="wg-title text-11 fw-6 text-color-heading">
-          Amenities And Features
+          {t('amenitiesAndFeatures')}
         </div>
         <div className="wrap-feature">
-          <p className="text-color-2">No amenities listed for this property.</p>
+          <p className="text-color-2">{t('noAmenities')}</p>
         </div>
       </>
     );
@@ -27,7 +30,7 @@ export default function Features({ property }) {
   return (
     <>
       <div className="wg-title text-11 fw-6 text-color-heading">
-        Amenities And Features
+        {t('amenitiesAndFeatures')}
       </div>
       <div className="wrap-feature">
         {column1.length > 0 && (

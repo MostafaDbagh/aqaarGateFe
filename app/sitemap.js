@@ -235,19 +235,9 @@ export default async function sitemap() {
       priority: 0.5,
     },
     
-    // Note: The following pages exist but are not included in sitemap for SEO reasons:
-    // - Dashboard pages (/dashboard, /my-favorites, /my-property, etc.) - User-specific, require authentication
-    // - Admin pages (/admin/*) - Admin-only, should not be indexed
-    // - 404 page - Error page, should not be indexed
-    
-    // Dynamic property detail pages
-    // These are generated from the API and include all approved properties
-    // Each property gets its own URL: /property-detail/[id]
+  
     ...propertyUrls,
-    
-    // Dynamic agent detail pages
-    // These are generated from the API and include all non-blocked agents
-    // Each agent gets its own URL: /agents-details/[id]
+
     ...agentUrls,
   ]
 }

@@ -1,19 +1,25 @@
 "use client";
 import React, { useState } from "react";
+import { useTranslations } from 'next-intl';
 import { getStatusBadge } from "@/utlis/propertyHelpers";
+import { translateKeywordsString } from "@/utils/translateKeywords";
 import MoreAboutPropertyModal from "../modals/MoreAboutPropertyModal";
 import ContactAgentModal from "../modals/ContactAgentModal";
 import styles from "./PropertyOverview.module.css";
 import { HeartOutlineIcon, CopyIcon, CheckIcon } from "@/components/icons";
 import logger from "@/utlis/logger";
 import FavoriteButton from "../common/FavoriteButton";
+import ShareButton from "./ShareButton";
 
 export default function PropertyOverview({ property }) {
+  const t = useTranslations();
+  const tCommon = useTranslations('common');
+  const tDetail = useTranslations('propertyDetail');
   const [isMoreInfoModalOpen, setIsMoreInfoModalOpen] = useState(false);
   const [isAskQuestionModalOpen, setIsAskQuestionModalOpen] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   
-  const statusBadge = getStatusBadge(property?.status);
+  const statusBadge = getStatusBadge(property?.status, t);
   
   // Handle copy property ID
   const handleCopyPropertyId = async (propertyId) => {
@@ -62,15 +68,11 @@ export default function PropertyOverview({ property }) {
       {/* Property Keyword Tags */}
       {property?.propertyKeyword && (
         <div className={styles.keywordTagsContainer}>
-          {property.propertyKeyword.split(',').map((keyword, index) => {
-            const trimmedKeyword = keyword.trim();
-            if (!trimmedKeyword) return null;
-            return (
-              <span key={index} className={styles.keywordTag}>
-                {trimmedKeyword}
-              </span>
-            );
-          })}
+          {translateKeywordsString(property.propertyKeyword, tCommon).map((translatedKeyword, index) => (
+            <span key={index} className={styles.keywordTag}>
+              {translatedKeyword}
+            </span>
+          ))}
         </div>
       )}
       <div className="info flex justify-between">
@@ -82,15 +84,15 @@ export default function PropertyOverview({ property }) {
           <ul className="meta-list flex">
             <li className="text-1 flex items-center gap-10">
               <i className="icon-Bed-2" />
-              <span>{property?.bedrooms || '0'}</span>Bed
+              <span>{property?.bedrooms || '0'}</span>{tDetail('bed')}
             </li>
             <li className="text-1 flex items-center gap-10">
               <i className="icon-Bathtub" />
-              <span>{property?.bathrooms || '0'}</span>Bath
+              <span>{property?.bathrooms || '0'}</span>{tDetail('bath')}
             </li>
             <li className="text-1 flex items-center gap-10">
               <i className="icon-Ruler" />
-              <span>{property?.size || '0'}</span>Sqft
+              <span>{property?.size || '0'}</span>{tDetail('sqft')}
             </li>
           </ul>
         </div>
@@ -104,6 +106,9 @@ export default function PropertyOverview({ property }) {
                 iconClassName="icon-heart-1"
               />
             </li>
+            <li>
+              <ShareButton property={property} />
+            </li>
           </ul>
         </div>
       </div>
@@ -114,7 +119,7 @@ export default function PropertyOverview({ property }) {
               <i className="icon-HouseLine" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">ID:</div>
+              <div className="text-4 text-color-default">{tDetail('id')}:</div>
               <div className="text-1 text-color-heading" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span>{property?.propertyId || 'N/A'}</span>
                 {property?.propertyId && (
@@ -130,7 +135,7 @@ export default function PropertyOverview({ property }) {
                       color: copiedId === property.propertyId ? '#28a745' : '#6c757d',
                       transition: 'color 0.2s'
                     }}
-                    title={copiedId === property.propertyId ? 'Copied!' : 'Copy Property ID'}
+                    title={copiedId === property.propertyId ? tDetail('copied') : tDetail('copyPropertyId')}
                     aria-label="Copy property ID to clipboard"
                   >
                     {copiedId === property.propertyId ? (
@@ -148,8 +153,8 @@ export default function PropertyOverview({ property }) {
               <i className="icon-Bathtub" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Bathrooms:</div>
-              <div className="text-1 text-color-heading">{property?.bathrooms || '0'} Rooms</div>
+              <div className="text-4 text-color-default">{tDetail('bathrooms')}:</div>
+              <div className="text-1 text-color-heading">{property?.bathrooms || '0'} {tDetail('rooms')}</div>
             </div>
           </div>
         </div>
@@ -159,7 +164,7 @@ export default function PropertyOverview({ property }) {
               <i className="icon-SlidersHorizontal" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Type:</div>
+              <div className="text-4 text-color-default">{tDetail('type')}:</div>
               <div className="text-1 text-color-heading">{property?.propertyType || 'House'}</div>
             </div>
           </div>
@@ -168,8 +173,8 @@ export default function PropertyOverview({ property }) {
               <i className="icon-Crop" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Land Size:</div>
-              <div className="text-1 text-color-heading">{property?.landArea || '0'} SqFt</div>
+              <div className="text-4 text-color-default">{tDetail('landSize')}:</div>
+              <div className="text-1 text-color-heading">{property?.landArea || '0'} {tDetail('sqft')}</div>
             </div>
           </div>
         </div>
@@ -179,8 +184,8 @@ export default function PropertyOverview({ property }) {
               <i className="icon-Garage-1" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Garages</div>
-              <div className="text-1 text-color-heading">{property?.garages ? 'Yes' : 'No'}</div>
+              <div className="text-4 text-color-default">{tDetail('garages')}</div>
+              <div className="text-1 text-color-heading">{property?.garages ? tDetail('yes') : tDetail('no')}</div>
             </div>
           </div>
           <div className="box-icon">
@@ -188,7 +193,7 @@ export default function PropertyOverview({ property }) {
               <i className="icon-Hammer" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Year Built:</div>
+              <div className="text-4 text-color-default">{tDetail('yearBuilt')}:</div>
               <div className="text-1 text-color-heading">{property?.yearBuilt || 'N/A'}</div>
             </div>
           </div>
@@ -199,8 +204,8 @@ export default function PropertyOverview({ property }) {
               <i className="icon-Bed-2" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Bedrooms:</div>
-              <div className="text-1 text-color-heading">{property?.bedrooms || '0'} Rooms</div>
+              <div className="text-4 text-color-default">{tDetail('bedrooms')}:</div>
+              <div className="text-1 text-color-heading">{property?.bedrooms || '0'} {tDetail('rooms')}</div>
             </div>
           </div>
           <div className="box-icon">
@@ -208,8 +213,8 @@ export default function PropertyOverview({ property }) {
               <i className="icon-Ruler" />
             </div>
             <div className="content">
-              <div className="text-4 text-color-default">Size:</div>
-              <div className="text-1 text-color-heading">{property?.size || '0'} SqFt</div>
+              <div className="text-4 text-color-default">{tDetail('size')}:</div>
+              <div className="text-1 text-color-heading">{property?.size || '0'} {tDetail('sqft')}</div>
             </div>
           </div>
         </div>
@@ -233,7 +238,7 @@ export default function PropertyOverview({ property }) {
                 !
               </div>
               <div className="content">
-                <div className="text-4 text-color-default">Notes:</div>
+                <div className="text-4 text-color-default">{tDetail('notes')}:</div>
                 <div className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
                   {property.notes}
                 </div>
@@ -247,7 +252,7 @@ export default function PropertyOverview({ property }) {
         className="tf-btn bg-color-primary pd-21 fw-6"
         style={{ border: 'none', cursor: 'pointer', width: '100%' }}
       >
-        Ask a question
+        {tDetail('askQuestion')}
       </button>
 
       <ContactAgentModal 

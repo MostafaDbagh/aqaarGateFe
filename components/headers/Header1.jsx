@@ -5,17 +5,29 @@ import Link from "next/link";
 import Image from "next/image";
 import DashboardNav from "./DashboardNav";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
-import { PhoneIcon } from "@/components/icons";
 import { useAuthState } from "@/store/hooks/useAuth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 
 export default function Header1({ parentClass = "header" }) {
   // Use Redux for auth state
   const { isAuthenticated: isLoggedIn, isAgent, user } = useAuthState();
   const { showMakeMeAgentModal } = useGlobalModal();
+  const tCommon = useTranslations('common');
+  const pathname = usePathname();
   
   // Check if user is admin
   const isAdmin = user?.role === 'admin';
+  
+  // Check if we're on dashboard or admin pages
+  // Remove locale from pathname for checking
+  const pathWithoutLocale = pathname?.replace(/^\/(en|ar)/, '') || pathname || '';
+  const isDashboardPage = pathWithoutLocale?.includes('/dashboard') || pathWithoutLocale?.includes('/admin') || 
+                          pathWithoutLocale?.includes('/my-property') || pathWithoutLocale?.includes('/add-property') ||
+                          pathWithoutLocale?.includes('/my-profile') || pathWithoutLocale?.includes('/my-package') ||
+                          pathWithoutLocale?.includes('/messages') || pathWithoutLocale?.includes('/review') ||
+                          pathWithoutLocale?.includes('/my-favorites') || pathWithoutLocale?.includes('/my-save-search');
 
   const makeAgent = (e) => {
     e.preventDefault();
@@ -48,13 +60,7 @@ export default function Header1({ parentClass = "header" }) {
                   </ul>
                 </nav>
                 <div className="header-right">
-                  <div className="phone-number">
-                    <div className="icons">
-                      <PhoneIcon stroke="black" />
-                    </div>
-                    <p>+963995278383</p>
-                  </div>
-                  <LanguageSwitcher />
+                  {!isDashboardPage && <LanguageSwitcher />}
                   <DashboardNav />
                   
                   {/* Add Property Button - Only for Agents */}
@@ -65,7 +71,7 @@ export default function Header1({ parentClass = "header" }) {
                         href={`/add-property`}
                         style={{ borderRadius: '12px' }}
                       >
-                        Add property
+                        {tCommon('addProperty')}
                       </Link>
                     </div>
                   )}
@@ -85,7 +91,7 @@ export default function Header1({ parentClass = "header" }) {
                           borderRadius: '12px'
                         }}
                       >
-                        🎯 Make Me Agent
+                        🎯 {tCommon('makeMeAgent')}
                       </button>
                     </div>
                   )}

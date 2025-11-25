@@ -46,7 +46,7 @@ export default async function LocaleLayout({ children, params }) {
                 `,
               }}
             />
-            <NextIntlClientProvider messages={fallbackMessages}>
+            <NextIntlClientProvider messages={fallbackMessages} timeZone="UTC">
               <Providers>
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   Error loading messages. Please refresh the page.
@@ -81,7 +81,7 @@ export default async function LocaleLayout({ children, params }) {
           `,
         }}
       />
-      <NextIntlClientProvider messages={messages}>
+      <NextIntlClientProvider messages={messages} timeZone="UTC">
         <Providers>
           <StructuredData />
           <KeywordOptimization />

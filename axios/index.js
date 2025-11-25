@@ -31,6 +31,51 @@ Axios.interceptors.request.use(
     // Set baseURL dynamically based on environment
     config.baseURL = getBaseURL();
     
+    // Get current locale - check sessionStorage first (set by LanguageSwitcher), then pathname
+    if (typeof window !== 'undefined') {
+      let locale = 'en'; // Default to 'en'
+      
+      // First, check sessionStorage (set immediately when language changes)
+      let storedLocale = sessionStorage.getItem('currentLocale');
+      
+      // If no stored locale, read from pathname and store it
+      if (!storedLocale || (storedLocale !== 'ar' && storedLocale !== 'en')) {
+        const pathname = window.location.pathname;
+        
+        // Check pathname - must check /ar/ FIRST before /en/ to avoid false matches
+        if (pathname.startsWith('/ar/') || pathname === '/ar') {
+          locale = 'ar';
+          sessionStorage.setItem('currentLocale', 'ar');
+        } else if (pathname.startsWith('/en/') || pathname === '/en') {
+          locale = 'en';
+          sessionStorage.setItem('currentLocale', 'en');
+        } else {
+          // No locale in pathname, default to 'en'
+          sessionStorage.setItem('currentLocale', 'en');
+        }
+      } else {
+        // Use stored locale
+        locale = storedLocale;
+        
+        // Verify it matches pathname (in case user navigated directly)
+        const pathname = window.location.pathname;
+        const pathLocale = pathname.startsWith('/ar/') || pathname === '/ar' ? 'ar' : 
+                          pathname.startsWith('/en/') || pathname === '/en' ? 'en' : null;
+        
+        // If pathname has a different locale, update sessionStorage
+        if (pathLocale && pathLocale !== locale) {
+          locale = pathLocale;
+          sessionStorage.setItem('currentLocale', pathLocale);
+        }
+      }
+      
+      // Add Accept-Language header for i18n backend support
+      config.headers['Accept-Language'] = locale;
+    } else {
+      // Server-side: default to English
+      config.headers['Accept-Language'] = 'en';
+    }
+    
     // Rate limiting check (client-side protection)
     if (typeof window !== 'undefined') {
       const userIdentifier = localStorage.getItem('user') 

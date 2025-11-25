@@ -2,7 +2,6 @@
 import React from "react";
 import { useTranslations } from 'next-intl';
 import Link from "next/link";
-import Image from "next/image";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
@@ -11,10 +10,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { translateKeywordsString } from "@/utils/translateKeywords";
 import styles from "./Properties2.module.css";
 
 export default function Properties2() {
   const t = useTranslations('homeSections');
+  const tCommon = useTranslations('common');
+  const tRoot = useTranslations();
   // Use search endpoint to get ONLY Holiday Home properties
   const { data: searchResponse, isLoading, isError, error } = useSearchListings({ 
     propertyType: 'Holiday Home', // ONLY show Holiday Homes
@@ -185,7 +187,7 @@ export default function Properties2() {
                   const status = property.status?.toLowerCase();
                   const isRent = status === 'rent';
                   const isSale = status === 'sale';
-                  const displayStatus = isRent ? 'For Rent' : isSale ? 'For Sale' : 'For Rent';
+                  const displayStatus = isRent ? tCommon('forRent') : isSale ? tCommon('forSale') : tCommon('forRent');
                   
                   return (
                   <SwiperSlide key={property._id}>
@@ -194,12 +196,11 @@ export default function Properties2() {
                       <div className={styles.leftSection}>
                         <div className={styles.imageSection}>
                           <Link href={`/property-detail/${property._id}`}>
-                            <Image
+                            <img
                               className={`lazyload property-image-cover ${styles.propertyImage}`}
                               alt={property.propertyKeyword || property.propertyType || "Property"}
                               src={imageSrc || "/images/section/box-house-2.jpg"}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 370px"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                               onError={(e) => {
                                 e.currentTarget.src = "/images/section/box-house-2.jpg";
                               }}
@@ -214,7 +215,7 @@ export default function Properties2() {
                               {displayStatus}
                             </span>
                             <span className={styles.badgeHoliday}>
-                              🏖️ Holiday Home
+                              🏖️ {tCommon('holidayHome')}
                             </span>
                             {property.isAgentBlocked && (
                               <span className={styles.badgeBlockedAgent}>
@@ -237,15 +238,11 @@ export default function Properties2() {
                           {/* Property Keyword Tags */}
                           {property.propertyKeyword && (
                             <div className={styles.keywordTagsContainer}>
-                              {property.propertyKeyword.split(',').map((keyword, index) => {
-                                const trimmedKeyword = keyword.trim();
-                                if (!trimmedKeyword) return null;
-                                return (
-                                  <span key={index} className={styles.keywordTag}>
-                                    {trimmedKeyword}
-                                  </span>
-                                );
-                              })}
+                              {translateKeywordsString(property.propertyKeyword, tCommon).map((translatedKeyword, index) => (
+                                <span key={index} className={styles.keywordTag}>
+                                  {translatedKeyword}
+                                </span>
+                              ))}
                             </div>
                           )}
                           <p className={styles.propertyLocation}>
@@ -260,7 +257,7 @@ export default function Properties2() {
                             ${property.propertyPrice?.toLocaleString() || '0'}
                           </div>
                           <Link href={`/property-detail/${property._id}`} className={styles.detailsBtn}>
-                            Details
+                            {tCommon('details')}
                           </Link>
                         </div>
                       </div>
@@ -273,26 +270,26 @@ export default function Properties2() {
                           <div className={styles.detailsGrid}>
                             <div className={styles.detailItem}>
                               <i className="icon-bed" />
-                              <span>Beds <strong>{property.bedrooms}</strong></span>
+                              <span>{tCommon('beds')} <strong>{property.bedrooms}</strong></span>
                             </div>
                             <div className={styles.detailItem}>
                               <i className="icon-bath" />
-                              <span>Baths <strong>{property.bathrooms}</strong></span>
+                              <span>{tCommon('baths')} <strong>{property.bathrooms}</strong></span>
                             </div>
                             <div className={styles.detailItem}>
                               <i className="icon-sqft" />
-                              <span>Sqft <strong>{property.size}</strong></span>
+                              <span>{tCommon('sqft')} <strong>{property.size}</strong></span>
                             </div>
                             <div className={styles.detailItem}>
                               <i className="icon-garage" />
-                              <span>Garage <strong>{property.garages ? 'Yes' : 'No'}</strong></span>
+                              <span>{tCommon('garage')} <strong>{property.garages ? tCommon('yes') : tCommon('no')}</strong></span>
                             </div>
                           </div>
                         </div>
                         
                         {/* Action Buttons - Tab Style */}
                         <div className={styles.actionButtonsSection}>
-                          <p className={`${styles.contactAgentTitle} contact-agent-title`}>Contact Agent</p>
+                          <p className={`${styles.contactAgentTitle} contact-agent-title`}>{tCommon('contactAgent')}</p>
                           <div className={styles.actionButtonsVertical}>
                             <button 
                               className={`${styles.actionTab} ${styles.callTab}`}
@@ -308,7 +305,7 @@ export default function Properties2() {
                               <i className="icon-phone-1" />
                               <span className="phone-number-text" style={{fontSize: '12px'}}>
                                 
-                                  {property.agentNumber || property.agent?.phoneNumber || property.agent?.phone || 'Call Agent'}
+                                  {property.agentNumber || property.agent?.phoneNumber || property.agent?.phone || tCommon('callAgent')}
                                 
                               </span>
                             </button>
@@ -326,7 +323,7 @@ export default function Properties2() {
                               <i className="icon-mail" />
                               <span>
                                 
-                                  {property.agentEmail || property.agent?.email || 'Email Agent'}
+                                  {property.agentEmail || property.agent?.email || tCommon('emailAgent')}
                                 
                               </span>
                             </button>

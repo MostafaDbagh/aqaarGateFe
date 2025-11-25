@@ -1,20 +1,21 @@
 /**
  * Get status badge configuration for property status
  * @param {string} status - Property status (rent, sale, etc.)
+ * @param {Function} t - Translation function (optional)
  * @returns {Object} Badge configuration with text, bgColor, and textColor
  */
-export const getStatusBadge = (status) => {
+export const getStatusBadge = (status, t = null) => {
   const normalizedStatus = status?.toLowerCase();
   
   if (normalizedStatus === 'rent') {
     return {
-      text: 'For Rent',
+      text: t ? t('common.forRent') : 'For Rent',
       bgColor: '#3B82F6', // Blue
       textColor: '#FFFFFF'
     };
   } else if (normalizedStatus === 'sale') {
     return {
-      text: 'For Sale',
+      text: t ? t('common.forSale') : 'For Sale',
       bgColor: '#10B981', // Green
       textColor: '#FFFFFF'
     };

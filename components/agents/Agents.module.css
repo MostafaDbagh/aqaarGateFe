@@ -1,6 +1,12 @@
 /* Filters */
 .cityDropdown { width: 40%; }
 
+/* City Tags - Always LTR */
+.city-tag {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
 /* Empty State */
 .emptyState {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

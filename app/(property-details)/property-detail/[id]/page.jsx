@@ -1,6 +1,10 @@
 import React from "react";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 
+// Disable static generation for dynamic routes to avoid build errors
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';

@@ -40,6 +40,17 @@
 .rc-slider .rc-slider-tracks {
   background-color: var(--Primary);
 }
+
+/* City names - Always LTR regardless of language */
+.city-title,
+.cityName,
+.city-tag,
+[dir="ltr"] .city-title,
+[dir="ltr"] .cityName,
+[dir="ltr"] .city-tag {
+  direction: ltr !important;
+  text-align: left !important;
+}
 .header.header-10:not(.header-sticky) {
   .row > * {
     padding-left: 0 !important;

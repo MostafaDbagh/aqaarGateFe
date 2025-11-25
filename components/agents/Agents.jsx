@@ -665,7 +665,7 @@ export default function Agents() {
                         {agent.location && (
                           <div className="cities-tags">
                             {agent.location.split(',').map((city, index) => (
-                              <span key={index} className="city-tag">
+                              <span key={index} className="city-tag" dir="ltr">
                                 {city.trim()}
                               </span>
                             ))}

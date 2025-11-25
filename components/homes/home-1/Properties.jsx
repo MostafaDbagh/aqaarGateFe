@@ -2,7 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordsString } from "@/utils/translateKeywords";
 import '@/components/properties/PropertyImageFix.css';
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
@@ -10,7 +11,9 @@ import LocationLoader from "@/components/common/LocationLoader";
 import styles from "./Properties.module.css";
 
 export default function Properties({ listings, isLoading, isError }) {
-  const t = useTranslations('homeSections');
+  const t = useTranslations();
+  const tCommon = useTranslations('common');
+  const tHomeSections = useTranslations('homeSections');
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
 
@@ -142,10 +145,10 @@ export default function Properties({ listings, isLoading, isError }) {
           <div className="col-12">
             <div className="heading-section text-center">
               <h2 className="title split-text effect-right">
-                {t('todaysLuxuryListings')}
+                {tHomeSections('todaysLuxuryListings')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                {t('todaysLuxuryListingsSubtitle')}
+                {tHomeSections('todaysLuxuryListingsSubtitle')}
               </p>
             </div>
             <div style={{ padding: '60px 20px', textAlign: 'center' }}>
@@ -196,15 +199,15 @@ export default function Properties({ listings, isLoading, isError }) {
             <div className="col-12">
               <div className="heading-section text-center">
                 <h2 className="title split-text effect-right">
-                  {t('todaysListings')}
+                  {tHomeSections('todaysListings')}
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
-                  {t('todaysListingsSubtitle')}
+                  {tHomeSections('todaysListingsSubtitle')}
                 </p>
               </div>
               <div style={{ padding: '60px 20px', textAlign: 'center' }}>
                 <div style={{ color: '#6B7280', fontSize: '18px', fontWeight: '500' }}>
-                  {t('noPropertiesAvailable')}
+                  {tHomeSections('noPropertiesAvailable')}
                 </div>
               </div>
             </div>
@@ -221,10 +224,10 @@ export default function Properties({ listings, isLoading, isError }) {
           <div className="col-12">
             <div className="heading-section text-center ">
               <h2 className="title split-text effect-right">
-                {t('todaysListings')}
+                {tHomeSections('todaysListings')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                {t('todaysListingsSubtitle')}
+                {tHomeSections('todaysListingsSubtitle')}
               </p>
             </div>
             
@@ -327,7 +330,7 @@ export default function Properties({ listings, isLoading, isError }) {
                 color: 'white'
               }}
             >
-              {listing.status?.toLowerCase() === 'rent' ? 'For Rent' : 'For Sale'}
+              {listing.status?.toLowerCase() === 'rent' ? t('common.forRent') : t('common.forSale')}
             </li>
           </ul>
 
@@ -357,15 +360,11 @@ export default function Properties({ listings, isLoading, isError }) {
           {/* Property Keyword Tags */}
           {listing.propertyKeyword && (
             <div className={styles.keywordTagsContainer}>
-              {listing.propertyKeyword.split(',').map((keyword, index) => {
-                const trimmedKeyword = keyword.trim();
-                if (!trimmedKeyword) return null;
-                return (
-                  <span key={index} className={styles.keywordTag}>
-                    {trimmedKeyword}
-                  </span>
-                );
-              })}
+              {translateKeywordsString(listing.propertyKeyword, tCommon).map((translatedKeyword, index) => (
+                <span key={index} className={styles.keywordTag}>
+                  {translatedKeyword}
+                </span>
+              ))}
             </div>
           )}
           </div>
@@ -428,7 +427,7 @@ export default function Properties({ listings, isLoading, isError }) {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04207 3.23945 9.11999 3.72C9.28562 4.68007 9.56648 5.62273 9.95999 6.53C10.0555 6.74431 10.1112 6.97355 10.1241 7.20668C10.137 7.43981 10.1069 7.67342 10.0353 7.896C9.96366 8.11858 9.85182 8.32642 9.70599 8.51L8.08999 10.12C9.51355 12.4885 11.5115 14.4864 13.88 15.91L15.49 14.3C15.6736 14.1542 15.8814 14.0423 16.104 13.9707C16.3266 13.8991 16.5602 13.869 16.7933 13.8819C17.0264 13.8948 17.2557 13.9505 17.47 14.046C18.3773 14.4395 19.3199 14.7204 20.28 14.886C20.7658 14.9656 21.2094 15.2132 21.5265 15.5866C21.8437 15.9601 22.0122 16.4348 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  {showPhoneNumbers[listing._id] ? (listing.agentPhone || '+971549967817') : 'Call'}
+                  {showPhoneNumbers[listing._id] ? (listing.agentPhone || '+971549967817') : t('common.call')}
                 </button>
                 
                 {showPhoneNumbers[listing._id] && (
@@ -470,7 +469,7 @@ export default function Properties({ listings, isLoading, isError }) {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04207 3.23945 9.11999 3.72C9.28562 4.68007 9.56648 5.62273 9.95999 6.53C10.0555 6.74431 10.1112 6.97355 10.1241 7.20668C10.137 7.43981 10.1069 7.67342 10.0353 7.896C9.96366 8.11858 9.85182 8.32642 9.70599 8.51L8.08999 10.12C9.51355 12.4885 11.5115 14.4864 13.88 15.91L15.49 14.3C15.6736 14.1542 15.8814 14.0423 16.104 13.9707C16.3266 13.8991 16.5602 13.869 16.7933 13.8819C17.0264 13.8948 17.2557 13.9505 17.47 14.046C18.3773 14.4395 19.3199 14.7204 20.28 14.886C20.7658 14.9656 21.2094 15.2132 21.5265 15.5866C21.8437 15.9601 22.0122 16.4348 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        Call
+                        {t('common.call')}
                       </button>
                       <button
                         onClick={() => handleWhatsAppClick(listing.agentPhone || '+971549967817')}
@@ -532,7 +531,7 @@ export default function Properties({ listings, isLoading, isError }) {
                   <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Email
+                {t('common.email')}
               </button>
 
               {/* Details Button */}
@@ -571,7 +570,7 @@ export default function Properties({ listings, isLoading, isError }) {
                   <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <polyline points="10,9 9,9 8,9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                Details
+                {t('common.details')}
               </button>
             </div>
           </div>

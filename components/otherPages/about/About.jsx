@@ -99,7 +99,7 @@ const About = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className={styles.cityIcon}>{city.icon}</div>
-                <h4 className={styles.cityName}>{city.name}</h4>
+                <h4 className={styles.cityName} dir="ltr">{city.name}</h4>
               </div>
             ))}
           </div>

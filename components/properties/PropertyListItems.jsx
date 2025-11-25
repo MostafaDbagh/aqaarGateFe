@@ -2,12 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordsString } from "@/utils/translateKeywords";
 import FavoriteButton from "../common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
 import logger from "@/utlis/logger";
 
 export default function PropertyListItems({ listings = [] }) {
+  const t = useTranslations();
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
   const [activeImageIndex, setActiveImageIndex] = useState({});
   if (!listings || listings.length === 0) {
@@ -361,7 +366,7 @@ export default function PropertyListItems({ listings = [] }) {
               <Link href={`/property-detail/${property._id}`} className="image-link">
               <Image
                 className="lazyload property-img"
-                alt={property.propertyKeyword || property.propertyTitle || 'Property'}
+                alt={property.propertyKeyword || property.propertyTitle || t('common.property')}
                 src={activeImage}
                 width={600}
                 height={401}
@@ -430,7 +435,7 @@ export default function PropertyListItems({ listings = [] }) {
             <ul className="box-tag flex gap-8">
               {property.propertyType === 'Holiday Homes' && (
                 <li className="flat-tag text-4 fw-6 text_white holiday-badge">
-                  🏖️ Holiday Home
+                  🏖️ {t('common.holidayHome')}
                 </li>
               )}
               {property.offer && (
@@ -445,7 +450,7 @@ export default function PropertyListItems({ listings = [] }) {
                   color: 'white'
                 }}
               >
-                {property.status?.toLowerCase() === 'rent' ? 'For Rent' : 'For Sale'}
+                {property.status?.toLowerCase() === 'rent' ? t('common.forRent') : t('common.forSale')}
               </li>
               {property.isAgentBlocked && (
                 <li className="flat-tag text-4 fw-6 text_white" style={{ backgroundColor: '#dc2626', color: 'white' }}>
@@ -470,28 +475,24 @@ export default function PropertyListItems({ listings = [] }) {
             {/* Property Keyword Tags */}
             {property.propertyKeyword && (
               <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {property.propertyKeyword.split(',').map((keyword, index) => {
-                  const trimmedKeyword = keyword.trim();
-                  if (!trimmedKeyword) return null;
-                  return (
-                    <span 
-                      key={index} 
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        padding: '4px 10px',
-                        backgroundColor: '#f0f0f0',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '20px',
-                        fontSize: '12px',
-                        color: '#333',
-                        fontWeight: '500'
-                      }}
-                    >
-                      {trimmedKeyword}
-                    </span>
-                  );
-                })}
+                {translateKeywordsString(property.propertyKeyword, tCommon).map((translatedKeyword, index) => (
+                  <span 
+                    key={index} 
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '4px 10px',
+                      backgroundColor: '#f0f0f0',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '20px',
+                      fontSize: '12px',
+                      color: '#333',
+                      fontWeight: '500'
+                    }}
+                  >
+                    {translatedKeyword}
+                  </span>
+                ))}
               </div>
             )}
             <p className="location text-1 flex items-center gap-6">
@@ -533,7 +534,7 @@ export default function PropertyListItems({ listings = [] }) {
                   onClick={() => handleDetailsClick(property._id)}
                   className="tf-btn style-border pd-4 details-btn-bordered"
                 >
-                  Details
+                  {t('common.details')}
                 </button>
               </div>
             </div>

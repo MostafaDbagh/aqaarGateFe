@@ -4,6 +4,26 @@ const withNextIntl = createNextIntlPlugin('./i18n.js');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Fix for webpack bundling issues
+    webpack: (config, { isServer, webpack }) => {
+      if (!isServer) {
+        config.resolve.fallback = {
+          ...config.resolve.fallback,
+          fs: false,
+        };
+      }
+      // Fix for next-intl bundling issues - use IgnorePlugin instead of alias
+      config.plugins.push(
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^@formatjs\/intl$/,
+        })
+      );
+      return config;
+    },
+    // Skip static generation for dynamic routes that cause issues
+    experimental: {
+      missingSuspenseWithCSRBailout: false,
+    },
     images: {
       remotePatterns: [
         {

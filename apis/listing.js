@@ -135,12 +135,19 @@ export const listingAPI = {
   getListingsByAgent: async (agentId, params = {}) => {
     try {
       const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Only add Authorization header if token exists (for authenticated requests)
+      // Public pages (like agents-details) should work without token
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const response = await Axios.get(`/listing/agent/${agentId}`, {
         params,
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers
       });
       return response.data;
     } catch (error) {

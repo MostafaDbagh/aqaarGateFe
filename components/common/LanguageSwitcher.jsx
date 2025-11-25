@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { routing } from '@/i18n/routing';
 import styles from './LanguageSwitcher.module.css';
 
@@ -9,8 +10,23 @@ export default function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  
+  // Check if we're on dashboard or admin pages - disable language switcher
+  // Remove locale from pathname for checking
+  const pathWithoutLocale = pathname?.replace(/^\/(en|ar)/, '') || pathname || '';
+  const isDashboardPage = pathWithoutLocale?.includes('/dashboard') || pathWithoutLocale?.includes('/admin') || 
+                          pathWithoutLocale?.includes('/my-property') || pathWithoutLocale?.includes('/add-property') ||
+                          pathWithoutLocale?.includes('/my-profile') || pathWithoutLocale?.includes('/my-package') ||
+                          pathWithoutLocale?.includes('/messages') || pathWithoutLocale?.includes('/review') ||
+                          pathWithoutLocale?.includes('/my-favorites') || pathWithoutLocale?.includes('/my-save-search');
+  
+  // Don't render if on dashboard pages
+  if (isDashboardPage) {
+    return null;
+  }
 
   const languages = [
     { code: 'en', flag: '🇬🇧', name: 'English' },
@@ -41,6 +57,17 @@ export default function LanguageSwitcher() {
       return;
     }
     
+    // Close dropdown immediately
+    setIsOpen(false);
+    
+    // Store locale in sessionStorage for immediate access by axios interceptor
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('currentLocale', newLocale);
+    }
+    
+    // Invalidate all queries to force refetch with new language
+    queryClient.invalidateQueries();
+    
     // Remove current locale from pathname
     const segments = pathname.split('/').filter(Boolean);
     
@@ -51,9 +78,16 @@ export default function LanguageSwitcher() {
     
     // Add new locale and navigate
     const newPath = `/${newLocale}${segments.length > 0 ? '/' + segments.join('/') : ''}`;
-    router.push(newPath);
-    router.refresh();
-    setIsOpen(false);
+    
+    // Use window.location.href for immediate navigation and reload
+    // This ensures the language changes from the first click
+    if (typeof window !== 'undefined') {
+      window.location.href = newPath;
+    } else {
+      // Fallback for SSR
+      router.replace(newPath);
+      router.refresh();
+    }
   };
 
   return (

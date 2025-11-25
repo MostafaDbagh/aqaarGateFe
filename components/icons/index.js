@@ -27,6 +27,10 @@ export { default as HeartOutlineIcon } from './HeartOutlineIcon';
 export { default as CompareIcon } from './CompareIcon';
 export { default as PrintIcon } from './PrintIcon';
 export { default as ShareIcon } from './ShareIcon';
+export { default as FacebookIcon } from './FacebookIcon';
+export { default as XIcon } from './XIcon';
+export { default as WhatsAppIcon } from './WhatsAppIcon';
+export { default as LinkIcon } from './LinkIcon';
 export { default as CopyIcon } from './CopyIcon';
 export { default as CheckIcon } from './CheckCircleIcon';
 

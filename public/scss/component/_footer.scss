@@ -203,12 +203,18 @@
         }
         .tf-collapse-content {
             display: block !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
         }
         &.open {
             .tf-collapse-content {
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
+                max-height: 2000px !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
             }
         }
     }

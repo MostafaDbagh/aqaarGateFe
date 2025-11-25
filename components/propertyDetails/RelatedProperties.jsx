@@ -306,12 +306,12 @@ export default function RelatedProperties({ currentProperty }) {
                         </Link>
                        
                         {property.offer && (
-                          <span className={styles.offerBadge}>Special Offer</span>
+                          <span className={styles.offerBadge}>{t('specialOffer')}</span>
                         )}
                       
                       {property.status && (
                         <span className={`${styles.statusBadge} ${getBadgeClass()}`}>
-                          {property.status === 'sale' ? 'For Sale' : 'For Rent'}
+                          {property.status === 'sale' ? t('forSale') : t('forRent')}
                         </span>
                       )}
                     </div>

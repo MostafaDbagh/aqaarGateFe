@@ -5,6 +5,10 @@ import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import React from "react";
 
+// Disable static generation for dynamic routes to avoid build errors
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
 export const metadata = {
   title: "Agents Details || AqaarGate - Real Estate React Nextjs Template",
   description: "AqaarGate - Real Estate React Nextjs Template",
