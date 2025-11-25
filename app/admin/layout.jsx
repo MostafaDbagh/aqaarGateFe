@@ -7,8 +7,8 @@ import { AdminTabContext, TABS } from "@/components/admin/AdminDashboardMain";
 import styles from "./AdminLayout.module.css";
 
 // Import CSS files for admin pages
-import "../public/main.scss";
-import "../public/css/components.css";
+import "../../public/main.scss";
+import "../../public/css/components.css";
 import "odometer/themes/odometer-theme-default.css";
 import "photoswipe/style.css";
 import "rc-slider/assets/index.css";

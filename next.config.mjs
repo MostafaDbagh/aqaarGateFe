@@ -36,10 +36,6 @@ const nextConfig = {
       };
       return config;
     },
-    // Skip static generation for dynamic routes that cause issues
-    experimental: {
-      missingSuspenseWithCSRBailout: false,
-    },
     images: {
       remotePatterns: [
         {
