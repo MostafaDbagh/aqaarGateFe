@@ -33,6 +33,26 @@
 
 .header {
     box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
+    
+    /* Remove left and right padding from container elements only */
+    .tf-container,
+    .tf-container.xl {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    .col-12 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
     .header-inner-wrap {
         @include mixin.flex(center, space-between);
         position: relative;
