@@ -15,7 +15,13 @@ export const listingAPI = {
   // Search/filter listings
   searchListings: async (searchParams) => {
     try {
-      const response = await Axios.get('/listing/search', { params: searchParams });
+      // Convert amenities array to comma-separated string for GET request
+      const params = { ...searchParams };
+      if (params.amenities && Array.isArray(params.amenities) && params.amenities.length > 0) {
+        params.amenities = params.amenities.join(',');
+      }
+      
+      const response = await Axios.get('/listing/search', { params });
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
