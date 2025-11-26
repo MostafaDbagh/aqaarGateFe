@@ -19,8 +19,11 @@
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  position: relative;
 }
 
 .modalHeader {
@@ -29,6 +32,14 @@
   align-items: center;
   padding: 24px;
   border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  background: white;
+  z-index: 1;
+  border-radius: 16px 16px 0 0;
+  overflow: visible !important;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .modalTitle {
@@ -61,6 +72,47 @@
 
 .modalForm {
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 transparent;
+}
+
+.modalForm::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalForm::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modalForm::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 4px;
+}
+
+.modalForm::-webkit-scrollbar-thumb:hover {
+  background-color: #a0aec0;
+}
+
+/* Ensure header never shows scrollbar */
+.modalHeader,
+.modalHeader * {
+  overflow: visible !important;
+}
+
+.modalHeader::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.modalHeader {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 .formGroup {

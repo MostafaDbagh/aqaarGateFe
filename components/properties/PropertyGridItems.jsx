@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import FavoriteButton from "../common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
@@ -13,6 +13,7 @@ import logger from "@/utlis/logger";
 export default function PropertyGridItems({ listings = [] }) {
   const t = useTranslations();
   const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const [activeImageIndex, setActiveImageIndex] = useState({});
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
@@ -581,7 +582,10 @@ export default function PropertyGridItems({ listings = [] }) {
             </div>
   
             <p className={`location text-1 flex items-center gap-6 ${styles.locationText}`}>
-              <i className="icon-location" /> <span className={styles.locationContent}><span className={styles.locationState}>{property.state}</span>-{property.address || 'Location not specified'}</span>
+              <i className="icon-location" /> <span className={styles.locationContent} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                <span className={styles.locationState}>{property.state}</span>-
+                {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || 'Location not specified')}
+              </span>
             </p>
             <ul className={`meta-list flex ${styles.metaList}`}>
               <li className="text-1 flex items-center">

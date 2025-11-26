@@ -33,6 +33,7 @@ export default function AddProperty({ isAdminMode = false }) {
     garages: false,
     garageSize: "",
     yearBuilt: "",
+    floor: "",
     address: "",
     country: "Syria",
     state: "Aleppo",
@@ -41,13 +42,19 @@ export default function AddProperty({ isAdminMode = false }) {
     agentId: "",
     amenities: [],
     propertyId: `PROP_${Date.now()}`,
-    notes: ""
+    notes: "",
+    // Arabic translation fields
+    description_ar: "",
+    address_ar: "",
+    neighborhood_ar: "",
+    notes_ar: ""
   });
 
   const [images, setImages] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
 
   const createListingMutation = useCreateListing();
 
@@ -237,6 +244,11 @@ export default function AddProperty({ isAdminMode = false }) {
     if (name !== 'yearBuilt' && errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    
+    // Clear Arabic field errors when user starts typing
+    if (name.includes('_ar') && errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleDropdownChange = (name, value) => {
@@ -307,6 +319,16 @@ export default function AddProperty({ isAdminMode = false }) {
     }));
   };
 
+  // Check if all Arabic fields are filled
+  const isArabicSectionComplete = () => {
+    return (
+      formData.description_ar && formData.description_ar.trim() !== '' &&
+      formData.address_ar && formData.address_ar.trim() !== '' &&
+      formData.neighborhood_ar && formData.neighborhood_ar.trim() !== '' &&
+      formData.notes_ar && formData.notes_ar.trim() !== ''
+    );
+  };
+
   const validateForm = () => {
     const newErrors = {};
     
@@ -322,6 +344,20 @@ export default function AddProperty({ isAdminMode = false }) {
     if (!formData.country) newErrors.country = "Country is required";
     if (!formData.state) newErrors.state = "State is required";
     if (!formData.neighborhood) newErrors.neighborhood = "Neighborhood is required";
+    
+    // Arabic translation fields - REQUIRED
+    if (!formData.description_ar || formData.description_ar.trim() === '') {
+      newErrors.description_ar = "Arabic description is required";
+    }
+    if (!formData.address_ar || formData.address_ar.trim() === '') {
+      newErrors.address_ar = "Arabic address is required";
+    }
+    if (!formData.neighborhood_ar || formData.neighborhood_ar.trim() === '') {
+      newErrors.neighborhood_ar = "Arabic neighborhood is required";
+    }
+    if (!formData.notes_ar || formData.notes_ar.trim() === '') {
+      newErrors.notes_ar = "Arabic notes are required";
+    }
     
     // Numeric validations
     if (!formData.bedrooms || isNaN(formData.bedrooms) || parseInt(formData.bedrooms) < 0) {
@@ -353,6 +389,9 @@ export default function AddProperty({ isAdminMode = false }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Mark that submit has been attempted
+    setSubmitAttempted(true);
   
     // Check if agent is blocked
     if (isAgentBlocked) {
@@ -411,6 +450,7 @@ export default function AddProperty({ isAdminMode = false }) {
         size: parseInt(formData.size),
         landArea: formData.landArea ? parseInt(formData.landArea) : parseInt(formData.size),
         yearBuilt: formData.yearBuilt ? parseInt(formData.yearBuilt) : new Date().getFullYear(),
+        floor: formData.floor ? parseInt(formData.floor) : undefined,
         garageSize: formData.garages && formData.garageSize ? parseInt(formData.garageSize) : 0,
         approvalStatus: isAdminMode && user?.role === 'admin' ? "approved" : "pending",
         isSold: false,
@@ -460,13 +500,19 @@ export default function AddProperty({ isAdminMode = false }) {
         garages: false,
         garageSize: "",
         yearBuilt: "",
+        floor: "",
         address: "",
         country: "Syria",
         state: "Aleppo",
         neighborhood: "Downtown",
         amenities: [],
         propertyId: `PROP_${Date.now()}`,
-        notes: ""
+        notes: "",
+        // Arabic translation fields
+        description_ar: "",
+        address_ar: "",
+        neighborhood_ar: "",
+        notes_ar: ""
       };
       
       // If admin mode, auto-fill admin details again
@@ -776,7 +822,7 @@ export default function AddProperty({ isAdminMode = false }) {
               </fieldset>
             </div>
             
-            <div className="box grid-layout-2 gap-30">
+            <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="size">
                   Size (SqFt):<span>*</span>
@@ -812,6 +858,21 @@ export default function AddProperty({ isAdminMode = false }) {
                   </span>
                 )}
               </fieldset>
+              
+              <fieldset className="box-fieldset">
+                <label htmlFor="floor">
+                  Floor:
+                </label>
+                <input
+                  type="number"
+                  name="floor"
+                  className="form-control"
+                  value={formData.floor}
+                  onChange={handleInputChange}
+                  min="0"
+                  placeholder="e.g., 3"
+                />
+              </fieldset>
             </div>
             
             <div className="box grid-layout-3 gap-30">
@@ -844,20 +905,6 @@ export default function AddProperty({ isAdminMode = false }) {
                 />
                 {errors.bathrooms && <span className="text-danger">{errors.bathrooms}</span>}
               </fieldset>
-              
-              <fieldset className="box-fieldset">
-                <label htmlFor="garageSize">
-                  Garage Size (SqFt):
-                </label>
-                <input
-                  type="number"
-                  name="garageSize"
-                  className="form-control"
-                  value={formData.garageSize}
-                  onChange={handleInputChange}
-                  min="0"
-                />
-              </fieldset>
             </div>
             
             <div className="box" style={{ display: 'flex', gap: '30px', marginTop: '20px' }}>
@@ -885,6 +932,32 @@ export default function AddProperty({ isAdminMode = false }) {
                 </label>
               </fieldset>
             </div>
+            
+            {/* Show Garage Size input only if "Has Garages" is checked */}
+            {formData.garages && (
+              <div className="box" style={{ 
+                marginTop: '20px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(12, 1fr)',
+                gap: '30px'
+              }}>
+                <fieldset className="box-fieldset" style={{ gridColumn: 'span 4' }}>
+                  <label htmlFor="garageSize">
+                    Garage Size (SqFt):
+                  </label>
+                  <input
+                    type="number"
+                    name="garageSize"
+                    id="garageSize"
+                    className="form-control"
+                    value={formData.garageSize}
+                    onChange={handleInputChange}
+                    min="0"
+                    placeholder="Enter garage size in square feet"
+                  />
+                </fieldset>
+              </div>
+            )}
             
             <fieldset className="box-fieldset" style={{ gridColumn: '1 / -1' }}>
               <label htmlFor="notes">
@@ -940,6 +1013,95 @@ export default function AddProperty({ isAdminMode = false }) {
             </div>
           </div>
 
+          {/* Arabic Translation Section */}
+          <div className="widget-box-2 mb-20">
+            <h3 className="title">Arabic Translation (الترجمة العربية) <span style={{ color: '#dc3545' }}>*</span></h3>
+            <div className="box-info-property">
+              <fieldset className="box box-fieldset">
+                <label htmlFor="description_ar">
+                  Description (الوصف):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <textarea
+                  name="description_ar"
+                  className={`textarea ${errors.description_ar ? 'is-invalid' : ''}`}
+                  placeholder="أدخل وصف العقار بالعربية"
+                  value={formData.description_ar}
+                  onChange={handleInputChange}
+                  dir="rtl"
+                  required
+                />
+                {errors.description_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {errors.description_ar}
+                  </span>
+                )}
+              </fieldset>
+              
+              <fieldset className="box box-fieldset">
+                <label htmlFor="address_ar">
+                  Full Address (العنوان الكامل):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="address_ar"
+                  className={`form-control ${errors.address_ar ? 'is-invalid' : ''}`}
+                  placeholder="أدخل العنوان الكامل بالعربية"
+                  value={formData.address_ar}
+                  onChange={handleInputChange}
+                  dir="rtl"
+                  required
+                />
+                {errors.address_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {errors.address_ar}
+                  </span>
+                )}
+              </fieldset>
+              
+              <fieldset className="box box-fieldset">
+                <label htmlFor="neighborhood_ar">
+                  Neighborhood (الحي):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="neighborhood_ar"
+                  className={`form-control ${errors.neighborhood_ar ? 'is-invalid' : ''}`}
+                  placeholder="أدخل اسم الحي بالعربية"
+                  value={formData.neighborhood_ar}
+                  onChange={handleInputChange}
+                  dir="rtl"
+                  required
+                />
+                {errors.neighborhood_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {errors.neighborhood_ar}
+                  </span>
+                )}
+              </fieldset>
+              
+              <fieldset className="box box-fieldset">
+                <label htmlFor="notes_ar">
+                  Notes (ملاحظات):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <textarea
+                  name="notes_ar"
+                  className={`textarea ${errors.notes_ar ? 'is-invalid' : ''}`}
+                  placeholder="أي ملاحظات إضافية بالعربية..."
+                  value={formData.notes_ar}
+                  onChange={handleInputChange}
+                  dir="rtl"
+                  rows="4"
+                  required
+                />
+                {errors.notes_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {errors.notes_ar}
+                  </span>
+                )}
+              </fieldset>
+            </div>
+          </div>
+
           {/* Amenities Section */}
           <div className="widget-box-2 mb-20">
             <h5 className="title">
@@ -969,20 +1131,34 @@ export default function AddProperty({ isAdminMode = false }) {
             <button
               type="submit"
               className="tf-btn bg-color-primary pd-13"
-              disabled={isSubmitting || isAgentBlocked}
-              onClick={(e) => {
-                // Directly call handleSubmit to ensure API call happens
-                handleSubmit(e);
-              }}
+              disabled={isSubmitting || isAgentBlocked || !isArabicSectionComplete()}
               style={isAgentBlocked ? { 
                 opacity: 0.5, 
                 cursor: 'not-allowed',
                 backgroundColor: '#ccc'
-              } : {}}
-              title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : 'Add property'}
+              } : (!isArabicSectionComplete() ? { 
+                opacity: 0.6, 
+                cursor: 'not-allowed' 
+              } : {})}
+              title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : (!isArabicSectionComplete() ? "Please fill all required Arabic fields" : 'Add property')}
+              onClick={(e) => {
+                // Directly call handleSubmit to ensure API call happens
+                handleSubmit(e);
+              }}
             >
               {isSubmitting ? "Creating Property..." : "Add Property"}
             </button>
+            {submitAttempted && !isArabicSectionComplete() && (
+              <p style={{ 
+                marginTop: '10px', 
+                color: '#dc3545', 
+                fontSize: '14px',
+                fontWeight: '500',
+                textAlign: 'center'
+              }}>
+                Please fill all required Arabic fields to submit
+              </p>
+            )}
             
             <button
               type="button"
@@ -1017,7 +1193,6 @@ export default function AddProperty({ isAdminMode = false }) {
           <ul className="list">
             <li><a href="#">Privacy</a></li>
             <li><a href="#">Terms</a></li>
-            <li><a href="#">Support</a></li>
           </ul>
         </div>
       </div>

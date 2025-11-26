@@ -58,53 +58,14 @@ export default function Cities() {
     router.push(`/property-list?${searchParams.toString()}`);
   };
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <section className="section-neighborhoods">
-        <div className="tf-container full">
-          <div className="col-12">
-            <div className="heading-section text-center mb-48">
-                <h2 className="title">
-                  {t('exploreSyriaCities')}
-                </h2>
-              <p className="text-1 split-text split-lines-transform">
-                {t('exploreSyriaCitiesSubtitle')}
-              </p>
-            </div>
-            <div style={{ padding: '40px 20px' }}>
-              <LocationLoader size="medium" message="Loading Syrian cities..." />
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+  // Hide section completely if no data or error
+  if (isError || locations.length === 0 || !citiesData || citiesData.length === 0) {
+    return null;
   }
 
-  // Show empty state if no locations
-  if (locations.length === 0) {
-    return (
-      <section className="section-neighborhoods">
-        <div className="tf-container full">
-          <div className="col-12">
-            <div className="heading-section text-center mb-48">
-              <h2 className="title">
-                {t('exploreSyriaCities')}
-              </h2>
-              <p className="text-1 split-text split-lines-transform">
-                {t('exploreSyriaCitiesSubtitle')}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="alert alert-info">
-                <h4>{t('noSyrianCitiesAvailable')}</h4>
-                <p>{t('noSyrianCitiesAvailableText')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+  // Show loading state only if we're loading and might have data
+  if (isLoading) {
+    return null; // Hide during loading to avoid showing empty section
   }
 
   return (

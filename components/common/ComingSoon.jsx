@@ -67,9 +67,7 @@ export default function ComingSoon({
             <li>
               <a href="#">Terms</a>
             </li>
-            <li>
-              <a href="#">Support</a>
-            </li>
+         
           </ul>
         </div>
         {/* .footer-dashboard */}

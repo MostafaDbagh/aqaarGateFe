@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import Link from "next/link";
 import FavoriteButton from "@/components/common/FavoriteButton";
@@ -55,6 +55,7 @@ const extractPagination = (payload) => {
 export default function Listings({ agentId }) {
   const t = useTranslations('agentDetails');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'rent', 'sale'
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
@@ -502,7 +503,10 @@ export default function Listings({ agentId }) {
                       </div>
                     )}
                     <p className="location text-1 flex items-center gap-6">
-                      <i className="icon-location" /> {property.address || property.state || t('locationNotSpecified')}
+                      <i className="icon-location" /> 
+                      <span style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                        {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || property.state || t('locationNotSpecified'))}
+                      </span>
                     </p>
                     <ul className="meta-list flex">
                       <li className="text-1 flex">

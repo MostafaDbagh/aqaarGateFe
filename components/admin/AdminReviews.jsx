@@ -453,9 +453,7 @@ export default function AdminReviews() {
             <li>
               <a href="#">Terms</a>
             </li>
-            <li>
-              <a href="#">Support</a>
-            </li>
+          
           </ul>
         </div>
       </div>

@@ -23,6 +23,9 @@ export default function Details3({ property }) {
             <div className="wg-property box-amenities spacing-3">
               <Features property={property} />
             </div>
+            <div className="wg-property box-location spacing-3">
+              <Location property={property} />
+            </div>
             <div className="wg-property box-reviews spacing-3">
               <PropertyReviews propertyId={property._id} />
             </div>

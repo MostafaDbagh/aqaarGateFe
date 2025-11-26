@@ -369,16 +369,13 @@ export default function Favorites() {
         </div>
         {/* .footer-dashboard */}
         <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} Popty</p>
+          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
           <ul className="list">
             <li>
               <a href="#">Privacy</a>
             </li>
             <li>
               <a href="#">Terms</a>
-            </li>
-            <li>
-              <a href="#">Support</a>
             </li>
           </ul>
         </div>

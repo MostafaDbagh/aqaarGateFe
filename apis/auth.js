@@ -42,7 +42,9 @@ export const authAPI = {
       
       return response.data;
     } catch (error) {
-      throw error.response?.data || error.message;
+      // Preserve the full error object so Login component can access error.response.data.message
+      // Don't transform the error - let the component handle it
+      throw error;
     }
   },
 

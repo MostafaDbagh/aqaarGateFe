@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { getStatusBadge } from "@/utlis/propertyHelpers";
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import MoreAboutPropertyModal from "../modals/MoreAboutPropertyModal";
@@ -15,6 +15,7 @@ export default function PropertyOverview({ property }) {
   const t = useTranslations();
   const tCommon = useTranslations('common');
   const tDetail = useTranslations('propertyDetail');
+  const locale = useLocale();
   const [isMoreInfoModalOpen, setIsMoreInfoModalOpen] = useState(false);
   const [isAskQuestionModalOpen, setIsAskQuestionModalOpen] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
@@ -65,6 +66,51 @@ export default function PropertyOverview({ property }) {
           </span>
         </div>
       </div>
+      
+      {/* Arabic Translation Section - Show only when locale is Arabic and Arabic fields exist */}
+      {locale === 'ar' && (property?.description_ar || property?.address_ar || property?.neighborhood_ar || property?.notes_ar) && (
+        <div className="info-detail mt-30" style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+          <h4 className="text-4 fw-6 text-color-heading mb-20" style={{ marginBottom: '20px', fontSize: '18px' }}>
+            الترجمة العربية
+          </h4>
+          
+          {property?.description_ar && (
+            <div className="mb-20" style={{ marginBottom: '20px' }}>
+              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>الوصف:</p>
+              <p className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: 'rtl', textAlign: 'right' }}>
+                {property.description_ar}
+              </p>
+            </div>
+          )}
+          
+          {property?.address_ar && (
+            <div className="mb-20" style={{ marginBottom: '20px' }}>
+              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>العنوان الكامل:</p>
+              <p className="text-1 text-color-heading" style={{ direction: 'rtl', textAlign: 'right' }}>
+                {property.address_ar}
+              </p>
+            </div>
+          )}
+          
+          {property?.neighborhood_ar && (
+            <div className="mb-20" style={{ marginBottom: '20px' }}>
+              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>الحي:</p>
+              <p className="text-1 text-color-heading" style={{ direction: 'rtl', textAlign: 'right' }}>
+                {property.neighborhood_ar}
+              </p>
+            </div>
+          )}
+          
+          {property?.notes_ar && (
+            <div className="mb-20" style={{ marginBottom: '20px' }}>
+              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>ملاحظات:</p>
+              <p className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: 'rtl', textAlign: 'right' }}>
+                {property.notes_ar}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
       {/* Property Keyword Tags */}
       {property?.propertyKeyword && (
         <div className={styles.keywordTagsContainer}>
@@ -79,7 +125,7 @@ export default function PropertyOverview({ property }) {
         <div className="feature">
           <p className="location text-1 flex items-center gap-10">
             <i className="icon-location" />
-            {property?.address || 'Property Location'}
+            {locale === 'ar' && property?.address_ar ? property.address_ar : (property?.address || 'Property Location')}
           </p>
           <ul className="meta-list flex">
             <li className="text-1 flex items-center gap-10">
@@ -197,6 +243,17 @@ export default function PropertyOverview({ property }) {
               <div className="text-1 text-color-heading">{property?.yearBuilt || 'N/A'}</div>
             </div>
           </div>
+          {property?.floor !== undefined && property?.floor !== null && (
+            <div className="box-icon">
+              <div className="icons">
+                <i className="icon-HouseLine" />
+              </div>
+              <div className="content">
+                <div className="text-4 text-color-default">{tDetail('floor')}:</div>
+                <div className="text-1 text-color-heading">{property.floor}</div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="wrap-box">
           <div className="box-icon">
@@ -239,8 +296,8 @@ export default function PropertyOverview({ property }) {
               </div>
               <div className="content">
                 <div className="text-4 text-color-default">{tDetail('notes')}:</div>
-                <div className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
-                  {property.notes}
+                <div className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {locale === 'ar' && property?.notes_ar ? property.notes_ar : (property?.notes || '')}
                 </div>
               </div>
             </div>

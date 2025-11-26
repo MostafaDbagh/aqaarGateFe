@@ -90,14 +90,40 @@ export default function Login({ isOpen, onClose }) {
     try {
       const result = await authAPI.signin(formData);
       
-      // Close the modal
-      closeModal();
-      
-      // No force redirect - let users navigate manually
-      // Users can access their dashboards through the sidebar or navigation
+      // Only close the modal if login was successful
+      // Check if result exists and has user data
+      if (result && (result.user || result.data)) {
+        // Close the modal only on successful login
+        closeModal();
+        
+        // No force redirect - let users navigate manually
+        // Users can access their dashboards through the sidebar or navigation
+      } else {
+        // If no user data, treat as failed login
+        setError(t('loginFailed') || 'Login failed. Please check your credentials.');
+        // Keep modal open - do NOT close it
+      }
       
     } catch (error) {
-      setError(error.message || t('loginFailed'));
+      // Keep modal open and show error message
+      // Extract error message from various possible formats
+      let errorMessage = t('loginFailed') || 'Login failed. Please check your credentials.';
+      
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error?.error) {
+        errorMessage = error.error;
+      }
+      
+      setError(errorMessage);
+      // IMPORTANT: Do NOT close modal on error - let user see the error and try again
+      // The modal should remain open so the user can see why login failed
     } finally {
       setIsLoading(false);
     }

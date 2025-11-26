@@ -1,9 +1,15 @@
 "use client";
 import React from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
-export default function Location() {
+export default function Location({ property }) {
   const t = useTranslations('propertyDetail');
+  const locale = useLocale();
+  
+  // Use Arabic fields if available and locale is Arabic
+  const address = locale === 'ar' && property?.address_ar ? property.address_ar : (property?.address || '');
+  const neighborhood = locale === 'ar' && property?.neighborhood_ar ? property.neighborhood_ar : (property?.neighborhood || '');
+  
   return (
     <>
       <div className="wg-title text-11 fw-6 text-color-heading">
@@ -21,29 +27,29 @@ export default function Location() {
         <ul className="box-left">
           <li>
             <span className="label fw-6">{t('address')}</span>
-            <div className="text text-variant-1">150 sqft</div>
+            <div className="text text-variant-1" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+              {address || t('notSpecified')}
+            </div>
           </li>
           <li>
             <span className="label fw-6">{t('city')}</span>
-            <div className="text text-variant-1">#1234</div>
+            <div className="text text-variant-1">{property?.city || property?.state || 'N/A'}</div>
           </li>
           <li>
             <span className="label fw-6">{t('stateCounty')}</span>
-            <div className="text text-variant-1">$7,500</div>
+            <div className="text text-variant-1">{property?.state || 'N/A'}</div>
           </li>
         </ul>
         <ul className="box-right">
           <li>
-            <span className="label fw-6">{t('postalCode')}</span>
-            <div className="text text-variant-1">7.328</div>
-          </li>
-          <li>
             <span className="label fw-6">{t('area')}</span>
-            <div className="text text-variant-1">7.328</div>
+            <div className="text text-variant-1" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+              {neighborhood || t('notSpecified')}
+            </div>
           </li>
           <li>
             <span className="label fw-6">{t('country')}</span>
-            <div className="text text-variant-1">2024</div>
+            <div className="text text-variant-1">{property?.country || 'Syria'}</div>
           </li>
         </ul>
       </div>

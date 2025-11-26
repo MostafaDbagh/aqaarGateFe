@@ -150,11 +150,14 @@ Axios.interceptors.response.use(
     
     // Only redirect to login for specific authentication endpoints
     // Don't redirect for listing operations to avoid disrupting user workflow
+    // IMPORTANT: Don't redirect on 401 for /auth/signin - let the Login modal handle the error
     if (error.response?.status === 401) {
       const url = error.config?.url || '';
       
-      // Only redirect to login for auth-related endpoints
-      if (url.includes('/auth/') || url.includes('/login') || url.includes('/register')) {
+      // Only redirect to login for auth-related endpoints EXCEPT signin
+      // Signin errors should be handled by the Login modal component
+      if ((url.includes('/auth/') || url.includes('/login') || url.includes('/register')) 
+          && !url.includes('/auth/signin')) {
         // Clear token and redirect to login
         localStorage.removeItem('token');
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';

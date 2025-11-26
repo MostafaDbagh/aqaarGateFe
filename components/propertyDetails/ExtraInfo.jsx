@@ -1,16 +1,19 @@
 "use client";
 import React, { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { formatPrice, formatStatus } from "@/utlis/propertyHelpers";
 import { CopyIcon, CheckIcon } from "@/components/icons";
 import logger from "@/utlis/logger";
 
 export default function ExtraInfo({ property }) {
   const t = useTranslations('propertyDetail');
+  const locale = useLocale();
   const [copiedId, setCopiedId] = useState(null);
   
-  // Get description or show default
-  const description = property?.propertyDesc || t('noDescription');
+  // Get description or show default - use Arabic if available and locale is Arabic
+  const description = locale === 'ar' && property?.description_ar 
+    ? property.description_ar 
+    : (property?.propertyDesc || t('noDescription'));
   
   // Handle copy property ID
   const handleCopyPropertyId = async (propertyId) => {
@@ -90,6 +93,12 @@ export default function ExtraInfo({ property }) {
             <p className="fw-6">{t('yearBuilt')}</p>
             <p>{property?.yearBuilt || 'N/A'}</p>
           </li>
+          {property?.floor !== undefined && property?.floor !== null && (
+            <li className="flex">
+              <p className="fw-6">{t('floor')}</p>
+              <p>{property.floor}</p>
+            </li>
+          )}
           <li className="flex">
             <p className="fw-6">{t('type')}</p>
             <p>{property?.propertyType || 'N/A'}</p>

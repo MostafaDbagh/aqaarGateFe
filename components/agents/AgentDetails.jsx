@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Listings from "./Listings";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,12 +10,28 @@ import styles from "./AgentDetails.module.css";
 
 export default function AgentDetails({ agentId }) {
   const t = useTranslations('agentDetails');
+  const locale = useLocale();
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   
   // Fetch agent data from API
   const { data: agentData, isLoading, isError, error } = useAgent(agentId);
   // API returns { success: true, data: agent }, extract the agent object
   const agent = agentData?.data || agentData;
+  
+  // Get localized values based on locale
+  const getLocalizedValue = (field, arabicField) => {
+    if (locale === 'ar' && agent?.[arabicField]) {
+      return agent[arabicField];
+    }
+    return agent?.[field] || '';
+  };
+  
+  const fullName = getLocalizedValue('fullName', 'username_ar') || agent?.username || agent?.fullName;
+  const description = getLocalizedValue('description', 'description_ar');
+  const company = getLocalizedValue('companyName', 'company_ar') || agent?.company || 'AqaarGate Real Estate';
+  const position = getLocalizedValue('position', 'position_ar') || getLocalizedValue('job', 'job_ar') || t('realEstateAgent');
+  const officeAddress = getLocalizedValue('officeAddress', 'officeAddress_ar');
+  const location = getLocalizedValue('location', 'location_ar');
 
   if (isLoading) {
     return (
@@ -64,7 +80,7 @@ export default function AgentDetails({ agentId }) {
                 <div className={`image-wrap ${styles.imageWrap}`}>
                   <Link href={`/agents-details/${agent._id}`}>
                     <Image
-                      alt={agent.fullName || t('agent')}
+                      alt={fullName || t('agent')}
                       width={400}
                       height={400}
                       src={agent.avatar || "/images/section/agent-details.jpg"}
@@ -76,13 +92,13 @@ export default function AgentDetails({ agentId }) {
                   <div className="author">
                     <h4 className="name">
                       <Link href={`/agents-details/${agent._id}`}>
-                        {agent.fullName || t('agentName')}
+                        {fullName || t('agentName')}
                       </Link>
                     </h4>
-                    <p className="font-poppins">
-                      {agent.position || agent.job || t('realEstateAgent')} at{" "}
+                    <p className="font-poppins" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      {position} {locale === 'ar' ? 'في' : 'at'}{" "}
                       <a href="#" className="fw-7">
-                        {agent.companyName || "AqaarGate Real Estate"}
+                        {company}
                       </a>
                     </p>
                   </div>
@@ -125,7 +141,7 @@ export default function AgentDetails({ agentId }) {
                         <a href={`mailto:${agent.email}`}>{agent.email}</a>
                     </li>
                     )}
-                    {agent.location && (
+                    {location && (
                     <li>
                       <svg width={16}
                         height={16}
@@ -146,7 +162,9 @@ export default function AgentDetails({ agentId }) {
                           strokeLinejoin="round"
                         />
                       </svg>
-                        {agent.location}
+                        <span style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                          {location}
+                        </span>
                     </li>
                     )}
                   </ul>
@@ -198,10 +216,13 @@ export default function AgentDetails({ agentId }) {
               {/* Second Row: Description and See More Button */}
               <div className={`${styles.descriptionRow} agent-content-section`}>
                 <div className="content">
-                  <h6 className="title">{agent.fullName ? t('aboutAgent', { name: agent.fullName }) : t('aboutThisAgent')}</h6>
-                  <p className="text-1">
-                    {agent.description || 
-                      "Experienced real estate professional dedicated to helping clients achieve their property goals. With a deep understanding of the local market and a commitment to exceptional service, I'm here to guide you through every step of your real estate journey."
+                  <h6 className="title">{fullName ? t('aboutAgent', { name: fullName }) : t('aboutThisAgent')}</h6>
+                  <p className="text-1" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left', whiteSpace: 'pre-wrap' }}>
+                    {description || 
+                      (locale === 'ar' 
+                        ? "محترف عقاري ذو خبرة مكرس لمساعدة العملاء على تحقيق أهدافهم العقارية. مع فهم عميق للسوق المحلي والتزام بخدمة استثنائية، أنا هنا لإرشادك خلال كل خطوة من رحلتك العقارية."
+                        : "Experienced real estate professional dedicated to helping clients achieve their property goals. With a deep understanding of the local market and a commitment to exceptional service, I'm here to guide you through every step of your real estate journey."
+                      )
                     }
                   </p>
                   
@@ -215,15 +236,15 @@ export default function AgentDetails({ agentId }) {
                       <div className={`details-grid ${styles.detailsGrid}`}>
                         <div className={`detail-item ${styles.detailItem}`}>
                           <strong className={styles.detailLabel}>{t('company')}:</strong>
-                          <span className={styles.detailValue}>
-                            {agent.companyName || "AqaarGate Real Estate"}
+                          <span className={styles.detailValue} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                            {company}
                           </span>
                         </div>
                         
                         <div className={`detail-item ${styles.detailItem}`}>
                           <strong className={styles.detailLabel}>{t('position')}:</strong>
-                          <span className={styles.detailValue}>
-                            {agent.position || agent.job || t('realEstateAgent')}
+                          <span className={styles.detailValue} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                            {position}
                           </span>
                         </div>
                         
@@ -236,11 +257,11 @@ export default function AgentDetails({ agentId }) {
                           </div>
                         )}
                         
-                        {agent.officeAddress && (
+                        {officeAddress && (
                           <div className={`detail-item ${styles.detailItem}`}>
                             <strong className={styles.detailLabel}>{t('officeAddress')}:</strong>
-                            <span className={styles.detailValue}>
-                              {agent.officeAddress}
+                            <span className={styles.detailValue} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                              {officeAddress}
                             </span>
                           </div>
                         )}
@@ -298,19 +319,14 @@ export default function AgentDetails({ agentId }) {
                     {/* Professional Summary */}
                     <div className={`professional-summary ${styles.professionalSummary}`}>
                       <h6 className={`title ${styles.sectionTitle}`}>{t('professionalSummary')}</h6>
-                      <p className={`text-1 ${styles.summaryText}`}>
-                        {agent.fullName || t('agent')} brings extensive experience in real estate transactions, 
-                        market analysis, and client relations. With a proven track record of successful property 
-                        sales and satisfied clients, {agent.fullName?.split(' ')[0] || t('agent')} are committed to 
-                        providing personalized service and expert guidance throughout the buying and selling process.
+                      <p className={`text-1 ${styles.summaryText}`} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left', whiteSpace: 'pre-wrap' }}>
+                        {locale === 'ar' 
+                          ? `${fullName || t('agent')} يجلب خبرة واسعة في المعاملات العقارية، وتحليل السوق، وعلاقات العملاء. مع سجل حافل من مبيعات العقارات الناجحة والعملاء الراضين، ${fullName?.split(' ')[0] || t('agent')} ملتزم بتقديم خدمة مخصصة وإرشاد خبير طوال عملية الشراء والبيع.`
+                          : `${fullName || t('agent')} brings extensive experience in real estate transactions, market analysis, and client relations. With a proven track record of successful property sales and satisfied clients, ${fullName?.split(' ')[0] || t('agent')} are committed to providing personalized service and expert guidance throughout the buying and selling process.`
+                        }
                       </p>
                       
                       <div className={`achievements ${styles.achievements}`}>
-                        <div className={`achievement-item ${styles.achievementItem}`}>
-                          <div className={styles.achievementNumber}>50+</div>
-                          <span className={styles.achievementLabel}>{t('propertiesSold')}</span>
-                        </div>
-                        
                         <div className={`achievement-item ${styles.achievementItem}`}>
                           <div className={styles.achievementNumber}>5+</div>
                           <span className={styles.achievementLabel}>{t('yearsExperience')}</span>
@@ -351,12 +367,14 @@ export default function AgentDetails({ agentId }) {
                           </div>
                         )}
                         
-                        {agent.location && (
+                        {location && (
                           <div className={`contact-item ${styles.contactItem}`}>
                             <div className={styles.contactIcon}>📍</div>
                             <div>
                               <strong className={styles.contactLabel}>{t('location')}</strong>
-                              <span className={styles.contactValue}>{agent.location}</span>
+                              <span className={styles.contactValue} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                {location}
+                              </span>
                             </div>
                           </div>
                         )}

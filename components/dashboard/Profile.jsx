@@ -10,27 +10,39 @@ import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/consta
 import logger from "@/utlis/logger";
 import styles from "./Profile.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import { useLocale } from 'next-intl';
+import ChangePasswordSection from "./ChangePasswordSection";
 
 export default function Profile() {
   const { showLoginModal } = useGlobalModal();
+  const locale = useLocale();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
+  const [arabicErrors, setArabicErrors] = useState({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
 
   // Profile form data
   const [formData, setFormData] = useState({
     username: "",
+    username_ar: "",
     email: "",
     description: "",
+    description_ar: "",
     company: "",
+    company_ar: "",
     position: "",
+    position_ar: "",
     officeNumber: "",
     officeAddress: "",
+    officeAddress_ar: "",
     job: "",
+    job_ar: "",
     phone: "",
     countryCode: DEFAULT_COUNTRY_CODE,
     location: "",
+    location_ar: "",
     city: "",
     facebook: "",
     twitter: "",
@@ -90,12 +102,6 @@ export default function Profile() {
 
 
 
-  // Password form data
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -127,16 +133,23 @@ export default function Profile() {
         
         setFormData({
           username: profile.username || "",
+          username_ar: profile.username_ar || "",
           email: profile.email || "",
           description: profile.description || "",
+          description_ar: profile.description_ar || "",
           company: profile.company || "",
+          company_ar: profile.company_ar || "",
           position: profile.position || "",
+          position_ar: profile.position_ar || "",
           officeNumber: profile.officeNumber || "",
           officeAddress: profile.officeAddress || "",
+          officeAddress_ar: profile.officeAddress_ar || "",
           job: profile.job || "",
+          job_ar: profile.job_ar || "",
           phone: phoneNumber,
           countryCode: profile.countryCode || countryCode,
           location: profile.location || "",
+          location_ar: profile.location_ar || "",
           city: profile.city || "",
           facebook: profile.facebook || "",
           twitter: profile.twitter || "",
@@ -169,6 +182,56 @@ export default function Profile() {
       ...prev,
       [id]: value,
     }));
+    
+    // Clear error when user starts typing in Arabic fields
+    if (id.includes('_ar') && arabicErrors[id]) {
+      setArabicErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[id];
+        return newErrors;
+      });
+    }
+  };
+
+  // Validate Arabic fields
+  const validateArabicFields = () => {
+    const errors = {};
+    const requiredArabicFields = [
+      'username_ar',
+      'description_ar',
+      'job_ar'
+    ];
+    
+    // Add agent-specific fields if user is agent
+    if (user?.role === 'agent') {
+      requiredArabicFields.push('company_ar', 'officeAddress_ar');
+    }
+    
+    requiredArabicFields.forEach(field => {
+      if (!formData[field] || formData[field].trim() === '') {
+        errors[field] = 'This field is required';
+      }
+    });
+    
+    setArabicErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Check if all Arabic fields are filled
+  const isArabicSectionComplete = () => {
+    const requiredFields = [
+      'username_ar',
+      'description_ar',
+      'job_ar'
+    ];
+    
+    if (user?.role === 'agent') {
+      requiredFields.push('company_ar', 'officeAddress_ar');
+    }
+    
+    return requiredFields.every(field => 
+      formData[field] && formData[field].trim() !== ''
+    );
   };
 
   const handleServiceChange = (service, checked) => {
@@ -193,16 +256,22 @@ export default function Profile() {
     }
   };
 
-  const handlePasswordChange = (e) => {
-    const { id, value } = e.target;
-    setPasswordData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+  const handlePasswordChanged = (message) => {
+    setToast({ type: "success", message });
   };
 
   const handleSubmitProfile = async (e) => {
     e.preventDefault();
+    
+    // Mark that submit has been attempted
+    setSubmitAttempted(true);
+    
+    // Validate Arabic fields before submitting
+    if (!validateArabicFields()) {
+      setToast({ type: "error", message: "Please fill all required Arabic fields" });
+      return;
+    }
+    
     setSaving(true);
 
     try {
@@ -244,42 +313,6 @@ export default function Profile() {
     }
   };
 
-  const handleSubmitPassword = async (e) => {
-    e.preventDefault();
-
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setToast({ type: "error", message: "Passwords do not match" });
-      return;
-    }
-
-    if (passwordData.newPassword.length < 6) {
-      setToast({ type: "error", message: "Password must be at least 6 characters" });
-      return;
-    }
-
-    setSaving(true);
-
-    try {
-      await userAPI.changePassword(
-        user._id,
-        passwordData.oldPassword,
-        passwordData.newPassword
-      );
-      
-      setPasswordData({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-      
-      setToast({ type: "success", message: "Password changed successfully!" });
-    } catch (error) {
-      logger.error("Error changing password:", error);
-      setToast({ type: "error", message: "Failed to change password" });
-    } finally {
-      setSaving(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -431,27 +464,15 @@ export default function Profile() {
             </fieldset>
 
             {user?.role === "agent" && (
-              <fieldset className="box grid-layout-4 gap-30">
+              <fieldset className="box grid-layout-3 gap-30">
                 <div className="box-fieldset">
                   <label htmlFor="company">
-                    Your Company:
+                    Company Name:
                   </label>
                   <input
                     type="text"
                     id="company"
                     value={formData.company}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="box-fieldset">
-                  <label htmlFor="position">
-                    Position:
-                  </label>
-                  <input
-                    type="text"
-                    id="position"
-                    value={formData.position}
                     onChange={handleInputChange}
                     className="form-control"
                   />
@@ -483,27 +504,15 @@ export default function Profile() {
               </fieldset>
             )}
 
-            <div className="box grid-layout-3 gap-30 box-info-2">
+            <div className="box grid-layout-2 gap-30 box-info-2">
               <div className="box-fieldset">
                 <label htmlFor="job">
-                  Job:
+                  Job Title:
                 </label>
                 <input
                   type="text"
                   id="job"
                   value={formData.job}
-                  onChange={handleInputChange}
-                  className="form-control"
-                />
-              </div>
-              <div className="box-fieldset">
-                <label htmlFor="location">
-                  Location:
-                </label>
-                <input
-                  type="text"
-                  id="location"
-                  value={formData.location}
                   onChange={handleInputChange}
                   className="form-control"
                 />
@@ -671,86 +680,151 @@ export default function Profile() {
               </div>
             </fieldset>
 
-            
+            {/* Arabic Translation Section */}
+            <div className="widget-box-2 mb-20" style={{ marginTop: '32px', padding: '20px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+              <h5 className="title">Arabic Translation (الترجمة العربية) <span style={{ color: '#dc3545' }}>*</span></h5>
+              
+              <fieldset className="box box-fieldset">
+                <label htmlFor="username_ar">
+                  Full name (الاسم الكامل):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  id="username_ar"
+                  value={formData.username_ar}
+                  onChange={handleInputChange}
+                  className={`form-control ${arabicErrors.username_ar ? 'is-invalid' : ''}`}
+                  dir="rtl"
+                  placeholder="أدخل الاسم الكامل بالعربية"
+                  required
+                />
+                {arabicErrors.username_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {arabicErrors.username_ar}
+                  </span>
+                )}
+              </fieldset>
+
+              <fieldset className="box box-fieldset">
+                <label htmlFor="description_ar">
+                  Description (الوصف):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <textarea
+                  id="description_ar"
+                  value={formData.description_ar}
+                  onChange={handleInputChange}
+                  rows={4}
+                  dir="rtl"
+                  placeholder="أدخل الوصف بالعربية"
+                  className={arabicErrors.description_ar ? 'is-invalid' : ''}
+                  required
+                />
+                {arabicErrors.description_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {arabicErrors.description_ar}
+                  </span>
+                )}
+              </fieldset>
+
+              {user?.role === "agent" && (
+                <>
+                  <fieldset className="box box-fieldset">
+                    <label htmlFor="company_ar">
+                      Company Name (اسم الشركة):<span style={{ color: '#dc3545' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="company_ar"
+                      value={formData.company_ar}
+                      onChange={handleInputChange}
+                      className={`form-control ${arabicErrors.company_ar ? 'is-invalid' : ''}`}
+                      dir="rtl"
+                      placeholder="أدخل اسم الشركة بالعربية"
+                      required
+                    />
+                    {arabicErrors.company_ar && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {arabicErrors.company_ar}
+                      </span>
+                    )}
+                  </fieldset>
+
+                  <fieldset className="box box-fieldset">
+                    <label htmlFor="officeAddress_ar">
+                      Office Address (عنوان المكتب):<span style={{ color: '#dc3545' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="officeAddress_ar"
+                      value={formData.officeAddress_ar}
+                      onChange={handleInputChange}
+                      className={`form-control ${arabicErrors.officeAddress_ar ? 'is-invalid' : ''}`}
+                      dir="rtl"
+                      placeholder="أدخل عنوان المكتب بالعربية"
+                      required
+                    />
+                    {arabicErrors.officeAddress_ar && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {arabicErrors.officeAddress_ar}
+                      </span>
+                    )}
+                  </fieldset>
+                </>
+              )}
+
+              <fieldset className="box box-fieldset">
+                <label htmlFor="job_ar">
+                  Job Title (مسمى الوظيفة):<span style={{ color: '#dc3545' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  id="job_ar"
+                  value={formData.job_ar}
+                  onChange={handleInputChange}
+                  className={`form-control ${arabicErrors.job_ar ? 'is-invalid' : ''}`}
+                  dir="rtl"
+                  placeholder="أدخل مسمى الوظيفة بالعربية"
+                  required
+                />
+                {arabicErrors.job_ar && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {arabicErrors.job_ar}
+                  </span>
+                )}
+              </fieldset>
+            </div>
 
             <div className="box" style={{ marginTop: '32px' }}>
               <button 
                 type="submit"
                 className="tf-btn bg-color-primary pd-10"
-                disabled={saving}
+                disabled={saving || !isArabicSectionComplete()}
+                style={!isArabicSectionComplete() ? { 
+                  opacity: 0.6, 
+                  cursor: 'not-allowed' 
+                } : {}}
+                title={!isArabicSectionComplete() ? "Please fill all required Arabic fields" : ""}
               >
                 {saving ? "Saving..." : "Save & Update"}
               </button>
+              {submitAttempted && !isArabicSectionComplete() && (
+                <p style={{ 
+                  marginTop: '10px', 
+                  color: '#dc3545', 
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}>
+                  Please fill all required Arabic fields to save
+                </p>
+              )}
             </div>
           </form>
 
-          <h5 className="title" style={{ marginTop: '32px' }}>Change password</h5>
-          <form onSubmit={handleSubmitPassword}>
-            <div className="box grid-layout-3 gap-30">
-              <div className="box-fieldset">
-                <label htmlFor="oldPassword">
-                  Old Password:<span>*</span>
-                </label>
-                <div className="box-password">
-                  <input
-                    type="password"
-                    id="oldPassword"
-                    className="form-contact password-field"
-                    placeholder="Old Password"
-                    value={passwordData.oldPassword}
-                    onChange={handlePasswordChange}
-                    autoComplete="current-password"
-                  />
-                </div>
-              </div>
-              <div className="box-fieldset">
-                <label htmlFor="newPassword">
-                  New Password:<span>*</span>
-                </label>
-                <div className="box-password">
-                  <input
-                    type="password"
-                    id="newPassword"
-                    className="form-contact password-field2"
-                    placeholder="New Password"
-                    value={passwordData.newPassword}
-                    onChange={handlePasswordChange}
-                    autoComplete="new-password"
-                  />
-                </div>
-              </div>
-              <div className="box-fieldset mb-30">
-                <label htmlFor="confirmPassword">
-                  Confirm Password:<span>*</span>
-                </label>
-                <div className="box-password">
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    className="form-contact password-field3"
-                    placeholder="Confirm Password"
-                    value={passwordData.confirmPassword}
-                    onChange={handlePasswordChange}
-                    autoComplete="new-password"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="box">
-              <button 
-                type="submit" 
-                className="tf-btn bg-color-primary pd-20"
-                disabled={saving}
-              >
-                {saving ? "Updating..." : "Update Password"}
-              </button>
-            </div>
-          </form>
+       
         </div>
-        
+          <ChangePasswordSection userId={user?._id} onPasswordChanged={handlePasswordChanged} />
         <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} Popty</p>
+          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
           <ul className="list">
             <li>
               <a href="#">Privacy</a>
@@ -758,9 +832,7 @@ export default function Profile() {
             <li>
               <a href="#">Terms</a>
             </li>
-            <li>
-              <a href="#">Support</a>
-            </li>
+       
           </ul>
         </div>
       </div>

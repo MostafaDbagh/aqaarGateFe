@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { adminAPI } from "@/apis";
+import { adminAPI, agentAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./AdminAgents.module.css";
@@ -14,6 +14,9 @@ export default function AdminAgents() {
   const [blockReason, setBlockReason] = useState("");
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [agentDetails, setAgentDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
   const [filters, setFilters] = useState({
     search: "",
     isBlocked: "", // Show all agents by default
@@ -80,6 +83,22 @@ export default function AdminAgents() {
       fetchAgents();
     } catch (err) {
       showWarningModal("Error", err.message || "Failed to unblock agent");
+    }
+  };
+
+  const handleViewDetails = async (id) => {
+    try {
+      setLoadingDetails(true);
+      setShowDetailsModal(true);
+      const response = await agentAPI.getAgentById(id);
+      // Handle both wrapped and direct response
+      const agent = response.data || response;
+      setAgentDetails(agent);
+    } catch (err) {
+      showWarningModal("Error", err.message || "Failed to load agent details");
+      setShowDetailsModal(false);
+    } finally {
+      setLoadingDetails(false);
     }
   };
 
@@ -193,6 +212,12 @@ export default function AdminAgents() {
                   </td>
                   <td>
                     <div className={styles.actions}>
+                      <button
+                        className={`${styles.btn} ${styles.btnView}`}
+                        onClick={() => handleViewDetails(agent._id)}
+                      >
+                        View Details
+                      </button>
                       {agent.isBlocked ? (
                         <button
                           className={`${styles.btn} ${styles.btnUnblock}`}
@@ -216,6 +241,304 @@ export default function AdminAgents() {
           </tbody>
         </table>
       </div>
+
+      {/* Agent Details Modal */}
+      {showDetailsModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowDetailsModal(false)}>
+          <div className={styles.detailsModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3 className={styles.modalTitle}>Agent Details</h3>
+              <button
+                className={styles.closeButton}
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setAgentDetails(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            {loadingDetails ? (
+              <div className={styles.loaderContainer}>
+                <LocationLoader message="Loading agent details..." />
+              </div>
+            ) : agentDetails ? (
+              <div className={styles.detailsContent}>
+                {/* Basic Information */}
+                <div className={styles.detailsSection}>
+                  <h4 className={styles.sectionTitle}>Basic Information</h4>
+                  <div className={styles.detailsGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Username:</span>
+                      <span className={styles.detailValue}>{agentDetails.username || agentDetails.fullName || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Email:</span>
+                      <span className={styles.detailValue}>{agentDetails.email || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Phone:</span>
+                      <span className={styles.detailValue}>{agentDetails.phone || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Role:</span>
+                      <span className={styles.detailValue}>{agentDetails.role || '-'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Status:</span>
+                      <span className={styles.detailValue}>
+                        {agentDetails.isBlocked ? (
+                          <span className={`${styles.badge} ${styles.badgeBlocked}`}>
+                            {agentDetails.blockedReason?.includes('New agent') ? 'Pending Verification' : 'Blocked'}
+                          </span>
+                        ) : (
+                          <span className={`${styles.badge} ${styles.badgeActive}`}>Active</span>
+                        )}
+                      </span>
+                    </div>
+                    {agentDetails.blockedReason && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Blocked Reason:</span>
+                        <span className={styles.detailValue}>{agentDetails.blockedReason}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Description */}
+                {agentDetails.description && (
+                  <div className={styles.detailsSection}>
+                    <h4 className={styles.sectionTitle}>Description</h4>
+                    <p className={styles.detailValue}>{agentDetails.description}</p>
+                  </div>
+                )}
+
+                {/* Company Information */}
+                {(agentDetails.company || agentDetails.position || agentDetails.job || agentDetails.officeAddress || agentDetails.officeNumber) && (
+                  <div className={styles.detailsSection}>
+                    <h4 className={styles.sectionTitle}>Company Information</h4>
+                    <div className={styles.detailsGrid}>
+                      {agentDetails.company && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Company:</span>
+                          <span className={styles.detailValue}>{agentDetails.company}</span>
+                        </div>
+                      )}
+                      {agentDetails.position && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Position:</span>
+                          <span className={styles.detailValue}>{agentDetails.position}</span>
+                        </div>
+                      )}
+                      {agentDetails.job && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Job Title:</span>
+                          <span className={styles.detailValue}>{agentDetails.job}</span>
+                        </div>
+                      )}
+                      {agentDetails.officeAddress && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Office Address:</span>
+                          <span className={styles.detailValue}>{agentDetails.officeAddress}</span>
+                        </div>
+                      )}
+                      {agentDetails.officeNumber && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Office Phone:</span>
+                          <span className={styles.detailValue}>{agentDetails.officeNumber}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Location Information */}
+                {(agentDetails.location || agentDetails.city) && (
+                  <div className={styles.detailsSection}>
+                    <h4 className={styles.sectionTitle}>Location Information</h4>
+                    <div className={styles.detailsGrid}>
+                      {agentDetails.location && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Location:</span>
+                          <span className={styles.detailValue}>{agentDetails.location}</span>
+                        </div>
+                      )}
+                      {agentDetails.city && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>City:</span>
+                          <span className={styles.detailValue}>{agentDetails.city}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Arabic Information Section */}
+                {(agentDetails.username_ar || agentDetails.description_ar || agentDetails.company_ar || agentDetails.position_ar || agentDetails.job_ar || agentDetails.officeAddress_ar || agentDetails.location_ar) && (
+                  <div className={styles.detailsSection}>
+                    <h4 className={styles.sectionTitle}>Arabic Info (المعلومات العربية)</h4>
+                    <div className={styles.detailsGrid} dir="rtl" style={{ textAlign: 'right' }}>
+                      {agentDetails.username_ar && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>الاسم الكامل:</span>
+                          <span className={styles.detailValue} dir="rtl">{agentDetails.username_ar}</span>
+                        </div>
+                      )}
+                      {agentDetails.description_ar && (
+                        <div className={styles.detailItem} style={{ gridColumn: '1 / -1' }}>
+                          <span className={styles.detailLabel}>الوصف:</span>
+                          <p className={styles.detailValue} dir="rtl" style={{ textAlign: 'right', whiteSpace: 'pre-wrap' }}>{agentDetails.description_ar}</p>
+                        </div>
+                      )}
+                      {agentDetails.company_ar && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>الشركة:</span>
+                          <span className={styles.detailValue} dir="rtl">{agentDetails.company_ar}</span>
+                        </div>
+                      )}
+                      {agentDetails.position_ar && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>المنصب:</span>
+                          <span className={styles.detailValue} dir="rtl">{agentDetails.position_ar}</span>
+                        </div>
+                      )}
+                      {agentDetails.job_ar && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>مسمى الوظيفة:</span>
+                          <span className={styles.detailValue} dir="rtl">{agentDetails.job_ar}</span>
+                        </div>
+                      )}
+                      {agentDetails.officeAddress_ar && (
+                        <div className={styles.detailItem} style={{ gridColumn: '1 / -1' }}>
+                          <span className={styles.detailLabel}>عنوان المكتب:</span>
+                          <span className={styles.detailValue} dir="rtl">{agentDetails.officeAddress_ar}</span>
+                        </div>
+                      )}
+                      {agentDetails.location_ar && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>الموقع:</span>
+                          <span className={styles.detailValue} dir="rtl">{agentDetails.location_ar}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Services & Expertise */}
+                {agentDetails.servicesAndExpertise && agentDetails.servicesAndExpertise.length > 0 && (
+                  <div className={styles.detailsSection}>
+                    <h4 className={styles.sectionTitle}>Services & Expertise</h4>
+                    <div className={styles.servicesList}>
+                      {agentDetails.servicesAndExpertise.map((service, index) => (
+                        <span key={index} className={styles.serviceTag}>{service}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional Information */}
+                <div className={styles.detailsSection}>
+                  <h4 className={styles.sectionTitle}>Additional Information</h4>
+                  <div className={styles.detailsGrid}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Points Balance:</span>
+                      <span className={styles.detailValue}>{agentDetails.pointsBalance || 0}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Package Type:</span>
+                      <span className={styles.detailValue}>{agentDetails.packageType || 'basic'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Unlimited Points:</span>
+                      <span className={styles.detailValue}>{agentDetails.hasUnlimitedPoints ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Trial Period:</span>
+                      <span className={styles.detailValue}>{agentDetails.isTrial ? 'Yes' : 'No'}</span>
+                    </div>
+                    {agentDetails.packageExpiry && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Package Expiry:</span>
+                        <span className={styles.detailValue}>
+                          {new Date(agentDetails.packageExpiry).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                    {agentDetails.yearsExperience && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Years Experience:</span>
+                        <span className={styles.detailValue}>{agentDetails.yearsExperience}</span>
+                      </div>
+                    )}
+                    {agentDetails.responseTime && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Response Time:</span>
+                        <span className={styles.detailValue}>{agentDetails.responseTime}</span>
+                      </div>
+                    )}
+                    {agentDetails.availability && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Availability:</span>
+                        <span className={styles.detailValue}>{agentDetails.availability}</span>
+                      </div>
+                    )}
+                    {agentDetails.createdAt && (
+                      <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Member Since:</span>
+                        <span className={styles.detailValue}>
+                          {new Date(agentDetails.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Social Media */}
+                {(agentDetails.facebook || agentDetails.twitter || agentDetails.linkedin || agentDetails.whatsapp) && (
+                  <div className={styles.detailsSection}>
+                    <h4 className={styles.sectionTitle}>Social Media</h4>
+                    <div className={styles.detailsGrid}>
+                      {agentDetails.facebook && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Facebook:</span>
+                          <a href={agentDetails.facebook} target="_blank" rel="noopener noreferrer" className={styles.detailValue}>
+                            {agentDetails.facebook}
+                          </a>
+                        </div>
+                      )}
+                      {agentDetails.twitter && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>Twitter/X:</span>
+                          <a href={agentDetails.twitter} target="_blank" rel="noopener noreferrer" className={styles.detailValue}>
+                            {agentDetails.twitter}
+                          </a>
+                        </div>
+                      )}
+                      {agentDetails.linkedin && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>LinkedIn:</span>
+                          <a href={agentDetails.linkedin} target="_blank" rel="noopener noreferrer" className={styles.detailValue}>
+                            {agentDetails.linkedin}
+                          </a>
+                        </div>
+                      )}
+                      {agentDetails.whatsapp && (
+                        <div className={styles.detailItem}>
+                          <span className={styles.detailLabel}>WhatsApp:</span>
+                          <span className={styles.detailValue}>{agentDetails.whatsapp}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className={styles.noData}>No details available</div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Block Modal */}
       {showBlockModal && (

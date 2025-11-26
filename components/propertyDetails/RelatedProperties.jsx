@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
 import { getPropertyImage, getPropertyTitle } from "@/utlis/propertyHelpers";
@@ -10,6 +10,7 @@ import styles from "./RelatedProperties.module.css";
 
 export default function RelatedProperties({ currentProperty }) {
   const t = useTranslations('similarListings');
+  const locale = useLocale();
   
   // Calculate search parameters - remove price filter to get more results
   const searchParams = useMemo(() => {
@@ -216,7 +217,10 @@ export default function RelatedProperties({ currentProperty }) {
                             </h3>
                             <div className={styles.location}>
                               <i className="icon-location" />
-                              <span>{property.address}, {property.state}</span>
+                              <span style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                                {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || '')}
+                                {property.state && `, ${property.state}`}
+                              </span>
                             </div>
                             <div className={styles.metaInfo}>
                               <div className={styles.metaItem}>
@@ -323,10 +327,13 @@ export default function RelatedProperties({ currentProperty }) {
                         </Link>
                       </h3>
 
-                      <div className={styles.location}>
-                        <i className="icon-location" />
-                        <span>{property.address}, {property.state}</span>
-                      </div>
+                        <div className={styles.location}>
+                          <i className="icon-location" />
+                          <span style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                            {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || '')}
+                            {property.state && `, ${property.state}`}
+                          </span>
+                        </div>
 
                       <div className={styles.metaInfo}>
                         <div className={styles.metaItem}>

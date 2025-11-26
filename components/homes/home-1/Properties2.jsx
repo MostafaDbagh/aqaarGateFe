@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from "next/link";
 import SplitTextAnimation from "@/components/common/SplitTextAnimation";
 import LocationLoader from "@/components/common/LocationLoader";
@@ -17,6 +17,7 @@ export default function Properties2() {
   const t = useTranslations('homeSections');
   const tCommon = useTranslations('common');
   const tRoot = useTranslations();
+  const locale = useLocale();
   // Use search endpoint to get ONLY Holiday Home properties
   const { data: searchResponse, isLoading, isError, error } = useSearchListings({ 
     propertyType: 'Holiday Home', // ONLY show Holiday Homes
@@ -247,7 +248,8 @@ export default function Properties2() {
                           )}
                           <p className={styles.propertyLocation}>
                             <i className="icon-location" />
-                            {property.address}, {property.state}
+                            {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || '')}
+                            {property.state && `, ${property.state}`}
                           </p>
                         </div>
                         

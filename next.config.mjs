@@ -12,13 +12,24 @@ const nextConfig = {
           fs: false,
         };
       }
-      // Fix for next-intl bundling issues - use IgnorePlugin instead of alias
-      config.plugins.push(
-        new webpack.IgnorePlugin({
-          resourceRegExp: /^@formatjs\/intl$/,
-        })
+      
+      // Fix for @formatjs/intl vendor chunk issues
+      // Instead of ignoring, provide a proper fallback
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@formatjs/intl': false,
+      };
+      
+      // Remove any existing IgnorePlugin for @formatjs/intl
+      config.plugins = config.plugins.filter(
+        (plugin) =>
+          !(
+            plugin instanceof webpack.IgnorePlugin &&
+            plugin.options?.resourceRegExp?.test('@formatjs/intl')
+          )
       );
-      // Fix for axios vendor chunk issues
+      
+      // Fix for vendor chunk issues
       config.optimization = {
         ...config.optimization,
         splitChunks: {
@@ -31,9 +42,17 @@ const nextConfig = {
               priority: -20,
               reuseExistingChunk: true,
             },
+            // Prevent @formatjs from being split into separate chunks
+            formatjs: {
+              test: /[\\/]node_modules[\\/]@formatjs[\\/]/,
+              name: 'formatjs',
+              priority: 10,
+              reuseExistingChunk: true,
+            },
           },
         },
       };
+      
       return config;
     },
     images: {
