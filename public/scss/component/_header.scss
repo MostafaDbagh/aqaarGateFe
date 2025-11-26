@@ -33,11 +33,41 @@
 
 .header {
     box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
+    max-height: 98px;
+    
+    // Prevent horizontal scroll in production
+    .tf-container.xl {
+        max-width: 100vw !important;
+        width: 100% !important;
+    }
+    
     .header-inner-wrap {
-        @include mixin.flex(center, space-between);
+        @include mixin.flex(center, center);
         position: relative;
         z-index: 999;
         margin-right: 32px;
+        max-width: 100%;
+        box-sizing: border-box;
+        max-height: 98px;
+        gap: 40px;
+        
+        // Position logo on the left
+        .header-logo {
+            position: absolute;
+            left: 0;
+        }
+        
+        // Position main menu in center
+        .main-menu {
+            flex: 0 0 auto;
+            margin: 0 auto;
+        }
+        
+        // Position header-right on the right
+        .header-right {
+            position: absolute;
+            right: 0;
+        }
     }
     .header-right {
         @include mixin.d-flex();
@@ -468,11 +498,18 @@
     position: relative;
     @include mixin.transition3();
     margin-right: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
     .navigation {
         @include mixin.d-flex();
         align-items: center;
         @include mixin.d-flex();
         gap: 14px;
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 100%;
         > li {
             &.current-menu {
                 > a {
