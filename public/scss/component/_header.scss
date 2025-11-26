@@ -33,6 +33,7 @@
 
 .header {
     box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
+    max-height: 80px !important;
     
     /* Remove left and right padding from container elements only */
     .tf-container,
@@ -58,6 +59,8 @@
         position: relative;
         z-index: 999;
         margin-right: 32px;
+        max-height: 80px !important;
+        padding-left: 32px !important;
     }
     .header-right {
         @include mixin.d-flex();

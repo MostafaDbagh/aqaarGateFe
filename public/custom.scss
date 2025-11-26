@@ -268,6 +268,8 @@
 
 /* Remove left and right padding from header container elements only */
 .header {
+  max-height: 80px !important;
+  
   .tf-container,
   .tf-container.xl {
     padding-left: 0 !important;
@@ -284,5 +286,22 @@
   .col-12 {
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+  
+  .header-inner-wrap {
+    max-height: 80px !important;
+    padding-left: 32px !important;
+  }
+}
+
+/* Contact page - image-wrap height fix */
+.section-contact .image-wrap,
+.section-contact.style-4 .image-wrap,
+.box-contact .image-wrap {
+  height: 560px !important;
+  
+  @media (max-width: 768px) {
+    height: auto !important;
+    min-height: 300px !important;
   }
 }
