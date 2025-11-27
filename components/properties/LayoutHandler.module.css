@@ -1,0 +1,53 @@
+/* Disabled List Layout Button on Mobile */
+.disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+  user-select: none !important;
+  position: relative !important;
+}
+
+.disabled:hover {
+  cursor: not-allowed !important;
+}
+
+.disabledTooltip {
+  position: absolute !important;
+  left: 50% !important;
+  top: 42px!important;
+  transform: translateX(-50%) !important;
+  margin-bottom: 8px !important;
+  padding: 6px 12px !important;
+  background-color: #1f2937 !important;
+  color: white !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease !important;
+  z-index: 1000 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.disabledTooltip::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 100% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  border: 5px solid transparent !important;
+  border-bottom-color: #1f2937 !important;
+}
+
+.disabled:hover .disabledTooltip {
+  opacity: 1 !important;
+}
+
+/* Hide tooltip on desktop */
+@media (min-width: 768px) {
+  .disabledTooltip {
+    display: none !important;
+  }
+}
+

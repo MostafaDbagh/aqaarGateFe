@@ -103,7 +103,7 @@ export default function PropertyGridItems({ listings = [] }) {
 
   if (!listings || listings.length === 0) {
     return (
-      <div className="empty-state-container">
+      <div className={styles.emptyStateContainer}>
         <p>{t('common.noPropertiesFound')}</p>
       </div>
     );
@@ -149,303 +149,6 @@ export default function PropertyGridItems({ listings = [] }) {
 
   return (
     <>
-      <style jsx>{`
-        .empty-state-container {
-          grid-column: 1 / -1 !important;
-          text-align: center !important;
-          padding: 40px !important;
-          color: #666 !important;
-        }
-        
-        .property-img {
-          position: absolute !important;
-          inset: 0 !important;
-          width: 100% !important;
-          height: 100% !important;
-          object-fit: cover !important;
-          display: block !important;
-        }
-        
-        .image-wrap {
-          position: relative !important;
-          width: 100% !important;
-          aspect-ratio: 3 / 2 !important;
-          overflow: hidden !important;
-          background: #f3f4f6 !important;
-          border-radius: 12px !important;
-        }
-
-        .image-slider {
-          position: relative !important;
-          width: 100% !important;
-          height: 100% !important;
-        }
-
-        .image-link {
-          display: block !important;
-          width: 100% !important;
-          height: 100% !important;
-          position: relative !important;
-        }
-
-        .slider-control {
-          position: absolute !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          width: 38px !important;
-          height: 38px !important;
-          border-radius: 9999px !important;
-          border: 1px solid rgba(148, 163, 184, 0.4) !important;
-          background: rgba(255, 255, 255, 0.95) !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          cursor: pointer !important;
-          transition: all 0.2s ease !important;
-          z-index: 5 !important;
-          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15) !important;
-          color: #1f2937 !important;
-          opacity: 0 !important;
-          pointer-events: none !important;
-        }
-
-        .image-wrap:hover .slider-control,
-        .image-slider:focus-within .slider-control {
-          opacity: 1 !important;
-          pointer-events: auto !important;
-        }
-
-        .slider-control:hover {
-          transform: translateY(-50%) scale(1.03) !important;
-          box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18) !important;
-        }
-
-        .slider-control:focus-visible {
-          outline: 2px solid #0ea5e9 !important;
-          outline-offset: 2px !important;
-        }
-
-        .slider-control.prev {
-          left: 12px !important;
-          width: 26px !important;
-          height: 26px !important;
-        }
-
-        .slider-control.next {
-          right: 12px !important;
-          width: 26px !important;
-          height: 26px !important;
-        }
-
-        .slider-control svg {
-          width: 18px !important;
-          height: 18px !important;
-        }
-
-        .favorite-floating {
-          position: absolute !important;
-          right: 16px !important;
-          bottom: 16px !important;
-          z-index: 6 !important;
-        }
-
-        .favorite-floating :global(.favorite-button) {
-          width: 44px !important;
-          height: 44px !important;
-          border-radius: 9999px !important;
-          background: transparent !important;
-          border: none !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          box-shadow: none !important;
-          transition: transform 0.2s ease !important;
-        }
-        
-        .favorite-floating :global(.favorite-button:hover) {
-          transform: translateY(-2px) !important;
-        }
-
-        .favorite-floating :global(.favorite-button:active) {
-          transform: translateY(0) !important;
-        }
-
-        .favorite-floating :global(.favorite-icon) {
-          width: 32px !important;
-          height: 32px !important;
-          color: #f1913d !important;
-        }
-
-        .favorite-floating :global(.favorite-icon::before) {
-          color: #f1913d !important;
-          transition: color 0.2s ease !important;
-        }
-
-        .favorite-floating :global(.favorite-icon.favorite-icon-favorited),
-        .favorite-floating :global(.favorite-icon.favorite-icon-favorited::before) {
-          color: #f1913d !important;
-        }
-
-        .slider-dots {
-          position: absolute !important;
-          left: 50% !important;
-          bottom: 12px !important;
-          transform: translateX(-50%) !important;
-          display: flex !important;
-          gap: 6px !important;
-          padding: 6px 12px !important;
-          border-radius: 9999px !important;
-          background: rgba(15, 23, 42, 0.45) !important;
-          backdrop-filter: blur(6px) !important;
-          z-index: 4 !important;
-        }
-
-        .slider-dot {
-          width: 8px !important;
-          height: 8px !important;
-          border-radius: 9999px !important;
-          border: none !important;
-          background: rgba(255, 255, 255, 0.6) !important;
-          cursor: pointer !important;
-          transition: all 0.2s ease !important;
-        }
-
-        .slider-dot.active {
-          width: 20px !important;
-          background: #f1913d !important;
-        }
-
-        .slider-dot:focus-visible {
-          outline: 2px solid #0ea5e9 !important;
-          outline-offset: 2px !important;
-        }
-
-        .sr-only {
-          position: absolute !important;
-          width: 1px !important;
-          height: 1px !important;
-          padding: 0 !important;
-          margin: -1px !important;
-          overflow: hidden !important;
-          clip: rect(0, 0, 0, 0) !important;
-          white-space: nowrap !important;
-          border: 0 !important;
-        }
-
-        .image-fallback {
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-          width: 100% !important;
-          height: 100% !important;
-          background-color: #f5f5f5 !important;
-          display: none !important;
-          align-items: center !important;
-          justify-content: center !important;
-          border-radius: 12px !important;
-          color: #999 !important;
-          font-size: 14px !important;
-        }
-        
-        .holiday-badge {
-          background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
-          border: 2px solid #2563eb !important;
-          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
-        }
-        
-        .contact-section {
-          margin-bottom: 16px !important;
-        }
-        
-        .call-button-container {
-          position: relative !important;
-        }
-        
-        .action-button {
-          background: white !important;
-          border: 1px solid #F97316 !important;
-          border-radius: 8px !important;
-          padding: 8px 12px !important;
-          cursor: pointer !important;
-          display: flex !important;
-          align-items: center !important;
-          gap: 8px !important;
-          color: #F97316 !important;
-          font-size: 14px !important;
-          font-weight: 500 !important;
-          transition: all 0.2s ease !important;
-          min-width: 120px !important;
-          justify-content: center !important;
-        }
-        
-        .action-button:hover {
-          background: #F97316 !important;
-          color: white !important;
-        }
-        
-        .action-button-primary {
-          background: #F97316 !important;
-          color: white !important;
-          border: none !important;
-        }
-        
-        .action-button-primary:hover {
-          background: #EA580C !important;
-        }
-        
-        .phone-options {
-          position: absolute !important;
-          top: 100% !important;
-          left: 0 !important;
-          right: 0 !important;
-          background-color: white !important;
-          border: 1px solid #e5e7eb !important;
-          border-radius: 8px !important;
-          padding: 8px !important;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-          z-index: 10 !important;
-          margin-top: 4px !important;
-        }
-        
-        .phone-options-row {
-          display: flex !important;
-          gap: 6px !important;
-        }
-        
-        .phone-action-btn {
-          flex: 1 !important;
-          background: #10b981 !important;
-          color: white !important;
-          border: none !important;
-          border-radius: 6px !important;
-          padding: 6px 10px !important;
-          font-size: 12px !important;
-          font-weight: 500 !important;
-          cursor: pointer !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 4px !important;
-        }
-        
-        .whatsapp-btn {
-          background: #25D366 !important;
-        }
-        
-        .price-section {
-          width: 100% !important;
-          text-align: center !important;
-          padding: 12px 0 !important;
-          border-top: 1px solid #e5e7eb !important;
-        }
-        
-        .price-section .price {
-          font-size: 18px !important;
-          font-weight: 600 !important;
-          color: #374151 !important;
-          margin: 0 !important;
-        }
-      `}</style>
       {listings.map((property) => {
         const imageUrls = extractImageUrls(property);
         const totalImages = imageUrls.length;
@@ -455,24 +158,24 @@ export default function PropertyGridItems({ listings = [] }) {
 
         return (
           <div className="box-house hover-img property-image-fix" key={property._id}>
-          <div className="image-wrap">
-            <div className="image-slider">
-              <Link href={`/property-detail/${property._id}`} className="image-link">
+          <div className={styles.imageWrap}>
+            <div className={styles.imageSlider}>
+              <Link href={`/property-detail/${property._id}`} className={styles.imageLink}>
               <Image
-                className="lazyload property-img"
+                className={`lazyload ${styles.propertyImg}`}
                 alt={ property.propertyTitle || t('common.property')}
                 src={activeImage}
                 width={339}
                 height={245}
                 onError={(e) => {
                   logger.warn('Image failed to load:', e.target.src);
-                  e.target.style.display = 'none';
+                  e.target.classList.add(styles.imageHidden);
                   if (e.target.nextSibling) {
-                    e.target.nextSibling.style.display = 'flex';
+                    e.target.nextSibling.classList.add(styles.imageFallbackVisible);
                   }
                 }}
               />
-              <div className="image-fallback">
+              <div className={`${styles.imageFallback}`}>
                 No Image
               </div>
             </Link>
@@ -480,7 +183,7 @@ export default function PropertyGridItems({ listings = [] }) {
               <>
                 <button
                   type="button"
-                  className="slider-control prev"
+                  className={`${styles.sliderControl} ${styles.sliderControlPrev}`}
                   onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -488,14 +191,14 @@ export default function PropertyGridItems({ listings = [] }) {
                   }}
                   aria-label="View previous image"
                 >
-                  <span className="sr-only">Previous image</span>
+                  <span className={styles.srOnly}>Previous image</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
                 </button>
                 <button
                   type="button"
-                  className="slider-control next"
+                  className={`${styles.sliderControl} ${styles.sliderControlNext}`}
                   onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -503,17 +206,17 @@ export default function PropertyGridItems({ listings = [] }) {
                   }}
                   aria-label="View next image"
                 >
-                  <span className="sr-only">Next image</span>
+                  <span className={styles.srOnly}>Next image</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="9 6 15 12 9 18" />
                   </svg>
                 </button>
-                <div className="slider-dots">
+                <div className={styles.sliderDots}>
                   {imageUrls.map((_, dotIndex) => (
                     <button
                       key={dotIndex}
                       type="button"
-                      className={`slider-dot${dotIndex === safeIndex ? ' active' : ''}`}
+                      className={`${styles.sliderDot}${dotIndex === safeIndex ? ` ${styles.sliderDotActive}` : ''}`}
                       onClick={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
@@ -528,7 +231,7 @@ export default function PropertyGridItems({ listings = [] }) {
             </div>
             <ul className="box-tag flex gap-8">
               {property.propertyType === 'Holiday Homes' && (
-                <li className="flat-tag text-4 fw-6 text_white holiday-badge">
+                <li className={`flat-tag text-4 fw-6 text_white ${styles.holidayBadge}`}>
                   🏖️ {t('common.holidayHome')}
                 </li>
               )}
@@ -550,7 +253,7 @@ export default function PropertyGridItems({ listings = [] }) {
                   </li>
                 )}
             </ul>
-            <div className="favorite-floating">
+            <div className={styles.favoriteFloating}>
               <FavoriteButton
                 propertyId={property._id}
                 showLabel={false}
@@ -575,14 +278,14 @@ export default function PropertyGridItems({ listings = [] }) {
                   ))}
                 </div>
               ) : (
-                <p className={`title`} style={{ fontSize: '14px', fontWeight: '600', color: '#6b7280',margin:'16px auto' }}>
+                <p className={`title ${styles.propertyTitleFallback}`}>
                   {property.propertyTitle || t('common.property')}
                 </p>
               )}
             </div>
   
             <p className={`location text-1 flex items-center gap-6 ${styles.locationText}`}>
-              <i className="icon-location" /> <span className={styles.locationContent} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+              <i className="icon-location" /> <span className={`${styles.locationContent} ${locale === 'ar' ? styles.locationContentRtl : styles.locationContentLtr}`}>
                 <span className={styles.locationState}>{property.state}</span>-
                 {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || 'Location not specified')}
               </span>
@@ -602,12 +305,12 @@ export default function PropertyGridItems({ listings = [] }) {
               </li>
             </ul>
             {/* Contact Section */}
-            <div className="contact-section">
+            <div className={styles.contactSection}>
               <div className="wrap-btn flex">
-                <div className="call-button-container">
+                <div className={styles.callButtonContainer}>
                   <button 
                     onClick={() => togglePhoneNumber(property._id)}
-                    className="call flex gap-8 items-center text-1 action-button"
+                    className={`call flex gap-8 items-center text-1 ${styles.actionButton}`}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04207 3.23945 9.11999 3.72C9.28562 4.68007 9.56648 5.62273 9.95999 6.53C10.0555 6.74431 10.1112 6.97355 10.1241 7.20668C10.137 7.43981 10.1069 7.67342 10.0353 7.896C9.96366 8.11858 9.85182 8.32642 9.70599 8.51L8.08999 10.12C9.51355 12.4885 11.5115 14.4864 13.88 15.91L15.49 14.3C15.6736 14.1542 15.8814 14.0423 16.104 13.9707C16.3266 13.8991 16.5602 13.869 16.7933 13.8819C17.0264 13.8948 17.2557 13.9505 17.47 14.046C18.3773 14.4395 19.3199 14.7204 20.28 14.886C20.7658 14.9656 21.2094 15.2132 21.5265 15.5866C21.8437 15.9601 22.0122 16.4348 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -616,10 +319,10 @@ export default function PropertyGridItems({ listings = [] }) {
                   </button>
                   
                   {showPhoneNumbers[property._id] && (
-                    <div className="phone-options">
-                      <div className="phone-options-row">
+                    <div className={styles.phoneOptions}>
+                      <div className={styles.phoneOptionsRow}>
                         <button
-                          className="phone-action-btn"
+                          className={styles.phoneActionBtn}
                           onClick={() => window.open(`tel:${property.agentPhone || '+971549967817'}`)}
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -628,7 +331,7 @@ export default function PropertyGridItems({ listings = [] }) {
                           {t('common.call')}
                         </button>
                         <button
-                          className="phone-action-btn whatsapp-btn"
+                          className={`${styles.phoneActionBtn} ${styles.whatsappBtn}`}
                           onClick={() => handleWhatsAppClick(property.agentPhone || '+971549967817')}
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -643,7 +346,7 @@ export default function PropertyGridItems({ listings = [] }) {
                 
                 {/* Email Button */}
                 <button
-                  className="action-button"
+                  className={styles.actionButton}
                   onClick={() => window.open(`mailto:${property.agentEmail || 'info@example.com'}?subject=Inquiry about ${property.propertyTitle || t('common.property')}`)}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -655,7 +358,7 @@ export default function PropertyGridItems({ listings = [] }) {
 
                 {/* Details Button */}
                 <button
-                  className="action-button action-button-primary"
+                  className={`${styles.actionButton} ${styles.actionButtonPrimary}`}
                   onClick={() => handleDetailsClick(property._id)}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -671,8 +374,8 @@ export default function PropertyGridItems({ listings = [] }) {
             </div>
 
             {/* Price Section - Full Width */}
-            <div className="price-section">
-              <h5 className="price">
+            <div className={styles.priceSection}>
+              <h5 className={styles.price}>
                 {(() => {
                   const currencySymbols = {
                     'USD': '$',

@@ -1,6 +1,20 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import styles from "./LayoutHandler.module.css";
 
 export default function LayoutHandler({ defaultGrid = true }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <>
       <li className="nav-tab-item" role="presentation">
@@ -58,11 +72,20 @@ export default function LayoutHandler({ defaultGrid = true }) {
       </li>
       <li className="nav-tab-item" role="presentation">
         <a
-          href="#listLayout"
+          href={isMobile ? undefined : "#listLayout"}
           className={`nav-link-item btn-layout  ${
             !defaultGrid ? "active" : ""
-          } list`}
-          data-bs-toggle="tab"
+          } list ${isMobile ? styles.disabled : ""}`}
+          data-bs-toggle={isMobile ? undefined : "tab"}
+          onClick={(e) => {
+            if (isMobile) {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }
+          }}
+          aria-disabled={isMobile}
+          tabIndex={isMobile ? -1 : 0}
         >
           <svg width={25}
             height={25}
@@ -95,6 +118,9 @@ export default function LayoutHandler({ defaultGrid = true }) {
               fill="#8E8E93"
             />
           </svg>
+          {isMobile && (
+            <span className={styles.disabledTooltip}>Only available on desktop</span>
+          )}
         </a>
       </li>
     </>
