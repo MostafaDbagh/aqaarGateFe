@@ -86,7 +86,10 @@
       "south_facing_house": "منزل مواجه للجنوب",
       "south_facing": "مواجه للجنوب",
       "well_ventilated": "جيد التهوية",
-      "bright": "مشمس"
+      "bright": "مشمس",
+      "east_facing": "مواجه للشرق",
+      "east-facing": "مواجه للشرق",
+      "eastfacing": "مواجه للشرق"
     },
     "addProperty": "إضافة عقار",
     "makeMeAgent": "اجعلني وكيل"

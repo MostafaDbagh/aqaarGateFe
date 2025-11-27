@@ -86,7 +86,10 @@
       "south_facing_house": "South-Facing House",
       "south_facing": "South-Facing",
       "well_ventilated": "Well-Ventilated",
-      "bright": "Bright"
+      "bright": "Bright",
+      "east_facing": "East-Facing",
+      "east-facing": "East-Facing",
+      "eastfacing": "East-Facing"
     },
     "addProperty": "Add property",
     "makeMeAgent": "Make Me Agent"

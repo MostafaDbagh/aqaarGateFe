@@ -305,3 +305,32 @@
     min-height: 300px !important;
   }
 }
+
+/* Pagination - Keep arrows direction same (LTR), only translate text */
+.wrap-pagination .wg-pagination,
+html[dir="rtl"] .wrap-pagination .wg-pagination,
+[dir="rtl"] .wrap-pagination .wg-pagination {
+  direction: ltr !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: row !important;
+  
+  li {
+    direction: ltr !important;
+    
+    a {
+      direction: ltr !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    i,
+    .icon-arrow-left,
+    .icon-arrow-right {
+      direction: ltr !important;
+      transform: none !important;
+    }
+  }
+}
