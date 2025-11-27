@@ -12,7 +12,6 @@ export const amenitiesList = [
   "Reception (nator)",
   "Balcony",
   "Swimming pool",
-  "First aid kit",
   "Fire alarms"
 ];
 

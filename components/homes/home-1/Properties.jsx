@@ -587,7 +587,24 @@ export default function Properties({ listings, isLoading, isError }) {
                 };
                 const currency = listing?.currency || 'USD';
                 const symbol = currencySymbols[currency] || currency;
-                return `${symbol} ${listing?.propertyPrice?.toLocaleString() || '0'}`;
+                const price = listing?.propertyPrice?.toLocaleString() || '0';
+                const basePrice = `${symbol} ${price}`;
+                
+                // Add rent period for rental properties
+                if (listing?.status?.toLowerCase() === 'rent' && listing?.rentType) {
+                  const rentTypeMap = {
+                    'monthly': t('common.monthly'),
+                    'weekly': t('common.weekly'),
+                    'yearly': t('common.yearly'),
+                    'one-year': t('common.oneYear'),
+                    'three-month': t('common.threeMonth'),
+                    'six-month': t('common.sixMonth')
+                  };
+                  const rentPeriod = rentTypeMap[listing.rentType] || t('common.monthly');
+                  return `${basePrice} ${rentPeriod}`;
+                }
+                
+                return basePrice;
               })()}
             </h5>
             

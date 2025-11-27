@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { listingAPI } from '@/apis/listing';
+import DropdownSelect from '../common/DropdownSelect';
+import { amenitiesList } from '@/constants/amenities';
 import styles from './EditPropertyModal.module.css'
 
 const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
@@ -8,6 +10,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     address: '',
     propertyPrice: '',
     status: 'sale',
+    rentType: 'monthly',
     approvalStatus: 'pending',
     description: '',
     bedrooms: '',
@@ -64,40 +67,52 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     }
   };
 
-  // Available amenities list
-  const availableAmenities = [
-    'Shared Gym',
-    'Smart Controls',
-    'BBQ Area',
-    'Private Garden',
-    'Children\'s Play Area',
-    'Smoke alarm',
-    'Self check-in with lockbox',
-    'Carbon monoxide alarm',
-    'Security cameras',
-    'Hangers',
-    'Extra pillows & blankets',
-    'Bed linens',
-    'TV with standard cable',
-    'Refrigerator',
-    'Dishwasher',
-    'Microwave',
-    'Coffee maker'
-  ];
+  // Use same amenities list as AddProperty
+  const amenityOptions = amenitiesList;
 
   // Initialize form data when property changes
   useEffect(() => {
     if (property) {
+      // Normalize status: handle "for rent", "for sale", "rent", "sale", etc.
+      let normalizedStatus = (property.status || 'sale').toLowerCase().trim();
+      
+      // Convert "for rent" or "for sale" to "rent" or "sale"
+      if (normalizedStatus.includes('rent')) {
+        normalizedStatus = 'rent';
+      } else if (normalizedStatus.includes('sale')) {
+        normalizedStatus = 'sale';
+      }
+      
+      // Normalize rentType: handle "Three Months", "three-month", etc.
+      let normalizedRentType = property.rentType || 'monthly';
+      if (normalizedRentType) {
+        const rentTypeLower = normalizedRentType.toLowerCase().trim();
+        // Map common variations to standard format
+        const rentTypeMap = {
+          'three months': 'three-month',
+          'three-month': 'three-month',
+          'six months': 'six-month',
+          'six-month': 'six-month',
+          'one year': 'one-year',
+          'one-year': 'one-year',
+          'monthly': 'monthly',
+          'weekly': 'weekly',
+          'yearly': 'yearly'
+        };
+        normalizedRentType = rentTypeMap[rentTypeLower] || normalizedRentType.toLowerCase();
+      }
+      
       setFormData({
         propertyKeyword: property.propertyKeyword || '',
         address: property.address || '',
         propertyPrice: property.propertyPrice || '',
-        status: property.status || 'sale',
+        status: normalizedStatus,
+        rentType: normalizedRentType,
         approvalStatus: property.approvalStatus || 'pending',
-        description: property.description || '',
+        description: property.description || property.propertyDesc || '',
         bedrooms: property.bedrooms || '',
         bathrooms: property.bathrooms || '',
-        squareFootage: property.squareFootage || '',
+        squareFootage: property.squareFootage || property.size || '',
         yearBuilt: property.yearBuilt || '',
         propertyType: property.propertyType || '',
         amenities: property.amenities || [],
@@ -113,6 +128,14 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'status' ? value.toLowerCase() : value
+    }));
+  };
+
+  // Handle dropdown change (for rentType)
+  const handleDropdownChange = (name, value) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -148,7 +171,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       // Prepare data for API
       // IMPORTANT: Do not send approvalStatus unless user is admin
       // Backend will preserve existing approvalStatus for non-admin users
-      const { approvalStatus, ...formDataWithoutApprovalStatus } = formData;
+      const { approvalStatus, rentType, ...formDataWithoutApprovalStatus } = formData;
       const updateData = {
         ...formDataWithoutApprovalStatus,
         propertyPrice: parseFloat(formData.propertyPrice) || 0,
@@ -163,6 +186,11 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         notes_ar: formData.notes_ar || undefined,
         floor: formData.floor ? parseInt(formData.floor) : undefined
       };
+      
+      // Only include rentType if status is "rent"
+      if (formData.status === 'rent' && formData.rentType) {
+        updateData.rentType = formData.rentType;
+      }
       
       // Only include approvalStatus if user is admin (check user role from localStorage or context)
       // For now, we'll let backend handle this - it will preserve existing approvalStatus for non-admin users
@@ -275,7 +303,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onBlur={handleInputBlur}
               />
             </div>
-
             {/* Price and Status Row */}
             <div className={styles.gridTwoCols}>
               <div>
@@ -302,7 +329,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 </label>
                 <select
                   name="status"
-                  value={formData.status}
+                  value={formData.status || 'sale'}
                   onChange={handleInputChange}
                   className={styles.input}
                   onFocus={handleInputFocus}
@@ -313,6 +340,29 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 </select>
               </div>
             </div>
+
+            {/* Rent Type - Only show when status is "rent" */}
+            {(formData.status === 'rent' || formData.status?.toLowerCase() === 'rent') && (
+              <div style={{ marginTop: '20px' }}>
+                <label className={styles.formLabel}>
+                  Rent Period charge: <span style={{ color: 'red' }}>*</span>
+                </label>
+                <DropdownSelect
+                  name="rentType"
+                  options={[
+                    'monthly',
+                    'three-month',
+                    'six-month',
+                    'one-year',
+                    'yearly',
+                    'weekly'
+                  ]}
+                  selectedValue={formData.rentType || 'monthly'}
+                  onChange={(value) => handleDropdownChange('rentType', value)}
+                  addtionalParentClass=""
+                />
+              </div>
+            )}
 
             {/* Property Details Row */}
             <div className={styles.gridThreeCols}>
@@ -401,23 +451,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   onBlur={handleInputBlur}
                 />
               </div>
-            </div>
-
-            {/* Property Category */}
-            <div>
-              <label className={styles.formLabel}>
-                Property Category
-              </label>
-              <input
-                type="text"
-                name="propertyType"
-                value={formData.propertyType}
-                onChange={handleInputChange}
-                placeholder="e.g., Apartment, House, Villa"
-                className={styles.input}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}
-              />
             </div>
 
             {/* Description */}
@@ -521,15 +554,14 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
               </div>
             </div>
 
-            {/* Amenities */}
+            {/* Amenities Section */}
             <div>
               <label className={styles.formLabel}>
-                Amenities
+                Amenities <span style={{ color: 'red' }}>*</span>
               </label>
               <div className={styles.amenitiesWrap}>
-                {/* Available Amenities Grid */}
                 <div className={styles.amenitiesGrid}>
-                  {availableAmenities.map((amenity) => (
+                  {amenityOptions.map((amenity) => (
                     <label
                       key={amenity}
                       className={styles.amenityItem}
@@ -546,18 +578,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                     </label>
                   ))}
                 </div>
-
-                {/* Selected Amenities */}
-                {formData.amenities.length > 0 && (
-                  <div>
-                    <div className={styles.selectedAmenitiesTitle}>Selected Amenities:</div>
-                    <div className={styles.selectedAmenitiesChips}>
-                      {formData.amenities.map((a) => (
-                        <span key={a} className={styles.chip}>{a}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
             </div>

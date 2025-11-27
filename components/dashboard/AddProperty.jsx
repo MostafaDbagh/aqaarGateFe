@@ -795,7 +795,7 @@ export default function AddProperty({ isAdminMode = false }) {
               {formData.status === "rent" && (
                 <fieldset className="box-fieldset">
                   <label htmlFor="rentType">
-                    Rent Period:<span>*</span>
+                    Rent Period charge:<span>*</span>
                   </label>
                   <DropdownSelect
                     name="rentType"
@@ -807,7 +807,7 @@ export default function AddProperty({ isAdminMode = false }) {
                         : isAdmin || isAdminMode
                         ? ["one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
                         // For regular agents: show three-month, six-month, one-year
-                        : ["three-month", "six-month", "one-year"]
+                        : ["monthly", "three-month", "six-month", "one-year"]
                     }
                     selectedValue={formData.rentType}
                     onChange={(value) => handleDropdownChange('rentType', value)}

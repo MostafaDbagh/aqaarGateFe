@@ -107,10 +107,24 @@ export default function ExtraInfo({ property }) {
             <p className="fw-6">{t('status')}</p>
             <p>{formatStatus(property?.status)}</p>
           </li>
-          <li className="flex">
-            <p className="fw-6">{t('garage')}</p>
-            <p>{property?.garages ? `${t('yes')} (${property?.garageSize || '0'} ${t('sqft')})` : t('no')}</p>
-          </li>
+          {property?.status?.toLowerCase() === 'rent' && property?.rentType && (
+            <li className="flex">
+              <p className="fw-6">{t('rentType')}</p>
+              <p>
+                {(() => {
+                  const rentTypeMap = {
+                    'monthly': t('rentTypeMonthly'),
+                    'weekly': t('rentTypeWeekly'),
+                    'yearly': t('rentTypeYearly'),
+                    'one-year': t('rentTypeOneYear'),
+                    'three-month': t('rentTypeThreeMonth'),
+                    'six-month': t('rentTypeSixMonth')
+                  };
+                  return rentTypeMap[property.rentType] || property.rentType;
+                })()}
+              </p>
+            </li>
+          )}
         </ul>
       </div>
     </>

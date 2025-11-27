@@ -530,7 +530,23 @@ export default function PropertyListItems({ listings = [] }) {
                       return `${symbol}0`;
                     }
                     // Use toLocaleString only for formatting, not for rounding
-                    return `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
+                    const basePrice = `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
+                    
+                    // Add rent period for rental properties
+                    if (property?.status?.toLowerCase() === 'rent' && property?.rentType) {
+                      const rentTypeMap = {
+                        'monthly': t('common.monthly'),
+                        'weekly': t('common.weekly'),
+                        'yearly': t('common.yearly'),
+                        'one-year': t('common.oneYear'),
+                        'three-month': t('common.threeMonth'),
+                        'six-month': t('common.sixMonth')
+                      };
+                      const rentPeriod = rentTypeMap[property.rentType] || t('common.monthly');
+                      return `${basePrice} ${rentPeriod}`;
+                    }
+                    
+                    return basePrice;
                   })()}
                 </h5>
                 
