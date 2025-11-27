@@ -440,11 +440,21 @@ export default function AddProperty({ isAdminMode = false }) {
     logger.debug("📤 Preparing to make API call...");
     
     try {
+      // IMPORTANT: Preserve exact propertyPrice value as entered by agent
+      const originalPrice = formData.propertyPrice;
+      const parsedPrice = parseFloat(formData.propertyPrice);
+      logger.info(`💰 Frontend - Property Price - Original: ${originalPrice}, Type: ${typeof originalPrice}, Parsed: ${parsedPrice}, Type: ${typeof parsedPrice}`);
+      
+      if (isNaN(parsedPrice)) {
+        setErrors(prev => ({ ...prev, propertyPrice: "Valid price is required" }));
+        return;
+      }
+      
       const submitData = {
         ...formData,
         // Map state to city for backend compatibility (backend requires city field)
         city: formData.state || formData.city || "Aleppo",
-        propertyPrice: parseFloat(formData.propertyPrice),
+        propertyPrice: parsedPrice, // Use parsed price without any modification
         bedrooms: parseInt(formData.bedrooms),
         bathrooms: parseInt(formData.bathrooms),
         size: parseInt(formData.size),

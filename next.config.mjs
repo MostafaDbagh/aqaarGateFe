@@ -13,45 +13,35 @@ const nextConfig = {
         };
       }
       
-      // Fix for @formatjs/intl vendor chunk issues
-      // Instead of ignoring, provide a proper fallback
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@formatjs/intl': false,
-      };
-      
-      // Remove any existing IgnorePlugin for @formatjs/intl
-      config.plugins = config.plugins.filter(
-        (plugin) =>
-          !(
-            plugin instanceof webpack.IgnorePlugin &&
-            plugin.options?.resourceRegExp?.test('@formatjs/intl')
-          )
-      );
-      
-      // Fix for vendor chunk issues
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          ...config.optimization.splitChunks,
-          cacheGroups: {
-            ...config.optimization.splitChunks?.cacheGroups,
-            default: {
-              ...config.optimization.splitChunks?.cacheGroups?.default,
-              minChunks: 2,
-              priority: -20,
-              reuseExistingChunk: true,
-            },
-            // Prevent @formatjs from being split into separate chunks
-            formatjs: {
-              test: /[\\/]node_modules[\\/]@formatjs[\\/]/,
-              name: 'formatjs',
-              priority: 10,
-              reuseExistingChunk: true,
+      // Fix for @formatjs vendor chunk issues
+      // Ensure @formatjs modules are bundled correctly without creating separate vendor chunks
+      if (config.optimization && config.optimization.splitChunks) {
+        const originalCacheGroups = config.optimization.splitChunks.cacheGroups || {};
+        
+        // Modify default vendor chunk to exclude @formatjs from being split
+        const defaultVendor = originalCacheGroups.default || {};
+        const originalTest = defaultVendor.test;
+        
+        config.optimization.splitChunks.cacheGroups = {
+          ...originalCacheGroups,
+          default: {
+            ...defaultVendor,
+            test: (module) => {
+              // Exclude @formatjs from default vendor chunks
+              if (module.resource && /[\\/]node_modules[\\/]@formatjs[\\/]/.test(module.resource)) {
+                return false;
+              }
+              // Use original test if it exists, otherwise return true for all node_modules
+              if (originalTest) {
+                return typeof originalTest === 'function' 
+                  ? originalTest(module)
+                  : originalTest.test(module.resource || '');
+              }
+              return /[\\/]node_modules[\\/]/.test(module.resource || '');
             },
           },
-        },
-      };
+        };
+      }
       
       return config;
     },

@@ -15,7 +15,13 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     squareFootage: '',
     yearBuilt: '',
     propertyType: '',
-    amenities: []
+    amenities: [],
+    // Arabic translation fields
+    description_ar: '',
+    address_ar: '',
+    neighborhood_ar: '',
+    notes_ar: '',
+    floor: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -94,7 +100,13 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         squareFootage: property.squareFootage || '',
         yearBuilt: property.yearBuilt || '',
         propertyType: property.propertyType || '',
-        amenities: property.amenities || []
+        amenities: property.amenities || [],
+        // Arabic translation fields
+        description_ar: property.description_ar || '',
+        address_ar: property.address_ar || '',
+        neighborhood_ar: property.neighborhood_ar || '',
+        notes_ar: property.notes_ar || '',
+        floor: property.floor || ''
       });
     }
   }, [property]);
@@ -134,14 +146,26 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
 
     try {
       // Prepare data for API
+      // IMPORTANT: Do not send approvalStatus unless user is admin
+      // Backend will preserve existing approvalStatus for non-admin users
+      const { approvalStatus, ...formDataWithoutApprovalStatus } = formData;
       const updateData = {
-        ...formData,
+        ...formDataWithoutApprovalStatus,
         propertyPrice: parseFloat(formData.propertyPrice) || 0,
         bedrooms: parseInt(formData.bedrooms) || 0,
         bathrooms: parseInt(formData.bathrooms) || 0,
         squareFootage: parseInt(formData.squareFootage) || 0,
-        yearBuilt: parseInt(formData.yearBuilt) || new Date().getFullYear()
+        yearBuilt: parseInt(formData.yearBuilt) || new Date().getFullYear(),
+        // Arabic translation fields
+        description_ar: formData.description_ar || undefined,
+        address_ar: formData.address_ar || undefined,
+        neighborhood_ar: formData.neighborhood_ar || undefined,
+        notes_ar: formData.notes_ar || undefined,
+        floor: formData.floor ? parseInt(formData.floor) : undefined
       };
+      
+      // Only include approvalStatus if user is admin (check user role from localStorage or context)
+      // For now, we'll let backend handle this - it will preserve existing approvalStatus for non-admin users
 
       await listingAPI.updateListing(property._id, updateData);
       
@@ -363,19 +387,37 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
 
               <div>
                 <label className={styles.formLabel}>
-                  Property Category
+                  Floor
                 </label>
                 <input
-                  type="text"
-                  name="propertyType"
-                  value={formData.propertyType}
+                  type="number"
+                  name="floor"
+                  value={formData.floor}
                   onChange={handleInputChange}
-                  placeholder="e.g., Apartment, House, Villa"
+                  min="0"
+                  placeholder="e.g., 3"
                   className={styles.input}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
               </div>
+            </div>
+
+            {/* Property Category */}
+            <div>
+              <label className={styles.formLabel}>
+                Property Category
+              </label>
+              <input
+                type="text"
+                name="propertyType"
+                value={formData.propertyType}
+                onChange={handleInputChange}
+                placeholder="e.g., Apartment, House, Villa"
+                className={styles.input}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+              />
             </div>
 
             {/* Description */}
@@ -394,8 +436,90 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
               />
             </div>
 
-            {/* Approval Status */}
-   
+            {/* Arabic Translation Section */}
+            <div className={styles.arabicSection}>
+              <h3 className={styles.arabicSectionTitle}>
+                Arabic Translation (الترجمة العربية)
+              </h3>
+              
+              <div className={styles.gridGap28}>
+                {/* Arabic Description */}
+                <div>
+                  <label className={styles.formLabel}>
+                    Description (الوصف)
+                  </label>
+                  <textarea
+                    name="description_ar"
+                    value={formData.description_ar}
+                    onChange={handleInputChange}
+                    rows="4"
+                    placeholder="أدخل وصف العقار بالعربية"
+                    dir="rtl"
+                    style={{ textAlign: 'right' }}
+                    className={`${styles.input} ${styles.textarea}`}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+
+                {/* Arabic Address */}
+                <div>
+                  <label className={styles.formLabel}>
+                    Full Address (العنوان الكامل)
+                  </label>
+                  <input
+                    type="text"
+                    name="address_ar"
+                    value={formData.address_ar}
+                    onChange={handleInputChange}
+                    placeholder="أدخل العنوان الكامل بالعربية"
+                    dir="rtl"
+                    style={{ textAlign: 'right' }}
+                    className={styles.input}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+
+                {/* Arabic Neighborhood */}
+                <div>
+                  <label className={styles.formLabel}>
+                    Neighborhood (الحي)
+                  </label>
+                  <input
+                    type="text"
+                    name="neighborhood_ar"
+                    value={formData.neighborhood_ar}
+                    onChange={handleInputChange}
+                    placeholder="أدخل اسم الحي بالعربية"
+                    dir="rtl"
+                    style={{ textAlign: 'right' }}
+                    className={styles.input}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+
+                {/* Arabic Notes */}
+                <div>
+                  <label className={styles.formLabel}>
+                    Notes (ملاحظات)
+                  </label>
+                  <textarea
+                    name="notes_ar"
+                    value={formData.notes_ar}
+                    onChange={handleInputChange}
+                    rows="4"
+                    placeholder="أي ملاحظات إضافية بالعربية..."
+                    dir="rtl"
+                    style={{ textAlign: 'right' }}
+                    className={`${styles.input} ${styles.textarea}`}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+              </div>
+            </div>
 
             {/* Amenities */}
             <div>

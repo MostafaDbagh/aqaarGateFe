@@ -59,7 +59,13 @@ export default function PropertyOverview({ property }) {
             };
             const currency = property?.currency || 'USD';
             const symbol = currencySymbols[currency] || currency;
-            return `${symbol}${property?.propertyPrice?.toLocaleString() || '0'}`;
+            // IMPORTANT: Display exact price as stored in database - no rounding or modification
+            const exactPrice = property?.propertyPrice;
+            if (exactPrice === null || exactPrice === undefined) {
+              return `${symbol}0`;
+            }
+            // Use toLocaleString only for formatting, not for rounding
+            return `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
           })()}{" "}
           <span className="h5 lh-30 fw-4 text-color-default">
             /{property?.rentType || 'month'}

@@ -334,3 +334,52 @@ html[dir="rtl"] .wrap-pagination .wg-pagination,
     }
   }
 }
+
+/* Property List Page - Responsive Cards */
+.tf-grid-layout {
+  .box-house.property-image-fix {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    
+    .image-wrap {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+    }
+  }
+  
+  /* Grid View - Responsive */
+  &.lg-col-3 {
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  
+  &.md-col-2 {
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  
+  /* List View - Responsive */
+  &.lg-col-2 {
+    .box-house.property-list-image-fix {
+      @media (max-width: 768px) {
+        flex-direction: column !important;
+        
+        .image-wrap {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          height: 250px !important;
+          min-height: 250px !important;
+        }
+      }
+    }
+  }
+}

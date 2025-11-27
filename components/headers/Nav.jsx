@@ -11,18 +11,40 @@ export default function Nav() {
   const t = useTranslations('navigation');
   const isRTL = locale === 'ar';
   
+  // Remove locale prefix from pathname for comparison
+  const pathWithoutLocale = pathname?.replace(/^\/(en|ar)/, '') || pathname || '';
+  const normalizedPath = pathWithoutLocale === '/' ? '/' : pathWithoutLocale.replace(/\/$/, '');
+  
+  // Check if home page is active - should be active for /, /en, /ar, /en/, /ar/
+  const isHomeActive = normalizedPath === '/' || normalizedPath === '' || 
+                       pathname === '/' || pathname === '/en' || pathname === '/ar' ||
+                       pathname === '/en/' || pathname === '/ar/';
+  
+  // Check if property-list page is active
+  const isPropertyListActive = normalizedPath === '/property-list' || normalizedPath?.startsWith('/property-list/') || 
+                               normalizedPath?.startsWith('/property-detail/') || normalizedPath?.startsWith('/property-rental-service');
+  
   const isParentActive = (menus) =>
-    menus.some((menu) =>
-      menu.submenu
-        ? menu.submenu.some((item) =>
-            item.submenu
-              ? item.submenu.some(
-                  (item) => item.href.split("/")[1] === pathname.split("/")[1]
-                )
-              : item.href.split("/")[1] === pathname.split("/")[1]
-          )
-        : menu.href.split("/")[1] === pathname.split("/")[1]
-    );
+    menus.some((menu) => {
+      const menuPath = menu.href?.replace(/^\/(en|ar)/, '') || menu.href || '';
+      const normalizedMenuPath = menuPath === '/' ? '/' : menuPath.replace(/\/$/, '');
+      
+      if (menu.submenu) {
+        return menu.submenu.some((item) => {
+          if (item.submenu) {
+            return item.submenu.some((subItem) => {
+              const subItemPath = subItem.href?.replace(/^\/(en|ar)/, '') || subItem.href || '';
+              const normalizedSubItemPath = subItemPath === '/' ? '/' : subItemPath.replace(/\/$/, '');
+              return normalizedSubItemPath === normalizedPath || normalizedPath?.startsWith(normalizedSubItemPath + '/');
+            });
+          }
+          const itemPath = item.href?.replace(/^\/(en|ar)/, '') || item.href || '';
+          const normalizedItemPath = itemPath === '/' ? '/' : itemPath.replace(/\/$/, '');
+          return normalizedItemPath === normalizedPath || normalizedPath?.startsWith(normalizedItemPath + '/');
+        });
+      }
+      return normalizedMenuPath === normalizedPath || normalizedPath?.startsWith(normalizedMenuPath + '/');
+    });
   
   // Define navigation items in order
   const navItems = [
@@ -31,7 +53,7 @@ export default function Nav() {
       element: (
         <li key="home" style={{ padding: '12px 8px' }}
           className={`${
-            homes.some((elm) => elm.href == pathname) ? "current-menu" : ""
+            isHomeActive ? "current-menu" : ""
           }`}
         >
           <a href="/">{t('home')}</a>
@@ -43,7 +65,7 @@ export default function Nav() {
       element: (
         <li key="listing"
           className={` style-2 ${
-            isParentActive(propertyLinks) ? "current-menu" : ""
+            isPropertyListActive ? "current-menu" : ""
           } `}
         >
           <a href="/property-list">{t('listing')}</a>
@@ -103,7 +125,7 @@ export default function Nav() {
       element: (
         <li key="agents"
           className={` ${
-            pathname?.split("/")[1] === "agents" ? "current-menu" : ""
+            normalizedPath === '/agents' || normalizedPath?.startsWith('/agents/') || normalizedPath?.startsWith('/agents-details/') ? "current-menu" : ""
           } `}
         >
           <Link href="/agents">{t('agents')}</Link>
@@ -115,7 +137,7 @@ export default function Nav() {
       element: (
         <li key="rentalService"
           className={` ${
-            pathname?.split("/")[1] === "property-rental-service" ? "current-menu" : ""
+            normalizedPath === '/property-rental-service' || normalizedPath?.startsWith('/property-rental-service/') ? "current-menu" : ""
           } `}
         >
           <Link href="/property-rental-service">{t('rentalService')}</Link>
@@ -125,7 +147,7 @@ export default function Nav() {
     {
       id: 'contact',
       element: (
-        <li key="contact" className={"/contact" == pathname ? "current-menu" : ""}>
+        <li key="contact" className={normalizedPath === '/contact' || normalizedPath?.startsWith('/contact/') ? "current-menu" : ""}>
           <Link href={`/contact`}>{t('contact')}</Link>
         </li>
       )

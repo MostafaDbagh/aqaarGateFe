@@ -200,6 +200,9 @@ export default function Property() {
       });
     },
     enabled: !!user?._id, // Only fetch if user ID exists
+    staleTime: 0, // Always consider data stale to ensure fresh data
+    refetchOnMount: true, // Always refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window regains focus
   });
 
   // Extract listings array and pagination info from the API response
@@ -257,8 +260,10 @@ export default function Property() {
                          (statusFilter === 'For Sale' && listing.status === 'sale') ||
                          (statusFilter === 'For Rent' && listing.status === 'rent');
     
+    // Use approvalStatusOriginal if available (from translation), otherwise use approvalStatus
+    const actualApprovalStatus = (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase() || listing.approvalStatus);
     const matchesApproval = approvalFilter === 'All' || 
-                           listing.approvalStatus === approvalFilter.toLowerCase();
+                           actualApprovalStatus === approvalFilter.toLowerCase();
     
     const matchesPropertyType = propertyTypeFilter === 'All' || 
                                listing.propertyType === propertyTypeFilter;
@@ -609,9 +614,9 @@ export default function Property() {
                             </span>
                             <span className="btn-status" style={{
                               background: 
-                                listing.approvalStatus === 'pending' ? '#ff9500' : 
-                                listing.approvalStatus === 'approved' ? '#00b14f' : 
-                                listing.approvalStatus === 'closed' ? '#6c757d' : '#dc3545',
+                                (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'pending' ? '#ff9500' : 
+                                (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'approved' ? '#00b14f' : 
+                                (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'closed' ? '#6c757d' : '#dc3545',
                               color: 'white',
                               padding: '8px',
                               height: '40px',
@@ -628,9 +633,9 @@ export default function Property() {
                               alignItems: 'center',
                               justifyContent: 'center'
                             }}>
-                              {listing.approvalStatus === 'pending' ? '⏳ Pending' : 
-                               listing.approvalStatus === 'approved' ? '✓ Approved' :
-                               listing.approvalStatus === 'closed' ? '🔒 Closed' : '❌ Rejected'}
+                              {(listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'pending' ? '⏳ Pending' : 
+                               (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'approved' ? '✓ Approved' :
+                               (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'closed' ? '🔒 Closed' : '❌ Rejected'}
                             </span>
                           </div>
                         </td>
@@ -807,7 +812,7 @@ export default function Property() {
         </div>
         {/* .footer-dashboard */}
         <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} Popty</p>
+          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
           <ul className="list">
             <li>
               <a href="#">Privacy</a>
@@ -815,9 +820,7 @@ export default function Property() {
             <li>
               <a href="#">Terms</a>
             </li>
-            <li>
-              <a href="#">Support</a>
-            </li>
+         
           </ul>
         </div>
         {/* .footer-dashboard */}

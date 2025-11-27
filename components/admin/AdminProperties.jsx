@@ -7,9 +7,11 @@ import PropertyDetailsModal from "./PropertyDetailsModal";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import styles from "./AdminProperties.module.css";
 import { UserIcon } from "@/components/icons";
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function AdminProperties() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
+  const queryClient = useQueryClient();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -75,6 +77,10 @@ export default function AdminProperties() {
         "Success",
         `Property ${approvalStatus} successfully`
       );
+      // Invalidate all listing-related queries to ensure fresh data everywhere
+      queryClient.invalidateQueries(['my-listings']);
+      queryClient.invalidateQueries(['listings']);
+      queryClient.invalidateQueries(['listing']);
       fetchProperties();
     } catch (err) {
       const errorMessage = err.message || err.error?.message || "Failed to update property approval";
