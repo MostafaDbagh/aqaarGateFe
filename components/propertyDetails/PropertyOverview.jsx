@@ -66,10 +66,15 @@ export default function PropertyOverview({ property }) {
             }
             // Use toLocaleString only for formatting, not for rounding
             return `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
-          })()}{" "}
-          <span className="h5 lh-30 fw-4 text-color-default">
-            /{property?.rentType || 'month'}
-          </span>
+          })()}
+          {property?.status?.toLowerCase() === 'rent' && (
+            <>
+              {" "}
+              <span className="h5 lh-30 fw-4 text-color-default">
+                /{property?.rentType || 'month'}
+              </span>
+            </>
+          )}
         </div>
       </div>
       
