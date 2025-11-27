@@ -2004,6 +2004,21 @@
   .section-property-detail {
     .wg-property {
       padding: 24px 15px !important;
+      &.box-amenities {
+        .wrap-feature {
+          display: flex !important;
+          flex-direction: column;
+          gap: 20px;
+          .box-feature {
+            width: 100%;
+            flex: 1;
+            ul {
+              display: flex;
+              flex-direction: column;
+            }
+          }
+        }
+      }
     }
   }
   .section-property-image {
@@ -2129,9 +2144,33 @@
   .section-property-detail {
     .wg-property {
       &.box-amenities {
+        padding: 20px 15px !important;
         .heading {
           padding-bottom: 20px;
           margin-bottom: 20px;
+        }
+        .wg-title {
+          padding: 0 0 15px 0;
+          margin-bottom: 15px;
+        }
+        .wrap-feature {
+          display: flex !important;
+          flex-direction: column;
+          gap: 20px;
+          .box-feature {
+            width: 100%;
+            flex: 1;
+            ul {
+              display: flex;
+              flex-direction: column;
+              padding-left: 20px;
+              li {
+                font-size: 14px;
+                line-height: 1.6;
+                flex: 0 0 auto;
+              }
+            }
+          }
         }
         padding-right: 0 !important;
       }
@@ -2558,10 +2597,32 @@
   .section-property-detail {
     .wg-property {
       &.box-amenities {
+        padding: 20px 15px !important;
+        .wg-title {
+          padding: 0 0 15px 0;
+          margin-bottom: 15px;
+        }
         .wrap-feature {
-          gap: 10px;
+          display: flex !important;
+          flex-direction: column;
+          gap: 15px;
+          padding: 0;
           .box-feature {
             width: 100%;
+            flex: 1;
+            ul {
+              display: flex;
+              flex-direction: column;
+              flex-wrap: wrap;
+              padding-left: 20px;
+              padding-right: 10px;
+              li {
+                padding-right: 5px;
+                font-size: 14px;
+                line-height: 1.6;
+                flex: 0 0 auto;
+              }
+            }
           }
         }
       }
@@ -2978,9 +3039,32 @@
 
 @media (max-width: 457px) {
   .box-amenities {
+    padding: 15px 12px !important;
+    .wg-title {
+      font-size: 18px;
+      padding: 0 0 12px 0;
+      margin-bottom: 12px;
+    }
     .wrap-feature {
+      display: flex !important;
+      flex-direction: column;
+      gap: 12px;
       .box-feature {
         width: 100%;
+        flex: 1;
+        ul {
+          display: flex;
+          flex-direction: column;
+          padding-left: 18px;
+          padding-right: 8px;
+          li {
+            padding-right: 5px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            flex: 0 0 auto;
+          }
+        }
       }
     }
   }

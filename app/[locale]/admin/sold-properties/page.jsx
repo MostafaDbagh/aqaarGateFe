@@ -5,3 +5,4 @@ export default function SoldPropertiesPage() {
   return <AdminDashboardMain />;
 }
 
+

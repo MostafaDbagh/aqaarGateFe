@@ -976,9 +976,6 @@ export default function Dashboard() {
                 <li>
                   <a href="#">Terms</a>
                 </li>
-                <li>
-                  <a href="#">Support</a>
-                </li>
               </ul>
             </div>
             {/* .footer-dashboard */}

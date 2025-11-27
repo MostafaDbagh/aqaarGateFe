@@ -676,7 +676,7 @@ export default function MakeMeAgent() {
         </div>
         
         <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} Popty</p>
+          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
           <ul className="list">
             <li>
               <a href="#">Privacy</a>

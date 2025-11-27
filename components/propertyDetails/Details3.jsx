@@ -3,7 +3,7 @@ import Slider3 from "./sliders/Slider3";
 import PropertyOverview from "./PropertyOverview";
 import ExtraInfo from "./ExtraInfo";
 import Features from "./Features";
-import Location from "./Location";
+// import Location from "./Location"; // Temporarily disabled - will be enabled later
 import Sidebar from "./Sidebar";
 import PropertyReviews from "./PropertyReviews";
 
@@ -23,9 +23,10 @@ export default function Details3({ property }) {
             <div className="wg-property box-amenities spacing-3">
               <Features property={property} />
             </div>
-            <div className="wg-property box-location spacing-3">
+            {/* Location section temporarily hidden - will be enabled later */}
+            {/* <div className="wg-property box-location spacing-3">
               <Location property={property} />
-            </div>
+            </div> */}
             <div className="wg-property box-reviews spacing-3">
               <PropertyReviews propertyId={property._id} />
             </div>
