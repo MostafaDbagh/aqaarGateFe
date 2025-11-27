@@ -255,10 +255,13 @@ export default function Property() {
     const matchesSearch = listing.propertyKeyword?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           listing.address?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    // Fix Property Type filter logic
+    // Fix Property Type filter logic - normalize status to handle both "For Sale"/"sale" and "For Rent"/"rent"
+    const normalizedStatus = listing.status?.toLowerCase() || '';
+    const isSale = normalizedStatus === 'sale' || normalizedStatus === 'for sale';
+    const isRent = normalizedStatus === 'rent' || normalizedStatus === 'for rent';
     const matchesStatus = statusFilter === 'All' || 
-                         (statusFilter === 'For Sale' && listing.status === 'sale') ||
-                         (statusFilter === 'For Rent' && listing.status === 'rent');
+                         (statusFilter === 'For Sale' && isSale) ||
+                         (statusFilter === 'For Rent' && isRent);
     
     // Use approvalStatusOriginal if available (from translation), otherwise use approvalStatus
     const actualApprovalStatus = (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase() || listing.approvalStatus);
@@ -536,7 +539,7 @@ export default function Property() {
                               </div>
                               <div className="text-btn text-color-primary">
                                 ${listing.propertyPrice?.toLocaleString()}
-                                {listing.status === 'rent' && listing.rentType && ` / ${listing.rentType}`}
+                                {((listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') && listing.rentType) && ` / ${listing.rentType}`}
                               </div>
                               
                               {/* Info Tags - ID and Views */}
@@ -592,26 +595,33 @@ export default function Property() {
                         </td>
                         <td>
                           <div className="status-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
-                            <span className="btn-status" style={{
-                              background: listing.isSold ? '#dc3545' : listing.status === 'sale' ? '#00b14f' : '#007bff',
-                              color: 'white',
-                              padding: '8px',
-                              height: '40px',
-                              minWidth: '80px',
-                              borderRadius: '8px',
-                              fontSize: '12px',
-                              fontWeight: '600',
-                              textAlign: 'center',
-                              textTransform: 'uppercase',
-                              letterSpacing: '0.5px',
-                              border: 'none',
-                              outline: 'none',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}>
-                              {listing.isSold ? 'SOLD' : listing.status === 'sale' ? 'For Sale' : 'For Rent'}
-                            </span>
+                            {(() => {
+                              const normalizedStatus = listing.status?.toLowerCase() || '';
+                              const isSale = normalizedStatus === 'sale' || normalizedStatus === 'for sale';
+                              const isRent = normalizedStatus === 'rent' || normalizedStatus === 'for rent';
+                              return (
+                                <span className="btn-status" style={{
+                                  background: listing.isSold ? '#dc3545' : isSale ? '#00b14f' : '#007bff',
+                                  color: 'white',
+                                  padding: '8px',
+                                  height: '40px',
+                                  minWidth: '80px',
+                                  borderRadius: '8px',
+                                  fontSize: '12px',
+                                  fontWeight: '600',
+                                  textAlign: 'center',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.5px',
+                                  border: 'none',
+                                  outline: 'none',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                                }}>
+                                  {listing.isSold ? 'SOLD' : isSale ? 'For Sale' : 'For Rent'}
+                                </span>
+                              );
+                            })()}
                             <span className="btn-status" style={{
                               background: 
                                 (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'pending' ? '#ff9500' : 

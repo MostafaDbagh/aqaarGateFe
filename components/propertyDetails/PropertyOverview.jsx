@@ -214,6 +214,17 @@ export default function PropertyOverview({ property }) {
               <div className="text-1 text-color-heading">{property?.bathrooms || '0'} {tDetail('rooms')}</div>
             </div>
           </div>
+          {property?.floor !== undefined && property?.floor !== null && (
+            <div className="box-icon">
+              <div className="icons">
+                <i className="icon-HouseLine" />
+              </div>
+              <div className="content">
+                <div className="text-4 text-color-default">{tDetail('floor')}:</div>
+                <div className="text-1 text-color-heading">{property.floor}</div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="wrap-box">
           <div className="box-icon">
@@ -254,17 +265,6 @@ export default function PropertyOverview({ property }) {
               <div className="text-1 text-color-heading">{property?.yearBuilt || 'N/A'}</div>
             </div>
           </div>
-          {property?.floor !== undefined && property?.floor !== null && (
-            <div className="box-icon">
-              <div className="icons">
-                <i className="icon-HouseLine" />
-              </div>
-              <div className="content">
-                <div className="text-4 text-color-default">{tDetail('floor')}:</div>
-                <div className="text-1 text-color-heading">{property.floor}</div>
-              </div>
-            </div>
-          )}
         </div>
         <div className="wrap-box">
           <div className="box-icon">
