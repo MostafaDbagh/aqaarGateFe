@@ -446,9 +446,6 @@ export default function AdminReviews() {
           )}
         </div>
         <DashboardFooter />
-          
-          </ul>
-        </div>
       </div>
       <div className="overlay-dashboard" />
       
