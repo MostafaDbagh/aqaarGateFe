@@ -7,6 +7,7 @@ import { favoriteAPI } from "@/apis/favorites";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import Toast from "../common/Toast";
 import LocationLoader from "../common/LocationLoader";
+import DashboardFooter from "../common/DashboardFooter";
 import { useFavorites } from "@/components/contexts/FavoritesContext";
 import logger from "@/utlis/logger";
 import styles from "./Favorites.module.css";
@@ -368,17 +369,7 @@ export default function Favorites() {
           )}
         </div>
         {/* .footer-dashboard */}
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
-          </ul>
-        </div>
+        <DashboardFooter />
         {/* .footer-dashboard */}
       </div>
       <div className="overlay-dashboard" />

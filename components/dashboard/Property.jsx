@@ -9,6 +9,7 @@ import EditPropertyModal from "../modals/EditPropertyModal";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import Toast from "../common/Toast";
 import LocationLoader from "../common/LocationLoader";
+import DashboardFooter from "../common/DashboardFooter";
 import { EyeIcon } from "../icons/EyeIcon";
 import logger from "@/utlis/logger";
 import styles from "./Property.module.css";
@@ -178,10 +179,25 @@ export default function Property() {
           }, 1000);
         } catch (error) {
           logger.error('Error deleting property:', error);
+          console.error('Full error object:', {
+            message: error?.message,
+            response: error?.response?.data,
+            status: error?.response?.status,
+            error: error?.error,
+            stack: error?.stack
+          });
           setConfirmationModal(prev => ({ ...prev, loading: false }));
           
           // Show more specific error message
-          const errorMessage = error?.response?.data?.message || error?.response?.data?.error || error?.message || error?.error || 'Failed to delete property. Please try again.';
+          const errorMessage = error?.response?.data?.message || 
+                              error?.response?.data?.error || 
+                              error?.message || 
+                              error?.error || 
+                              (error?.response?.status === 401 ? 'You are not authorized to delete this property.' :
+                               error?.response?.status === 403 ? 'You can only delete your own listings.' :
+                               error?.response?.status === 404 ? 'Property not found.' :
+                               error?.response?.status === 500 ? 'Server error. Please try again later.' :
+                               'Failed to delete property. Please try again.');
           showToast(errorMessage, 'error');
         }
       },
@@ -821,18 +837,7 @@ export default function Property() {
           </div>
         </div>
         {/* .footer-dashboard */}
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
-         
-          </ul>
-        </div>
+        <DashboardFooter />
         {/* .footer-dashboard */}
       </div>
       <div className="overlay-dashboard" />

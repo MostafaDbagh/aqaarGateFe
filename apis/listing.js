@@ -133,7 +133,16 @@ export const listingAPI = {
       });
       return response.data;
     } catch (error) {
-      throw error.response?.data || error.message;
+      // Preserve the full error object so the caller can access response, status, etc.
+      if (error.response) {
+        // If it's an HTTP error response, throw the full error
+        throw error;
+      } else {
+        // If it's a network error or other error, create a structured error
+        const customError = new Error(error.message || 'Failed to delete property');
+        customError.originalError = error;
+        throw customError;
+      }
     }
   },
 

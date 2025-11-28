@@ -4,6 +4,7 @@ import Image from "next/image";
 import { userAPI } from "@/apis";
 import Toast from "../common/Toast";
 import LocationLoader from "../common/LocationLoader";
+import DashboardFooter from "../common/DashboardFooter";
 import DropdownSelect from "../common/DropdownSelect";
 import { syrianProvinces } from "@/constants/provinces";
 import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/constants/countryCodes";
@@ -823,18 +824,7 @@ export default function Profile() {
        
         </div>
           <ChangePasswordSection userId={user?._id} onPasswordChanged={handlePasswordChanged} />
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
-       
-          </ul>
-        </div>
+        <DashboardFooter />
       </div>
       <div className="overlay-dashboard" />
       

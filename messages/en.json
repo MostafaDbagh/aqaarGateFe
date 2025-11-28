@@ -98,7 +98,8 @@
       "eastfacing": "East-Facing"
     },
     "addProperty": "Add property",
-    "makeMeAgent": "Make Me Agent"
+    "makeMeAgent": "Make Me Agent",
+    "noPropertiesFound": "No properties found."
   },
   "register": {
     "title": "Create Account",

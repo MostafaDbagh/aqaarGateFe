@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useMessagesByAgent, useReviewsByAgent, useMostVisitedListings, useDashboardStats, useDashboardAnalytics, useDashboardNotifications } from "@/apis/hooks";
 import LocationLoader from "@/components/common/LocationLoader";
+import DashboardFooter from "@/components/common/DashboardFooter";
 import logger from "@/utlis/logger";
 import styles from "./Dashboard.module.css";
 
@@ -967,17 +968,7 @@ export default function Dashboard() {
         <div className="row">
           <div className="col-xl-9">
             {/* .footer-dashboard */}
-            <div className="footer-dashboard">
-              <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-              <ul className="list">
-                <li>
-                  <a href="#">Privacy</a>
-                </li>
-                <li>
-                  <a href="#">Terms</a>
-                </li>
-              </ul>
-            </div>
+            <DashboardFooter />
             {/* .footer-dashboard */}
           </div>
         </div>

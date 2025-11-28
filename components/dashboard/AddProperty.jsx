@@ -4,6 +4,7 @@ import Image from "next/image";
 import DropdownSelect from "../common/DropdownSelect";
 import { useCreateListing } from "@/apis/hooks";
 import Toast from "../common/Toast";
+import DashboardFooter from "../common/DashboardFooter";
 import { useRouter } from "next/navigation";
 import { syrianProvinces } from "@/constants/provinces";
 import { amenitiesList } from "@/constants/amenities";
@@ -1198,13 +1199,7 @@ export default function AddProperty({ isAdminMode = false }) {
         </form>
 
         {/* Footer */}
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Terms</a></li>
-          </ul>
-        </div>
+        <DashboardFooter />
       </div>
     </div>
   );

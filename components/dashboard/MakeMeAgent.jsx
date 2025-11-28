@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { userAPI, authAPI } from "@/apis";
 import Toast from "../common/Toast";
 import LocationLoader from "../common/LocationLoader";
+import DashboardFooter from "../common/DashboardFooter";
 import DropdownSelect from "../common/DropdownSelect";
 import { syrianProvinces } from "@/constants/provinces";
 import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/constants/countryCodes";
@@ -675,15 +676,7 @@ export default function MakeMeAgent() {
           </form>
         </div>
         
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
+        <DashboardFooter />
             <li>
               <a href="#">Support</a>
             </li>

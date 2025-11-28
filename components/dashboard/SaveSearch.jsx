@@ -1,4 +1,5 @@
 import React from "react";
+import DashboardFooter from "../common/DashboardFooter";
 
 export default function SaveSearch() {
   return (
@@ -114,18 +115,7 @@ export default function SaveSearch() {
           </div>
         </div>
         {/* .footer-dashboard */}
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
-      
-          </ul>
-        </div>
+        <DashboardFooter />
         {/* .footer-dashboard */}
       </div>
       <div className="overlay-dashboard" />

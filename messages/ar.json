@@ -98,6 +98,7 @@
       "eastfacing": "مواجه للشرق"
     },
     "addProperty": "إضافة عقار",
+    "noPropertiesFound": "لم يتم العثور على عقارات.",
     "makeMeAgent": "اجعلني وكيل"
   },
   "register": {

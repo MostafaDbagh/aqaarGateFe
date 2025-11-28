@@ -7,6 +7,7 @@ import { listingAPI } from "@/apis/listing";
 import { useQueryClient } from "@tanstack/react-query";
 import LocationLoader from "../common/LocationLoader";
 import Toast from "../common/Toast";
+import DashboardFooter from "../common/DashboardFooter";
 import styles from "../dashboard/Review.module.css";
 
 /**
@@ -444,15 +445,7 @@ export default function AdminReviews() {
             </>
           )}
         </div>
-        <div className="footer-dashboard">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
+        <DashboardFooter />
           
           </ul>
         </div>

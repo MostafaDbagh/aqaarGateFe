@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
+import Link from "next/link";
 import { useTranslations } from 'next-intl';
 
 export default function Cta() {
@@ -33,15 +34,15 @@ export default function Cta() {
                     {t('subtitle')}
                   </p>
                 </div>
-                <a
-                  href="#"
+                <Link
+                  href="/agents"
                   className="tf-btn style-2 fw-6 pd-25 wow animate__fadeInUp animate__animated"
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
                   {t('button')}
                   <i className="icon-MagnifyingGlass fw-6" />
-                </a>
+                </Link>
               </div>
             </div>
             <div

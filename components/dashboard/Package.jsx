@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import DashboardFooter from "../common/DashboardFooter";
+
 export default function Package() {
   return (
     <div className="main-content w-100">
@@ -38,18 +40,7 @@ export default function Package() {
           </div>
         </div>
         {/* .footer-dashboard */}
-        <div className="footer-dashboard style-2">
-          <p>Copyright © {new Date().getFullYear()} AqaarGate</p>
-          <ul className="list">
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Terms</a>
-            </li>
-     
-          </ul>
-        </div>
+        <DashboardFooter className="style-2" />
         {/* .footer-dashboard */}
       </div>
       <div className="overlay-dashboard" />
