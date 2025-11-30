@@ -37,8 +37,8 @@ export default function MobileMenu() {
             <Image
               alt="Mobile menu icon"
               src="/images/logo/logo@2x.png"
-              width={272}
-              height={84}
+              width={138}
+              height={48}
             />
           </Link>
         </div>

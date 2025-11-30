@@ -47,9 +47,9 @@ export default function Header1({ parentClass = "header" }) {
                     <Image
                       className="logo_header"
                       alt="Property Listing Logo - Home"
-                      src="/images/logo/logo@2x.png"
-                      width={120}
-                      height={56}
+                      src="/images/logo/new-logo.png"
+                      width={138}
+                      height={48}
                       priority
                     />
                   </Link>

@@ -7,7 +7,7 @@ import { footerData } from "@/constants/footerLinks";
 import AppleStoreIcon from "@/components/icons/AppleStoreIcon";
 import GooglePlayIcon from "@/components/icons/GooglePlayIcon";
 import styles from "./Footer1.module.css";
-function Footer1({ logo = "/images/logo/logo@2x.png" }) {
+function Footer1({ logo = "/images/logo/new-logo.png" }) {
   const t = useTranslations('footer');
   
   // Translate footer data
@@ -99,8 +99,8 @@ function Footer1({ logo = "/images/logo/logo@2x.png" }) {
                     id="logo_footer"
                     alt="logo-footer"
                     src={logo}
-                    width={272}
-                    height={85}
+                    width={138}
+                    height={48}
                     loading="lazy"
                     priority={false}
                   />

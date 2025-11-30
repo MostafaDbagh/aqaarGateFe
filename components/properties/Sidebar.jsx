@@ -332,8 +332,8 @@ export default function Sidebar() {
           <Image
             alt="Advertisement"
             src="/images/logo/logo@2x.png"
-            width={272}
-            height={85}
+            width={138}
+            height={48}
           />
         </div>
 
