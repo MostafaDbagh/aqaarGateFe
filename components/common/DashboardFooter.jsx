@@ -2,11 +2,7 @@
 import React from "react";
 import Link from "next/link";
 
-interface DashboardFooterProps {
-  className?: string;
-}
-
-export default function DashboardFooter({ className = "" }: DashboardFooterProps) {
+export default function DashboardFooter({ className = "" }) {
   const currentYear = new Date().getFullYear();
   
   return (

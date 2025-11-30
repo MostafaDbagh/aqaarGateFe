@@ -677,11 +677,6 @@ export default function MakeMeAgent() {
         </div>
         
         <DashboardFooter />
-            <li>
-              <a href="#">Support</a>
-            </li>
-          </ul>
-        </div>
       </div>
       <div className="overlay-dashboard" />
       
