@@ -115,39 +115,39 @@ export const translateKeywordsArray = (keywords, locale = 'en') => {
  */
 export const translateKeywordWithT = (keyword, t) => {
   if (!keyword) return '';
-  // Normalize: trim, lowercase, replace spaces and hyphens with underscores
-  const normalizedKeyword = keyword.trim().toLowerCase().replace(/[\s-]/g, '_');
   
-  // Try translation key - t should be from useTranslations('common')
-  const translationKey = `propertyKeywords.${normalizedKeyword}`;
+  const trimmedKeyword = keyword.trim();
   
-  try {
-    const translated = t(translationKey);
-    // If translation found (not the key itself), return it
-    if (translated && translated !== translationKey && !translated.startsWith('propertyKeywords.') && !translated.startsWith('common.propertyKeywords.')) {
-      return translated;
-    }
-  } catch (e) {
-    // If error, continue to fallback
-  }
+  // Try multiple translation key formats
+  const translationAttempts = [
+    // 1. Try exact match (case-sensitive) - for keywords like "Green Title Deed"
+    trimmedKeyword,
+    // 2. Try normalized format (lowercase, spaces/hyphens to underscores)
+    trimmedKeyword.toLowerCase().replace(/[\s-]/g, '_'),
+    // 3. Try with commas replaced (for "2,400 shares" -> "2_400_shares")
+    trimmedKeyword.toLowerCase().replace(/[\s,-]/g, '_'),
+    // 4. Try original format with spaces preserved but lowercase
+    trimmedKeyword.toLowerCase(),
+  ];
   
-  // If translation not found, try with original hyphen format
-  if (keyword.includes('-')) {
-    const hyphenKey = keyword.trim().toLowerCase().replace(/\s/g, '_');
-    const hyphenTranslationKey = `propertyKeywords.${hyphenKey}`;
+  // Try each format
+  for (const attempt of translationAttempts) {
+    const translationKey = `propertyKeywords.${attempt}`;
     
     try {
-      const translated = t(hyphenTranslationKey);
-      if (translated && translated !== hyphenTranslationKey && !translated.startsWith('propertyKeywords.') && !translated.startsWith('common.propertyKeywords.')) {
+      const translated = t(translationKey);
+      // If translation found (not the key itself), return it
+      if (translated && translated !== translationKey && !translated.startsWith('propertyKeywords.') && !translated.startsWith('common.propertyKeywords.')) {
         return translated;
       }
     } catch (e) {
-      // Continue to fallback
+      // If error, continue to next attempt
+      continue;
     }
   }
   
   // Return original keyword if no translation found
-  return keyword;
+  return trimmedKeyword;
 };
 
 /**

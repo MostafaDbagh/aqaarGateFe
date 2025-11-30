@@ -14,6 +14,7 @@ export default function Properties({ listings, isLoading, isError }) {
   const t = useTranslations();
   const tCommon = useTranslations('common');
   const tHomeSections = useTranslations('homeSections');
+  const locale = useLocale();
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
 
@@ -370,7 +371,14 @@ export default function Properties({ listings, isLoading, isError }) {
           </div>
 
           <p className="location text-1 line-clamp-1">
-            <i className="icon-location" /><span style={{ color: '#f1913d',fontWeight: '600' }}>{listing.state}</span>-{listing.address}
+            <i className="icon-location" />
+            <span style={{ color: '#f1913d',fontWeight: '600' }}>
+              {listing.state || ''}
+            </span>
+            {locale === 'ar' && listing.address_ar 
+              ? `-${listing.address_ar}` 
+              : (listing.address ? `-${listing.address}` : '')
+            }
           </p>
 
           <ul className="meta-list flex" style={{ gap: '24px' }}>

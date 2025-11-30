@@ -178,10 +178,20 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       // Prepare data for API
       // IMPORTANT: Do not send approvalStatus unless user is admin
       // Backend will preserve existing approvalStatus for non-admin users
+      // CRITICAL: Preserve exact propertyPrice - NO DEDUCTION, NO MODIFICATION
       const { approvalStatus, rentType, ...formDataWithoutApprovalStatus } = formData;
+      
+      // Parse price exactly as entered - no deduction allowed
+      const exactPrice = parseFloat(formData.propertyPrice);
+      if (isNaN(exactPrice) || exactPrice <= 0) {
+        setError('Valid price is required');
+        setLoading(false);
+        return;
+      }
+      
       const updateData = {
         ...formDataWithoutApprovalStatus,
-        propertyPrice: parseFloat(formData.propertyPrice) || 0,
+        propertyPrice: exactPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
         bedrooms: parseInt(formData.bedrooms) || 0,
         bathrooms: parseInt(formData.bathrooms) || 0,
         squareFootage: parseInt(formData.squareFootage) || 0,

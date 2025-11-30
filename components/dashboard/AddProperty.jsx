@@ -444,6 +444,7 @@ export default function AddProperty({ isAdminMode = false }) {
     
     try {
       // IMPORTANT: Preserve exact propertyPrice value as entered by agent
+      // NO DEDUCTION, NO MODIFICATION - Price must be sent exactly as entered
       const originalPrice = formData.propertyPrice;
       const parsedPrice = parseFloat(formData.propertyPrice);
       logger.info(`💰 Frontend - Property Price - Original: ${originalPrice}, Type: ${typeof originalPrice}, Parsed: ${parsedPrice}, Type: ${typeof parsedPrice}`);
@@ -453,11 +454,19 @@ export default function AddProperty({ isAdminMode = false }) {
         return;
       }
       
+      // CRITICAL: Ensure price is sent exactly as entered - NO DEDUCTION ALLOWED
+      // Verify parsed price matches original (accounting for string to number conversion)
+      if (originalPrice && Math.abs(parseFloat(originalPrice) - parsedPrice) > 0.01) {
+        logger.error(`💰 Price mismatch detected! Original: ${originalPrice}, Parsed: ${parsedPrice}`);
+        setErrors(prev => ({ ...prev, propertyPrice: "Price validation error" }));
+        return;
+      }
+      
       const submitData = {
         ...formData,
         // Map state to city for backend compatibility (backend requires city field)
         city: formData.state || formData.city || "Aleppo",
-        propertyPrice: parsedPrice, // Use parsed price without any modification
+        propertyPrice: parsedPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
         bedrooms: parseInt(formData.bedrooms),
         bathrooms: parseInt(formData.bathrooms),
         size: parseInt(formData.size),
