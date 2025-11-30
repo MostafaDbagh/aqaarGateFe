@@ -17,7 +17,7 @@ import MobileMenu from "@/components/headers/MobileMenu";
 const IdleLogoutHandler = () => {
   const { isAuthenticated, logout } = useAuthState();
 
-  // 30 minutes (30 * 60 * 1000) for both agents and regular users
+  // 30 minutes (30 * 60 * 1000) for all authenticated users (user, agent, and admin)
   const timeout = 30 * 60 * 1000;
 
   useIdleLogout({
