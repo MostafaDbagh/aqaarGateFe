@@ -42,7 +42,14 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     "View",
     "Open view",
     "Sea view",
-    "Mountain view"
+    "Mountain view",
+    "luxury",
+    'doublex finishing',
+    'super doublex finishing',
+    'standard finishing',
+    'stone finishing',
+    '2,400 shares',
+    'Green Title Deed'
   ];
 
   // Handle tag click - add tag to propertyKeyword
