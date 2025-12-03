@@ -72,6 +72,10 @@ export default async function LocaleLayout({ children, params }) {
   // But we can't have nested <html> tags, so we use a script to update the root <html>
   return (
     <>
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="icon" href="/images/logo/logo-16x16.png" type="image/png" sizes="16x16" />
+      <link rel="icon" href="/images/logo/Logo-32x32.png" type="image/png" sizes="32x32" />
+      <link rel="apple-touch-icon" href="/images/logo/Apple-Touch-Icon.png" />
       <script
         dangerouslySetInnerHTML={{
           __html: `
