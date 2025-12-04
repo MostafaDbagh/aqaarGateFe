@@ -7,10 +7,10 @@ import About from "@/components/otherPages/about/About";
 import React from "react";
 
 export const metadata = {
-  title: "About Us - SyProperty | Ambitious Young Syrians Showcasing Syria's Real Estate",
+  title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
   description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria. Highlighting Syria's vibrant cities — Damascus, Aleppo, Latakia, Homs, Tartous, and others — blending modern architecture with ancient heritage.",
   keywords: [
-    'about syproperty',
+    'about AqaarGate',
     'syria real estate team',
     'young syrians',
     'syria property showcase',
@@ -20,13 +20,13 @@ export const metadata = {
     'syria real estate development'
   ],
   openGraph: {
-    title: "About Us - SyProperty | Ambitious Young Syrians Showcasing Syria's Real Estate",
+    title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
     description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/about-us`,
   },
   twitter: {
     card: 'summary_large_image',
-    title: "About Us - SyProperty | Ambitious Young Syrians Showcasing Syria's Real Estate",
+    title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
     description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
   },
 };

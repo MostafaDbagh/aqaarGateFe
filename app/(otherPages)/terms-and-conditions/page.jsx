@@ -1,10 +1,14 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 
 export default function TermsAndConditions() {
   const { showLoginModal, showRegisterModal } = useGlobalModal();
+  const t = useTranslations('terms');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
 
   const handleLoginClick = (e) => {
     e.preventDefault();
@@ -14,6 +18,14 @@ export default function TermsAndConditions() {
   const handleRegisterClick = (e) => {
     e.preventDefault();
     showRegisterModal();
+  };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -45,7 +57,7 @@ export default function TermsAndConditions() {
             textDecoration: 'none'
           }}>
             <Link href="/" style={{ color: '#000000', textDecoration: 'none' }}>
-              SyProperty
+              AqaarGate
             </Link>
           </div>
 
@@ -63,7 +75,7 @@ export default function TermsAndConditions() {
               fontWeight: '400',
               transition: 'color 0.2s ease'
             }}>
-              Home
+              {t('footer.home')}
             </Link>
             <Link href="/about-us" style={{
               fontSize: '16px',
@@ -72,7 +84,7 @@ export default function TermsAndConditions() {
               fontFamily: 'sans-serif',
               fontWeight: '700'
             }}>
-              About Us
+              {t('footer.aboutUs')}
             </Link>
           </nav>
 
@@ -95,7 +107,7 @@ export default function TermsAndConditions() {
               backgroundColor: 'transparent',
               cursor: 'pointer'
             }}>
-              Login
+              {tCommon('login')}
             </button>
             <button onClick={handleRegisterClick} style={{
               fontSize: '16px',
@@ -110,7 +122,7 @@ export default function TermsAndConditions() {
               border: 'none',
               cursor: 'pointer'
             }}>
-              Register
+              {tCommon('register')}
             </button>
           </div>
         </div>
@@ -141,7 +153,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   letterSpacing: '-0.02em'
                 }}>
-                  Terms & Conditions
+                  {t('title')}
                 </h1>
 
                 {/* Updated Date - Left Aligned */}
@@ -155,11 +167,7 @@ export default function TermsAndConditions() {
                     margin: '0',
                     fontWeight: '400'
                   }}>
-                    Updated on: {new Date().toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
+                    {t('updatedOn')} {formatDate(new Date())}
                   </p>
                 </div>
 
@@ -172,7 +180,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Welcome to SyProperty. Please read these Terms and Conditions ("Terms," "Agreement," or "Terms of Service") carefully before accessing or using the SyProperty website, mobile applications, or any of our real estate services (collectively, the "Service"). These Terms constitute a legally binding agreement between you ("User," "you," or "your") and SyProperty ("we," "our," or "us"). By accessing or using our Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you do not agree with any part of these Terms, you must not access or use our Service. The headings in this Agreement are for convenience only and do not affect the interpretation of these Terms.
+                  {t('introduction')}
                 </p>
 
                 <h2 style={{ 
@@ -183,7 +191,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  1. Acceptance of Terms
+                  {t('section1.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -193,7 +201,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  By accessing and using SyProperty ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. These Terms apply to all users, including but not limited to visitors, registered members, property owners, agents, and brokers who access SyProperty via the website, mobile application, APIs, or any related digital platform. If you do not agree to abide by the above, please do not use this service.
+                  {t('section1.content')}
                 </p>
 
                 <h2 style={{ 
@@ -204,7 +212,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  2. Use License
+                  {t('section2.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -214,7 +222,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Permission is granted to temporarily download one copy of SyProperty per device for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                  {t('section2.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
@@ -228,7 +236,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    modify or copy the materials
+                    {t('section2.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -237,7 +245,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    use the materials for any commercial purpose or for any public display
+                    {t('section2.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -246,7 +254,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    attempt to reverse engineer any software contained on SyProperty
+                    {t('section2.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -255,7 +263,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    remove any copyright or other proprietary notations from the materials
+                    {t('section2.list4')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -266,7 +274,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  All rights not expressly granted to you under this license are reserved by SyProperty. You may not sublicense, sell, or otherwise exploit any material from the Service.
+                  {t('section2.conclusion')}
                 </p>
 
                 <h2 style={{ 
@@ -277,7 +285,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  3. Property Listings and Information
+                  {t('section3.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -288,7 +296,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Listing Verification Process:</strong> All property listings posted by agents must go through our manual verification and approval process before they appear on our website and mobile application. This is a manual review process where our administrative team carefully examines each listing to ensure it meets our quality standards, accuracy requirements, and complies with our terms and conditions. The verification process is designed to protect users and maintain the integrity of our platform. The verification process will not take long, and you will be notified once your listing is approved or if any changes are required.
+                  <strong>{t('section3.verificationTitle')}</strong> {t('section3.verificationContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -299,7 +307,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Admin Rights to Manage Listings:</strong> AqaarGate administrators reserve all rights to delete or change the status of any property listing at any time if we notice any unusual actions, suspicious behavior, or violations of our terms and conditions. This includes but is not limited to: scam activities, failure to respond to client inquiries, mock or fake listings, misleading information, fraudulent property details, or any other actions that compromise the integrity of our platform or harm users. Administrators may immediately remove listings, change their approval status, or take any other necessary actions to protect users and maintain platform quality. Agents will be notified of any administrative actions taken on their listings.
+                  <strong>{t('section3.adminRightsTitle')}</strong> {t('section3.adminRightsContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -309,7 +317,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  SyProperty provides property listings and related information for informational purposes only. We do not guarantee the accuracy, completeness, or timeliness of any property information, including but not limited to:
+                  {t('section3.disclaimer')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
@@ -323,7 +331,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Property prices, availability, or condition
+                    {t('section3.disclaimerList1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -332,7 +340,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Property descriptions, images, or specifications
+                    {t('section3.disclaimerList2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -341,7 +349,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Agent contact information or credentials
+                    {t('section3.disclaimerList3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -350,7 +358,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Legal status or ownership of properties
+                    {t('section3.disclaimerList4')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -361,7 +369,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Third-Party Content Disclaimer:</strong> Some property listings and related information are submitted by third parties, including users and real estate professionals. SyProperty does not verify, endorse, or guarantee such information and is not responsible for any inaccuracies, errors, or omissions.
+                  <strong>{t('section3.thirdPartyTitle')}</strong> {t('section3.thirdPartyContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -372,7 +380,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Holiday Homes - Admin-Only Posting:</strong> Holiday Home property listings can only be posted by AqaarGate administrators. Agents cannot post Holiday Home listings directly. When users submit a rental service request for a Holiday Home property, the listing will be reviewed and processed by our administrators. Once the rental agreement is finalized and agreed upon by both parties (Party A and Party B), the Holiday Home listing will be posted by AqaarGate administrators. This process ensures proper verification and compliance with our platform standards.
+                  <strong>{t('section3.holidayHomesTitle')}</strong> {t('section3.holidayHomesContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -383,7 +391,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Rent Period Restrictions:</strong> For all property listings except Villa and Farm properties, the minimum rent period is three (3) months. This restriction is implemented to avoid misuse of properties and to ensure responsible rental practices. Villa and Farm properties are excluded from this restriction and can be rented on a daily basis or for any period as specified by the property owner or agent. This policy applies to all rental listings on our platform.
+                  <strong>{t('section3.rentPeriodTitle')}</strong> {t('section3.rentPeriodContent')}
                 </p>
 
                 <h2 style={{ 
@@ -394,7 +402,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  4. User Accounts and Responsibilities
+                  {t('section4.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -404,7 +412,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  When creating an account with SyProperty, you agree to:
+                  {t('section4.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
@@ -418,7 +426,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Provide accurate, current, and complete information
+                    {t('section4.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -427,7 +435,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Maintain and update your account information
+                    {t('section4.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -436,7 +444,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Keep your password secure and confidential
+                    {t('section4.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -445,7 +453,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Accept responsibility for all activities under your account
+                    {t('section4.list4')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -454,7 +462,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Notify us immediately of any unauthorized use
+                    {t('section4.list5')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -465,7 +473,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Account Suspension and Termination:</strong> We reserve the right to suspend or terminate your account, without prior notice, if we suspect fraudulent activity, violation of these Terms, or misuse of our platform. You are responsible for maintaining the confidentiality of your account and password.
+                  <strong>{t('section4.suspensionTitle')}</strong> {t('section4.suspensionContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
@@ -476,7 +484,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Account Deletion:</strong> Once you delete your account, you will no longer be able to access the Service or perform any actions. Your account and all associated data will be permanently deleted from our records. This includes but is not limited to your profile information, property listings, messages, favorites, reviews, and any other data associated with your account. Account deletion is irreversible, and we cannot restore your account or data after deletion. Please ensure you have saved any important information before proceeding with account deletion.
+                  <strong>{t('section4.deletionTitle')}</strong> {t('section4.deletionContent')}
                 </p>
 
                 <h2 style={{ 
@@ -487,7 +495,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  5. Prohibited Uses
+                  {t('section5.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -497,7 +505,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  You may not use SyProperty:
+                  {t('section5.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
@@ -511,7 +519,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    For any unlawful purpose or to solicit others to perform unlawful acts
+                    {t('section5.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -520,7 +528,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    To violate any international, federal, provincial, or state regulations, rules, laws, or local ordinances
+                    {t('section5.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -529,7 +537,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    To infringe upon or violate our intellectual property rights or the intellectual property rights of others
+                    {t('section5.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -538,7 +546,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate
+                    {t('section5.list4')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -547,7 +555,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    To submit false or misleading information
+                    {t('section5.list5')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -556,7 +564,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    To upload or transmit viruses or any other type of malicious code
+                    {t('section5.list6')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -565,7 +573,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Use automated systems (including bots, crawlers, or data mining tools) to access or collect data from SyProperty
+                    {t('section5.list7')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -574,7 +582,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Post duplicate, fake, misleading, or fraudulent property listings
+                    {t('section5.list8')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -583,7 +591,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Engage in spam activity or create multiple accounts for abusive purposes
+                    {t('section5.list9')}
                   </li>
                 </ul>
 
@@ -595,7 +603,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  6. Agent and Broker Services
+                  {t('section6.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -606,7 +614,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Agent Verification Requirement:</strong> All agents must be verified through their phone number and email address before they can perform any actions from their dashboard. Once an agent is authorized and verified by AqaarGate administrators, they will have full access to all dashboard features and functionalities. During the verification process, agents are required to provide accurate contact information. Once verified, the phone number and email address in the agent's profile will be disabled and cannot be changed. This ensures account security and prevents unauthorized modifications to verified contact information.
+                  <strong>{t('section6.verificationTitle')}</strong> {t('section6.verificationContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -617,7 +625,7 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Agent Blocking Policy:</strong> AqaarGate administrators reserve the right to block any agent's account at any time if the agent violates our terms and conditions, breaks any rules, performs scam actions, fails to respond to client inquiries in a timely manner, or if there are legitimate complaints filed against the agent. Once an agent is blocked by an administrator, all of their property listings will immediately disappear from the platform and will not be visible or accessible to clients. Blocked agents will lose access to their dashboard and all platform features. This policy is implemented to protect users, maintain platform integrity, and ensure quality service standards. Agents who are blocked may be subject to permanent account termination depending on the severity of the violation.
+                  <strong>{t('section6.blockingTitle')}</strong> {t('section6.blockingContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -627,7 +635,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  SyProperty facilitates connections between users and real estate professionals. We are not a licensed real estate broker or agent. All real estate transactions are conducted directly between users and licensed professionals. We:
+                  {t('section6.disclaimer')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
@@ -641,7 +649,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Do not participate in real estate transactions
+                    {t('section6.disclaimerList1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -650,7 +658,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Do not provide legal, financial, or tax advice
+                    {t('section6.disclaimerList2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -659,7 +667,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Are not responsible for the actions of agents or brokers
+                    {t('section6.disclaimerList3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -668,11 +676,11 @@ export default function TermsAndConditions() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Do not guarantee the performance of any real estate professional
+                    {t('section6.disclaimerList4')}
                   </li>
                 </ul>
 
-                                <h2 style={{ 
+                <h2 style={{ 
                   color: '#000000', 
                   marginBottom: '16px', 
                   fontSize: '24px',
@@ -680,7 +688,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  7. Listing Fees and Points Calculation
+                  {t('section7.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -690,7 +698,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Dynamic Listing Pricing:</strong> Each property listing requires a different amount of points to publish, calculated by our proprietary algorithm based on various property characteristics. The listing fee (in points) varies depending on the property's features and specifications.
+                  <strong>{t('section7.dynamicTitle')}</strong> {t('section7.dynamicContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -700,7 +708,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Pricing Algorithm Factors:</strong> Our algorithm calculates the listing publication cost based on the following factors:
+                  <strong>{t('section7.algorithmTitle')}</strong> {t('section7.algorithmContent')}
                 </p>
                 <ul style={{ 
                   marginBottom: '20px', 
@@ -714,7 +722,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Property Characteristics:</strong> Number of bedrooms and bathrooms
+                    <strong>{t('section7.factor1')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -723,7 +731,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Location:</strong> City where the property is located
+                    <strong>{t('section7.factor2')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -732,7 +740,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Property Size:</strong> Square footage or land area (size)
+                    <strong>{t('section7.factor3')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -741,7 +749,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Furnished Status:</strong> Whether the property is furnished or unfurnished
+                    <strong>{t('section7.factor4')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -750,7 +758,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Amenities:</strong> Number and type of amenities included with the property
+                    <strong>{t('section7.factor5')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -759,7 +767,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Other property features and specifications
+                    {t('section7.factor6')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -770,7 +778,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Points Display Before Publishing:</strong> Before you submit your property listing for publication, our platform will automatically calculate and display the exact number of points required to publish your listing based on your property's characteristics. You will see the total points cost calculated by our algorithm before proceeding with publication.
+                  <strong>{t('section7.displayTitle')}</strong> {t('section7.displayContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -780,7 +788,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>User Consent and Agreement Required:</strong> You must review and agree to the displayed points cost before your listing will be submitted for publication. By clicking "Publish," "Submit," or any similar confirmation button after reviewing the points cost, you confirm:
+                  <strong>{t('section7.consentTitle')}</strong> {t('section7.consentContent')}
                 </p>
                 <ul style={{ 
                   marginBottom: '20px', 
@@ -794,7 +802,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Your agreement to pay the specified number of points for listing publication
+                    {t('section7.consentList1')}
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -803,7 +811,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Your authorization for SyProperty to deduct these points from your account balance
+                    {t('section7.consentList2')}
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -812,7 +820,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Your understanding that the points cost may vary for different properties
+                    {t('section7.consentList3')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -823,7 +831,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Sufficient Points Balance Required:</strong> You must have sufficient points in your account balance to cover the listing publication cost at the time of submission. If your account does not have enough points, you will need to purchase additional points before proceeding with publication. The platform will notify you if your points balance is insufficient.
+                  <strong>{t('section7.balanceTitle')}</strong> {t('section7.balanceContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -833,7 +841,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Algorithm Updates:</strong> Our pricing algorithm may be updated from time to time to reflect market conditions, service improvements, or other factors. This may result in different point costs for similar properties submitted at different times. The points cost displayed and agreed upon at the time of submission is the final and binding cost for that specific listing, regardless of future algorithm changes.
+                  <strong>{t('section7.updatesTitle')}</strong> {t('section7.updatesContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
@@ -843,7 +851,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Non-Refundable After Publication:</strong> Once points are deducted for listing publication and the listing is approved and published, the points are non-refundable unless the listing is rejected during our review process or in other specific circumstances as outlined in our refund policy. You cannot receive a refund of points based solely on dissatisfaction with the point cost after agreeing to and completing the publication process.
+                  <strong>{t('section7.refundTitle')}</strong> {t('section7.refundContent')}
                 </p>
 
                 <h2 style={{ 
@@ -854,7 +862,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  8. Intellectual Property Rights
+                  {t('section8.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -864,7 +872,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  The Service and its original content, features, and functionality are and will remain the exclusive property of SyProperty and its licensors. The Service is protected by copyright, trademark, and other laws. Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.
+                  {t('section8.content1')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
@@ -874,7 +882,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>User-Generated Content License:</strong> By uploading or submitting content (including images, descriptions, property listings, or other media), you grant SyProperty a non-exclusive, worldwide, royalty-free, perpetual license to use, display, distribute, modify, and reproduce such content in connection with the Service and for marketing purposes.
+                  <strong>{t('section8.content2Title')}</strong> {t('section8.content2')}
                 </p>
 
                 <h2 style={{ 
@@ -885,7 +893,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  9. Privacy Policy
+                  {t('section9.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -895,7 +903,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Your privacy is important to us. Your use of the Service is also governed by our Privacy Policy, which is incorporated into these Terms by reference. Please review our Privacy Policy, which also governs your use of the Service, to understand our practices.
+                  {t('section9.content')}
                 </p>
 
                 <h2 style={{ 
@@ -906,7 +914,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  10. Limitation of Liability
+                  {t('section10.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -916,7 +924,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  In no event shall SyProperty, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.
+                  {t('section10.content1')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
@@ -926,7 +934,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Aggregate Liability Cap:</strong> In no event shall SyProperty's total liability to you for any claims arising out of or relating to the Service exceed the amount, if any, paid by you to SyProperty during the six (6) months prior to the event giving rise to liability, or $100, whichever is greater.
+                  <strong>{t('section10.content2Title')}</strong> {t('section10.content2')}
                 </p>
 
                 <h2 style={{ 
@@ -937,7 +945,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  11. Disclaimer
+                  {t('section11.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -947,7 +955,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  The information on this Service is provided on an "as is" basis. To the fullest extent permitted by law, SyProperty excludes all representations, warranties, conditions and terms relating to our Service and the use of this Service. We do not warrant that the Service will be uninterrupted, error-free, or secure, or that any information obtained will be accurate or reliable.
+                  {t('section11.content')}
                 </p>
 
                 <h2 style={{ 
@@ -958,7 +966,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  12. Governing Law
+                  {t('section12.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -968,7 +976,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  These Terms shall be interpreted and governed by the laws of the Syrian Arab Republic, without regard to its conflict of law provisions. Any disputes arising from or relating to these Terms or your use of the Service shall be subject to the exclusive jurisdiction of the courts of the Syrian Arab Republic.
+                  {t('section12.content1')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
@@ -978,7 +986,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Dispute Resolution:</strong> Before filing a formal legal action, both parties agree to attempt to resolve disputes amicably through negotiation or mediation.
+                  <strong>{t('section12.content2Title')}</strong> {t('section12.content2')}
                 </p>
 
                 <h2 style={{ 
@@ -989,7 +997,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  13. Changes to Terms
+                  {t('section13.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
@@ -999,7 +1007,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We reserve the right, at our sole discretion, to modify or replace these Terms at any time. <strong>ONGOING MODIFICATIONS:</strong> This application will continue to undergo modifications and updates. If a revision is material, we will provide all types of users (regular users and agents) with at least one (1) full month's advance notice prior to any new terms taking effect. Continued use of the Service after any such modifications constitutes acceptance of the revised Terms. It is your responsibility to review these Terms periodically for any changes.
+                  {t('section13.content')}
                 </p>
 
                 <h2 style={{ 
@@ -1010,7 +1018,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  14. Contact Information
+                  {t('section14.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -1020,7 +1028,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  If you have any questions about these Terms and Conditions, please contact us at:
+                  {t('section14.intro')}
                 </p>
                 <div style={{ 
                   marginBottom: '40px',
@@ -1030,13 +1038,13 @@ export default function TermsAndConditions() {
                   fontFamily: 'sans-serif'
                 }}>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>Email:</strong> legal@syproperty.com
+                    <strong>{t('section14.email')}</strong> legal@AqaarGate.com
                   </p>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>Phone:</strong> +1 (555) 123-4567
+                    <strong>{t('section14.phone')}</strong> +1 (555) 123-4567
                   </p>
                   <p style={{ margin: '0' }}>
-                    <strong>Address:</strong> 123 Property Street, Real Estate City, RE 12345
+                    <strong>{t('section14.address')}</strong> 123 Property Street, Real Estate City, RE 12345
                   </p>
                 </div>
 
@@ -1048,7 +1056,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  15. Advertisements and Google AdSense
+                  {t('section15.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -1058,7 +1066,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Third-Party Advertisements:</strong> SyProperty may display advertisements, including Google AdSense advertisements, on our platform. These advertisements may be served by third-party advertising companies and may use cookies, web beacons, or similar technologies to collect information about your visits to our website and other websites.
+                  <strong>{t('section15.thirdPartyTitle')}</strong> {t('section15.thirdPartyContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -1068,7 +1076,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Google AdSense:</strong> We use Google AdSense and other advertising services to display ads on our platform. Google AdSense uses cookies and similar technologies to serve ads based on your prior visits to our website and other websites. You may opt out of personalized advertising by visiting Google's Ads Settings or by managing your cookie preferences in your browser.
+                  <strong>{t('section15.adsenseTitle')}</strong> {t('section15.adsenseContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -1078,7 +1086,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>No Endorsement:</strong> The presence of advertisements on our platform does not constitute an endorsement, recommendation, or sponsorship by SyProperty of the advertised products, services, or companies. We are not responsible for the content, accuracy, or practices of third-party advertisers.
+                  <strong>{t('section15.endorsementTitle')}</strong> {t('section15.endorsementContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
@@ -1088,7 +1096,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Your Choices:</strong> You may choose to disable cookies in your browser settings, which may affect your ability to interact with our platform and view certain advertisements. For more information about how we use cookies and tracking technologies, please refer to our Privacy Policy.
+                  <strong>{t('section15.choicesTitle')}</strong> {t('section15.choicesContent')}
                 </p>
 
                 <h2 style={{ 
@@ -1099,7 +1107,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  16. Ongoing Modifications and Updates
+                  {t('section16.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
@@ -1109,7 +1117,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Platform Evolution:</strong> SyProperty is an evolving platform that will continue to undergo modifications, updates, and improvements. We regularly update our features, functionality, design, and services to enhance user experience and comply with technological and legal requirements.
+                  <strong>{t('section16.evolutionTitle')}</strong> {t('section16.evolutionContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
@@ -1119,7 +1127,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  <strong>Continuous Development:</strong> These modifications may include but are not limited to:
+                  <strong>{t('section16.developmentTitle')}</strong> {t('section16.developmentContent')}
                 </p>
                 <ul style={{ 
                   marginBottom: '20px', 
@@ -1133,7 +1141,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Updates to features, user interface, and functionality
+                    {t('section16.devList1')}
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -1142,7 +1150,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Changes to payment methods, pricing, or subscription packages
+                    {t('section16.devList2')}
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -1151,7 +1159,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Security enhancements and technical improvements
+                    {t('section16.devList3')}
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -1160,7 +1168,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Compliance with Syrian laws and regulations
+                    {t('section16.devList4')}
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -1169,7 +1177,7 @@ export default function TermsAndConditions() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    Integration of new services or third-party tools (including advertising services like Google AdSense)
+                    {t('section16.devList5')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -1180,7 +1188,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We will notify users of material changes as required by these Terms. By continuing to use the Service, you acknowledge that the platform may change and you agree to adapt to such modifications. We reserve the right to modify, suspend, or discontinue any part of the Service at any time, with or without notice.
+                  {t('section16.notificationContent')}
                 </p>
 
                 <h2 style={{ 
@@ -1191,7 +1199,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  17. Severability
+                  {t('section17.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '30px',
@@ -1201,7 +1209,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  If any provision of these Terms is held to be invalid, illegal, or unenforceable by a court of competent jurisdiction in the Syrian Arab Republic, the remaining provisions will remain in full force and effect. The invalid, illegal, or unenforceable provision shall be replaced with a valid, legal, and enforceable provision that comes closest to the intent of the original provision.
+                  {t('section17.content')}
                 </p>
 
                 <h2 style={{ 
@@ -1212,7 +1220,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  18. Entire Agreement
+                  {t('section18.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '30px',
@@ -1222,7 +1230,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  These Terms, together with our Privacy Policy, constitute the entire agreement between you and SyProperty regarding your use of the Service and supersede all prior agreements, understandings, negotiations, and discussions, whether oral or written, relating to the subject matter hereof. No modification, amendment, or waiver of any provision of these Terms shall be effective unless in writing and signed by both parties.
+                  {t('section18.content')}
                 </p>
 
                 <h2 style={{ 
@@ -1233,7 +1241,7 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  19. Force Majeure
+                  {t('section19.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '30px',
@@ -1243,10 +1251,8 @@ export default function TermsAndConditions() {
                   textAlign: 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  SyProperty shall not be liable for any delays, failures, or inability to perform its obligations under these Terms due to circumstances beyond its reasonable control, including but not limited to natural disasters, wars, acts of terrorism, government actions, internet outages, cyberattacks, equipment failures, or other force majeure events. In such events, SyProperty will use reasonable efforts to notify users and resume normal operations as soon as practicable.
+                  {t('section19.content')}
                 </p>
-
-
 
               </div>
             </div>
@@ -1282,7 +1288,7 @@ export default function TermsAndConditions() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              Home
+              {t('footer.home')}
             </Link>
             <Link href="/about-us" style={{
               fontSize: '14px',
@@ -1291,7 +1297,7 @@ export default function TermsAndConditions() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              About Us
+              {t('footer.aboutUs')}
             </Link>
             <Link href="/contact" style={{
               fontSize: '14px',
@@ -1300,7 +1306,7 @@ export default function TermsAndConditions() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              Contact
+              {t('footer.contact')}
             </Link>
             <Link href="/terms-and-conditions" style={{
               fontSize: '14px',
@@ -1309,7 +1315,7 @@ export default function TermsAndConditions() {
               fontFamily: 'sans-serif',
               fontWeight: '600'
             }}>
-              Terms & Conditions
+              {t('footer.terms')}
             </Link>
             <Link href="/privacy-policy" style={{
               fontSize: '14px',
@@ -1318,7 +1324,7 @@ export default function TermsAndConditions() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
           </div>
 
@@ -1329,7 +1335,7 @@ export default function TermsAndConditions() {
             fontFamily: 'sans-serif',
             fontWeight: '400'
           }}>
-            © {new Date().getFullYear()} SyProperty. All rights reserved.
+            © {new Date().getFullYear()} AqaarGate. {t('footer.copyright')}
           </div>
         </div>
       </footer>

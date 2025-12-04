@@ -128,13 +128,15 @@ export default function Agents() {
         
         .image-wrap {
           position: relative;
-          height: 250px;
+          max-height: 320px;
+          height: auto;
           overflow: hidden;
         }
         
         .image-wrap img {
           width: 100%;
-          height: 100%;
+          max-height: 320px;
+          height: auto;
           object-fit: cover;
           transition: transform 0.4s ease;
         }
@@ -633,14 +635,15 @@ export default function Agents() {
               <div className="tf-grid-layout-2">
                 {sortedAgents.map((agent) => (
                   <div key={agent._id} className="agent-item hover-img">
-                    <div className="image-wrap" style={{height:'360px'}}>
+                    <div className="image-wrap" style={{maxHeight:'320px'}}>
                       <Link href={`/agents-details/${agent._id}`}>
                         <Image
                           className="lazyload property-img"
                           alt={agent.fullName || t('agentName')}
                           width={435}
-                          height={450}
+                          height={320}
                           src={agent.avatar || "/images/avatar/agent-1.jpg"}
+                          style={{maxHeight: '320px', objectFit: 'cover'}}
                         />
                       </Link>
                     </div>

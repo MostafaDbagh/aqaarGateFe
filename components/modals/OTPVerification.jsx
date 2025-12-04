@@ -22,6 +22,7 @@ export default function OTPVerification({
   
   // Use safe translations hook that works even without provider
   const t = useSafeTranslations('otpVerification');
+  const tRegistrationSuccess = useSafeTranslations('registrationSuccess');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -102,8 +103,8 @@ export default function OTPVerification({
           const result = await authAPI.signup(userData);
           if (result.success) {
             showSuccessModal(
-              "Registration Successful!",
-              "Your account has been created successfully. You can now login with your credentials.",
+              tRegistrationSuccess('title'),
+              tRegistrationSuccess('message'),
               userData?.email,
               true // showLoginButton - only for registration
             );

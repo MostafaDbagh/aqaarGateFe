@@ -1,10 +1,15 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 
 export default function PrivacyPolicy() {
   const { showLoginModal, showRegisterModal } = useGlobalModal();
+  const t = useTranslations('privacy');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
 
   const handleLoginClick = (e) => {
     e.preventDefault();
@@ -16,8 +21,28 @@ export default function PrivacyPolicy() {
     showRegisterModal();
   };
 
+  const formatDate = (date) => {
+    // Use Gregorian calendar (miladi) for Arabic, not Hijri
+    if (locale === 'ar') {
+      // Force Gregorian calendar - manually format to avoid Hijri
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      const month = months[d.getMonth()];
+      const day = d.getDate();
+      return `${day} ${month} ${year}`;
+    }
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const isRTL = locale === 'ar';
+
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Clean Minimalist Header */}
       <header style={{
         backgroundColor: '#ffffff',
@@ -34,7 +59,8 @@ export default function PrivacyPolicy() {
           padding: '0 20px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          flexDirection: isRTL ? 'row-reverse' : 'row'
         }}>
           {/* Logo */}
           <div style={{
@@ -42,10 +68,11 @@ export default function PrivacyPolicy() {
             fontWeight: '700',
             color: '#000000',
             fontFamily: 'sans-serif',
-            textDecoration: 'none'
+            textDecoration: 'none',
+            order: isRTL ? 3 : 1
           }}>
             <Link href="/" style={{ color: '#000000', textDecoration: 'none' }}>
-              SyProperty
+              AqaarGate
             </Link>
           </div>
 
@@ -53,7 +80,8 @@ export default function PrivacyPolicy() {
           <nav style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '40px'
+            gap: '40px',
+            order: isRTL ? 2 : 2
           }}>
             <Link href="/" style={{
               fontSize: '16px',
@@ -63,7 +91,7 @@ export default function PrivacyPolicy() {
               fontWeight: '400',
               transition: 'color 0.2s ease'
             }}>
-              Home
+              {t('footer.home')}
             </Link>
             <Link href="/about-us" style={{
               fontSize: '16px',
@@ -72,16 +100,19 @@ export default function PrivacyPolicy() {
               fontFamily: 'sans-serif',
               fontWeight: '700'
             }}>
-              About Us
+              {t('footer.aboutUs')}
             </Link>
           </nav>
 
-          {/* Login/Register Button */}
+          {/* Language Switcher and Login/Register Buttons */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '15px'
+            gap: '15px',
+            flexDirection: isRTL ? 'row-reverse' : 'row',
+            order: isRTL ? 1 : 3
           }}>
+            <LanguageSwitcher />
             <button onClick={handleLoginClick} style={{
               fontSize: '16px',
               color: '#000000',
@@ -95,7 +126,7 @@ export default function PrivacyPolicy() {
               backgroundColor: 'transparent',
               cursor: 'pointer'
             }}>
-              Login
+              {tCommon('login')}
             </button>
             <button onClick={handleRegisterClick} style={{
               fontSize: '16px',
@@ -110,7 +141,7 @@ export default function PrivacyPolicy() {
               border: 'none',
               cursor: 'pointer'
             }}>
-              Register
+              {tCommon('register')}
             </button>
           </div>
         </div>
@@ -141,13 +172,13 @@ export default function PrivacyPolicy() {
                   fontFamily: 'sans-serif',
                   letterSpacing: '-0.02em'
                 }}>
-                  Privacy Policy
+                  {t('title')}
                 </h1>
 
-                {/* Updated Date - Left Aligned */}
+                {/* Updated Date */}
                 <div style={{ 
                   marginBottom: '40px',
-                  textAlign: 'left'
+                  textAlign: isRTL ? 'right' : 'left'
                 }}>
                   <p style={{ 
                     fontSize: '16px', 
@@ -155,11 +186,7 @@ export default function PrivacyPolicy() {
                     margin: '0',
                     fontWeight: '400'
                   }}>
-                    Updated on: {new Date().toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
+                    {t('updatedOn')} {formatDate(new Date())}
                   </p>
                 </div>
 
@@ -168,11 +195,11 @@ export default function PrivacyPolicy() {
                   marginBottom: '40px',
                   fontSize: '16px',
                   color: '#000000',
-                  lineHeight: '1.6',
-                  textAlign: 'left',
+                  lineHeight: '1.8',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  SyProperty ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.
+                  {t('introduction')}
                 </p>
 
                 <h2 style={{ 
@@ -180,10 +207,10 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  1. Information We Collect
+                  {t('section1.title')}
                 </h2>
                 
                 <h3 style={{ 
@@ -191,25 +218,27 @@ export default function PrivacyPolicy() {
                   marginBottom: '20px', 
                   fontSize: '20px',
                   fontWeight: '600',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  1.1 Personal Information
+                  {t('section1.subsection1.title')}
                 </h3>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We may collect personal information that you voluntarily provide to us when you:
+                  {t('section1.subsection1.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
-                  paddingLeft: '20px',
-                  listStyle: 'disc'
+                  paddingLeft: isRTL ? '0' : '20px',
+                  paddingRight: isRTL ? '20px' : '0',
+                  listStyle: 'disc',
+                  direction: isRTL ? 'rtl' : 'ltr'
                 }}>
                   <li style={{ 
                     marginBottom: '8px',
@@ -218,7 +247,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Register for an account
+                    {t('section1.subsection1.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -227,7 +256,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Search for properties
+                    {t('section1.subsection1.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -236,7 +265,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Contact agents or brokers
+                    {t('section1.subsection1.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -245,7 +274,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Submit property listings
+                    {t('section1.subsection1.list4')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -254,7 +283,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Subscribe to our newsletter
+                    {t('section1.subsection1.list5')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -263,7 +292,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Participate in surveys or promotions
+                    {t('section1.subsection1.list6')}
                   </li>
                 </ul>
 
@@ -272,25 +301,27 @@ export default function PrivacyPolicy() {
                   marginBottom: '20px', 
                   fontSize: '20px',
                   fontWeight: '600',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  1.2 Automatically Collected Information
+                  {t('section1.subsection2.title')}
                 </h3>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We automatically collect certain information when you visit our website:
+                  {t('section1.subsection2.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
-                  paddingLeft: '20px',
-                  listStyle: 'disc'
+                  paddingLeft: isRTL ? '0' : '20px',
+                  paddingRight: isRTL ? '20px' : '0',
+                  listStyle: 'disc',
+                  direction: isRTL ? 'rtl' : 'ltr'
                 }}>
                   <li style={{ 
                     marginBottom: '8px',
@@ -299,7 +330,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    IP address and device information
+                    {t('section1.subsection2.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -308,7 +339,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Browser type and version
+                    {t('section1.subsection2.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -317,7 +348,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Operating system
+                    {t('section1.subsection2.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -326,7 +357,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Pages visited and time spent on pages
+                    {t('section1.subsection2.list4')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -335,7 +366,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Referring website
+                    {t('section1.subsection2.list5')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -344,7 +375,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Cookies and similar tracking technologies
+                    {t('section1.subsection2.list6')}
                   </li>
                 </ul>
 
@@ -353,25 +384,27 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  2. How We Use Your Information
+                  {t('section2.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We use the information we collect to:
+                  {t('section2.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
-                  paddingLeft: '20px',
-                  listStyle: 'disc'
+                  paddingLeft: isRTL ? '0' : '20px',
+                  paddingRight: isRTL ? '20px' : '0',
+                  listStyle: 'disc',
+                  direction: isRTL ? 'rtl' : 'ltr'
                 }}>
                   <li style={{ 
                     marginBottom: '8px',
@@ -380,7 +413,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Provide and maintain our services
+                    {t('section2.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -389,7 +422,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Process transactions and send related information
+                    {t('section2.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -398,7 +431,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Send you technical notices and support messages
+                    {t('section2.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -407,7 +440,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Respond to your comments and questions
+                    {t('section2.list4')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -416,7 +449,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Improve our website and services
+                    {t('section2.list5')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -425,7 +458,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Send you marketing communications (with your consent)
+                    {t('section2.list6')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -434,7 +467,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Comply with legal obligations
+                    {t('section2.list7')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -443,7 +476,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Protect against fraud and abuse
+                    {t('section2.list8')}
                   </li>
                 </ul>
 
@@ -452,20 +485,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  3. Information Sharing and Disclosure
+                  {t('section3.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We may share your information in the following circumstances:
+                  {t('section3.intro')}
                 </p>
                 
                 <h3 style={{ 
@@ -473,20 +506,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '20px', 
                   fontSize: '20px',
                   fontWeight: '600',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  3.1 With Real Estate Professionals
+                  {t('section3.subsection1.title')}
                 </h3>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  When you express interest in a property or contact an agent, we may share your contact information and property preferences with the relevant real estate professional to facilitate communication.
+                  {t('section3.subsection1.content')}
                 </p>
 
                 <h3 style={{ 
@@ -494,20 +527,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '20px', 
                   fontSize: '20px',
                   fontWeight: '600',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  3.2 Service Providers
+                  {t('section3.subsection2.title')}
                 </h3>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We may share information with third-party service providers who assist us in operating our website, conducting business, or serving our users. These parties are bound by confidentiality agreements.
+                  {t('section3.subsection2.content')}
                 </p>
 
                 <h3 style={{ 
@@ -515,20 +548,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '20px', 
                   fontSize: '20px',
                   fontWeight: '600',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  3.3 Legal Requirements
+                  {t('section3.subsection3.title')}
                 </h3>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We may disclose information if required by law or in response to valid legal processes, such as subpoenas or court orders.
+                  {t('section3.subsection3.content')}
                 </p>
 
                 <h2 style={{ 
@@ -536,25 +569,27 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  4. Cookies and Tracking Technologies
+                  {t('section4.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We use cookies and similar technologies to:
+                  {t('section4.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
-                  paddingLeft: '20px',
-                  listStyle: 'disc'
+                  paddingLeft: isRTL ? '0' : '20px',
+                  paddingRight: isRTL ? '20px' : '0',
+                  listStyle: 'disc',
+                  direction: isRTL ? 'rtl' : 'ltr'
                 }}>
                   <li style={{ 
                     marginBottom: '8px',
@@ -563,7 +598,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Remember your preferences and settings
+                    {t('section4.list1')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -572,7 +607,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Analyze website traffic and usage patterns
+                    {t('section4.list2')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -581,7 +616,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Provide personalized content and advertisements
+                    {t('section4.list3')}
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -590,7 +625,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    Improve website functionality
+                    {t('section4.list4')}
                   </li>
                 </ul>
                 <p style={{ 
@@ -598,10 +633,10 @@ export default function PrivacyPolicy() {
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  You can control cookie settings through your browser preferences. However, disabling cookies may affect the functionality of our website.
+                  {t('section4.conclusion')}
                 </p>
 
                 <h2 style={{ 
@@ -609,31 +644,31 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  5. Data Security
+                  {t('section5.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
+                  {t('section5.content1')}
                 </p>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Password Encryption:</strong> Your password is encrypted using industry-standard encryption algorithms. No one, including SyProperty administrators, can access or view your password in plain text. Only you, as the account owner, can change your password. We cannot retrieve or reset your password without your authorization through the password reset process. Your password security is your responsibility, and you should never share your password with anyone.
+                  <strong>{t('section5.content2Title')}</strong> {t('section5.content2')}
                 </p>
 
                 <h2 style={{ 
@@ -641,25 +676,27 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  6. Your Rights and Choices
+                  {t('section6.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Depending on your location, you may have the following rights regarding your personal information:
+                  {t('section6.intro')}
                 </p>
                 <ul style={{ 
                   marginBottom: '16px', 
-                  paddingLeft: '20px',
-                  listStyle: 'disc'
+                  paddingLeft: isRTL ? '0' : '20px',
+                  paddingRight: isRTL ? '20px' : '0',
+                  listStyle: 'disc',
+                  direction: isRTL ? 'rtl' : 'ltr'
                 }}>
                   <li style={{ 
                     marginBottom: '8px',
@@ -668,7 +705,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Access:</strong> Request access to your personal information
+                    <strong>{t('section6.right1')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -677,7 +714,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Correction:</strong> Request correction of inaccurate information
+                    <strong>{t('section6.right2')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -686,7 +723,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Deletion:</strong> Request deletion of your personal information
+                    <strong>{t('section6.right3')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -695,7 +732,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Portability:</strong> Request transfer of your data
+                    <strong>{t('section6.right4')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -704,7 +741,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Opt-out:</strong> Unsubscribe from marketing communications
+                    <strong>{t('section6.right5')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '8px',
@@ -713,7 +750,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.6',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Restriction:</strong> Request restriction of processing
+                    <strong>{t('section6.right6')}</strong>
                   </li>
                 </ul>
 
@@ -722,31 +759,31 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  7. Data Retention and Account Deletion
+                  {t('section7.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When we no longer need your information, we will securely delete or anonymize it.
+                  {t('section7.content1')}
                 </p>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Account Deletion:</strong> Once you delete your account, you will no longer be able to access the Service or perform any actions. Your account and all associated data will be permanently deleted from our records. This includes but is not limited to your profile information, property listings, messages, favorites, and any other data associated with your account. Account deletion is irreversible, and we cannot restore your account or data after deletion. Please ensure you have saved any important information before proceeding with account deletion.
+                  <strong>{t('section7.content2Title')}</strong> {t('section7.content2')}
                 </p>
 
                 <h2 style={{ 
@@ -754,20 +791,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  8. International Data Transfers
+                  {t('section8.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Your information may be transferred to and processed in countries other than your own. We ensure that such transfers comply with applicable data protection laws and implement appropriate safeguards to protect your information.
+                  {t('section8.content')}
                 </p>
 
                 <h2 style={{ 
@@ -775,20 +812,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  9. Children's Privacy
+                  {t('section9.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Our services are not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information.
+                  {t('section9.content')}
                 </p>
 
                 <h2 style={{ 
@@ -796,20 +833,20 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  10. Third-Party Links
+                  {t('section10.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  Our website may contain links to third-party websites. We are not responsible for the privacy practices or content of these external sites. We encourage you to review the privacy policies of any third-party sites you visit.
+                  {t('section10.content')}
                 </p>
 
                 <h2 style={{ 
@@ -817,58 +854,60 @@ export default function PrivacyPolicy() {
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  11. Changes to This Privacy Policy
+                  {t('section11.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '16px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. We encourage you to review this Privacy Policy periodically for any changes.
+                  {t('section11.content')}
                 </p>
 
-                                <h2 style={{ 
+                <h2 style={{ 
                   color: '#000000', 
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  13. SyProperty's Business Model and Usage
+                  {t('section13.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Platform Role - No Interference Between Sellers and Buyers:</strong> SyProperty operates solely as a listing platform that displays property information. <strong>We do NOT interfere between sellers and buyers.</strong> All communications, negotiations, agreements, and transactions occur directly and exclusively between property sellers (or their agents) and property buyers. SyProperty is not involved, does not participate, and has no role in any aspect of real estate transactions between parties.
+                  <strong>{t('section13.platformTitle')}</strong> {t('section13.platformContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Revenue Model - Points from Listing Publications:</strong> SyProperty's revenue and profit come from points that agents pay when they publish property listings on our platform. <strong>We do NOT receive any commission, fee, or benefit from property sales or rentals between sellers and buyers.</strong> Our revenue is generated exclusively through:
+                  <strong>{t('section13.revenueTitle')}</strong> {t('section13.revenueContent')}
                 </p>
                 <ul style={{ 
                   marginBottom: '20px', 
-                  paddingLeft: '20px',
-                  listStyle: 'disc'
+                  paddingLeft: isRTL ? '0' : '20px',
+                  paddingRight: isRTL ? '20px' : '0',
+                  listStyle: 'disc',
+                  direction: isRTL ? 'rtl' : 'ltr'
                 }}>
                   <li style={{ 
                     marginBottom: '10px',
@@ -877,7 +916,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Listing Publication Points:</strong> Points deducted from agent accounts when they publish property listings on our platform
+                    <strong>{t('section13.revenueList1')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -886,7 +925,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Agent Subscription Packages:</strong> Package subscriptions (basic, premium, enterprise) purchased by agents
+                    <strong>{t('section13.revenueList2')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -895,7 +934,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Points Purchases:</strong> Points purchased by agents to maintain their account balance for listing publications
+                    <strong>{t('section13.revenueList3')}</strong>
                   </li>
                   <li style={{ 
                     marginBottom: '10px',
@@ -904,7 +943,7 @@ export default function PrivacyPolicy() {
                     lineHeight: '1.8',
                     fontFamily: 'sans-serif'
                   }}>
-                    <strong>Platform Usage Fees:</strong> Other platform usage fees (if applicable in the future)
+                    <strong>{t('section13.revenueList4')}</strong>
                   </li>
                 </ul>
                 <p style={{ 
@@ -912,52 +951,52 @@ export default function PrivacyPolicy() {
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  SyProperty has NO financial interest, benefits, commissions, or any other form of compensation from transactions between sellers and buyers. We do not participate in, facilitate, or benefit from any real estate transactions between parties.
+                  {t('section13.noBenefit')}
                 </p>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif',
                   fontWeight: '600'
                 }}>
-                  <strong>Advance Notification of Changes:</strong> If there are any changes to our business model, revenue structure, points system, fees, services, privacy practices, or policies that affect users, we will notify ALL types of users (regular users and agents) in advance. Material changes will be communicated with at least one (1) full month's advance notice via email and our communication channels. Continued use of the Service after such changes constitutes acceptance of the modified terms.
+                  <strong>{t('section13.notificationTitle')}</strong> {t('section13.notificationContent')}
                 </p>
                 <p style={{ 
                   marginBottom: '30px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.8',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  By using our Service, you acknowledge that you understand SyProperty operates as a listing platform only, does not interfere between sellers and buyers, and generates revenue solely from listing publications and agent subscriptions, not from property transactions.
+                  {t('section13.acknowledgment')}
                 </p>
 
-<h2 style={{ 
+                <h2 style={{ 
                   color: '#000000', 
                   marginBottom: '16px', 
                   fontSize: '24px',
                   fontWeight: '700',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  14. Contact Us
+                  {t('section14.title')}
                 </h2>
                 <p style={{ 
                   marginBottom: '20px',
                   fontSize: '16px',
                   color: '#000000',
                   lineHeight: '1.6',
-                  textAlign: 'left',
+                  textAlign: isRTL ? 'right' : 'left',
                   fontFamily: 'sans-serif'
                 }}>
-                  If you have any questions about this Privacy Policy or our privacy practices, please contact us:
+                  {t('section14.intro')}
                 </p>
                 <div style={{ 
                   marginBottom: '40px',
@@ -967,19 +1006,18 @@ export default function PrivacyPolicy() {
                   fontFamily: 'sans-serif'
                 }}>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>Email:</strong> privacy@syproperty.com
+                    <strong>{t('section14.email')}</strong> privacy@AqaarGate.com
                   </p>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>Phone:</strong> +1 (555) 123-4567
+                    <strong>{t('section14.phone')}</strong> +1 (555) 123-4567
                   </p>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>Address:</strong> 123 Property Street, Real Estate City, RE 12345
+                    <strong>{t('section14.address')}</strong> 123 Property Street, Real Estate City, RE 12345
                   </p>
                   <p style={{ margin: '0' }}>
-                    <strong>Data Protection Officer:</strong> dpo@syproperty.com
+                    <strong>{t('section14.dpo')}</strong> dpo@AqaarGate.com
                   </p>
                 </div>
-
 
               </div>
             </div>
@@ -1006,7 +1044,8 @@ export default function PrivacyPolicy() {
             justifyContent: 'center',
             gap: '40px',
             marginBottom: '20px',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            direction: isRTL ? 'rtl' : 'ltr'
           }}>
             <Link href="/" style={{
               fontSize: '14px',
@@ -1015,7 +1054,7 @@ export default function PrivacyPolicy() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              Home
+              {t('footer.home')}
             </Link>
             <Link href="/about-us" style={{
               fontSize: '14px',
@@ -1024,7 +1063,7 @@ export default function PrivacyPolicy() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              About Us
+              {t('footer.aboutUs')}
             </Link>
             <Link href="/contact" style={{
               fontSize: '14px',
@@ -1033,7 +1072,7 @@ export default function PrivacyPolicy() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              Contact
+              {t('footer.contact')}
             </Link>
             <Link href="/terms-and-conditions" style={{
               fontSize: '14px',
@@ -1042,7 +1081,7 @@ export default function PrivacyPolicy() {
               fontFamily: 'sans-serif',
               fontWeight: '400'
             }}>
-              Terms & Conditions
+              {t('footer.terms')}
             </Link>
             <Link href="/privacy-policy" style={{
               fontSize: '14px',
@@ -1051,7 +1090,7 @@ export default function PrivacyPolicy() {
               fontFamily: 'sans-serif',
               fontWeight: '600'
             }}>
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
           </div>
 
@@ -1062,7 +1101,7 @@ export default function PrivacyPolicy() {
             fontFamily: 'sans-serif',
             fontWeight: '400'
           }}>
-            © {new Date().getFullYear()} SyProperty. All rights reserved.
+            © {new Date().getFullYear()} AqaarGate. {t('footer.copyright')}
           </div>
         </div>
       </footer>

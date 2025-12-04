@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
+import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import logger from "@/utlis/logger";
 
@@ -13,6 +15,16 @@ export default function GlobalStatusModal({
   userEmail,
   showLoginButton = false
 }) {
+  const pathname = usePathname();
+  
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const locale = pathname?.split('/')[1] || 'en';
+  const isRTL = locale === 'ar';
+  
+  // Use safe translations hook
+  const tGlobalStatus = useSafeTranslations('globalStatus');
+  const tRegistrationSuccess = useSafeTranslations('registrationSuccess');
+  
   // Use GlobalModal context for opening login modal
   const { showLoginModal } = useGlobalModal();
   if (!isOpen) {
@@ -28,6 +40,7 @@ export default function GlobalStatusModal({
   const modalContent = (
     <div 
       className="modal fade show"
+      dir={isRTL ? 'rtl' : 'ltr'}
       style={{ 
         position: 'fixed',
         top: 0,
@@ -112,7 +125,7 @@ export default function GlobalStatusModal({
                     fontSize: '14px',
                     fontWeight: '600'
                   }}>
-                    {isSuccess ? 'Account created for:' : 'Email:'} {userEmail}
+                    {isSuccess ? tGlobalStatus('accountCreatedFor') : tGlobalStatus('email')} {userEmail}
                   </p>
                 </div>
               )}
@@ -139,7 +152,7 @@ export default function GlobalStatusModal({
                         color: 'white'
                       }}
                     >
-                      Login
+                      {tGlobalStatus('login')}
                     </button>
                     <button
                       onClick={onClose}
@@ -156,7 +169,7 @@ export default function GlobalStatusModal({
                         minWidth: window.innerWidth <= 360 ? '100%' : '120px'
                       }}
                     >
-                      Close
+                      {tGlobalStatus('close')}
                     </button>
                   </>
                 ) : (
@@ -175,7 +188,7 @@ export default function GlobalStatusModal({
                       color: 'white'
                     }}
                   >
-                    {isSuccess ? 'Continue' : 'Close'}
+                    {isSuccess ? tGlobalStatus('continue') : tGlobalStatus('close')}
                   </button>
                 )}
               </div>

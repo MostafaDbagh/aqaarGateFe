@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import GlobalStatusModal from '../modals/GlobalStatusModal';
 import Register from '../modals/Register';
 import { usePathname } from 'next/navigation';
+import { useSafeTranslations } from '@/hooks/useSafeTranslations';
 import Login from '../modals/Login';
 import ForgotPasswordFlow from '../modals/ForgotPasswordFlow';
 import OTPVerification from '../modals/OTPVerification';
@@ -21,6 +22,13 @@ export const useGlobalModal = () => {
 
 export const GlobalModalProvider = ({ children }) => {
   const pathname = usePathname();
+  
+  // Extract locale from pathname
+  const locale = pathname?.split('/')[1] || 'en';
+  
+  // Use safe translations hook
+  const tRegistrationSuccess = useSafeTranslations('registrationSuccess');
+  
   const [modalState, setModalState] = useState({
     isOpen: false,
     type: 'success',
@@ -244,7 +252,7 @@ export const GlobalModalProvider = ({ children }) => {
         onSuccess={(result) => {
           closeOTPModal();
           // Show success modal or redirect as needed
-          showSuccessModal('Registration Successful!', 'Your account has been created successfully. You can now log in.');
+          showSuccessModal(tRegistrationSuccess('title'), tRegistrationSuccess('message'));
         }}
         userData={otpModalState.userData}
         email={otpModalState.email}

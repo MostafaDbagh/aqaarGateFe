@@ -7,8 +7,8 @@ import Vision from "@/components/otherPages/vision/Vision";
 import React from "react";
 
 export const metadata = {
-  title: "Our Vision - SyProperty | Transforming Real Estate in Syria",
-  description: "Discover SyProperty's vision: displaying Syria properties to the world with modern European and Gulf standards. Simple, clear, and private property search experience.",
+  title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
+  description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern European and Gulf standards. Simple, clear, and private property search experience.",
   keywords: [
     'syria real estate vision',
     'syria property platform',
@@ -18,14 +18,14 @@ export const metadata = {
     'syria real estate innovation'
   ],
   openGraph: {
-    title: "Our Vision - SyProperty | Transforming Real Estate in Syria",
-    description: "Discover SyProperty's vision: displaying Syria properties to the world with modern standards.",
+    title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
+    description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/vision`,
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Our Vision - SyProperty | Transforming Real Estate in Syria",
-    description: "Discover SyProperty's vision: displaying Syria properties to the world with modern standards.",
+    title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
+    description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
   },
 };
 

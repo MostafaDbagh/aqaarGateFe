@@ -118,16 +118,27 @@ export const translateKeywordWithT = (keyword, t) => {
   
   const trimmedKeyword = keyword.trim();
   
+  // Skip very short keywords (likely fragments)
+  if (trimmedKeyword.length < 2) {
+    return trimmedKeyword;
+  }
+  
   // Try multiple translation key formats
   const translationAttempts = [
-    // 1. Try exact match (case-sensitive) - for keywords like "Green Title Deed"
+    // 1. Try exact match (case-sensitive) - for keywords like "Green Title Deed", "Sea view", "East-facing"
     trimmedKeyword,
-    // 2. Try normalized format (lowercase, spaces/hyphens to underscores)
+    // 2. Try with first letter capitalized - for "Sea view" -> "Sea View"
+    trimmedKeyword.charAt(0).toUpperCase() + trimmedKeyword.slice(1).toLowerCase(),
+    // 3. Try normalized format (lowercase, spaces/hyphens to underscores)
     trimmedKeyword.toLowerCase().replace(/[\s-]/g, '_'),
-    // 3. Try with commas replaced (for "2,400 shares" -> "2_400_shares")
+    // 4. Try with commas replaced (for "2,400 shares" -> "2_400_shares")
     trimmedKeyword.toLowerCase().replace(/[\s,-]/g, '_'),
-    // 4. Try original format with spaces preserved but lowercase
+    // 5. Try original format with spaces preserved but lowercase
     trimmedKeyword.toLowerCase(),
+    // 6. Try with spaces replaced by underscores only
+    trimmedKeyword.replace(/\s+/g, '_'),
+    // 7. Try with hyphens replaced by underscores
+    trimmedKeyword.replace(/-/g, '_'),
   ];
   
   // Try each format
@@ -135,7 +146,7 @@ export const translateKeywordWithT = (keyword, t) => {
     const translationKey = `propertyKeywords.${attempt}`;
     
     try {
-      const translated = t(translationKey);
+      const translated = t(translationKey, { defaultValue: null });
       // If translation found (not the key itself), return it
       if (translated && translated !== translationKey && !translated.startsWith('propertyKeywords.') && !translated.startsWith('common.propertyKeywords.')) {
         return translated;
