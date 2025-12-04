@@ -4,6 +4,7 @@ import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { routing } from '@/i18n/routing';
+import { useAuthState } from '@/store/hooks/useAuth';
 import styles from './LanguageSwitcher.module.css';
 
 export default function LanguageSwitcher() {
@@ -11,6 +12,7 @@ export default function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
+  const { isAgent } = useAuthState();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   
@@ -23,8 +25,8 @@ export default function LanguageSwitcher() {
                           pathWithoutLocale?.includes('/messages') || pathWithoutLocale?.includes('/review') ||
                           pathWithoutLocale?.includes('/my-favorites') || pathWithoutLocale?.includes('/my-save-search');
   
-  // Don't render if on dashboard pages
-  if (isDashboardPage) {
+  // Don't render if on dashboard pages UNLESS user is an agent
+  if (isDashboardPage && !isAgent) {
     return null;
   }
 

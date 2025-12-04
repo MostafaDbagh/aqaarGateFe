@@ -11,12 +11,15 @@ import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/consta
 import logger from "@/utlis/logger";
 import styles from "./Profile.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { useSafeTranslations } from '@/hooks/useSafeTranslations';
 import ChangePasswordSection from "./ChangePasswordSection";
 
 export default function Profile() {
   const { showLoginModal } = useGlobalModal();
   const locale = useLocale();
+  const t = useTranslations('agent.profile');
+  const tSafe = useSafeTranslations('agent.profile');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -101,6 +104,69 @@ export default function Profile() {
     ...syrianProvinces
   ];
 
+  // Translation helper functions
+  const translateService = (service) => {
+    try {
+      return t(`services.${service}`, { defaultValue: service });
+    } catch {
+      return service;
+    }
+  };
+
+  const translateResponseTime = (option) => {
+    try {
+      return t(`responseTimeOptions.${option}`, { defaultValue: option });
+    } catch {
+      return option;
+    }
+  };
+
+  const translateAvailability = (option) => {
+    try {
+      return t(`availabilityOptions.${option}`, { defaultValue: option });
+    } catch {
+      return option;
+    }
+  };
+
+  // Province translations mapping
+  const provinceTranslations = {
+    en: {
+      "Aleppo": "Aleppo",
+      "As-Suwayda": "As-Suwayda",
+      "Damascus": "Damascus",
+      "Daraa": "Daraa",
+      "Deir ez-Zur": "Deir ez-Zur",
+      "Hama": "Hama",
+      "Homs": "Homs",
+      "Idlib": "Idlib",
+      "Latakia": "Latakia",
+      "Raqqah": "Raqqah",
+      "Tartus": "Tartus"
+    },
+    ar: {
+      "Aleppo": "حلب",
+      "As-Suwayda": "السويداء",
+      "Damascus": "دمشق",
+      "Daraa": "درعا",
+      "Deir ez-Zur": "دير الزور",
+      "Hama": "حماة",
+      "Homs": "حمص",
+      "Idlib": "إدلب",
+      "Latakia": "اللاذقية",
+      "Raqqah": "الرقة",
+      "Tartus": "طرطوس"
+    }
+  };
+
+  const translateProvince = (province) => {
+    if (!province || province === "Select City") return province;
+    
+    // Use direct mapping based on locale
+    const translations = provinceTranslations[locale] || provinceTranslations.en;
+    return translations[province] || province;
+  };
+
 
 
 
@@ -168,7 +234,7 @@ export default function Profile() {
         }
       } catch (error) {
         logger.error("Error loading profile:", error);
-        setToast({ type: "error", message: "Failed to load profile" });
+        setToast({ type: "error", message: t('errorLoading') });
       } finally {
         setLoading(false);
       }
@@ -210,7 +276,7 @@ export default function Profile() {
     
     requiredArabicFields.forEach(field => {
       if (!formData[field] || formData[field].trim() === '') {
-        errors[field] = 'This field is required';
+        errors[field] = t('thisFieldIsRequired');
       }
     });
     
@@ -269,7 +335,7 @@ export default function Profile() {
     
     // Validate Arabic fields before submitting
     if (!validateArabicFields()) {
-      setToast({ type: "error", message: "Please fill all required Arabic fields" });
+      setToast({ type: "error", message: t('fillArabicFields') });
       return;
     }
     
@@ -305,10 +371,10 @@ export default function Profile() {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
       
-      setToast({ type: "success", message: "Profile updated successfully!" });
+      setToast({ type: "success", message: t('profileUpdated') });
     } catch (error) {
       logger.error("Error updating profile:", error);
-      setToast({ type: "error", message: "Failed to update profile" });
+      setToast({ type: "error", message: t('failedToUpdate') });
     } finally {
       setSaving(false);
     }
@@ -320,7 +386,7 @@ export default function Profile() {
       <div className={styles.loadingOverlay}>
         <LocationLoader 
           size="large" 
-          message="Loading your profile..."
+          message={t('loading')}
         />
       </div>
     );
@@ -330,27 +396,26 @@ export default function Profile() {
     <div className="main-content style-2">
       <div className="main-content-inner wrap-dashboard-content-2">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">{t('showDashboard')}</span>
         </div>
         <div className="widget-box-2">
           {user?.role === "agent" && (
             <div className="box">
-              <h3 className="title">Account Settings</h3>
+              <h3 className="title">{t('accountSettings')}</h3>
               <div className="box-agent-account">
-                <h6>Agent Account</h6>
+                <h6>{t('agentAccount')}</h6>
                 <p className="note">
-                  Your current account type is set to agent. You have access to all agent features
-                  including property management and analytics.
+                  {t('agentAccountDescription')}
                 </p>
                 <div className={styles.pointsBalance}>
-                  <strong>Points Balance:</strong> {user.pointsBalance || 'unlimited'} points
+                  <strong>{t('pointsBalance')}:</strong> {user.pointsBalance || t('unlimited')} {t('points')}
                 </div>
               </div>
             </div>
           )}
           
           <div className="box">
-            <h5 className="title">Avatar</h5>
+            <h5 className="title">{t('avatar')}</h5>
             <div className="box-agent-avt">
               <div className="avatar">
                 <Image
@@ -362,7 +427,7 @@ export default function Profile() {
                 />
               </div>
               <div className="content uploadfile">
-                <p>Upload a new avatar</p>
+                <p>{t('uploadNewAvatar')}</p>
                 <div className="box-ip">
                   <input 
                     type="file" 
@@ -371,16 +436,16 @@ export default function Profile() {
                     onChange={handleAvatarChange}
                   />
                 </div>
-                <p>JPEG, PNG, or WEBP (Max 5MB)</p>
+                <p>{t('avatarFormat')}</p>
               </div>
             </div>
           </div>
 
-          <h5 className="title">Information</h5>
+          <h5 className="title">{t('information')}</h5>
           <form onSubmit={handleSubmitProfile}>
             <fieldset className="box box-fieldset">
               <label htmlFor="username">
-                Full name:<span>*</span>
+                {t('fullName')}:<span>*</span>
               </label>
               <input
                 type="text"
@@ -394,7 +459,7 @@ export default function Profile() {
             <div className="box grid-layout-2 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="email">
-                  Email address:<span>*</span>
+                  {t('emailAddress')}:<span>*</span>
                 </label>
                 <input
                   type="email"
@@ -411,13 +476,13 @@ export default function Profile() {
                 />
                 {formData.email && (
                   <p className={styles.emailHelperText}>
-                    Email cannot be changed once set
+                    {t('emailCannotBeChanged')}
                   </p>
                 )}
               </fieldset>
               <fieldset className="box-fieldset">
                 <label htmlFor="phone">
-                  Your Phone:
+                  {t('yourPhone')}:
                 </label>
                 <div className={styles.phoneInputContainer}>
                   <select
@@ -439,14 +504,14 @@ export default function Profile() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className={styles.phoneInput}
-                    placeholder="Phone number"
+                    placeholder={t('phoneNumber')}
                     disabled={!!formData.phone}
                     autoComplete="off"
                   />
                 </div>
                 {formData.phone && (
                   <p className={styles.phoneHelperText}>
-                    Phone number cannot be changed once set
+                    {t('phoneCannotBeChanged')}
                   </p>
                 )}
               </fieldset>
@@ -454,7 +519,7 @@ export default function Profile() {
 
             <fieldset className="box box-fieldset">
               <label htmlFor="description">
-                Description:
+                {t('description')}:
               </label>
               <textarea
                 id="description"
@@ -468,7 +533,7 @@ export default function Profile() {
               <fieldset className="box grid-layout-3 gap-30">
                 <div className="box-fieldset">
                   <label htmlFor="company">
-                    Company Name:
+                    {t('companyName')}:
                   </label>
                   <input
                     type="text"
@@ -480,7 +545,7 @@ export default function Profile() {
                 </div>
                 <div className="box-fieldset">
                   <label htmlFor="officeNumber">
-                    Office Number:
+                    {t('officeNumber')}:
                   </label>
                   <input
                     type="text"
@@ -492,7 +557,7 @@ export default function Profile() {
                 </div>
                 <div className="box-fieldset">
                   <label htmlFor="officeAddress">
-                    Office Address:
+                    {t('officeAddress')}:
                   </label>
                   <input
                     type="text"
@@ -508,7 +573,7 @@ export default function Profile() {
             <div className="box grid-layout-2 gap-30 box-info-2">
               <div className="box-fieldset">
                 <label htmlFor="job">
-                  Job Title:
+                  {t('jobTitle')}:
                 </label>
                 <input
                   type="text"
@@ -520,14 +585,18 @@ export default function Profile() {
               </div>
               <div className="box-fieldset">
                 <label htmlFor="city">
-                  City:
+                  {t('city')}:
                 </label>
                 <DropdownSelect
                   name="city"
                   options={cityOptions}
                   selectedValue={formData.city}
-                  onChange={(value) => setFormData(prev => ({ ...prev, city: value === "Select City" ? "" : value }))}
+                  onChange={(value) => setFormData(prev => ({ ...prev, city: value === t('selectCity') ? "" : value }))}
                   addtionalParentClass=""
+                  translateOption={(option) => {
+                    if (option === "Select City") return t('selectCity');
+                    return translateProvince(option);
+                  }}
                 />
               </div>
             </div>
@@ -539,7 +608,7 @@ export default function Profile() {
             {/* Services & Expertise - Checkboxes */}
             <fieldset className="box box-fieldset" style={{ width: '100%' }}>
               <label htmlFor="servicesAndExpertise" style={{ display: 'block', marginBottom: '16px' }}>
-                Services & Expertise:
+                {t('servicesAndExpertise')}:
               </label>
               <div style={{ width: '100%' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', rowGap: '16px', width: '100%', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '20px', paddingRight: '20px', borderRadius: '12px', border: '1px solid #e9ecef', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)' }}>
@@ -564,7 +633,7 @@ export default function Profile() {
                             MozAppearance: 'checkbox'
                           }}
                         />
-                        <span className="text-4" style={{ margin: '0' }}>{service}</span>
+                        <span className="text-4" style={{ margin: '0' }}>{translateService(service)}</span>
                         <span className="btn-checkbox" />
                       </label>
                     </fieldset>
@@ -577,31 +646,33 @@ export default function Profile() {
             <div className="box grid-layout-3 gap-30 box-info-2">
               <div className="box-fieldset">
                 <label htmlFor="responseTime">
-                  Response Time:
+                  {t('responseTime')}:
                 </label>
                 <DropdownSelect
                   name="responseTime"
                   options={responseTimeOptions}
                   selectedValue={formData.responseTime}
-                  onChange={(value) => setFormData(prev => ({ ...prev, responseTime: value === "Select Response Time" ? "" : value }))}
+                  onChange={(value) => setFormData(prev => ({ ...prev, responseTime: value === t('selectResponseTime') ? "" : value }))}
                   addtionalParentClass=""
+                  translateOption={translateResponseTime}
                 />
               </div>
               <div className="box-fieldset">
                 <label htmlFor="availability">
-                  Availability:
+                  {t('availability')}:
                 </label>
                 <DropdownSelect
                   name="availability"
                   options={availabilityOptions}
                   selectedValue={formData.availability}
-                  onChange={(value) => setFormData(prev => ({ ...prev, availability: value === "Select Availability" ? "" : value }))}
+                  onChange={(value) => setFormData(prev => ({ ...prev, availability: value === t('selectAvailability') ? "" : value }))}
                   addtionalParentClass=""
+                  translateOption={translateAvailability}
                 />
               </div>
               <div className="box-fieldset">
                 <label htmlFor="yearsExperience">
-                  Years Experience:
+                  {t('yearsExperience')}:
                 </label>
                 <input
                   type="number"
@@ -611,14 +682,14 @@ export default function Profile() {
                   className="form-control"
                   min="0"
                   max="50"
-                  placeholder="e.g. 5"
+                  placeholder={t('yearsExperiencePlaceholder')}
                 />
               </div>
             </div>
 
 <div className="box box-fieldset">
               <label htmlFor="facebook">
-                Facebook:
+                {t('facebook')}:
               </label>
               <input
                 type="text"
@@ -630,7 +701,7 @@ export default function Profile() {
             </div>
             <div className="box box-fieldset">
               <label htmlFor="twitter">
-                Twitter:
+                {t('twitter')}:
               </label>
               <input
                 type="text"
@@ -642,7 +713,7 @@ export default function Profile() {
             </div>
             <div className="box box-fieldset">
               <label htmlFor="linkedin">
-                Linkedin:
+                {t('linkedin')}:
               </label>
               <input
                 type="text"
@@ -654,7 +725,7 @@ export default function Profile() {
             </div>
             <fieldset className="box-fieldset">
               <label htmlFor="whatsapp">
-                WhatsApp Number:
+                {t('whatsappNumber')}:
               </label>
               <div className={styles.phoneInputContainer}>
                 <select
@@ -675,7 +746,7 @@ export default function Profile() {
                   value={formData.whatsapp}
                   onChange={handleInputChange}
                   className={styles.phoneInput}
-                  placeholder="WhatsApp number"
+                  placeholder={t('whatsappPlaceholder')}
                   autoComplete="off"
                 />
               </div>
@@ -804,9 +875,9 @@ export default function Profile() {
                   opacity: 0.6, 
                   cursor: 'not-allowed' 
                 } : {}}
-                title={!isArabicSectionComplete() ? "Please fill all required Arabic fields" : ""}
+                title={!isArabicSectionComplete() ? t('fillArabicFields') : ""}
               >
-                {saving ? "Saving..." : "Save & Update"}
+                {saving ? t('saving') : t('saveAndUpdate')}
               </button>
               {submitAttempted && !isArabicSectionComplete() && (
                 <p style={{ 
@@ -815,7 +886,7 @@ export default function Profile() {
                   fontSize: '14px',
                   fontWeight: '500'
                 }}>
-                  Please fill all required Arabic fields to save
+                  {t('fillArabicFieldsToSave')}
                 </p>
               )}
             </div>

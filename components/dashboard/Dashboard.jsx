@@ -8,8 +8,13 @@ import LocationLoader from "@/components/common/LocationLoader";
 import DashboardFooter from "@/components/common/DashboardFooter";
 import logger from "@/utlis/logger";
 import styles from "./Dashboard.module.css";
+import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordWithT } from '@/utils/translateKeywords';
 
 export default function Dashboard() {
+  const t = useTranslations('agent.dashboard');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -95,12 +100,12 @@ export default function Dashboard() {
     const diffTime = Math.abs(now - date);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 1) return "1 day ago";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 14) return "1 week ago";
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-    return `${Math.ceil(diffDays / 30)} months ago`;
-  }, []);
+    if (diffDays === 1) return `1 ${t('dayAgo')}`;
+    if (diffDays < 7) return `${diffDays} ${t('daysAgo')}`;
+    if (diffDays < 14) return `1 ${t('weekAgo')}`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} ${t('weeksAgo')}`;
+    return `${Math.ceil(diffDays / 30)} ${t('monthsAgo')}`;
+  }, [t]);
 
   const truncateText = useCallback((text, maxLength = 80) => {
     if (text.length <= maxLength) return text;
@@ -120,13 +125,13 @@ export default function Dashboard() {
       `}</style>
       <div className="main-content-inner">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">{t('showDashboard')}</span>
         </div>
         
         {/* Error handling for dashboard stats */}
         {statsError && (
           <div className="alert alert-danger" style={{ marginBottom: '20px', borderRadius: '8px' }}>
-            <strong>Error loading dashboard data:</strong> {statsError.message || 'Failed to load dashboard statistics'}
+            <strong>{t('errorLoading')}:</strong> {statsError.message || t('failedToLoad')}
           </div>
         )}
         {/* First Row - 3 Cards */}
@@ -170,19 +175,19 @@ export default function Dashboard() {
                 </span>
               </div>
               <div className="content-box">
-                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>Balance</div>
+                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>{t('balance')}</div>
                 <div className="box-count d-flex align-items-end">
                   {statsLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
-                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Loading...</span>
+                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>{t('loading')}</span>
                     </div>
                   ) : (
                     <>
                       <div className="number" style={{ color: 'white', fontSize: '36px', fontWeight: '700', lineHeight: '1' }}>
                         ${stats.balance?.toLocaleString() || '0'}
                       </div>
-                      <span className="text" style={{ color: 'rgba(255,255,255,0.8)', marginLeft: '10px', fontSize: '14px', marginBottom: '4px' }}>Available</span>
+                      <span className="text" style={{ color: 'rgba(255,255,255,0.8)', marginLeft: '10px', fontSize: '14px', marginBottom: '4px' }}>{t('available')}</span>
                     </>
                   )}
                 </div>
@@ -255,12 +260,12 @@ export default function Dashboard() {
               </span>
             </div>
             <div className="content-box">
-                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>Your listing</div>
+                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>{t('yourListing')}</div>
               <div className="box-count d-flex align-items-end">
                   {statsLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
-                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Loading...</span>
+                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>{t('loading')}</span>
                     </div>
                   ) : (
                     <>
@@ -268,7 +273,7 @@ export default function Dashboard() {
                         {stats.totalListings || 0}
                       </div>
                       <span className="text" style={{ color: 'rgba(255,255,255,0.8)', marginLeft: '10px', fontSize: '14px', marginBottom: '4px' }}>
-                        /{stats.listingLimit || 50} remaining
+                        /{stats.listingLimit || 50} {t('remaining')}
                       </span>
                     </>
                   )}
@@ -328,12 +333,12 @@ export default function Dashboard() {
               </span>
             </div>
             <div className="content-box">
-                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>Pending</div>
+                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>{t('pending')}</div>
               <div className="box-count d-flex align-items-end">
                   {statsLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
-                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Loading...</span>
+                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>{t('loading')}</span>
                     </div>
                   ) : (
                     <div className="number" style={{ color: 'white', fontSize: '36px', fontWeight: '700', lineHeight: '1' }}>
@@ -393,12 +398,12 @@ export default function Dashboard() {
               </span>
             </div>
             <div className="content-box">
-                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>Favorites</div>
+                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>{t('favorites')}</div>
               <div className="d-flex align-items-end">
                   {statsLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
-                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Loading...</span>
+                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>{t('loading')}</span>
                     </div>
                   ) : (
                     <div className="number" style={{ color: 'white', fontSize: '36px', fontWeight: '700', lineHeight: '1' }}>
@@ -454,16 +459,16 @@ export default function Dashboard() {
                 </span>
               </div>
               <div className="content-box">
-                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>Reviews</div>
+                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>{t('approved')}</div>
                 <div className="d-flex align-items-end">
                   {statsLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
-                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Loading...</span>
+                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>{t('loading')}</span>
                     </div>
                   ) : (
                     <div className="number" style={{ color: 'white', fontSize: '36px', fontWeight: '700', lineHeight: '1' }}>
-                      {stats.totalReviews ? stats.totalReviews.toFixed(3) : '0.000'}
+                      {stats.approvedListings || 0}
                     </div>
                   )}
                 </div>
@@ -522,12 +527,12 @@ export default function Dashboard() {
               </span>
             </div>
             <div className="content-box">
-                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>Messages</div>
+                <div className="title-count" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>{t('recentMessages')}</div>
               <div className="d-flex align-items-end">
                   {statsLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
-                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Loading...</span>
+                      <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>{t('loading')}</span>
                     </div>
                   ) : (
                     <>
@@ -536,7 +541,7 @@ export default function Dashboard() {
                       </div>
                       {stats.unreadMessages > 0 && (
                         <span className="text" style={{ color: 'rgba(255,255,255,0.8)', marginLeft: '10px', fontSize: '14px', marginBottom: '4px' }}>
-                          {stats.unreadMessages} New
+                          {stats.unreadMessages} {t('new')}
                         </span>
                       )}
                     </>
@@ -549,32 +554,32 @@ export default function Dashboard() {
 
         <div className="row">
           <div className="col-xl-9">
-            <div className="widget-box-2 wd-listing mb-24">
-              <h3 className="title">Most Visited Listings</h3>
+            <div className="widget-box-2 wd-listing mb-24" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+              <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('mostVisited')}</h3>
               <div className="wrap-table">
                 {mostVisitedLoading ? (
                   <div style={{ padding: '40px', textAlign: 'center' }}>
                     <LocationLoader 
                       size="medium" 
-                      message="Loading most visited listings..."
+                      message={t('loading')}
                     />
                   </div>
                 ) : mostVisitedError ? (
                   <div className="text-center p-4" style={{ color: '#dc3545' }}>
-                    Error loading most visited listings
+                    {t('errorLoading')}
                   </div>
                 ) : mostVisitedListings.length === 0 ? (
                   <div className="text-center p-4" style={{ color: '#6c757d' }}>
-                    No visited listings yet
+                    {t('noListings')}
                   </div>
                 ) : (
                 <div className="table-responsive">
-                  <table>
+                  <table style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
                     <thead>
                       <tr>
-                        <th>Listing</th>
-                          <th>Visits</th>
-                        <th>Status</th>
+                        <th style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('listing')}</th>
+                        <th style={{ textAlign: 'center' }}>{t('visits')}</th>
+                        <th style={{ textAlign: 'center' }}>{t('status')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -590,21 +595,30 @@ export default function Dashboard() {
                                     src={listing.images?.[0]?.url || "/images/section/box-house-2.jpg"}
                                 />
                               </div>
-                              <div className="content">
-                                <div className="title">
+                              <div className="content" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                <div className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                   <Link
                                       href={`/property-detail/${listing._id}`}
                                     className="link"
                                   >
-                                      {listing.propertyType || 'Property Listing'}
+                                      {listing.propertyType || t('propertyListing')}
                                   </Link>
                                 </div>
                                 {/* Property Keyword Tags */}
                                 {listing.propertyKeyword && (
-                                  <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                  <div style={{ 
+                                    marginTop: '16px', 
+                                    marginBottom: '16px', 
+                                    display: 'flex', 
+                                    flexWrap: 'wrap', 
+                                    gap: '6px',
+                                    direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                    justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end'
+                                  }}>
                                     {listing.propertyKeyword.split(',').map((keyword, index) => {
                                       const trimmedKeyword = keyword.trim();
                                       if (!trimmedKeyword) return null;
+                                      const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                                       return (
                                         <span 
                                           key={index} 
@@ -617,19 +631,21 @@ export default function Dashboard() {
                                             borderRadius: '20px',
                                             fontSize: '12px',
                                             color: '#333',
-                                            fontWeight: '500'
+                                            fontWeight: '500',
+                                            direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                            textAlign: 'center'
                                           }}
                                         >
-                                          {trimmedKeyword}
+                                          {translatedKeyword}
                                         </span>
                                       );
                                     })}
                                   </div>
                                 )}
-                                <div className="text-date">
-                                    Posted: {formatDate(listing.createdAt)}
+                                <div className="text-date" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                    {t('posted')}: {formatDate(listing.createdAt)}
                                 </div>
-                                <div className="text-btn text-color-primary">
+                                <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                     ${listing.propertyPrice?.toLocaleString()}
                                 </div>
                               </div>
@@ -646,7 +662,7 @@ export default function Dashboard() {
                                   <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#F1913D"/>
                                 </svg>
                                 <span style={{ fontWeight: '600', color: '#F1913D' }}>
-                                  {listing.visitCount || 0} views
+                                  {listing.visitCount || 0} {t('views')}
                                 </span>
                             </div>
                           </td>
@@ -659,7 +675,7 @@ export default function Dashboard() {
                                 backgroundColor: listing.approvalStatus === 'approved' ? '#d4edda' : '#fff3cd',
                                 color: listing.approvalStatus === 'approved' ? '#155724' : '#856404'
                               }}>
-                                {listing.approvalStatus || 'Pending'}
+                                {listing.approvalStatus === 'approved' ? t('approved') : listing.approvalStatus === 'pending' ? t('pending') : listing.approvalStatus || t('pending')}
                               </span>
                           </td>
                         </tr>
@@ -670,15 +686,15 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
-            <div className="widget-box-2 wd-chart">
-              <h5 className="title">Property Analytics</h5>
+            <div className="widget-box-2 wd-chart" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+              <h5 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('propertyAnalytics')}</h5>
               <div className="wd-filter-date">
                 <div className="left">
-                  <div className="dates active">Overview</div>
+                  <div className="dates active">{t('overview')}</div>
                 </div>
                 <div className="right">
                   <div style={{ fontSize: '12px', color: '#6c757d', fontWeight: '500' }}>
-                    Last 30 days
+                    {t('last30Days')}
                   </div>
                 </div>
               </div>
@@ -693,11 +709,11 @@ export default function Dashboard() {
                         color: 'white',
                         textAlign: 'center'
                       }}>
-                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>Total Views</h6>
+                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('totalViews')}</h6>
                         <div style={{ fontSize: '32px', fontWeight: '700', marginBottom: '5px' }}>
                           {mostVisitedListings.reduce((total, listing) => total + (listing.visitCount || 0), 0)}
               </div>
-                        <div style={{ fontSize: '12px', opacity: 0.8 }}>All Properties</div>
+                        <div style={{ fontSize: '12px', opacity: 0.8 }}>{t('allProperties')}</div>
           </div>
                     </div>
                     <div className="col-md-6 mb-4">
@@ -708,13 +724,13 @@ export default function Dashboard() {
                         color: 'white',
                         textAlign: 'center'
                       }}>
-                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>Avg. Views</h6>
+                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('avgViews')}</h6>
                         <div style={{ fontSize: '32px', fontWeight: '700', marginBottom: '5px' }}>
                           {mostVisitedListings.length > 0 
                             ? Math.round(mostVisitedListings.reduce((total, listing) => total + (listing.visitCount || 0), 0) / mostVisitedListings.length)
                             : 0}
                         </div>
-                        <div style={{ fontSize: '12px', opacity: 0.8 }}>Per Property</div>
+                        <div style={{ fontSize: '12px', opacity: 0.8 }}>{t('perProperty')}</div>
               </div>
             </div>
           </div>
@@ -728,11 +744,11 @@ export default function Dashboard() {
                         color: 'white',
                         textAlign: 'center'
                       }}>
-                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>Approved</h6>
+                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('approved')}</h6>
                         <div style={{ fontSize: '32px', fontWeight: '700', marginBottom: '5px' }}>
                           {mostVisitedListings.filter(listing => listing.approvalStatus === 'approved').length}
                     </div>
-                        <div style={{ fontSize: '12px', opacity: 0.8 }}>Properties</div>
+                        <div style={{ fontSize: '12px', opacity: 0.8 }}>{t('properties')}</div>
                     </div>
                   </div>
                     <div className="col-md-6 mb-4">
@@ -743,19 +759,25 @@ export default function Dashboard() {
                         color: 'white',
                         textAlign: 'center'
                       }}>
-                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>Pending</h6>
+                        <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('pending')}</h6>
                         <div style={{ fontSize: '32px', fontWeight: '700', marginBottom: '5px' }}>
                           {mostVisitedListings.filter(listing => listing.approvalStatus === 'pending').length}
                         </div>
-                        <div style={{ fontSize: '12px', opacity: 0.8 }}>Properties</div>
+                        <div style={{ fontSize: '12px', opacity: 0.8 }}>{t('properties')}</div>
                     </div>
                     </div>
                   </div>
 
                   {mostVisitedListings.length > 0 && (
-                    <div style={{ marginTop: '20px' }}>
-                      <h6 style={{ marginBottom: '15px', fontSize: '16px', fontWeight: '600', color: '#333' }}>
-                        Top Performing Properties
+                    <div style={{ marginTop: '20px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                      <h6 style={{ 
+                        marginBottom: '15px', 
+                        fontSize: '16px', 
+                        fontWeight: '600', 
+                        color: '#333',
+                        textAlign: locale === 'ar' ? 'right' : 'left'
+                      }}>
+                        {t('topPerformingProperties')}
                       </h6>
                       <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                         {mostVisitedListings.slice(0, 3).map((listing, index) => (
@@ -764,17 +786,27 @@ export default function Dashboard() {
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             padding: '12px 0',
-                            borderBottom: index < 2 ? '1px solid #eee' : 'none'
+                            borderBottom: index < 2 ? '1px solid #eee' : 'none',
+                            direction: locale === 'ar' ? 'rtl' : 'ltr'
                           }}>
-                            <div style={{ flex: 1 }}>
+                            <div style={{ flex: 1, textAlign: locale === 'ar' ? 'right' : 'left' }}>
                               <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>
-                                {listing.propertyType || 'Property Listing'}
+                                {listing.propertyType || t('propertyListing')}
                                 {/* Property Keyword Tags */}
                                 {listing.propertyKeyword && (
-                                  <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                  <div style={{ 
+                                    marginTop: '16px', 
+                                    marginBottom: '16px', 
+                                    display: 'flex', 
+                                    flexWrap: 'wrap', 
+                                    gap: '6px',
+                                    direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                    justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end'
+                                  }}>
                                     {listing.propertyKeyword.split(',').map((keyword, index) => {
                                       const trimmedKeyword = keyword.trim();
                                       if (!trimmedKeyword) return null;
+                                      const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                                       return (
                                         <span 
                                           key={index} 
@@ -787,10 +819,12 @@ export default function Dashboard() {
                                             borderRadius: '20px',
                                             fontSize: '12px',
                                             color: '#333',
-                                            fontWeight: '500'
+                                            fontWeight: '500',
+                                            direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                            textAlign: 'center'
                                           }}
                                         >
-                                          {trimmedKeyword}
+                                          {translatedKeyword}
                                         </span>
                                       );
                                     })}
@@ -813,7 +847,7 @@ export default function Dashboard() {
                                 <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#F1913D"/>
                               </svg>
                               <span style={{ fontSize: '14px', fontWeight: '600', color: '#F1913D' }}>
-                                {listing.visitCount || 0} views
+                                {listing.visitCount || 0} {t('views')}
                       </span>
                     </div>
                   </div>
@@ -828,14 +862,14 @@ export default function Dashboard() {
           <div className="col-xl-3">
             <div className="widget-box-2 mess-box mb-20">
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5 className="title mb-0">Recent Messages</h5>
+                <h5 className="title mb-0">{t('recentMessages')}</h5>
                 <Link href="/messages" className="btn-view-all" style={{ 
                   fontSize: '12px', 
                   color: '#F1913D', 
                   textDecoration: 'none',
                   fontWeight: '500'
                 }}>
-                  View All →
+                  {t('viewAll')} →
                 </Link>
                   </div>
               
@@ -843,16 +877,16 @@ export default function Dashboard() {
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   <LocationLoader 
                     size="small" 
-                    message="Loading messages..."
+                    message={t('loading')}
                       />
                     </div>
               ) : messagesError ? (
                 <div className="text-center p-3" style={{ color: '#dc3545' }}>
-                  Error loading messages
+                  {t('errorLoading')}
                     </div>
               ) : recentMessages.length === 0 ? (
                 <div className="text-center p-3" style={{ color: '#6c757d' }}>
-                  No recent messages
+                  {t('noMessages')}
                   </div>
               ) : (
                 <ul className="list-mess">
@@ -890,14 +924,14 @@ export default function Dashboard() {
                     </div>
             <div className="widget-box-2 mess-box">
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5 className="title mb-0">Recent Reviews</h5>
+                <h5 className="title mb-0">{t('recentReviews')}</h5>
                 <Link href="/review" className="btn-view-all" style={{ 
                   fontSize: '12px', 
                   color: '#F1913D', 
                   textDecoration: 'none',
                   fontWeight: '500'
                 }}>
-                  View All →
+                  {t('viewAll')} →
                 </Link>
                   </div>
               
@@ -905,16 +939,16 @@ export default function Dashboard() {
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   <LocationLoader 
                     size="small" 
-                    message="Loading reviews..."
+                    message={t('loading')}
                       />
                     </div>
               ) : reviewsError ? (
                 <div className="text-center p-3" style={{ color: '#dc3545' }}>
-                  Error loading reviews
+                  {t('errorLoading')}
                     </div>
               ) : recentReviews.length === 0 ? (
                 <div className="text-center p-3" style={{ color: '#6c757d' }}>
-                  No recent reviews
+                  {t('noReviews')}
                   </div>
               ) : (
                 <ul className="list-mess">

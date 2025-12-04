@@ -2,6 +2,7 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { useDashboardStats } from '@/apis/hooks';
+import { useTranslations } from 'next-intl';
 
 export default function ReviewsCount({ 
   showLabel = true, 
@@ -9,6 +10,7 @@ export default function ReviewsCount({
   icon = true,
   format = 'parentheses' // 'parentheses', 'badge', 'text'
 }) {
+  const t = useTranslations('agent.sidebar');
   const pathname = usePathname();
   // Only fetch dashboard stats if we're on a dashboard page
   const isDashboardPage = pathname?.startsWith('/dashboard') || pathname?.startsWith('/review') || pathname?.startsWith('/messages') || pathname?.startsWith('/my-property');
@@ -25,7 +27,7 @@ export default function ReviewsCount({
             <path d="M11.668 9.99996C12.11 9.99996 12.5339 9.82436 12.8465 9.5118C13.159 9.19924 13.3346 8.77532 13.3346 8.33329V6.66663H11.668" stroke="#A8ABAE" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         )}
-        {showLabel && 'Reviews'} <span>(...)</span>
+        {showLabel && t('reviews')} <span>(...)</span>
       </span>
     );
   }
@@ -55,7 +57,7 @@ export default function ReviewsCount({
           <path d="M11.668 9.99996C12.11 9.99996 12.5339 9.82436 12.8465 9.5118C13.159 9.19924 13.3346 8.77532 13.3346 8.33329V6.66663H11.668" stroke="#A8ABAE" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       )}
-      {showLabel && 'Reviews'} {renderCount()}
+      {showLabel && t('reviews')} {renderCount()}
     </span>
   );
 }

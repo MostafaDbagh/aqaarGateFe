@@ -4,12 +4,16 @@ import Image from "next/image";
 import { useReviewsByAgent, useHideReviewFromDashboard, useHideReviewFromListing } from "@/apis/hooks";
 import { reviewAPI } from "@/apis/review";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import LocationLoader from "../common/LocationLoader";
 import Toast from "../common/Toast";
 import DashboardFooter from "../common/DashboardFooter";
 import styles from "./Review.module.css";
 
 export default function Review() {
+  const t = useTranslations('agent.review');
+  const locale = useLocale();
   const [user, setUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -87,17 +91,21 @@ export default function Review() {
 
   // Format date helper
   const formatDate = (dateString) => {
-    if (!dateString) return 'Recently';
+    if (!dateString) return t('recently');
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now - date);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
+    if (diffDays === 0) return t('today');
+    if (diffDays === 1) return `1 ${t('dayAgo')}`;
+    if (diffDays < 7) return `${diffDays} ${t('daysAgo')}`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} ${t('weeksAgo')}`;
+    return date.toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   // Render stars
@@ -110,13 +118,13 @@ export default function Review() {
   // Get avatar
   const getAvatar = (review) => {
     if (review.userId?.avatar) return review.userId.avatar;
-    return '/images/avatar/avt-png13.png'; // Default avatar
+    return '/images/default-avatar.svg'; // Default avatar
   };
 
   // Get reviewer name
   const getReviewerName = (review) => {
     if (review.userId?.username) return review.userId.username;
-    return review.name || 'Anonymous';
+    return review.name || t('anonymous');
   };
 
   // Pagination handlers
@@ -162,7 +170,7 @@ export default function Review() {
   const handleHideFromDashboard = async (reviewId) => {
     // Check if agent is blocked
     if (isAgentBlocked) {
-      showToast('Your account is blocked. This action is disabled.', 'error');
+      showToast(t('accountBlocked'), 'error');
       return;
     }
 
@@ -170,9 +178,9 @@ export default function Review() {
       await hideFromDashboardMutation.mutateAsync({ reviewId, hidden: true });
       // Mark this review as hidden from dashboard
       setHiddenFromDashboard(prev => new Set(prev).add(reviewId));
-      showToast('Review hidden from dashboard');
+      showToast(t('reviewHiddenFromDashboard'));
     } catch (error) {
-      showToast('Failed to hide review', 'error');
+      showToast(t('failedToHide'), 'error');
     }
   };
 
@@ -180,7 +188,7 @@ export default function Review() {
   const handleHideFromListing = async (reviewId) => {
     // Check if agent is blocked
     if (isAgentBlocked) {
-      showToast('Your account is blocked. This action is disabled.', 'error');
+      showToast(t('accountBlocked'), 'error');
       return;
     }
 
@@ -188,17 +196,19 @@ export default function Review() {
       await hideFromListingMutation.mutateAsync({ reviewId, hidden: true });
       // Mark this review as hidden from listing
       setHiddenFromListing(prev => new Set(prev).add(reviewId));
-      showToast('Review hidden from listing');
+      showToast(t('reviewHiddenFromListing'));
     } catch (error) {
-      showToast('Failed to hide review', 'error');
+      showToast(t('failedToHide'), 'error');
     }
   };
 
+  const isRTL = locale === 'ar';
+
   return (
-    <div className="main-content w-100">
+    <div className="main-content w-100" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="main-content-inner style-3">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">{t('showDashboard')}</span>
         </div>
 
         {/* Statistics Cards */}
@@ -210,7 +220,7 @@ export default function Review() {
                   <h3 className={`mb-2 ${styles.statNumber}`}>
                     {stats.totalReviews}
                   </h3>
-                  <p className={`mb-0 ${styles.statLabel}`}>Total Reviews</p>
+                  <p className={`mb-0 ${styles.statLabel}`} style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('totalReviews')}</p>
                 </div>
               </div>
             </div>
@@ -220,7 +230,7 @@ export default function Review() {
                   <h3 className={`mb-2 ${styles.statNumberYellow}`}>
                     {stats.averageRating.toFixed(1)} <i className={`icon-star ${styles.starIcon}`} />
                   </h3>
-                  <p className={`mb-0 ${styles.statLabel}`}>Average Rating</p>
+                  <p className={`mb-0 ${styles.statLabel}`} style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('averageRating')}</p>
                 </div>
               </div>
             </div>
@@ -230,7 +240,7 @@ export default function Review() {
                   <h3 className={`mb-2 ${styles.statNumberGreen}`}>
                     {stats.totalProperties}
                   </h3>
-                  <p className={`mb-0 ${styles.statLabel}`}>Properties with Reviews</p>
+                  <p className={`mb-0 ${styles.statLabel}`} style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('propertiesWithReviews')}</p>
                 </div>
               </div>
             </div>
@@ -238,11 +248,11 @@ export default function Review() {
         )}
 
         <div className="widget-box-2 mess-box">
-          <h3 className="title">
-            My Property Reviews
+          <h3 className="title" style={{ textAlign: isRTL ? 'right' : 'left' }}>
+            {t('myPropertyReviews')}
             {pagination.totalReviews > 0 && (
               <span className={styles.titleBadge}>
-                ({pagination.totalReviews} total reviews)
+                ({pagination.totalReviews} {t('totalReviewsCount')})
               </span>
             )}
           </h3>
@@ -251,20 +261,20 @@ export default function Review() {
             <div className={styles.loadingContainer}>
               <LocationLoader 
                 size="large" 
-                message="Loading property reviews..."
+                message={t('loadingPropertyReviews')}
               />
             </div>
           )}
 
           {isError && (
-            <div className={styles.errorContainer}>
-              <p>Failed to load reviews. Please try again later.</p>
+            <div className={styles.errorContainer} style={{ textAlign: isRTL ? 'right' : 'left' }}>
+              <p>{t('failedToLoadReviews')}</p>
             </div>
           )}
 
           {!isLoading && !isError && reviews.length === 0 && (
-            <div className={styles.emptyContainer}>
-              <p>No reviews found.</p>
+            <div className={styles.emptyContainer} style={{ textAlign: isRTL ? 'right' : 'left' }}>
+              <p>{t('noReviews')}</p>
             </div>
           )}
 
@@ -275,7 +285,23 @@ export default function Review() {
                   <li key={review._id} className="mess-item">
                     <div className="user-box">
                       <div className="avatar">
-                    
+                        <Image
+                          src={getAvatar(review)}
+                          alt={getReviewerName(review)}
+                          width={50}
+                          height={50}
+                          className="rounded-circle"
+                          style={{ 
+                            objectFit: 'cover',
+                            filter: 'brightness(0)',
+                            backgroundColor: '#000'
+                          }}
+                          onError={(e) => {
+                            e.target.src = '/images/default-avatar.svg';
+                            e.target.style.filter = 'brightness(0)';
+                            e.target.style.backgroundColor = '#000';
+                          }}
+                        />
                       </div>
                       <div className="content justify-content-start">
                         <div className="name fw-6">{getReviewerName(review)}</div>
@@ -286,8 +312,8 @@ export default function Review() {
                     </div>
                     <p>{review.review}</p>
                     {review.propertyId && (
-                      <div className={styles.propertyInfoContainer}>
-                        Property: <strong>{review.propertyId.propertyKeyword || 'N/A'}</strong>
+                      <div className={styles.propertyInfoContainer} style={{ textAlign: isRTL ? 'right' : 'left' }}>
+                        {t('property')}: <strong>{review.propertyId.propertyKeyword || 'N/A'}</strong>
                         <br />
                         <a 
                           href={`/property-detail/${review.propertyId._id}`}
@@ -295,33 +321,33 @@ export default function Review() {
                           rel="noopener noreferrer"
                           className={styles.propertyLink}
                         >
-                          View Property Details (ID: {review.propertyId._id})
+                          {t('viewPropertyDetails')} ({t('propertyId')}: {review.propertyId._id})
                         </a>
                       </div>
                     )}
                     <div className="ratings">
                       {renderStars(review.rating || 5)}
                     </div>
-                    <div className={styles.actionButtons}>
+                    <div className={styles.actionButtons} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
                       <button
                         onClick={() => handleHideFromDashboard(review._id)}
                         disabled={isAgentBlocked || hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard || hideFromDashboardMutation.isPending}
                         className={styles.hideButtonDashboard}
-                        title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : ((hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? 'Already hidden' : 'Hide from Dashboard')}
+                        title={isAgentBlocked ? t('accountBlocked') : ((hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? t('alreadyHidden') : t('hideFromDashboard'))}
                         style={isAgentBlocked ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                       >
-                        {hideFromDashboardMutation.isPending && !hiddenFromDashboard.has(review._id) && !review.hiddenFromDashboard ? 'Hiding...' : 
-                         (hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? 'Hidden' : 'Hide from Dashboard'}
+                        {hideFromDashboardMutation.isPending && !hiddenFromDashboard.has(review._id) && !review.hiddenFromDashboard ? t('hiding') : 
+                         (hiddenFromDashboard.has(review._id) || review.hiddenFromDashboard) ? t('hidden') : t('hideFromDashboard')}
                       </button>
                       <button
                         onClick={() => handleHideFromListing(review._id)}
                         disabled={isAgentBlocked || hiddenFromListing.has(review._id) || review.hiddenFromListing || hideFromListingMutation.isPending}
                         className={styles.hideButtonListing}
-                        title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : ((hiddenFromListing.has(review._id) || review.hiddenFromListing) ? 'Already hidden' : 'Hide from Listing')}
+                        title={isAgentBlocked ? t('accountBlocked') : ((hiddenFromListing.has(review._id) || review.hiddenFromListing) ? t('alreadyHidden') : t('hideFromListing'))}
                         style={isAgentBlocked ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                       >
-                        {hideFromListingMutation.isPending && !hiddenFromListing.has(review._id) && !review.hiddenFromListing ? 'Hiding...' : 
-                         (hiddenFromListing.has(review._id) || review.hiddenFromListing) ? 'Hidden' : 'Hide from Listing'}
+                        {hideFromListingMutation.isPending && !hiddenFromListing.has(review._id) && !review.hiddenFromListing ? t('hiding') : 
+                         (hiddenFromListing.has(review._id) || review.hiddenFromListing) ? t('hidden') : t('hideFromListing')}
                       </button>
                     </div>
                   </li>
@@ -330,14 +356,14 @@ export default function Review() {
 
               {/* Pagination */}
               {pagination.totalPages > 1 && (
-                <div className={styles.paginationContainer}>
+                <div className={styles.paginationContainer} style={{ direction: 'ltr' }}>
                   {/* Previous Button */}
                   <button
                     onClick={handlePrevPage}
                     disabled={!pagination.hasPreviousPage}
                     className={styles.paginationNavButton}
                   >
-                    « Previous
+                    « {t('previous')}
                   </button>
 
                   {/* Page Numbers */}
@@ -365,7 +391,7 @@ export default function Review() {
                     disabled={!pagination.hasNextPage}
                     className={styles.paginationNavButton}
                   >
-                    Next »
+                    {t('next')} »
                   </button>
                 </div>
               )}

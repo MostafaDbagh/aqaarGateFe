@@ -8,6 +8,7 @@ export default function DropdownSelect({
   defaultOption,
   selectedValue,
   addtionalParentClass = "",
+  translateOption = null, // Optional translation function: (option) => translatedText
 }) {
   const selectRef = useRef();
   const optionsRef = useRef();
@@ -69,11 +70,21 @@ export default function DropdownSelect({
     };
   }, []);
 
+  // Helper function to get translated or original option
+  const getDisplayText = (option) => {
+    if (translateOption && typeof translateOption === 'function') {
+      return translateOption(option) || option;
+    }
+    return option;
+  };
+
+  const currentDisplayValue = selectedValue || selected || defaultOption || options[0];
+
   return (
     <>
       <div className={`nice-select ${addtionalParentClass}`} ref={selectRef}>
         <span className="current">
-          {selectedValue || selected || defaultOption || options[0]}
+          {getDisplayText(currentDisplayValue)}
         </span>
         <ul className="list" ref={optionsRef}>
           {options.map((elm, i) => (
@@ -91,7 +102,7 @@ export default function DropdownSelect({
                   : ""
               }  text text-1`}
             >
-              {elm}
+              {getDisplayText(elm)}
             </li>
           ))}
         </ul>

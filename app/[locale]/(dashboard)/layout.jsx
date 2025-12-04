@@ -1,12 +1,14 @@
+"use client";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header1 from "@/components/headers/Header1";
 import React from "react";
 
-export const metadata = {
-  title: "Dashboard || AqaarGate - Real Estate React Nextjs Template",
-  description: "AqaarGate - Real Estate React Nextjs Template",
-};
-export default function page({ children }) {
+// Metadata cannot be exported from client components
+// export const metadata = {
+//   title: "Dashboard || AqaarGate - Real Estate React Nextjs Template",
+//   description: "AqaarGate - Real Estate React Nextjs Template",
+// };
+export default function DashboardLayout({ children }) {
   return (
     <>
       <div className="bg-dashboard">

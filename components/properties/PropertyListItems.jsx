@@ -7,7 +7,6 @@ import { translateKeywordsString } from "@/utils/translateKeywords";
 import FavoriteButton from "../common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
-import logger from "@/utlis/logger";
 
 export default function PropertyListItems({ listings = [] }) {
   const t = useTranslations();
@@ -23,13 +22,6 @@ export default function PropertyListItems({ listings = [] }) {
     );
   }
 
-  // Debug: Log the first property to see the data structure
-  if (listings.length > 0) {
-    logger.debug('PropertyListItems - First property data:', listings[0]);
-    logger.debug('PropertyListItems - Images:', listings[0].images);
-    logger.debug('PropertyListItems - ImageNames:', listings[0].imageNames);
-    logger.debug('PropertyListItems - All keys:', Object.keys(listings[0]));
-  }
 
   const handlePrevImage = (propertyId, totalImages) => {
     if (totalImages <= 1) return;
@@ -102,7 +94,6 @@ export default function PropertyListItems({ listings = [] }) {
   };
 
   const extractImageUrls = (property) => {
-    logger.debug('Getting image sources for property:', property.propertyTitle);
     const urls = [];
 
     const pushUrl = (value) => {
@@ -371,7 +362,6 @@ export default function PropertyListItems({ listings = [] }) {
                 width={600}
                 height={401}
                 onError={(e) => {
-                  logger.warn('Image failed to load:', e.target.src);
                   e.target.style.display = 'none';
                   if (e.target.nextSibling) {
                     e.target.nextSibling.style.display = 'flex';

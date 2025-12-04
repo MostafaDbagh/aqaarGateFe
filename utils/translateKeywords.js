@@ -118,8 +118,8 @@ export const translateKeywordWithT = (keyword, t) => {
   
   const trimmedKeyword = keyword.trim();
   
-  // Skip very short keywords (likely fragments)
-  if (trimmedKeyword.length < 2) {
+  // Skip very short keywords (likely fragments) - minimum 3 characters
+  if (trimmedKeyword.length < 3) {
     return trimmedKeyword;
   }
   
@@ -142,7 +142,10 @@ export const translateKeywordWithT = (keyword, t) => {
   ];
   
   // Try each format
+  // Note: t is already scoped to 'common' namespace (from useTranslations('common'))
+  // So we only need 'propertyKeywords.xxx', not 'common.propertyKeywords.xxx'
   for (const attempt of translationAttempts) {
+    // Try with propertyKeywords prefix (t is already scoped to 'common')
     const translationKey = `propertyKeywords.${attempt}`;
     
     try {

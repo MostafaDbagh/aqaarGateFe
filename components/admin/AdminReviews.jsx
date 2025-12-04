@@ -196,7 +196,7 @@ export default function AdminReviews() {
   // Get avatar
   const getAvatar = (review) => {
     if (review.userId?.avatar) return review.userId.avatar;
-    return '/images/avatar/avt-png13.png'; // Default avatar
+    return '/images/default-avatar.svg'; // Default avatar
   };
 
   // Get reviewer name

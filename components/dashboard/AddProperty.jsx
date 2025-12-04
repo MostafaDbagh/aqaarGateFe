@@ -12,8 +12,12 @@ import logger from "@/utlis/logger";
 import styles from "./AddProperty.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { sanitizeInput, validateFileUpload } from "@/utils/security";
+import { useTranslations } from 'next-intl';
+import { translateKeywordWithT } from '@/utils/translateKeywords';
 
 export default function AddProperty({ isAdminMode = false }) {
+  const t = useTranslations('agent.addProperty');
+  const tCommon = useTranslations('common');
   const router = useRouter();
   const { showSuccessModal, showLoginModal } = useGlobalModal();
   const [user, setUser] = useState(null);
@@ -607,17 +611,58 @@ export default function AddProperty({ isAdminMode = false }) {
 
   const amenityOptions = amenitiesList;
 
+  // Translation helper functions for dropdowns
+  const translatePropertyType = (type) => {
+    try {
+      return t(`propertyTypes.${type}`, { defaultValue: type });
+    } catch {
+      return type;
+    }
+  };
+
+  const translateStatus = (status) => {
+    try {
+      return t(`status.${status}`, { defaultValue: status });
+    } catch {
+      return status;
+    }
+  };
+
+  const translateRentType = (rentType) => {
+    try {
+      return t(`rentTypes.${rentType}`, { defaultValue: rentType });
+    } catch {
+      return rentType;
+    }
+  };
+
+  const translateProvince = (province) => {
+    try {
+      return t(`provinces.${province}`, { defaultValue: province });
+    } catch {
+      return province;
+    }
+  };
+
+  const translateAmenity = (amenity) => {
+    try {
+      return t(`amenities.${amenity}`, { defaultValue: amenity });
+    } catch {
+      return amenity;
+    }
+  };
+
   return (
     <div className="main-content w-100">
       <div className="main-content-inner">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">{t('showDashboard')}</span>
         </div>
 
         <form onSubmit={handleSubmit}>
           {/* Upload Media Section */}
           <div className="widget-box-2 mb-20">
-            <h3 className="title">Upload Media</h3>
+            <h3 className="title">{t('uploadMedia')}</h3>
             <div className="box-uploadfile text-center">
               <div className="uploadfile">
                 <label
@@ -638,7 +683,7 @@ export default function AddProperty({ isAdminMode = false }) {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  Select photos
+                  {t('selectPhotos')}
                   <input 
                     id="imageUpload"
                     type="file" 
@@ -649,8 +694,8 @@ export default function AddProperty({ isAdminMode = false }) {
                   />
                 </label>
                 <p className="file-name fw-5">
-                  or drag photos here <br />
-                  <span>(Up to 10 photos)</span>
+                  {t('orDragPhotos')} <br />
+                  <span>({t('upTo10Photos')})</span>
                 </p>
               </div>
             </div>
@@ -678,11 +723,11 @@ export default function AddProperty({ isAdminMode = false }) {
 
           {/* Information Section */}
           <div className="widget-box-2 mb-20">
-            <h5 className="title">Information</h5>
+            <h5 className="title">{t('information')}</h5>
             <div className="box-info-property">
               <fieldset className="box box-fieldset">
                 <label htmlFor="propertyKeyword">
-                  Property Keyword:<span>*</span>
+                  {t('propertyKeyword')}:<span>*</span>
                 </label>
                 
                 {/* Display input showing selected tags (read-only) */}
@@ -690,7 +735,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   type="text"
                   name="propertyKeyword"
                   className="form-control"
-                  placeholder="Select tags from below..."
+                  placeholder={t('selectTagsPlaceholder')}
                   value={formData.propertyKeyword}
                   readOnly
                   style={{ cursor: 'not-allowed', backgroundColor: '#f8f9fa' }}
@@ -702,9 +747,10 @@ export default function AddProperty({ isAdminMode = false }) {
                     {formData.propertyKeyword.split(',').map((keyword, index) => {
                       const trimmedKeyword = keyword.trim();
                       if (!trimmedKeyword) return null;
+                      const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                       return (
                         <span key={index} className={styles.selectedTag}>
-                          {trimmedKeyword}
+                          {translatedKeyword}
                           <span 
                             className={styles.removeTagIcon}
                             onClick={() => {
@@ -728,27 +774,30 @@ export default function AddProperty({ isAdminMode = false }) {
                 
                 {/* Keyword Tags Suggestions - Only allow selection from these tags */}
                 <div className={styles.keywordTagsContainer}>
-                  <span className={styles.keywordTagsLabel}>Select tags (click to add/remove):</span>
-                  {keywordTags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className={`${styles.keywordTag} ${isTagSelected(tag) ? styles.keywordTagSelected : ''}`}
-                      onClick={() => handleTagClick(tag)}
-                      title={`Click to ${isTagSelected(tag) ? 'remove' : 'add'} "${tag}"`}
-                    >
-                      {tag}
-                      <span className={styles.keywordTagIcon}>{isTagSelected(tag) ? '✓' : '+'}</span>
-                    </span>
-                  ))}
+                  <span className={styles.keywordTagsLabel}>{t('selectTagsLabel')}</span>
+                  {keywordTags.map((tag, index) => {
+                    const translatedTag = translateKeywordWithT(tag, tCommon);
+                    return (
+                      <span
+                        key={index}
+                        className={`${styles.keywordTag} ${isTagSelected(tag) ? styles.keywordTagSelected : ''}`}
+                        onClick={() => handleTagClick(tag)}
+                        title={`Click to ${isTagSelected(tag) ? 'remove' : 'add'} "${translatedTag}"`}
+                      >
+                        {translatedTag}
+                        <span className={styles.keywordTagIcon}>{isTagSelected(tag) ? '✓' : '+'}</span>
+                      </span>
+                    );
+                  })}
                 </div>
               </fieldset>
               
               <fieldset className="box box-fieldset">
-                <label htmlFor="propertyDesc">Description:</label>
+                <label htmlFor="propertyDesc">{t('description')}:</label>
                 <textarea
                   name="propertyDesc"
                   className="textarea"
-                  placeholder="Describe your property"
+                  placeholder={t('describeProperty')}
                   value={formData.propertyDesc}
                   onChange={handleInputChange}
                 />
@@ -757,13 +806,13 @@ export default function AddProperty({ isAdminMode = false }) {
               <div className="box grid-layout-3 gap-30">
                 <fieldset className="box-fieldset">
                   <label htmlFor="address">
-                    Full Address:<span>*</span>
+                    {t('fullAddress')}:<span>*</span>
                   </label>
                   <input
                     type="text"
                     name="address"
                     className="form-control"
-                    placeholder="Enter property full address"
+                    placeholder={t('enterFullAddress')}
                     value={formData.address}
                     onChange={handleInputChange}
                   />
@@ -772,7 +821,7 @@ export default function AddProperty({ isAdminMode = false }) {
                
                 <fieldset className="box-fieldset">
                   <label htmlFor="country">
-                    Country:<span>*</span>
+                    {t('country')}:<span>*</span>
                   </label>
                   <input
                     type="text"
@@ -788,7 +837,7 @@ export default function AddProperty({ isAdminMode = false }) {
               <div className="box grid-layout-2 gap-30">
                 <fieldset className="box-fieldset">
                   <label htmlFor="state">
-                    Province/State:<span>*</span>
+                    {t('provinceState')}:<span>*</span>
                   </label>
                   <DropdownSelect
                     name="state"
@@ -796,19 +845,20 @@ export default function AddProperty({ isAdminMode = false }) {
                     selectedValue={formData.state}
                     onChange={(value) => handleDropdownChange('state', value)}
                     addtionalParentClass=""
+                    translateOption={translateProvince}
                   />
                   {errors.state && <span className="text-danger">{errors.state}</span>}
                 </fieldset>
                 
                 <fieldset className="box-fieldset">
                   <label htmlFor="neighborhood">
-                    Neighborhood:<span>*</span>
+                    {t('neighborhood')}:<span>*</span>
                   </label>
                   <input
                     type="text"
                     name="neighborhood"
                     className="form-control"
-                    placeholder="Enter neighborhood"
+                    placeholder={t('enterNeighborhood')}
                     value={formData.neighborhood}
                     onChange={handleInputChange}
                   />
@@ -823,11 +873,11 @@ export default function AddProperty({ isAdminMode = false }) {
 
           {/* Additional Information Section */}
           <div className="widget-box-2 mb-20">
-            <h3 className="title">Additional Information</h3>
+            <h3 className="title">{t('additionalInformation')}</h3>
             <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="propertyType">
-                  Property Type:<span>*</span>
+                  {t('propertyType')}:<span>*</span>
                 </label>
                 <DropdownSelect
                   name="propertyType"
@@ -835,13 +885,14 @@ export default function AddProperty({ isAdminMode = false }) {
                   selectedValue={formData.propertyType}
                   onChange={(value) => handleDropdownChange('propertyType', value)}
                   addtionalParentClass=""
+                  translateOption={translatePropertyType}
                 />
                 {errors.propertyType && <span className="text-danger">{errors.propertyType}</span>}
               </fieldset>
               
               <fieldset className="box-fieldset">
                 <label htmlFor="status">
-                  Property Status:<span>*</span>
+                  {t('propertyStatus')}:<span>*</span>
                 </label>
                 <DropdownSelect
                   name="status"
@@ -849,6 +900,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   selectedValue={formData.status}
                   onChange={(value) => handleDropdownChange('status', value)}
                   addtionalParentClass=""
+                  translateOption={translateStatus}
                 />
                 {errors.status && <span className="text-danger">{errors.status}</span>}
               </fieldset>
@@ -856,7 +908,7 @@ export default function AddProperty({ isAdminMode = false }) {
               {formData.status === "rent" && (
                 <fieldset className="box-fieldset">
                   <label htmlFor="rentType">
-                    Rent Period charge:<span>*</span>
+                    {t('rentPeriodCharge')}:<span>*</span>
                   </label>
                   <DropdownSelect
                     name="rentType"
@@ -873,6 +925,7 @@ export default function AddProperty({ isAdminMode = false }) {
                     selectedValue={formData.rentType}
                     onChange={(value) => handleDropdownChange('rentType', value)}
                     addtionalParentClass=""
+                    translateOption={translateRentType}
                   />
                   {errors.rentType && <span className="text-danger">{errors.rentType}</span>}
                 </fieldset>
@@ -880,7 +933,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box-fieldset">
                 <label htmlFor="propertyId">
-                  Property ID:<span>*</span>
+                  {t('propertyId')}:<span>*</span>
                 </label>
                 <input
                   type="text"
@@ -896,7 +949,7 @@ export default function AddProperty({ isAdminMode = false }) {
             <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="size">
-                  Size (SqFt):<span>*</span>
+                  {t('sizeSqFt')}:<span>*</span>
                 </label>
                 <input
                   type="number"
@@ -911,7 +964,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box-fieldset">
                 <label htmlFor="yearBuilt">
-                  Year Built:
+                  {t('yearBuilt')}:
                 </label>
                 <input
                   type="number"
@@ -921,7 +974,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   onChange={handleInputChange}
                   min="1900"
                   max={new Date().getFullYear()}
-                  placeholder="e.g., 2020"
+                  placeholder={t('yearBuiltPlaceholder')}
                 />
                 {errors.yearBuilt && (
                   <span className="text-danger" style={{ display: 'block', marginTop: '5px', fontSize: '14px', fontWeight: '500' }}>
@@ -932,7 +985,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box-fieldset">
                 <label htmlFor="floor">
-                  Floor:
+                  {t('floor')}:
                 </label>
                 <input
                   type="number"
@@ -941,7 +994,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   value={formData.floor}
                   onChange={handleInputChange}
                   min="0"
-                  placeholder="e.g., 3"
+                  placeholder={t('floorPlaceholder')}
                 />
               </fieldset>
             </div>
@@ -949,7 +1002,7 @@ export default function AddProperty({ isAdminMode = false }) {
             <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="bedrooms">
-                  Bedrooms:<span>*</span>
+                  {t('bedrooms')}:<span>*</span>
                 </label>
                 <input
                   type="number"
@@ -964,7 +1017,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box-fieldset">
                 <label htmlFor="bathrooms">
-                  Bathrooms:<span>*</span>
+                  {t('bathrooms')}:<span>*</span>
                 </label>
                 <input
                   type="number"
@@ -987,7 +1040,7 @@ export default function AddProperty({ isAdminMode = false }) {
                     checked={formData.furnished}
                     onChange={handleInputChange}
                   />
-                  <span>Furnished</span>
+                  <span>{t('furnished')}</span>
                 </label>
               </fieldset>
               
@@ -999,7 +1052,7 @@ export default function AddProperty({ isAdminMode = false }) {
                     checked={formData.garages}
                     onChange={handleInputChange}
                   />
-                  <span>Has Garages</span>
+                  <span>{t('hasGarages')}</span>
                 </label>
               </fieldset>
             </div>
@@ -1014,7 +1067,7 @@ export default function AddProperty({ isAdminMode = false }) {
               }}>
                 <fieldset className="box-fieldset" style={{ gridColumn: 'span 4' }}>
                   <label htmlFor="garageSize">
-                    Garage Size (SqFt):
+                    {t('garageSizeSqFt')}:
                   </label>
                   <input
                     type="number"
@@ -1024,7 +1077,7 @@ export default function AddProperty({ isAdminMode = false }) {
                     value={formData.garageSize}
                     onChange={handleInputChange}
                     min="0"
-                    placeholder="Enter garage size in square feet"
+                    placeholder={t('enterGarageSize')}
                   />
                 </fieldset>
               </div>
@@ -1032,7 +1085,7 @@ export default function AddProperty({ isAdminMode = false }) {
             
             <fieldset className="box-fieldset" style={{ gridColumn: '1 / -1' }}>
               <label htmlFor="notes">
-                Notes:
+                {t('notes')}:
               </label>
               <textarea
                 style={{ fontSize: '18px', lineHeight: '22.4px', fontWeight: '500',color: '#374151' }}
@@ -1040,25 +1093,25 @@ export default function AddProperty({ isAdminMode = false }) {
                 id="notes"
                 className="form-control"
                 rows="4"
-                placeholder="Any additional notes about the property..."
+                placeholder={t('notesPlaceholder')}
                 value={formData.notes}
                 onChange={handleInputChange}
               />
             </fieldset>
           </div>
           <div className="widget-box-2 mb-20">
-            <h3 className="title">Price</h3>
+            <h3 className="title">{t('price')}</h3>
             <div className="box-price-property">
               <div className="box grid-2 gap-30">
                 <fieldset className="box-fieldset mb-30">
                   <label htmlFor="propertyPrice">
-                    Price:<span>*</span>
+                    {t('price')}:<span>*</span>
                   </label>
                   <input
                     type="number"
                     name="propertyPrice"
                     className="form-control"
-                    placeholder="Example: 250000"
+                    placeholder={t('pricePlaceholder')}
                     value={formData.propertyPrice}
                     onChange={handleInputChange}
                     min="0"
@@ -1068,7 +1121,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 
                 <fieldset className="box-fieldset mb-30">
                   <label htmlFor="currency">
-                    Currency:<span>*</span>
+                    {t('currency')}:<span>*</span>
                   </label>
                   <input
                     type="text"
@@ -1152,12 +1205,12 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box box-fieldset">
                 <label htmlFor="notes_ar">
-                  Notes (ملاحظات):<span style={{ color: '#dc3545' }}>*</span>
+                  Notes (الملاحظات):<span style={{ color: '#dc3545' }}>*</span>
                 </label>
                 <textarea
                   name="notes_ar"
                   className={`textarea ${errors.notes_ar ? 'is-invalid' : ''}`}
-                  placeholder="أي ملاحظات إضافية بالعربية..."
+                  placeholder="أدخل أي ملاحظات إضافية بالعربية..."
                   value={formData.notes_ar}
                   onChange={handleInputChange}
                   dir="rtl"
@@ -1176,14 +1229,14 @@ export default function AddProperty({ isAdminMode = false }) {
           {/* Amenities Section */}
           <div className="widget-box-2 mb-20">
             <h5 className="title">
-              Amenities<span>*</span>
+              {t('amenitiesLabel')}<span>*</span>
             </h5>
             <div className="box-amenities-property">
               <div className="grid grid-cols-2 gap-4">
                 {amenityOptions.map((amenity) => (
                   <fieldset key={amenity} className="checkbox-item style-1">
                     <label>
-                      <span className="text-4">{amenity}</span>
+                      <span className="text-4">{translateAmenity(amenity)}</span>
                       <input
                         type="checkbox"
                         checked={formData.amenities.includes(amenity)}
@@ -1211,13 +1264,13 @@ export default function AddProperty({ isAdminMode = false }) {
                 opacity: 0.6, 
                 cursor: 'not-allowed' 
               } : {})}
-              title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : (!isArabicSectionComplete() ? "Please fill all required Arabic fields" : 'Add property')}
+              title={isAgentBlocked ? t('accountBlocked') : (!isArabicSectionComplete() ? t('fillArabicFields') : t('addProperty'))}
               onClick={(e) => {
                 // Directly call handleSubmit to ensure API call happens
                 handleSubmit(e);
               }}
             >
-              {isSubmitting ? "Creating Property..." : "Add Property"}
+              {isSubmitting ? t('creatingProperty') : t('addProperty')}
             </button>
             {submitAttempted && !isArabicSectionComplete() && (
               <p style={{ 
@@ -1227,7 +1280,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 fontWeight: '500',
                 textAlign: 'center'
               }}>
-                Please fill all required Arabic fields to submit
+                {t('fillArabicFields')}
               </p>
             )}
             
@@ -1238,7 +1291,7 @@ export default function AddProperty({ isAdminMode = false }) {
               onClick={() => {
                 // Check if agent is blocked
                 if (isAgentBlocked) {
-                  setToast({ type: "error", message: "Your account is blocked. This action is disabled." });
+                  setToast({ type: "error", message: t('accountBlocked') });
                   return;
                 }
                 // Save as draft functionality
@@ -1251,9 +1304,9 @@ export default function AddProperty({ isAdminMode = false }) {
                 borderColor: '#ccc',
                 color: '#ccc'
               } : {}}
-              title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : 'Save and preview property'}
+              title={isAgentBlocked ? t('accountBlocked') : t('saveAndPreview')}
             >
-              Save & Preview
+              {t('saveAndPreview')}
             </button>
           </div>
         </form>

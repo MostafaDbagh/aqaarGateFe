@@ -1,10 +1,16 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { listingAPI } from '@/apis/listing';
 import DropdownSelect from '../common/DropdownSelect';
 import { amenitiesList } from '@/constants/amenities';
+import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordWithT } from '@/utils/translateKeywords';
 import styles from './EditPropertyModal.module.css'
 
 const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
+  const t = useTranslations('agent.addProperty');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [formData, setFormData] = useState({
     propertyKeyword: '',
     address: '',
@@ -196,7 +202,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       // Parse price exactly as entered - no deduction allowed
       const exactPrice = parseFloat(formData.propertyPrice);
       if (isNaN(exactPrice) || exactPrice <= 0) {
-        setError('Valid price is required');
+        setError(t('propertyPriceRequired'));
         setLoading(false);
         return;
       }
@@ -231,7 +237,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       }
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update property');
+      setError(err.response?.data?.message || t('failedToUpdate'));
     } finally {
       setLoading(false);
     }
@@ -262,9 +268,9 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         className={styles.modalContent}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles.modalHeader}>
+        <div className={styles.modalHeader} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
           <h2 className={styles.modalTitle}>
-            Edit Property
+            {t('editProperty')}
           </h2>
           <button 
             onClick={handleCancel}
@@ -274,7 +280,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
           </button>
         </div>
 
-        <div className={styles.modalBody}>
+        <div className={styles.modalBody} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
           <form onSubmit={handleSubmit} className={styles.formContainer}>
             {error && (
               <div className={styles.errorAlert}>
@@ -282,11 +288,11 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
               </div>
             )}
 
-            <div className={styles.gridGap28}>
+            <div className={styles.gridGap28} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
             {/* Property Title */}
             <div>
-              <label className={styles.formLabel}>
-                Property Title *
+              <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                {t('propertyTitle')} *
               </label>
               
               {/* Display input showing selected tags (read-only) */}
@@ -297,21 +303,22 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 readOnly
                 required
                 className={styles.input}
-                placeholder="Select tags from below..."
-                style={{ cursor: 'not-allowed', backgroundColor: '#f8f9fa' }}
+                placeholder={t('selectTagsPlaceholder')}
+                style={{ cursor: 'not-allowed', backgroundColor: '#f8f9fa', direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
               
               {/* Selected Tags Display */}
               {formData.propertyKeyword && (
-                <div className={styles.selectedTagsContainer} style={{ marginTop: '12px' }}>
+                <div className={styles.selectedTagsContainer} style={{ marginTop: '12px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
                   {formData.propertyKeyword.split(',').map((keyword, index) => {
                     const trimmedKeyword = keyword.trim();
                     if (!trimmedKeyword) return null;
+                    const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                     return (
                       <span key={index} className={styles.selectedTag}>
-                        {trimmedKeyword}
+                        {translatedKeyword}
                         <span 
                           className={styles.removeTagIcon}
                           onClick={() => {
@@ -332,26 +339,31 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
               )}
               
               {/* Keyword Tags Suggestions - Only allow selection from these tags */}
-              <div className={styles.keywordTagsContainer}>
-                <span className={styles.keywordTagsLabel}>Select tags (click to add/remove):</span>
-                {keywordTags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className={`${styles.keywordTag} ${isTagSelected(tag) ? styles.keywordTagSelected : ''}`}
-                    onClick={() => handleTagClick(tag)}
-                    title={`Click to ${isTagSelected(tag) ? 'remove' : 'add'} "${tag}"`}
-                  >
-                    {tag}
-                    <span className={styles.keywordTagIcon}>{isTagSelected(tag) ? '✓' : '+'}</span>
-                  </span>
-                ))}
+              <div className={styles.keywordTagsContainer} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                <span className={styles.keywordTagsLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('selectTagsLabel')}</span>
+                {keywordTags.map((tag, index) => {
+                  const translatedTag = translateKeywordWithT(tag, tCommon);
+                  return (
+                    <span
+                      key={index}
+                      className={`${styles.keywordTag} ${isTagSelected(tag) ? styles.keywordTagSelected : ''}`}
+                      onClick={() => handleTagClick(tag)}
+                      title={locale === 'ar' 
+                        ? `${isTagSelected(tag) ? 'انقر لإزالة' : 'انقر للإضافة'} "${translatedTag}"`
+                        : `Click to ${isTagSelected(tag) ? 'remove' : 'add'} "${translatedTag}"`}
+                    >
+                      {translatedTag}
+                      <span className={styles.keywordTagIcon}>{isTagSelected(tag) ? '✓' : '+'}</span>
+                    </span>
+                  );
+                })}
               </div>
             </div>
 
             {/* Address */}
             <div>
-              <label className={styles.formLabel}>
-                Address *
+              <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                {t('fullAddress')} *
               </label>
               <input
                 type="text"
@@ -360,6 +372,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onChange={handleInputChange}
                 required
                 className={styles.input}
+                style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
@@ -367,8 +380,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             {/* Price and Status Row */}
             <div className={styles.gridTwoCols}>
               <div>
-                <label className={styles.formLabel}>
-                  Price *
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('price')} *
                 </label>
                 <input
                   type="number"
@@ -379,34 +392,36 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   min="0"
                   step="0.01"
                   className={styles.input}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
               </div>
 
               <div>
-                <label className={styles.formLabel}>
-                  Property Type
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('propertyStatus')}
                 </label>
                 <select
                   name="status"
                   value={formData.status || 'sale'}
                   onChange={handleInputChange}
                   className={styles.input}
+                  style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 >
-                  <option value="sale">For Sale</option>
-                  <option value="rent">For Rent</option>
+                  <option value="sale">{t('status.sale')}</option>
+                  <option value="rent">{t('status.rent')}</option>
                 </select>
               </div>
             </div>
 
             {/* Rent Type - Only show when status is "rent" */}
             {(formData.status === 'rent' || formData.status?.toLowerCase() === 'rent') && (
-              <div style={{ marginTop: '20px' }}>
-                <label className={styles.formLabel}>
-                  Rent Period charge: <span style={{ color: 'red' }}>*</span>
+              <div style={{ marginTop: '20px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('rentPeriodCharge')}: <span style={{ color: 'red' }}>*</span>
                 </label>
                 <DropdownSelect
                   name="rentType"
@@ -421,6 +436,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   selectedValue={formData.rentType || 'monthly'}
                   onChange={(value) => handleDropdownChange('rentType', value)}
                   addtionalParentClass=""
+                  translateOption={(option) => t(`rentTypes.${option}`) || option}
                 />
               </div>
             )}
@@ -428,8 +444,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             {/* Property Details Row */}
             <div className={styles.gridThreeCols}>
               <div>
-                <label className={styles.formLabel}>
-                  Bedrooms
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('bedrooms')}
                 </label>
                 <input
                   type="number"
@@ -438,14 +454,15 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   onChange={handleInputChange}
                   min="0"
                   className={styles.input}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
               </div>
 
               <div>
-                <label className={styles.formLabel}>
-                  Bathrooms
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('bathrooms')}
                 </label>
                 <input
                   type="number"
@@ -455,14 +472,15 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   min="0"
                   step="0.5"
                   className={styles.input}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
               </div>
 
               <div>
-                <label className={styles.formLabel}>
-                  Square Footage
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('squareFootage')}
                 </label>
                 <input
                   type="number"
@@ -471,6 +489,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   onChange={handleInputChange}
                   min="0"
                   className={styles.input}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
@@ -480,8 +499,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             {/* Additional Details Row */}
             <div className={styles.gridTwoCols}>
               <div>
-                <label className={styles.formLabel}>
-                  Year Built
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('yearBuilt')}
                 </label>
                 <input
                   type="number"
@@ -491,14 +510,15 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   min="1800"
                   max={new Date().getFullYear()}
                   className={styles.input}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
               </div>
 
               <div>
-                <label className={styles.formLabel}>
-                  Floor
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('floor')}
                 </label>
                 <input
                   type="number"
@@ -506,8 +526,9 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   value={formData.floor}
                   onChange={handleInputChange}
                   min="0"
-                  placeholder="e.g., 3"
+                  placeholder={t('floorPlaceholder')}
                   className={styles.input}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}
                   onBlur={handleInputBlur}
                 />
@@ -516,8 +537,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
 
             {/* Description */}
             <div>
-              <label className={styles.formLabel}>
-                Description
+              <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                {t('description')}
               </label>
               <textarea
                 name="description"
@@ -525,6 +546,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onChange={handleInputChange}
                 rows="4"
                 className={`${styles.input} ${styles.textarea}`}
+                style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
+                placeholder={t('describeProperty')}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
@@ -616,9 +639,9 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             </div>
 
             {/* Amenities Section */}
-            <div>
-              <label className={styles.formLabel}>
-                Amenities <span style={{ color: 'red' }}>*</span>
+            <div style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+              <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                {t('amenitiesLabel')} <span style={{ color: 'red' }}>*</span>
               </label>
               <div className={styles.amenitiesWrap}>
                 <div className={styles.amenitiesGrid}>
@@ -633,8 +656,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                         onChange={() => handleAmenityToggle(amenity)}
                         className={styles.checkbox}
                       />
-                      <span className={formData.amenities.includes(amenity) ? styles.amenitySelected : styles.amenityLabel}>
-                        {amenity}
+                      <span className={formData.amenities.includes(amenity) ? styles.amenitySelected : styles.amenityLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                        {t(`amenities.${amenity}`) || amenity}
                       </span>
                     </label>
                   ))}
@@ -644,10 +667,10 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             </div>
 
             {/* Footer Buttons */}
-            <div className={styles.footerButtons}>
-              <button type="button" onClick={handleCancel} className={styles.btnSecondary}>Cancel</button>
-              <button type="submit" disabled={loading} className={styles.btnPrimary}>
-                {loading ? 'Saving...' : 'Save Changes'}
+            <div className={styles.footerButtons} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+              <button type="button" onClick={handleCancel} className={styles.btnSecondary} style={{ order: locale === 'ar' ? 2 : 1 }}>{tCommon('cancel')}</button>
+              <button type="submit" disabled={loading} className={styles.btnPrimary} style={{ order: locale === 'ar' ? 1 : 2 }}>
+                {loading ? t('saving') : t('saveChanges')}
               </button>
             </div>
           </form>

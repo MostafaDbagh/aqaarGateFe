@@ -11,8 +11,13 @@ import DashboardFooter from "../common/DashboardFooter";
 import { useFavorites } from "@/components/contexts/FavoritesContext";
 import logger from "@/utlis/logger";
 import styles from "./Favorites.module.css";
+import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordWithT } from '@/utils/translateKeywords';
 
 export default function Favorites() {
+  const t = useTranslations('agent.favorites');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [user, setUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -21,7 +26,8 @@ export default function Favorites() {
     isOpen: false,
     title: '',
     message: '',
-    confirmText: 'Confirm',
+    confirmText: t('confirm'),
+    cancelText: t('cancel'),
     confirmColor: '#dc3545',
     onConfirm: null,
     loading: false
@@ -93,13 +99,13 @@ export default function Favorites() {
   // Get property status display
   const getStatusDisplay = (property) => {
     if (!property) return 'N/A';
-    if (property.isSold) return 'Sold';
-    if (property.approvalStatus === 'closed') return 'Closed';
-    if (property.approvalStatus === 'pending') return 'Pending';
+    if (property.isSold) return t('sold');
+    if (property.approvalStatus === 'closed') return t('closed');
+    if (property.approvalStatus === 'pending') return t('pending');
     if (property.approvalStatus === 'approved') {
-      return property.status === 'rent' ? 'For Rent' : 'For Sale';
+      return property.status === 'rent' ? t('forRent') : t('forSale');
     }
-    return property.status === 'rent' ? 'For Rent' : 'For Sale';
+    return property.status === 'rent' ? t('forRent') : t('forSale');
   };
 
   // Pagination handlers
@@ -143,11 +149,13 @@ export default function Favorites() {
 
   // Handle delete favorite
   const handleDeleteFavorite = (favorite) => {
+    const propertyName = favorite.propertyId?.propertyKeyword || t('thisProperty');
     setConfirmationModal({
       isOpen: true,
-      title: 'Remove from Favorites',
-      message: `Are you sure you want to remove "${favorite.propertyId?.propertyKeyword || 'this property'}" from your favorites?`,
-      confirmText: 'Remove',
+      title: t('removeFromFavorites'),
+      message: t('removeFromFavoritesMessage', { property: propertyName }),
+      confirmText: t('remove'),
+      cancelText: t('cancel'),
       confirmColor: '#dc3545',
       onConfirm: async () => {
         setConfirmationModal(prev => ({ ...prev, loading: true }));
@@ -155,12 +163,12 @@ export default function Favorites() {
           await favoriteAPI.removeFavorite(favorite.propertyId._id);
           refetch(); // Refresh the favorites list
           refreshFavoritesCount(); // Update the global count
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
-          showToast('Property removed from favorites successfully!', 'success');
+          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false });
+          showToast(t('removedSuccessfully'), 'success');
         } catch (error) {
           logger.error('Error removing favorite:', error);
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
-          const errorMessage = error?.message || error?.error || 'Failed to remove favorite. Please try again.';
+          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false });
+          const errorMessage = error?.message || error?.error || t('failedToRemove');
           showToast(errorMessage, 'error');
         }
       },
@@ -170,16 +178,16 @@ export default function Favorites() {
 
   return (
     <div className="main-content w-100">
-      <div className="main-content-inner">
+      <div className="main-content-inner" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">{t('showDashboard')}</span>
         </div>
         <div className="widget-box-2 wd-listing">
-          <h3 className="title">
-            My Favorites
+          <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+            {t('title')}
             {favoritesCount > 0 && (
               <span className="favorites-title-count">
-                ({favoritesCount} total {favoritesCount === 1 ? 'property' : 'properties'})
+                ({favoritesCount} {t('total')} {favoritesCount === 1 ? t('property') : t('properties')})
               </span>
             )}
           </h3>
@@ -188,22 +196,22 @@ export default function Favorites() {
             <div style={{ padding: '60px 20px', textAlign: 'center' }}>
               <LocationLoader 
                 size="large" 
-                message="Loading your favorite properties..."
+                message={t('loadingFavoriteProperties')}
               />
             </div>
           )}
 
           {isError && (
-            <div className="favorites-error">
-              <p>Failed to load favorites. Please try again later.</p>
+            <div className="favorites-error" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+              <p>{t('failedToLoad')}</p>
             </div>
           )}
 
           {!isLoading && !isError && favorites.length === 0 && (
-            <div className="favorites-empty">
-              <p>You haven't added any properties to your favorites yet.</p>
+            <div className="favorites-empty" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+              <p>{t('noFavoritesYet')}</p>
               <Link href="/property-list" className="favorites-browse-link">
-                Browse Properties
+                {t('browseProperties')}
               </Link>
             </div>
           )}
@@ -211,12 +219,12 @@ export default function Favorites() {
           {!isLoading && !isError && favorites.length > 0 && (
             <div className="wrap-table">
               <div className="table-responsive">
-                <table>
+                <table style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
                   <thead>
                     <tr>
-                      <th>Listing</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('listing')}</th>
+                      <th style={{ textAlign: 'center' }}>{t('status')}</th>
+                      <th style={{ textAlign: 'center' }}>{t('action')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -236,21 +244,30 @@ export default function Favorites() {
                                   height={405}
                                 />
                               </div>
-                              <div className="content">
-                                <div className="title">
+                              <div className="content" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                <div className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                   <Link
                                     href={`/property-detail/${property._id}`}
                                     className="link"
                                   >
-                                    {property.propertyType || 'Property'}
+                                    {property.propertyType || tCommon('property')}
                                   </Link>
                                 </div>
                                 {/* Property Keyword Tags */}
                                 {property.propertyKeyword && (
-                                  <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                  <div style={{ 
+                                    marginTop: '16px', 
+                                    marginBottom: '16px', 
+                                    display: 'flex', 
+                                    flexWrap: 'wrap', 
+                                    gap: '6px',
+                                    direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                    justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end'
+                                  }}>
                                     {property.propertyKeyword.split(',').map((keyword, index) => {
                                       const trimmedKeyword = keyword.trim();
                                       if (!trimmedKeyword) return null;
+                                      const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                                       return (
                                         <span 
                                           key={index} 
@@ -263,19 +280,21 @@ export default function Favorites() {
                                             borderRadius: '20px',
                                             fontSize: '12px',
                                             color: '#333',
-                                            fontWeight: '500'
+                                            fontWeight: '500',
+                                            direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                            textAlign: 'center'
                                           }}
                                         >
-                                          {trimmedKeyword}
+                                          {translatedKeyword}
                                         </span>
                                       );
                                     })}
                                   </div>
                                 )}
-                                <div className="text-date">
-                                  Added: {formatDate(favorite.createdAt || favorite.addedAt)}
+                                <div className="text-date" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                  {t('added')}: {formatDate(favorite.createdAt || favorite.addedAt)}
                                 </div>
-                                <div className="text-btn text-color-primary">
+                                <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                   ${property.propertyPrice?.toLocaleString() || 'N/A'}
                                 </div>
                               </div>
@@ -312,7 +331,7 @@ export default function Favorites() {
                                       strokeLinejoin="round"
                                     />
                                   </svg>
-                                  Delete
+                                  {t('delete')}
                                 </button>
                               </li>
                             </ul>
@@ -326,14 +345,14 @@ export default function Favorites() {
 
               {/* Pagination */}
               {pagination.totalPages > 1 && (
-                <div className="favorites-pagination">
+                <div className="favorites-pagination" style={{ direction: 'ltr', textAlign: 'left' }}>
                   {/* Previous Button */}
                   <button
                     onClick={handlePrevPage}
                     disabled={!pagination.hasPreviousPage}
                     className="favorites-pagination-button"
                   >
-                    « Previous
+                    « {t('previous')}
                   </button>
 
                   {/* Page Numbers */}
@@ -361,7 +380,7 @@ export default function Favorites() {
                     disabled={!pagination.hasNextPage}
                     className="favorites-pagination-button"
                   >
-                    Next »
+                    {t('next')} »
                   </button>
                 </div>
               )}
@@ -377,11 +396,12 @@ export default function Favorites() {
       {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={confirmationModal.isOpen}
-        onClose={() => setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false })}
+        onClose={() => setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false })}
         onConfirm={confirmationModal.onConfirm}
         title={confirmationModal.title}
         message={confirmationModal.message}
         confirmText={confirmationModal.confirmText}
+        cancelText={confirmationModal.cancelText}
         confirmColor={confirmationModal.confirmColor}
         loading={confirmationModal.loading}
       />

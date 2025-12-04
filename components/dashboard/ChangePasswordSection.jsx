@@ -4,8 +4,10 @@ import { userAPI } from "@/apis";
 import logger from "@/utlis/logger";
 import PasswordInput from "../common/PasswordInput";
 import styles from "./ChangePasswordSection.module.css";
+import { useTranslations } from 'next-intl';
 
 export default function ChangePasswordSection({ userId, onPasswordChanged }) {
+  const t = useTranslations('agent.profile.changePassword');
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -33,12 +35,12 @@ export default function ChangePasswordSection({ userId, onPasswordChanged }) {
 
     // Validation
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError("New password and confirm password do not match");
+      setError(t('passwordsDoNotMatch'));
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      setError("New password must be at least 6 characters long");
+      setError(t('passwordMinLength'));
       return;
     }
 
@@ -60,11 +62,11 @@ export default function ChangePasswordSection({ userId, onPasswordChanged }) {
 
       setSuccess(true);
       if (onPasswordChanged) {
-        onPasswordChanged("Password changed successfully!");
+        onPasswordChanged(t('passwordChangedSuccessfully'));
       }
     } catch (error) {
       logger.error("Error changing password:", error);
-      const errorMessage = error?.response?.data?.message || "Failed to change password";
+      const errorMessage = error?.response?.data?.message || t('failedToChangePassword');
       setError(errorMessage);
     } finally {
       setSaving(false);
@@ -73,35 +75,35 @@ export default function ChangePasswordSection({ userId, onPasswordChanged }) {
 
   return (
     <div className={styles.changePasswordSection}>
-      <h5 className={styles.title}>Change password</h5>
+      <h5 className={styles.title}>{t('title')}</h5>
       <form onSubmit={handleSubmitPassword} className={styles.formContainer}>
         <div className="box grid-layout-3 gap-30">
           <PasswordInput
             id="oldPassword"
-            label="Old Password"
+            label={t('oldPassword')}
             value={passwordData.oldPassword}
             onChange={handlePasswordChange}
-            placeholder="Old Password"
+            placeholder={t('oldPasswordPlaceholder')}
             autoComplete="current-password"
             required
             error={error && error.includes("old") ? error : null}
           />
           <PasswordInput
             id="newPassword"
-            label="New Password"
+            label={t('newPassword')}
             value={passwordData.newPassword}
             onChange={handlePasswordChange}
-            placeholder="New Password"
+            placeholder={t('newPasswordPlaceholder')}
             autoComplete="new-password"
             required
             error={error && error.includes("New password") ? error : null}
           />
           <PasswordInput
             id="confirmPassword"
-            label="Confirm Password"
+            label={t('confirmPassword')}
             value={passwordData.confirmPassword}
             onChange={handlePasswordChange}
-            placeholder="Confirm Password"
+            placeholder={t('confirmPasswordPlaceholder')}
             autoComplete="new-password"
             required
             className="mb-30"
@@ -117,7 +119,7 @@ export default function ChangePasswordSection({ userId, onPasswordChanged }) {
 
         {success && (
           <div className={styles.successMessage}>
-            Password changed successfully!
+            {t('passwordChangedSuccessfully')}
           </div>
         )}
 
@@ -127,7 +129,7 @@ export default function ChangePasswordSection({ userId, onPasswordChanged }) {
             className="tf-btn bg-color-primary pd-20"
             disabled={saving}
           >
-            {saving ? "Updating..." : "Update Password"}
+            {saving ? t('updating') : t('updatePassword')}
           </button>
         </div>
       </form>

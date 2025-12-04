@@ -42,7 +42,7 @@
       height: 100vh;
       @include mixin.d-flex();
       flex-direction: column;
-      justify-content: space-between;
+      gap: 32px;
     }
     
     /* Admin pages: reduce padding-top to 32px */

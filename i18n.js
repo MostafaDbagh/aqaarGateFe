@@ -22,17 +22,48 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   try {
     const messages = (await import(`./messages/${locale}.json`)).default;
+    // Load agent-specific translations
+    let agentMessages = {};
+    try {
+      agentMessages = (await import(`./messages/agent.${locale}.json`)).default;
+    } catch (agentError) {
+      // If agent translations don't exist for this locale, try default locale
+      try {
+        agentMessages = (await import(`./messages/agent.${routing.defaultLocale}.json`)).default;
+      } catch (defaultAgentError) {
+        // Agent translations not available, continue without them
+      }
+    }
+    
+    // Merge agent translations into main messages
+    const mergedMessages = {
+      ...messages,
+      agent: agentMessages
+    };
+    
     return {
       locale,
-      messages,
+      messages: mergedMessages,
       timeZone: timeZone
     };
   } catch (error) {
     // Fallback to default locale messages if import fails
     const defaultMessages = (await import(`./messages/${routing.defaultLocale}.json`)).default;
+    let defaultAgentMessages = {};
+    try {
+      defaultAgentMessages = (await import(`./messages/agent.${routing.defaultLocale}.json`)).default;
+    } catch (agentError) {
+      // Agent translations not available
+    }
+    
+    const mergedDefaultMessages = {
+      ...defaultMessages,
+      agent: defaultAgentMessages
+    };
+    
     return {
       locale: routing.defaultLocale,
-      messages: defaultMessages,
+      messages: mergedDefaultMessages,
       timeZone: timeZone
     };
   }

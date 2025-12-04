@@ -2,6 +2,7 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { useDashboardStats } from '@/apis/hooks';
+import { useTranslations } from 'next-intl';
 
 export default function PropertiesCount({ 
   showLabel = true, 
@@ -9,6 +10,7 @@ export default function PropertiesCount({
   icon = true,
   format = 'parentheses' // 'parentheses', 'badge', 'text'
 }) {
+  const t = useTranslations('agent.sidebar');
   const pathname = usePathname();
   // Only fetch dashboard stats if we're on a dashboard page
   const isDashboardPage = pathname?.startsWith('/dashboard') || pathname?.startsWith('/review') || pathname?.startsWith('/messages') || pathname?.startsWith('/my-property');
@@ -33,7 +35,7 @@ export default function PropertiesCount({
             <path d="M17.25 11.5L18.0833 11.1666" stroke="#A8ABAE" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         )}
-        {showLabel && 'My properties'} <span>(...)</span>
+        {showLabel && t('myProperties')} <span>(...)</span>
       </span>
     );
   }
@@ -71,7 +73,7 @@ export default function PropertiesCount({
           <path d="M17.25 11.5L18.0833 11.1666" stroke="#A8ABAE" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       )}
-      {showLabel && 'My properties'} {renderCount()}
+      {showLabel && t('myProperties')} {renderCount()}
     </span>
   );
 }

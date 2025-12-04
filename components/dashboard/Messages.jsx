@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslations, useLocale } from 'next-intl';
 import DropdownSelect from "../common/DropdownSelect";
 import LocationLoader from "../common/LocationLoader";
 import { useMessagesByAgent, useMessageMutations } from "@/apis/hooks";
@@ -10,6 +11,9 @@ import { CopyIcon, CheckIcon } from "@/components/icons";
 import styles from "./Messages.module.css";
 
 export default function Messages() {
+  const t = useTranslations('agent.messages');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [user, setUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('all');
@@ -118,17 +122,17 @@ export default function Messages() {
   const handleMarkAsRead = async (messageId) => {
     try {
       await markAsRead(messageId);
-      showToast('Message marked as read');
+      showToast(t('messageMarkedAsRead'));
       refetch();
     } catch (error) {
-      showToast('Failed to mark message as read', 'error');
+      showToast(t('failedToMarkAsRead'), 'error');
     }
   };
 
   // Handle reply
   const handleReply = async () => {
     if (!replyModal.response.trim()) {
-      showToast('Please enter a response', 'error');
+      showToast(t('pleaseEnterResponse'), 'error');
       return;
     }
 
@@ -137,11 +141,11 @@ export default function Messages() {
         messageId: replyModal.message._id,
         response: replyModal.response
       });
-      showToast('Reply sent successfully');
+      showToast(t('messageReplied'));
       setReplyModal({ isOpen: false, message: null, response: '' });
       refetch();
     } catch (error) {
-      showToast('Failed to send reply', 'error');
+      showToast(t('failedToReply'), 'error');
     }
   };
 
@@ -149,10 +153,10 @@ export default function Messages() {
   const handleArchive = async (messageId) => {
     try {
       await archiveMessage(messageId);
-      showToast('Message archived');
+      showToast(t('messageArchived'));
       refetch();
     } catch (error) {
-      showToast('Failed to archive message', 'error');
+      showToast(t('failedToArchive'), 'error');
     }
   };
 
@@ -160,11 +164,11 @@ export default function Messages() {
   const handleDelete = async (messageId) => {
     try {
       await deleteMessage(messageId);
-      showToast('Message deleted');
+      showToast(t('messageDeleted'));
       setDeleteModal({ isOpen: false, message: null });
       refetch();
     } catch (error) {
-      showToast('Failed to delete message', 'error');
+      showToast(t('failedToDelete'), 'error');
     }
   };
 
@@ -178,22 +182,37 @@ export default function Messages() {
     try {
       await navigator.clipboard.writeText(propertyId);
       setCopiedId(messageId);
-      showToast('Property ID copied to clipboard');
+      showToast(t('idCopied'));
       setTimeout(() => setCopiedId(null), 2000);
     } catch (error) {
-      showToast('Failed to copy property ID', 'error');
+      showToast(t('failedToCopy'), 'error');
     }
   };
 
   // Format date helper
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  // Translate message type
+  const translateMessageType = (messageType) => {
+    if (!messageType) return '';
+    const normalized = messageType.replace('_', '').toLowerCase();
+    const typeMap = {
+      'inquiry': 'inquiry',
+      'viewingrequest': 'viewingRequest',
+      'offer': 'offer',
+      'question': 'question',
+      'complaint': 'complaint'
+    };
+    const key = typeMap[normalized] || normalized;
+    return t(key) || messageType;
   };
 
   // Get status badge color
@@ -299,12 +318,14 @@ export default function Messages() {
     return items;
   };
 
+  const isRTL = locale === 'ar';
+
   if (isLoading) {
     return (
-      <div className="main-content w-100">
+      <div className="main-content w-100" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="main-content-inner">
           <div className="button-show-hide show-mb">
-            <span className="body-1">Show Messages</span>
+            <span className="body-1">{t('showMessages')}</span>
           </div>
           <div style={{ 
             display: 'flex', 
@@ -314,7 +335,7 @@ export default function Messages() {
           }}>
             <LocationLoader 
               size="large" 
-              message="Loading your messages..."
+              message={t('loading')}
             />
           </div>
         </div>
@@ -324,15 +345,15 @@ export default function Messages() {
 
   if (isError) {
     return (
-      <div className="main-content w-100">
+      <div className="main-content w-100" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="main-content-inner">
           <div className="button-show-hide show-mb">
-            <span className="body-1">Show Messages</span>
+            <span className="body-1">{t('showMessages')}</span>
           </div>
-          <div style={{ textAlign: 'center', padding: '40px', color: '#dc3545' }}>
-            <p>Error loading messages. Please try again.</p>
-            <button onClick={() => refetch()} className="btn btn-primary" aria-label="Retry loading messages">
-              Retry
+          <div style={{ textAlign: isRTL ? 'right' : 'center', padding: '40px', color: '#dc3545' }}>
+            <p>{t('errorLoading')}</p>
+            <button onClick={() => refetch()} className="btn btn-primary" aria-label={t('retry')}>
+              {t('retry')}
             </button>
           </div>
         </div>
@@ -341,10 +362,10 @@ export default function Messages() {
   }
 
   return (
-    <div className="main-content w-100">
+    <div className="main-content w-100" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="main-content-inner">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Messages</span>
+          <span className="body-1">{t('showMessages')}</span>
         </div>
 
         {/* Statistics Cards */}
@@ -354,8 +375,8 @@ export default function Messages() {
               <div className={styles.statValue}>
                 {stats.total || 0}
               </div>
-              <div className={styles.statLabel}>
-                Total Messages
+              <div className={styles.statLabel} style={{ textAlign: isRTL ? 'right' : 'left' }}>
+                {t('totalMessages')}
               </div>
             </div>
           </div>
@@ -365,8 +386,8 @@ export default function Messages() {
               <div className={styles.statValue}>
                 {stats.replied || 0}
               </div>
-              <div className={styles.statLabel}>
-                Replied
+              <div className={styles.statLabel} style={{ textAlign: isRTL ? 'right' : 'left' }}>
+                {t('replied')}
               </div>
             </div>
           </div>
@@ -376,8 +397,8 @@ export default function Messages() {
               <div className={styles.statValue}>
                 {stats.unread || 0}
               </div>
-              <div className={styles.statLabel}>
-                Unread
+              <div className={styles.statLabel} style={{ textAlign: isRTL ? 'right' : 'left' }}>
+                {t('unread')}
               </div>
             </div>
           </div>
@@ -388,28 +409,34 @@ export default function Messages() {
           <div className="card-body">
             <div className="row g-3">
               <div className="col-md-3">
-                <label className="form-label">Status</label>
+                <label className="form-label" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('status')}</label>
                 <DropdownSelect
-                  options={["All", "Unread", "Read", "Replied", "Archived"]}
-                  value={statusFilter === 'all' ? 'All' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
-                  onChange={(value) => handleFilterChange('status', value.toLowerCase() === 'all' ? 'all' : value.toLowerCase())}
-                />
-              </div>
-              <div className="col-md-3">
-                <label className="form-label">Message Type</label>
-                <DropdownSelect
-                  options={["All", "Inquiry", "Viewing Request", "Offer", "Question", "Complaint"]}
-                  value={messageTypeFilter === 'all' ? 'All' : messageTypeFilter.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  onChange={(value) => handleFilterChange('messageType', value.toLowerCase().replace(' ', '_') === 'all' ? 'all' : value.toLowerCase().replace(' ', '_'))}
-                />
-              </div>
-              <div className="col-md-3">
-                <label className="form-label">Property</label>
-                <DropdownSelect
-                  options={["All", ...filterOptions.properties.map(p => p.propertyKeyword)]}
-                  value={propertyFilter === 'all' ? 'All' : filterOptions.properties.find(p => p._id === propertyFilter)?.propertyKeyword || 'All'}
+                  options={[t('all'), t('unread'), t('read'), t('replied'), t('archived')]}
+                  value={statusFilter === 'all' ? t('all') : t(statusFilter)}
                   onChange={(value) => {
-                    if (value === 'All') {
+                    const statusMap = { [t('all')]: 'all', [t('unread')]: 'unread', [t('read')]: 'read', [t('replied')]: 'replied', [t('archived')]: 'archived' };
+                    handleFilterChange('status', statusMap[value] || 'all');
+                  }}
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('messageType')}</label>
+                <DropdownSelect
+                  options={[t('all'), t('inquiry'), t('viewingRequest'), t('offer'), t('question'), t('complaint')]}
+                  value={messageTypeFilter === 'all' ? t('all') : translateMessageType(messageTypeFilter)}
+                  onChange={(value) => {
+                    const typeMap = { [t('all')]: 'all', [t('inquiry')]: 'inquiry', [t('viewingRequest')]: 'viewing_request', [t('offer')]: 'offer', [t('question')]: 'question', [t('complaint')]: 'complaint' };
+                    handleFilterChange('messageType', typeMap[value] || 'all');
+                  }}
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('property')}</label>
+                <DropdownSelect
+                  options={[t('all'), ...filterOptions.properties.map(p => p.propertyKeyword)]}
+                  value={propertyFilter === 'all' ? t('all') : filterOptions.properties.find(p => p._id === propertyFilter)?.propertyKeyword || t('all')}
+                  onChange={(value) => {
+                    if (value === t('all')) {
                       handleFilterChange('property', 'all');
                     } else {
                       const property = filterOptions.properties.find(p => p.propertyKeyword === value);
@@ -419,16 +446,17 @@ export default function Messages() {
                 />
               </div>
               <div className="col-md-3">
-                <label className="form-label">Search</label>
+                <label className="form-label" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('search')}</label>
                 <form onSubmit={handleSearch} className="d-flex">
                   <input
                     type="text"
                     className="form-control me-2"
-                    placeholder="Search messages..."
+                    placeholder={t('searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ direction: isRTL ? 'rtl' : 'ltr' }}
                   />
-                  <button type="submit" className="btn btn-outline-primary" aria-label="Search messages">
+                  <button type="submit" className="btn btn-outline-primary" aria-label={t('search')}>
                     <i className="icon-search" aria-hidden="true"></i>
                   </button>
                 </form>
@@ -440,37 +468,37 @@ export default function Messages() {
         {/* Messages List */}
         <div className="card">
           <div className="card-header">
-            <h3 className="mb-0">
-              Messages
+            <h3 className="mb-0" style={{ textAlign: isRTL ? 'right' : 'left' }}>
+              {t('title')}
               {pagination.totalMessages > 0 && (
                 <span className="text-muted ms-2">
-                  ({pagination.totalMessages} total - Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalMessages)})
+                  ({pagination.totalMessages} {t('total')} - {t('showing')} {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalMessages)})
                 </span>
               )}
             </h3>
           </div>
           <div className="card-body p-0">
             {messages.length === 0 ? (
-              <div className="text-center py-5">
+              <div className="text-center py-5" style={{ textAlign: isRTL ? 'right' : 'center' }}>
                 <div className="mb-3">
                   <i className="icon-message" style={{ fontSize: '48px', color: '#6c757d' }} aria-hidden="true"></i>
                 </div>
-                <h5>No messages found</h5>
-                <p className="text-muted">You don't have any messages matching your current filters.</p>
+                <h5>{t('noMessages')}</h5>
+                <p className="text-muted">{t('noMessagesDescription')}</p>
               </div>
             ) : (
               <div className="table-responsive" style={{ overflowX: 'auto', maxWidth: '100%' }}>
                 <table className="table table-hover mb-0" style={{ minWidth: '1200px' }}>
                   <thead className="table-light">
                     <tr>
-                      <th>Status</th>
-                      <th>Sender</th>
-                      <th>Subject</th>
-                      <th>Property</th>
-                      <th>Property ID</th>
-                      <th>Type</th>
-                      <th>Date</th>
-                      <th>Actions</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('status')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('sender')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('subject')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('property')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('propertyId')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('type')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('date')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -478,7 +506,7 @@ export default function Messages() {
                       <tr key={message._id}>
                         <td>
                           <span className={`badge ${getStatusBadgeColor(message.status)}`}>
-                            {message.status.charAt(0).toUpperCase() + message.status.slice(1)}
+                            {t(message.status)}
                           </span>
                         </td>
                         <td>
@@ -512,12 +540,12 @@ export default function Messages() {
                               </small>
                             </div>
                           ) : (
-                            <span className="text-muted">Property not found</span>
+                            <span className="text-muted">{t('propertyNotFound')}</span>
                           )}
                         </td>
                         <td>
                           {message.propertyId?.propertyId ? (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', direction: isRTL ? 'rtl' : 'ltr' }}>
                               <small className="text-muted" style={{ fontFamily: 'monospace', fontSize: '11px' }}>
                                 {message.propertyId.propertyId}
                               </small>
@@ -541,8 +569,8 @@ export default function Messages() {
                                   alignItems: 'center',
                                   justifyContent: 'center'
                                 }}
-                                title={copiedId === message._id ? 'Copied!' : 'Copy Property ID'}
-                                aria-label="Copy property ID to clipboard"
+                                title={copiedId === message._id ? t('copied') : t('copyPropertyId')}
+                                aria-label={t('copyPropertyId')}
                                 onMouseEnter={(e) => {
                                   if (copiedId !== message._id) {
                                     e.target.style.color = '#007bff';
@@ -564,12 +592,12 @@ export default function Messages() {
                               </button>
                             </div>
                           ) : (
-                            <span className="text-muted">N/A</span>
+                            <span className="text-muted">{t('na')}</span>
                           )}
                         </td>
                         <td>
                           <span className={`badge ${getMessageTypeBadgeColor(message.messageType)}`}>
-                            {message.messageType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                            {translateMessageType(message.messageType)}
                           </span>
                         </td>
                         <td>
@@ -596,8 +624,8 @@ export default function Messages() {
                                 }}
                                 onClick={() => handleMarkAsRead(message._id)}
                                 disabled={isMarkingAsRead}
-                                title="Mark as Read"
-                                aria-label={`Mark message as read`}
+                                title={t('markAsRead')}
+                                aria-label={t('markAsRead')}
                                 onMouseEnter={(e) => {
                                   if (!isMarkingAsRead) {
                                     e.target.style.transform = 'translateY(-1px)';
@@ -612,7 +640,7 @@ export default function Messages() {
                                 }}
                               >
                                 <i className="icon-eye" aria-hidden="true" style={{ fontSize: '14px' }}></i>
-                                {isMarkingAsRead ? 'Marking...' : 'Mark as Read'}
+                                {isMarkingAsRead ? t('marking') : t('markAsRead')}
                               </button>
                             )}
                             <button
@@ -633,8 +661,8 @@ export default function Messages() {
                               }}
                               onClick={() => handleDeleteClick(message)}
                               disabled={isDeleting}
-                              title="Delete Message"
-                              aria-label={`Delete message from ${message.senderName}`}
+                              title={t('deleteMessage')}
+                              aria-label={t('deleteMessage')}
                               onMouseEnter={(e) => {
                                 if (!isDeleting) {
                                   e.target.style.transform = 'translateY(-1px)';
@@ -649,7 +677,7 @@ export default function Messages() {
                               }}
                             >
                               <i className="icon-trash" aria-hidden="true" style={{ fontSize: '14px' }}></i>
-                              {isDeleting ? 'Deleting...' : 'Delete'}
+                              {isDeleting ? t('deleting') : t('delete')}
                             </button>
                           </div>
                         </td>
@@ -673,50 +701,51 @@ export default function Messages() {
 
         {/* Reply Modal */}
         {replyModal.isOpen && (
-          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Reply to Message</h5>
+                  <h5 className="modal-title" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('replyToMessage')}</h5>
                   <button
                     type="button"
                     className="btn-close"
                     onClick={() => setReplyModal({ isOpen: false, message: null, response: '' })}
-                    aria-label="Close reply modal"
+                    aria-label={tCommon('close')}
                   ></button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                   <div className="mb-3">
-                    <strong>From:</strong> {replyModal.message.senderName} ({replyModal.message.senderEmail})
+                    <strong>{t('from')}:</strong> {replyModal.message.senderName} ({replyModal.message.senderEmail})
                   </div>
                   <div className="mb-3">
-                    <strong>Subject:</strong> {replyModal.message.subject}
+                    <strong>{t('subject')}:</strong> {replyModal.message.subject}
                   </div>
                   <div className="mb-3">
-                    <strong>Message:</strong>
-                    <div className="border p-3 mt-2" style={{ backgroundColor: '#f8f9fa' }}>
+                    <strong>{t('title')}:</strong>
+                    <div className="border p-3 mt-2" style={{ backgroundColor: '#f8f9fa', textAlign: isRTL ? 'right' : 'left' }}>
                       {replyModal.message.message}
                     </div>
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="response" className="form-label">Your Response:</label>
+                    <label htmlFor="response" className="form-label">{t('yourResponse')}:</label>
                     <textarea
                       id="response"
                       className="form-control"
                       rows="5"
                       value={replyModal.response}
                       onChange={(e) => setReplyModal({ ...replyModal, response: e.target.value })}
-                      placeholder="Type your response here..."
+                      placeholder={t('responsePlaceholder')}
+                      style={{ direction: isRTL ? 'rtl' : 'ltr' }}
                     ></textarea>
                   </div>
                 </div>
-                <div className="modal-footer">
+                <div className="modal-footer" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
                   <button
                     type="button"
                     className="btn btn-secondary"
                     onClick={() => setReplyModal({ isOpen: false, message: null, response: '' })}
                   >
-                    Cancel
+                    {t('cancel')}
                   </button>
                   <button
                     type="button"
@@ -724,7 +753,7 @@ export default function Messages() {
                     onClick={handleReply}
                     disabled={isReplying || !replyModal.response.trim()}
                   >
-                    {isReplying ? 'Sending...' : 'Send Reply'}
+                    {isReplying ? t('sending') : t('sendReply')}
                   </button>
                 </div>
               </div>
@@ -734,43 +763,43 @@ export default function Messages() {
 
         {/* Delete Confirmation Modal */}
         {deleteModal.isOpen && (
-          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Delete Message</h5>
+                  <h5 className="modal-title" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('deleteMessage')}</h5>
                   <button
                     type="button"
                     className="btn-close"
                     onClick={() => setDeleteModal({ isOpen: false, message: null })}
-                    aria-label="Close delete modal"
+                    aria-label={tCommon('close')}
                   ></button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                   <div className="mb-3">
-                    <strong>From:</strong> {deleteModal.message.senderEmail}
+                    <strong>{t('from')}:</strong> {deleteModal.message.senderEmail}
                   </div>
                   <div className="mb-3">
-                    <strong>Subject:</strong> {deleteModal.message.subject}
+                    <strong>{t('subject')}:</strong> {deleteModal.message.subject}
                   </div>
                   <div className="mb-3">
-                    <strong>Message:</strong>
-                    <div className="border p-3 mt-2" style={{ backgroundColor: '#f8f9fa', maxHeight: '150px', overflow: 'auto' }}>
+                    <strong>{t('title')}:</strong>
+                    <div className="border p-3 mt-2" style={{ backgroundColor: '#f8f9fa', maxHeight: '150px', overflow: 'auto', textAlign: isRTL ? 'right' : 'left' }}>
                       {deleteModal.message.message}
                     </div>
                   </div>
-                  <div className="alert alert-warning">
+                  <div className="alert alert-warning" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                     <i className="icon-warning me-2"></i>
-                    Are you sure you want to delete this message? This action cannot be undone.
+                    {t('deleteWarning')}
                   </div>
                 </div>
-                <div className="modal-footer">
+                <div className="modal-footer" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
                   <button
                     type="button"
                     className="btn btn-secondary"
                     onClick={() => setDeleteModal({ isOpen: false, message: null })}
                   >
-                    Cancel
+                    {t('cancel')}
                   </button>
                   <button
                     type="button"
@@ -785,7 +814,7 @@ export default function Messages() {
                       fontWeight: '500'
                     }}
                   >
-                    {isDeleting ? 'Deleting...' : 'Confirm Delete'}
+                    {isDeleting ? t('deleting') : t('confirmDelete')}
                   </button>
                 </div>
               </div>

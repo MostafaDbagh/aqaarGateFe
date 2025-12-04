@@ -12,8 +12,10 @@ import { useAdminTab, TABS } from "@/components/admin/AdminDashboardMain";
 import DeleteAccountModal from "@/components/modals/DeleteAccountModal";
 import Toast from "@/components/common/Toast";
 import styles from "./Sidebar.module.css";
+import { useTranslations } from 'next-intl';
 
 export default function Sidebar() {
+  const t = useTranslations('agent.sidebar');
   const pathname = usePathname();
   const router = useRouter();
   const { isAgent, logout: logoutUser, user } = useAuthState();
@@ -332,7 +334,7 @@ export default function Sidebar() {
                   >
                     <Link className="nav-menu-link" href={`/dashboard`}>
                       <DashboardGridIcon />
-                      Dashboards
+                      {t('dashboards')}
                     </Link>
                   </li>
                 )}
@@ -345,7 +347,7 @@ export default function Sidebar() {
                   >
                     <Link className="nav-menu-link" href={`/my-package`}>
                       <PackageBoxIcon />
-                      My package
+                      {t('myPackage')}
                     </Link>
                   </li>
                 )}
@@ -357,7 +359,7 @@ export default function Sidebar() {
                 >
                   <Link className="nav-menu-link" href={`/my-profile`}>
                     <UserIcon />
-                    My Profile
+                    {t('myProfile')}
                   </Link>
                 </li>
 
@@ -368,7 +370,7 @@ export default function Sidebar() {
                 >
                   <Link className="nav-menu-link" href={`/my-favorites`}>
                     <i className="icon-bookmark" />
-                    My favorites
+                    {t('myFavorites')}
                   </Link>
                 </li>
            
@@ -390,7 +392,7 @@ export default function Sidebar() {
                   >
                     <Link className="nav-menu-link" href={`/messages`}>
                       <i className="icon-message" />
-                      Messages
+                      {t('messages')}
                     </Link>
                   </li>
                 )}
@@ -442,7 +444,7 @@ export default function Sidebar() {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      Add property
+                      {t('addProperty')}
                     </Link>
                   </li>
                 )}
@@ -454,7 +456,7 @@ export default function Sidebar() {
                 onClick={handleLogout}
               >
                 <LogoutArrowIcon />
-                Logout
+                {t('logout')}
               </button>
             </li>
             {/* Delete My Account - For agent (after Logout) and user (last tab) */}
@@ -468,7 +470,7 @@ export default function Sidebar() {
                   }}
                 >
                   <i className="icon-trash" />
-                  Delete My Account
+                  {t('deleteMyAccount')}
                 </button>
               </li>
             )}

@@ -13,8 +13,13 @@ import DashboardFooter from "../common/DashboardFooter";
 import { EyeIcon } from "../icons/EyeIcon";
 import logger from "@/utlis/logger";
 import styles from "./Property.module.css";
+import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordWithT } from '@/utils/translateKeywords';
 
 export default function Property() {
+  const t = useTranslations('agent.property');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -24,11 +29,40 @@ export default function Property() {
   const itemsPerPage = 6;
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  // Property type translations mapping
+  const propertyTypeTranslations = {
+    en: {
+      "Apartment": "Apartment",
+      "Villa": "Villa",
+      "Holiday Home": "Holiday Home",
+      "Office": "Office",
+      "Townhouse": "Townhouse",
+      "Commercial": "Commercial",
+      "Land": "Land"
+    },
+    ar: {
+      "Apartment": "شقة",
+      "Villa": "فيلا",
+      "Holiday Home": "منزل عطلة",
+      "Office": "مكتب",
+      "Townhouse": "منزل متلاصق",
+      "Commercial": "تجاري",
+      "Land": "أرض"
+    }
+  };
+
+  const translatePropertyType = (propertyType) => {
+    if (!propertyType) return propertyType;
+    const translations = propertyTypeTranslations[locale] || propertyTypeTranslations.en;
+    return translations[propertyType] || propertyType;
+  };
+
   const [confirmationModal, setConfirmationModal] = useState({
     isOpen: false,
     title: '',
     message: '',
-    confirmText: 'Confirm',
+    confirmText: t('confirm'),
+    cancelText: t('cancel'),
     confirmColor: '#dc3545',
     onConfirm: null,
     loading: false
@@ -88,35 +122,34 @@ export default function Property() {
   const handleUpdateSuccess = () => {
     // Refetch the listings data
     refetch();
-    showToast('Property updated successfully!', 'success');
+    showToast(t('propertyUpdated'), 'success');
   };
 
   // Handle mark as sold/unsold
   const handleMarkSold = (listing) => {
     // Check if agent is blocked
     if (isAgentBlocked) {
-      showToast('Your account is blocked. This action is disabled.', 'error');
+      showToast(t('accountBlocked'), 'error');
       return;
     }
 
     // Check if user has a valid token
     const token = localStorage.getItem('token');
     if (!token) {
-      showToast('Please log in to perform this action.', 'error');
+      showToast(t('pleaseLogin'), 'error');
       return;
     }
 
     const action = listing.isSold ? 'unsold' : 'sold';
-    const title = listing.isSold ? 'Mark Property as Unsold' : 'Mark Property as Sold';
-    const message = listing.isSold 
-      ? 'Are you sure you want to mark this property as unsold? It will become available for sale/rent again.'
-      : 'Are you sure you want to mark this property as sold? It will no longer be available for purchase.';
+    const title = listing.isSold ? t('unmarkAsSoldTitle') : t('markAsSoldTitle');
+    const message = listing.isSold ? t('unmarkAsSoldMessage') : t('markAsSoldMessage');
     
     setConfirmationModal({
       isOpen: true,
       title,
       message,
-      confirmText: `Mark as ${action.charAt(0).toUpperCase() + action.slice(1)}`,
+      confirmText: listing.isSold ? t('unmarkAsSold') : t('markAsSold'),
+      cancelText: t('cancel'),
       confirmColor: '#ff6b35',
       onConfirm: async () => {
         setConfirmationModal(prev => ({ ...prev, loading: true }));
@@ -127,14 +160,14 @@ export default function Property() {
           // No need to send soldDate explicitly - backend handles it dynamically
           await listingAPI.updateListing(listing._id, updateData);
           refetch(); // Refresh the listings
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
-          showToast(`Property marked as ${action} successfully!`, 'success');
+          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false });
+          showToast(listing.isSold ? t('propertyUnsold') : t('propertySold'), 'success');
         } catch (error) {
           logger.error(`Error marking property as ${action}:`, error);
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false });
+          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false });
           
           // Show more specific error message
-          const errorMessage = error?.message || error?.error || `Failed to mark property as ${action}. Please try again.`;
+          const errorMessage = error?.message || error?.error || t('failedToUpdate');
           showToast(errorMessage, 'error');
         }
       },
@@ -146,33 +179,34 @@ export default function Property() {
   const handleDeleteProperty = (listing) => {
     // Check if agent is blocked
     if (isAgentBlocked) {
-      showToast('Your account is blocked. This action is disabled.', 'error');
+      showToast(t('accountBlocked'), 'error');
       return;
     }
 
     // Check if user has a valid token
     const token = localStorage.getItem('token');
     if (!token) {
-      showToast('Please log in to perform this action.', 'error');
+      showToast(t('pleaseLogin'), 'error');
       return;
     }
 
     setConfirmationModal({
       isOpen: true,
-      title: 'Delete Property',
-      message: 'Please provide a reason for deleting this property. This property will be marked as deleted.',
-      confirmText: 'Delete Property',
+      title: t('deleteTitle'),
+      message: t('deleteMessage'),
+      confirmText: t('delete'),
+      cancelText: t('cancel'),
       confirmColor: '#dc3545',
       showInput: true,
-      inputLabel: 'Reason for deletion',
-      inputPlaceholder: 'Enter the reason for deleting this property...',
+      inputLabel: t('deleteReasonLabel'),
+      inputPlaceholder: t('deleteReasonPlaceholder'),
       inputRequired: true,
       onConfirm: async (deletedReason) => {
         setConfirmationModal(prev => ({ ...prev, loading: true }));
         try {
           await listingAPI.deleteListing(listing._id, deletedReason);
-          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false });
-          showToast('Property deleted successfully!', 'success');
+          setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false });
+          showToast(t('propertyDeleted'), 'success');
           // Force page reload after successful deletion
           setTimeout(() => {
             window.location.reload();
@@ -193,11 +227,11 @@ export default function Property() {
                               error?.response?.data?.error || 
                               error?.message || 
                               error?.error || 
-                              (error?.response?.status === 401 ? 'You are not authorized to delete this property.' :
-                               error?.response?.status === 403 ? 'You can only delete your own listings.' :
-                               error?.response?.status === 404 ? 'Property not found.' :
-                               error?.response?.status === 500 ? 'Server error. Please try again later.' :
-                               'Failed to delete property. Please try again.');
+                              (error?.response?.status === 401 ? t('unauthorizedDelete') :
+                               error?.response?.status === 403 ? t('onlyDeleteOwn') :
+                               error?.response?.status === 404 ? t('propertyNotFound') :
+                               error?.response?.status === 500 ? t('serverError') :
+                               t('failedToDelete'));
           showToast(errorMessage, 'error');
         }
       },
@@ -373,7 +407,7 @@ export default function Property() {
     <div className="main-content w-100">
       <div className="main-content-inner wrap-dashboard-content">
         <div className="button-show-hide show-mb">
-          <span className="body-1">Show Dashboard</span>
+          <span className="body-1">{t('showDashboard')}</span>
         </div>
         <div className="row">
           <div className="col-md-2">
@@ -381,13 +415,20 @@ export default function Property() {
               <fieldset className="box-fieldset">
                 <label>
                   {" "}
-                  Approval Status:<span>*</span>{" "}
+                  {t('approvalStatus')}:<span>*</span>{" "}
                 </label>
 
                 <DropdownSelect
-                  options={["All", "Pending", "Approved", "Closed"]}
+                  options={[t('all'), t('pending'), t('approved'), t('closed')]}
                   addtionalParentClass=""
-                  onChange={(value) => setApprovalFilter(value)}
+                  onChange={(value) => setApprovalFilter(value === t('all') ? 'All' : value === t('pending') ? 'Pending' : value === t('approved') ? 'Approved' : 'Closed')}
+                  translateOption={(option) => {
+                    if (option === 'All') return t('all');
+                    if (option === 'Pending') return t('pending');
+                    if (option === 'Approved') return t('approved');
+                    if (option === 'Closed') return t('closed');
+                    return option;
+                  }}
                 />
               </fieldset>
             </form>
@@ -397,13 +438,19 @@ export default function Property() {
               <fieldset className="box-fieldset">
                 <label>
                   {" "}
-                  Status:<span>*</span>{" "}
+                  {t('status')}:<span>*</span>{" "}
                 </label>
 
                 <DropdownSelect
-                  options={["All", "For Sale", "For Rent"]}
+                  options={[t('all'), t('forSale'), t('forRent')]}
                   addtionalParentClass=""
-                  onChange={(value) => setStatusFilter(value)}
+                  onChange={(value) => setStatusFilter(value === t('all') ? 'All' : value === t('forSale') ? 'For Sale' : 'For Rent')}
+                  translateOption={(option) => {
+                    if (option === 'All') return t('all');
+                    if (option === 'For Sale') return t('forSale');
+                    if (option === 'For Rent') return t('forRent');
+                    return option;
+                  }}
                 />
               </fieldset>
             </form>
@@ -413,13 +460,17 @@ export default function Property() {
               <fieldset className="box-fieldset">
                 <label>
                   {" "}
-                  Property Type:<span>*</span>{" "}
+                  {t('propertyType')}:<span>*</span>{" "}
                 </label>
 
                 <DropdownSelect
                   options={["All", "Apartment", "Villa", "Holiday Home", "Office", "Townhouse", "Commercial", "Land"]}
                   addtionalParentClass=""
                   onChange={(value) => setPropertyTypeFilter(value)}
+                  translateOption={(option) => {
+                    if (option === 'All') return t('all');
+                    return translatePropertyType(option);
+                  }}
                 />
               </fieldset>
             </form>
@@ -429,12 +480,12 @@ export default function Property() {
               <fieldset className="box-fieldset">
                 <label>
                   {" "}
-                  Search:<span>*</span>{" "}
+                  {t('search')}:<span>*</span>{" "}
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Search by title or address"
+                  placeholder={t('searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -442,11 +493,11 @@ export default function Property() {
             </form>
           </div>
         </div>
-        <div className="widget-box-2 wd-listing mt-20">
-          <h3 className="title">
-            My Properties 
-            {user && <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: '10px' }}>
-              ({filteredListings.length} total - Showing {startIndex + 1}-{Math.min(endIndex, filteredListings.length)})
+        <div className="widget-box-2 wd-listing mt-20" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+          <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+            {t('title')}
+            {user && <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: locale === 'ar' ? '0' : '10px', marginRight: locale === 'ar' ? '10px' : '0' }}>
+              ({filteredListings.length} {t('total')} - {t('showing')} {startIndex + 1}-{Math.min(endIndex, filteredListings.length)})
             </span>}
           </h3>
           <div className="wrap-table">
@@ -455,24 +506,24 @@ export default function Property() {
                 <div style={{ padding: '40px', textAlign: 'center' }}>
                   <LocationLoader 
                     size="medium" 
-                    message="Loading your properties..."
+                    message={t('loading')}
                   />
                 </div>
               ) : isError ? (
                 <div style={{ padding: '40px', textAlign: 'center', color: '#dc3545' }}>
-                  <p>Error loading properties. Please try again.</p>
+                  <p>{t('errorLoading')}</p>
                 </div>
               ) : filteredListings.length === 0 ? (
                 <div style={{ padding: '40px', textAlign: 'center' }}>
-                  <p>No properties found. <Link href="/add-property" className={styles.addPropertyLink}>Add your first property</Link></p>
+                  <p>{t('noProperties')} <Link href="/add-property" className={styles.addPropertyLink}>{t('addFirstProperty')}</Link></p>
                 </div>
               ) : (
-                <table>
+                <table style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
                   <thead>
                     <tr>
-                      <th>Listing</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('listing')}</th>
+                      <th style={{ textAlign: 'center' }}>{t('status')}</th>
+                      <th style={{ textAlign: 'center' }}>{t('action')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -507,12 +558,12 @@ export default function Property() {
                                   letterSpacing: '1px',
                                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
                                 }}>
-                                  SOLD
+                                  {t('sold')}
                                 </div>
                               )}
                             </div>
-                            <div className="content">
-                              <div className="title">
+                            <div className="content" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                              <div className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                 <Link
                                   href={`/property-detail/${listing._id}`}
                                   className="link"
@@ -522,38 +573,52 @@ export default function Property() {
                               </div>
                               {/* Property Keyword Tags */}
                               {listing.propertyKeyword && (
-                                <div style={{ marginTop: '16px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                <div style={{ 
+                                  marginTop: '16px', 
+                                  marginBottom: '16px', 
+                                  display: 'flex', 
+                                  flexWrap: 'wrap', 
+                                  gap: '6px',
+                                  justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end',
+                                  direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                  textAlign: locale === 'ar' ? 'right' : 'left'
+                                }}>
                                   {listing.propertyKeyword.split(',').map((keyword, index) => {
                                     const trimmedKeyword = keyword.trim();
                                     if (!trimmedKeyword) return null;
+                                    const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                                     return (
                                       <span 
                                         key={index} 
                                         style={{
                                           display: 'inline-flex',
                                           alignItems: 'center',
+                                          justifyContent: 'center',
                                           padding: '4px 10px',
                                           backgroundColor: '#f0f0f0',
                                           border: '1px solid #e0e0e0',
                                           borderRadius: '20px',
                                           fontSize: '12px',
                                           color: '#333',
-                                          fontWeight: '500'
+                                          fontWeight: '500',
+                                          direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                          textAlign: 'center',
+                                          whiteSpace: 'nowrap'
                                         }}
                                       >
-                                        {trimmedKeyword}
+                                        {translatedKeyword}
                                       </span>
                                     );
                                   })}
                                 </div>
                               )}
-                              <div className="text-date">
-                                Posting date: {formatDate(listing.createdAt)}
+                              <div className="text-date" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                {t('postingDate')}: {formatDate(listing.createdAt)}
                               </div>
-                              <div className="text-1 text-color-3">
-                                {listing.address}
+                              <div className="text-1 text-color-3" style={{ textAlign: locale === 'ar' ? 'right' : 'left', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                                {locale === 'ar' && listing.address_ar ? listing.address_ar : listing.address}
                               </div>
-                              <div className="text-btn text-color-primary">
+                              <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                 ${listing.propertyPrice?.toLocaleString()}
                                 {((listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') && listing.rentType) && ` / ${listing.rentType}`}
                               </div>
@@ -564,7 +629,8 @@ export default function Property() {
                                 alignItems: 'center', 
                                 gap: '8px', 
                                 marginTop: '12px',
-                                flexWrap: 'wrap'
+                                flexWrap: 'wrap',
+                                justifyContent: locale === 'ar' ? 'flex-end' : 'flex-start'
                               }}>
                                 {/* Property ID Tag */}
                                 <div style={{
@@ -603,14 +669,14 @@ export default function Property() {
                                     fill="none"
                                     style={{ flexShrink: 0 }}
                                   />
-                                  <span>{listing.visitCount || 0} views</span>
+                                  <span>{listing.visitCount || 0} {t('views')}</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </td>
                         <td>
-                          <div className="status-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
+                          <div className="status-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
                             {(() => {
                               const normalizedStatus = listing.status?.toLowerCase() || '';
                               const isSale = normalizedStatus === 'sale' || normalizedStatus === 'for sale';
@@ -634,7 +700,7 @@ export default function Property() {
                                   alignItems: 'center',
                                   justifyContent: 'center'
                                 }}>
-                                  {listing.isSold ? 'SOLD' : isSale ? 'For Sale' : 'For Rent'}
+                                  {listing.isSold ? t('sold') : isSale ? t('forSale') : t('forRent')}
                                 </span>
                               );
                             })()}
@@ -659,14 +725,14 @@ export default function Property() {
                               alignItems: 'center',
                               justifyContent: 'center'
                             }}>
-                              {(listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'pending' ? '⏳ Pending' : 
-                               (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'approved' ? '✓ Approved' :
-                               (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'closed' ? '🔒 Closed' : '❌ Rejected'}
+                              {(listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'pending' ? `⏳ ${t('pending')}` : 
+                               (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'approved' ? `✓ ${t('approved')}` :
+                               (listing.approvalStatusOriginal || listing.approvalStatus?.toLowerCase()) === 'closed' ? `🔒 ${t('closed')}` : `❌ ${t('rejected')}`}
                             </span>
                           </div>
                         </td>
                         <td>
-                          <ul className="list-action">
+                          <ul className="list-action" style={{ justifyContent: 'center', direction: 'ltr' }}>
                             <li>
                               <button 
                                 onClick={() => handleEditProperty(listing)} 
@@ -683,7 +749,7 @@ export default function Property() {
                                   fontSize: '14px',
                                   opacity: isAgentBlocked ? 0.5 : 1
                                 }}
-                                title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : 'Edit property'}
+                                title={isAgentBlocked ? t('accountBlocked') : t('edit')}
                               >
                                 <svg width={16}
                                   height={16}
@@ -698,7 +764,7 @@ export default function Property() {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                                Edit
+                                {t('edit')}
                               </button>
                             </li>
                             <li>
@@ -718,7 +784,7 @@ export default function Property() {
                                   fontWeight: listing.isSold ? '600' : '400',
                                   opacity: isAgentBlocked ? 0.5 : 1
                                 }}
-                                title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : (listing.isSold ? 'Mark as unsold' : 'Mark as sold')}
+                                title={isAgentBlocked ? t('accountBlocked') : (listing.isSold ? t('unmarkAsSold') : t('markAsSold'))}
                               >
                                 <svg width={16}
                                   height={16}
@@ -733,7 +799,7 @@ export default function Property() {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                                {listing.isSold ? 'Mark Unsold' : 'Mark Sold'}
+                                {listing.isSold ? t('unmarkAsSold') : t('markAsSold')}
                               </button>
                             </li>
                             <li>
@@ -752,7 +818,7 @@ export default function Property() {
                                   fontSize: '14px',
                                   opacity: isAgentBlocked ? 0.5 : 1
                                 }}
-                                title={isAgentBlocked ? 'Your account is blocked. This action is disabled.' : 'Delete property'}
+                                title={isAgentBlocked ? t('accountBlocked') : t('delete')}
                               >
                                 <svg width={16}
                                   height={16}
@@ -767,7 +833,7 @@ export default function Property() {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                                Delete
+                                {t('delete')}
                               </button>
                             </li>
                           </ul>
@@ -779,9 +845,16 @@ export default function Property() {
               )}
             </div>
             
-            {/* Pagination */}
+            {/* Pagination - Keep numbers in English and LTR direction for both languages */}
             {!isLoading && !isError && filteredListings.length > 0 && (
-              <ul className="wg-pagination" style={{ marginTop: '20px' }}>
+              <ul 
+                className="wg-pagination" 
+                style={{ 
+                  marginTop: '20px',
+                  direction: 'ltr', // Force LTR for pagination in both languages
+                  textAlign: 'left' // Keep left alignment
+                }}
+              >
                 <li className={`arrow ${currentPage === 1 ? 'disabled' : ''}`}>
                   <a 
                     href="#" 
@@ -853,11 +926,12 @@ export default function Property() {
       {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={confirmationModal.isOpen}
-        onClose={() => setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false })}
+        onClose={() => setConfirmationModal({ isOpen: false, title: '', message: '', confirmText: t('confirm'), cancelText: t('cancel'), confirmColor: '#dc3545', onConfirm: null, loading: false, showInput: false })}
         onConfirm={confirmationModal.onConfirm}
         title={confirmationModal.title}
         message={confirmationModal.message}
         confirmText={confirmationModal.confirmText}
+        cancelText={confirmationModal.cancelText}
         confirmColor={confirmationModal.confirmColor}
         loading={confirmationModal.loading}
         showInput={confirmationModal.showInput || false}

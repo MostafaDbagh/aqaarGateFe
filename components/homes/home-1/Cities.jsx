@@ -292,6 +292,7 @@ export default function Cities() {
                         height: '100%',
                         transition: 'transform 0.3s ease'
                       }}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="city-overlay"></div>
                   </div>
