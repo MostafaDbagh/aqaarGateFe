@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import logger from "@/utlis/logger";
 
 /**
  * Automatically logs the user out after a period of inactivity.
@@ -38,7 +39,7 @@ export const useIdleLogout = ({
       try {
         localStorage.setItem(STORAGE_KEY, now.toString());
       } catch (error) {
-        console.warn('Failed to save last activity time:', error);
+        logger.warn('Failed to save last activity time:', error);
       }
     };
 
@@ -47,7 +48,7 @@ export const useIdleLogout = ({
         const stored = localStorage.getItem(STORAGE_KEY);
         return stored ? parseInt(stored, 10) : Date.now();
       } catch (error) {
-        console.warn('Failed to get last activity time:', error);
+        logger.warn('Failed to get last activity time:', error);
         return Date.now();
       }
     };
@@ -63,7 +64,7 @@ export const useIdleLogout = ({
 
       // If user has been idle longer than timeout, logout immediately
       if (elapsed >= timeout) {
-        console.log(`User idle for ${Math.round(elapsed / 1000 / 60)} minutes, logging out...`);
+        logger.info(`User idle for ${Math.round(elapsed / 1000 / 60)} minutes, logging out...`);
         if (typeof onIdle === "function") {
           onIdle();
         }
@@ -75,7 +76,7 @@ export const useIdleLogout = ({
       clearTimer();
       
       timerRef.current = setTimeout(() => {
-        console.log('Idle timeout reached, logging out...');
+        logger.info('Idle timeout reached, logging out...');
         if (typeof onIdle === "function") {
           onIdle();
         }
@@ -86,7 +87,7 @@ export const useIdleLogout = ({
       clearTimer();
       saveLastActivity();
       timerRef.current = setTimeout(() => {
-        console.log('Idle timeout reached, logging out...');
+        logger.info('Idle timeout reached, logging out...');
         if (typeof onIdle === "function") {
           onIdle();
         }
@@ -155,7 +156,7 @@ export const useIdleLogout = ({
       try {
         localStorage.removeItem(STORAGE_KEY);
       } catch (error) {
-        console.warn('Failed to clear last activity time:', error);
+        logger.warn('Failed to clear last activity time:', error);
       }
     }
 

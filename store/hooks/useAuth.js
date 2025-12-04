@@ -10,6 +10,7 @@ import {
   logout as logoutAction
 } from '../slices/authSlice';
 import { useRouter } from 'next/navigation';
+import logger from '@/utlis/logger';
 
 /**
  * Custom hook for authentication state from Redux
@@ -40,7 +41,7 @@ export const useAuthState = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('lastActivityTime');
       } catch (error) {
-        console.warn('Failed to clear localStorage on logout:', error);
+        logger.warn('Failed to clear localStorage on logout:', error);
       }
       
       // Clear cookies
@@ -48,7 +49,7 @@ export const useAuthState = () => {
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       } catch (error) {
-        console.warn('Failed to clear cookies on logout:', error);
+        logger.warn('Failed to clear cookies on logout:', error);
       }
     }
     

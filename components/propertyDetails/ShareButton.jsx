@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ShareIcon, FacebookIcon, XIcon, WhatsAppIcon, EmailIcon, LinkIcon } from "@/components/icons";
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import logger from "@/utlis/logger";
 import styles from "./ShareButton.module.css";
 
 export default function ShareButton({ property }) {
@@ -39,7 +40,7 @@ export default function ShareButton({ property }) {
       } catch (error) {
         // User cancelled or error occurred
         if (error.name !== 'AbortError') {
-          console.error('Error sharing:', error);
+          logger.error('Error sharing:', error);
         }
       }
     }
@@ -84,7 +85,7 @@ export default function ShareButton({ property }) {
       // Show success message (you can add a toast notification here)
       setIsOpen(false);
     } catch (error) {
-      console.error('Failed to copy link:', error);
+      logger.error('Failed to copy link:', error);
     }
   };
 

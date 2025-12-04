@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getCSRFToken, generateCSRFToken, rateLimiter } from '@/utils/security'
+import logger from '@/utlis/logger'
 
 const localhost = 'http://localhost:5500/api'
 const render ='https://aqaargatebe2.onrender.com/api'
@@ -132,7 +133,7 @@ Axios.interceptors.response.use(
       error.message.includes('CORS') ||
       error.message.includes('Failed to fetch')
     )) {
-      console.error('[CORS Error]', {
+      logger.error('[CORS Error]', {
         message: error.message,
         url: error.config?.url,
         baseURL: error.config?.baseURL,
@@ -172,7 +173,7 @@ Axios.interceptors.response.use(
     if (error.response?.status === 0 || error.response?.status === 403) {
       const url = error.config?.url || '';
       if (url && !url.includes('/auth/')) {
-        console.warn('[CORS Warning]', {
+        logger.warn('[CORS Warning]', {
           status: error.response?.status,
           url: error.config?.url,
           origin: typeof window !== 'undefined' ? window.location.origin : 'unknown'

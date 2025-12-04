@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import Link from "next/link";
+import Image from "next/image";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { useListingsByAgent } from "@/apis/hooks";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import LocationLoader from "../common/LocationLoader";
+import logger from "@/utlis/logger";
 import styles from "./Listings.module.css";
 
 const extractListings = (payload) => {
@@ -409,14 +411,14 @@ export default function Listings({ agentId }) {
         <>
           <div id="parent" className={styles.rootGrid}>
             {listings.map((property, i) => {
-              // Debug: Log property data to see image structure
+              // Debug: Log property data to see image structure (only in development)
               if (i === 0) {
-                console.log('First property data:', property);
-                console.log('Property images:', property?.images);
-                console.log('Property imageNames:', property?.imageNames);
-                console.log('Property coverImage:', property?.coverImage);
-                console.log('Property featuredImage:', property?.featuredImage);
-                console.log('Property mainImage:', property?.mainImage);
+                logger.debug('First property data:', property);
+                logger.debug('Property images:', property?.images);
+                logger.debug('Property imageNames:', property?.imageNames);
+                logger.debug('Property coverImage:', property?.coverImage);
+                logger.debug('Property featuredImage:', property?.featuredImage);
+                logger.debug('Property mainImage:', property?.mainImage);
               }
               
               const imageSrc = getImageSource(property);
@@ -428,13 +430,15 @@ export default function Listings({ agentId }) {
                   <div className={`${styles.imageWrap} image-wrap`}>
                     {hasImage ? (
                       <Link href={`/property-detail/${property._id}`}>
-                        <img
+                        <Image
                           className={styles.propertyImage + " lazyload"}
                           alt={property.propertyKeyword || property.propertyTitle || tCommon('property')}
                           src={imageSrc}
+                          width={600}
+                          height={401}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           onError={(e) => {
-                            console.error('❌ Image failed to load:', e.target.src);
+                            logger.error('Image failed to load:', e.target.src);
                             // Hide image and show no image message
                             e.target.style.display = 'none';
                             const noImageDiv = e.target.nextElementSibling;

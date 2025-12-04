@@ -2,6 +2,8 @@
  * Performance optimization utilities
  */
 
+import logger from './logger';
+
 // Debounce function for search inputs
 export const debounce = (func, wait) => {
   let timeout;
@@ -83,7 +85,7 @@ export const measurePerformance = (name, fn) => {
   const start = performance.now();
   const result = fn();
   const end = performance.now();
-  console.log(`${name} took ${end - start} milliseconds`);
+  logger.debug(`${name} took ${end - start} milliseconds`);
   return result;
 };
 
@@ -152,7 +154,7 @@ export const getOptimizedImageUrl = (url, width, height, quality = 80) => {
 // Bundle analyzer helper
 export const analyzeBundle = () => {
   if (typeof window !== 'undefined' && window.__NEXT_DATA__) {
-    console.log('Bundle analysis:', {
+    logger.debug('Bundle analysis:', {
       buildId: window.__NEXT_DATA__.buildId,
       runtimeConfig: window.__NEXT_DATA__.runtimeConfig,
     });

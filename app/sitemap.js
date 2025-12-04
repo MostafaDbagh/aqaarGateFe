@@ -1,3 +1,13 @@
+// Import logger for server-side logging
+const logger = {
+  error: (...args) => {
+    // Server-side logging - only log in development or use proper logging service
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(...args);
+    }
+  }
+};
+
 async function getProperties() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
@@ -15,7 +25,7 @@ async function getProperties() {
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.error('Failed to fetch properties for sitemap');
+        logger.error('Failed to fetch properties for sitemap');
         return [];
       }
       
@@ -34,14 +44,14 @@ async function getProperties() {
     } catch (fetchError) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
-        console.error('Timeout fetching properties for sitemap');
+        logger.error('Timeout fetching properties for sitemap');
       } else {
-        console.error('Error fetching properties for sitemap:', fetchError);
+        logger.error('Error fetching properties for sitemap:', fetchError);
       }
       return [];
     }
   } catch (error) {
-    console.error('Error in getProperties:', error);
+    logger.error('Error in getProperties:', error);
     return [];
   }
 }
@@ -63,7 +73,7 @@ async function getAgents() {
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.error('Failed to fetch agents for sitemap');
+        logger.error('Failed to fetch agents for sitemap');
         return [];
       }
       
@@ -80,14 +90,14 @@ async function getAgents() {
     } catch (fetchError) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
-        console.error('Timeout fetching agents for sitemap');
+        logger.error('Timeout fetching agents for sitemap');
       } else {
-        console.error('Error fetching agents for sitemap:', fetchError);
+        logger.error('Error fetching agents for sitemap:', fetchError);
       }
       return [];
     }
   } catch (error) {
-    console.error('Error in getAgents:', error);
+    logger.error('Error in getAgents:', error);
     return [];
   }
 }

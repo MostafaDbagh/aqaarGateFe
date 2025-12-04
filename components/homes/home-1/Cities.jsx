@@ -26,8 +26,8 @@ export default function Cities() {
   const citiesData = useMemo(() => {
     if (!cityStatsResponse?.data?.cities) {
       return [];
-    }
-    return cityStatsResponse.data.cities;
+      }
+      return cityStatsResponse.data.cities;
   }, [cityStatsResponse]);
 
   // Memoize locations array to prevent recreation on every render
@@ -39,7 +39,7 @@ export default function Cities() {
         id: index + 1,
         city: city.city || city.displayName,
         properties: `${city.count} Property${city.count !== 1 ? 's' : ''}`,
-        imageSrc: city.imageSrc || '/images/cities/SY.webp',
+        imageSrc: city.imageSrc || '/images/cities/Deir ez-Zur.jpg',
         alt: city.city || city.displayName,
         width: 400,
         height: 350

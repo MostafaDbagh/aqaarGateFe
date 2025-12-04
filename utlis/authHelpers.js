@@ -1,3 +1,5 @@
+import logger from './logger';
+
 /**
  * Check if user is authenticated
  * @returns {boolean} True if user is logged in
@@ -26,7 +28,7 @@ export const getCurrentUser = () => {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   } catch (error) {
-    console.error('Error parsing user data:', error);
+    logger.error('Error parsing user data:', error);
     return null;
   }
 };

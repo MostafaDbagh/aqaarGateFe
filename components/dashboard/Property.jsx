@@ -179,7 +179,7 @@ export default function Property() {
           }, 1000);
         } catch (error) {
           logger.error('Error deleting property:', error);
-          console.error('Full error object:', {
+          logger.error('Full error object:', {
             message: error?.message,
             response: error?.response?.data,
             status: error?.response?.status,
