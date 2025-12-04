@@ -635,18 +635,35 @@ export default function Agents() {
               <div className="tf-grid-layout-2">
                 {sortedAgents.map((agent) => (
                   <div key={agent._id} className="agent-item hover-img">
-                    <div className="image-wrap" style={{maxHeight:'320px'}}>
-                      <Link href={`/agents-details/${agent._id}`}>
-                        <Image
-                          className="lazyload property-img"
-                          alt={agent.fullName || t('agentName')}
-                          width={435}
-                          height={320}
-                          src={agent.avatar || "/images/avatar/agent-1.jpg"}
-                          style={{maxHeight: '320px', objectFit: 'cover'}}
-                        />
-                      </Link>
-                    </div>
+                    <div 
+        className="image-wrap" 
+        style={{
+        
+          minHeight: '320px',
+          maxHeight: '320px',
+          height: '320px',
+          width: '100%',
+          position: 'relative',
+          overflow: 'hidden',
+          backgroundImage: `url(${agent.avatar || "/images/avatar/agent-1.jpg"})`,
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          borderRadius: '16px'
+        }}
+      >
+        <Link 
+          href={`/agents-details/${agent._id}`}
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+            zIndex: 1
+          }}
+          aria-label={agent.fullName || t('agentName')}
+        />
+      </div>
                     <div className="content">
                       <div className="author">
                         <h5 className={styles.agentName + " name lh-30"}>

@@ -52,26 +52,38 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     'Green Title Deed'
   ];
 
-  // Handle tag click - add tag to propertyKeyword
+  // Handle tag click - add/remove tag from propertyKeyword
   const handleTagClick = (tag) => {
-    const currentKeyword = formData.propertyKeyword.trim();
-    if (currentKeyword) {
-      // If keyword already contains this tag, don't add it again
-      if (currentKeyword.toLowerCase().includes(tag.toLowerCase())) {
-        return;
-      }
-      // Add tag with comma separator
-      setFormData(prev => ({
-        ...prev,
-        propertyKeyword: `${currentKeyword}, ${tag}`
-      }));
+    const currentKeywords = formData.propertyKeyword
+      .split(',')
+      .map(k => k.trim())
+      .filter(k => k);
+    
+    // Check if tag is already selected
+    const tagIndex = currentKeywords.findIndex(k => k.toLowerCase() === tag.toLowerCase());
+    
+    if (tagIndex >= 0) {
+      // Remove tag if already selected
+      currentKeywords.splice(tagIndex, 1);
     } else {
-      // If keyword is empty, just set the tag
-      setFormData(prev => ({
-        ...prev,
-        propertyKeyword: tag
-      }));
+      // Add tag if not selected
+      currentKeywords.push(tag);
     }
+    
+    // Update propertyKeyword with comma-separated tags
+    setFormData(prev => ({
+      ...prev,
+      propertyKeyword: currentKeywords.join(', ')
+    }));
+  };
+  
+  // Check if a tag is selected
+  const isTagSelected = (tag) => {
+    const currentKeywords = formData.propertyKeyword
+      .split(',')
+      .map(k => k.trim())
+      .filter(k => k);
+    return currentKeywords.some(k => k.toLowerCase() === tag.toLowerCase());
   };
 
   // Use same amenities list as AddProperty
@@ -276,29 +288,61 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
               <label className={styles.formLabel}>
                 Property Title *
               </label>
+              
+              {/* Display input showing selected tags (read-only) */}
               <input
                 type="text"
                 name="propertyKeyword"
                 value={formData.propertyKeyword}
-                onChange={handleInputChange}
+                readOnly
                 required
                 className={styles.input}
+                placeholder="Select tags from below..."
+                style={{ cursor: 'not-allowed', backgroundColor: '#f8f9fa' }}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
               
-              {/* Keyword Tags Suggestions */}
+              {/* Selected Tags Display */}
+              {formData.propertyKeyword && (
+                <div className={styles.selectedTagsContainer} style={{ marginTop: '12px' }}>
+                  {formData.propertyKeyword.split(',').map((keyword, index) => {
+                    const trimmedKeyword = keyword.trim();
+                    if (!trimmedKeyword) return null;
+                    return (
+                      <span key={index} className={styles.selectedTag}>
+                        {trimmedKeyword}
+                        <span 
+                          className={styles.removeTagIcon}
+                          onClick={() => {
+                            const currentKeywords = formData.propertyKeyword
+                              .split(',')
+                              .map(k => k.trim())
+                              .filter(k => k && k !== trimmedKeyword);
+                            setFormData(prev => ({
+                              ...prev,
+                              propertyKeyword: currentKeywords.join(', ')
+                            }));
+                          }}
+                        >×</span>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+              
+              {/* Keyword Tags Suggestions - Only allow selection from these tags */}
               <div className={styles.keywordTagsContainer}>
-                <span className={styles.keywordTagsLabel}>Suggested tags:</span>
+                <span className={styles.keywordTagsLabel}>Select tags (click to add/remove):</span>
                 {keywordTags.map((tag, index) => (
                   <span
                     key={index}
-                    className={styles.keywordTag}
+                    className={`${styles.keywordTag} ${isTagSelected(tag) ? styles.keywordTagSelected : ''}`}
                     onClick={() => handleTagClick(tag)}
-                    title={`Click to add "${tag}"`}
+                    title={`Click to ${isTagSelected(tag) ? 'remove' : 'add'} "${tag}"`}
                   >
                     {tag}
-                    <span className={styles.keywordTagIcon}>+</span>
+                    <span className={styles.keywordTagIcon}>{isTagSelected(tag) ? '✓' : '+'}</span>
                   </span>
                 ))}
               </div>

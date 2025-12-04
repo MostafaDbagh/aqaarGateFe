@@ -281,6 +281,52 @@
   width: 100%;
 }
 
+.keywordTagSelected {
+  background-color: #f1913d !important;
+  border-color: #f1913d !important;
+  color: #fff !important;
+}
+
+.keywordTagSelected .keywordTagIcon {
+  opacity: 1;
+  color: #fff;
+}
+
+.selectedTagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  min-height: 44px;
+}
+
+.selectedTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: #f1913d;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.removeTagIcon {
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.removeTagIcon:hover {
+  opacity: 1;
+}
+
 /* Arabic Translation Section */
 .arabicSection {
   margin-top: 32px;
