@@ -327,11 +327,11 @@ export default function Properties({ listings, isLoading, isError }) {
             <li 
               className="flat-tag text-4 fw-6 text_white"
               style={{
-                backgroundColor: listing.status?.toLowerCase() === 'rent' ? '#6b7280' : '#10b981',
+                backgroundColor: (listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') ? '#3b82f6' : '#10b981',
                 color: 'white'
               }}
             >
-              {listing.status?.toLowerCase() === 'rent' ? t('common.forRent') : t('common.forSale')}
+              {(listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') ? t('common.forRent') : t('common.forSale')}
             </li>
           </ul>
 
@@ -599,7 +599,7 @@ export default function Properties({ listings, isLoading, isError }) {
                 const basePrice = `${symbol} ${price}`;
                 
                 // Add rent period for rental properties
-                if (listing?.status?.toLowerCase() === 'rent' && listing?.rentType) {
+                if ((listing?.status?.toLowerCase() === 'rent' || listing?.status?.toLowerCase() === 'for rent') && listing?.rentType) {
                   const rentTypeMap = {
                     'monthly': t('common.monthly'),
                     'weekly': t('common.weekly'),

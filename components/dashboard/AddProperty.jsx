@@ -1108,13 +1108,14 @@ export default function AddProperty({ isAdminMode = false }) {
                     {t('price')}:<span>*</span>
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     name="propertyPrice"
                     className="form-control"
                     placeholder={t('pricePlaceholder')}
                     value={formData.propertyPrice}
                     onChange={handleInputChange}
-                    min="0"
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                   />
                   {errors.propertyPrice && <span className="text-danger">{errors.propertyPrice}</span>}
                 </fieldset>

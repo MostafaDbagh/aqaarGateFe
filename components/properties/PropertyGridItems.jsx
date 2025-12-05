@@ -242,10 +242,10 @@ export default function PropertyGridItems({ listings = [] }) {
               )}
                 <li 
                   className={`flat-tag text-4 fw-6 text_white ${styles.statusBadge} ${
-                    property.status?.toLowerCase() === 'rent' ? styles.statusBadgeRent : styles.statusBadgeSale
+                    (property.status?.toLowerCase() === 'rent' || property.status?.toLowerCase() === 'for rent') ? styles.statusBadgeRent : styles.statusBadgeSale
                   }`}
                 >
-                  {property.status?.toLowerCase() === 'rent' ? t('common.forRent') : t('common.forSale')}
+                  {(property.status?.toLowerCase() === 'rent' || property.status?.toLowerCase() === 'for rent') ? t('common.forRent') : t('common.forSale')}
                 </li>
                 {property.isAgentBlocked && (
                   <li className={`flat-tag text-4 fw-6 text_white ${styles.blockedAgentBadge}`}>

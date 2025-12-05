@@ -7,13 +7,14 @@
 export const getStatusBadge = (status, t = null) => {
   const normalizedStatus = status?.toLowerCase();
   
-  if (normalizedStatus === 'rent') {
+  // Check for both 'rent' and 'for rent' formats
+  if (normalizedStatus === 'rent' || normalizedStatus === 'for rent') {
     return {
       text: t ? t('common.forRent') : 'For Rent',
-      bgColor: '#6b7280', // Gray
+      bgColor: '#3b82f6', // Bright Blue
       textColor: '#FFFFFF'
     };
-  } else if (normalizedStatus === 'sale') {
+  } else if (normalizedStatus === 'sale' || normalizedStatus === 'for sale') {
     return {
       text: t ? t('common.forSale') : 'For Sale',
       bgColor: '#10b981', // Green

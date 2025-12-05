@@ -186,8 +186,8 @@ export default function Properties2() {
                 {listings.map((property) => {
                   const imageSrc = getImageSource(property);
                   const status = property.status?.toLowerCase();
-                  const isRent = status === 'rent';
-                  const isSale = status === 'sale';
+                  const isRent = status === 'rent' || status === 'for rent';
+                  const isSale = status === 'sale' || status === 'for sale';
                   const displayStatus = isRent ? tCommon('forRent') : isSale ? tCommon('forSale') : tCommon('forRent');
                   
                   return (

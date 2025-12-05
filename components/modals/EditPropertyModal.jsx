@@ -384,13 +384,13 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   {t('price')} *
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="propertyPrice"
                   value={formData.propertyPrice}
                   onChange={handleInputChange}
                   required
-                  min="0"
-                  step="0.01"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
                   className={styles.input}
                   style={{ direction: 'ltr', textAlign: 'left' }}
                   onFocus={handleInputFocus}

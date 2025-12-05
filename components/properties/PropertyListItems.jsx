@@ -436,11 +436,11 @@ export default function PropertyListItems({ listings = [] }) {
               <li 
                 className="flat-tag text-4 fw-6 text_white"
                 style={{
-                  backgroundColor: property.status?.toLowerCase() === 'rent' ? '#6b7280' : '#10b981',
+                  backgroundColor: (property.status?.toLowerCase() === 'rent' || property.status?.toLowerCase() === 'for rent') ? '#3b82f6' : '#10b981',
                   color: 'white'
                 }}
               >
-                {property.status?.toLowerCase() === 'rent' ? t('common.forRent') : t('common.forSale')}
+                {(property.status?.toLowerCase() === 'rent' || property.status?.toLowerCase() === 'for rent') ? t('common.forRent') : t('common.forSale')}
               </li>
               {property.isAgentBlocked && (
                 <li className="flat-tag text-4 fw-6 text_white" style={{ backgroundColor: '#dc2626', color: 'white' }}>
