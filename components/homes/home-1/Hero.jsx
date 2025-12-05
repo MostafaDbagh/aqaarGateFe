@@ -1,7 +1,7 @@
 "use client";
 import SearchForm from "@/components/common/SearchForm";
-import React, { useState } from "react";
-import { useTranslations } from 'next-intl';
+import React, { useState, useRef, useEffect } from "react";
+import { useTranslations, useLocale } from 'next-intl';
 import styles from "./Hero.module.css";
 
 export default function Hero({
@@ -10,7 +10,150 @@ export default function Hero({
   setTriggerSearch,
 }) {
   const t = useTranslations('hero');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [activeItem, setActiveItem] = useState(t('forSale'));
+  const [showKeywordDropdown, setShowKeywordDropdown] = useState(false);
+  const [filteredKeywords, setFilteredKeywords] = useState([]);
+  const searchInputRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const isRTL = locale === 'ar';
+
+  // Get all property keywords - comprehensive list from translations
+  const getAllKeywords = () => {
+    // Get unique keywords (avoid duplicates with different cases)
+    const keywordsSet = new Set([
+      // From AddProperty.jsx - Core keywords
+      "South-facing house",
+      "East-facing",
+      "West-facing",
+      "Well-ventilated",
+      "Bright",
+      "Modern building",
+      "Old building",
+      "Spacious",
+      "View",
+      "Open view",
+      "Sea view",
+      "Mountain view",
+      "luxury",
+      "doublex finishing",
+      "super doublex finishing",
+      "standard finishing",
+      "stone finishing",
+      "2,400 shares",
+      "Green Title Deed",    
+
+  
+    ]);
+    
+    return Array.from(keywordsSet);
+  };
+
+  // Translate keyword
+  const translateKeyword = (keyword) => {
+    try {
+      const key = keyword.toLowerCase().replace(/[\s-]/g, '_');
+      const translated = tCommon(`propertyKeywords.${key}`);
+      if (translated && !translated.startsWith('propertyKeywords.')) {
+        return translated;
+      }
+    } catch (e) {
+      // Fallback to original
+    }
+    return keyword;
+  };
+
+  // Filter keywords based on search value and exclude already added keywords
+  useEffect(() => {
+    const searchValue = searchParams?.keyword || '';
+    const allKeywords = getAllKeywords();
+    
+    // Get already added keywords
+    const addedKeywords = searchValue
+      .split(',')
+      .map(k => k.trim())
+      .filter(k => k)
+      .map(k => k.toLowerCase());
+    
+    // Filter out already added keywords - this is the main filter
+    let filtered = allKeywords.filter(keyword => 
+      !addedKeywords.some(added => added === keyword.toLowerCase())
+    );
+    
+    // Don't filter by search value - we want to show all available keywords
+    // The searchValue here contains selected keywords, not a search query
+    
+    setFilteredKeywords(filtered);
+  }, [searchParams?.keyword, tCommon]);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if click is inside the keywords container or dropdown
+      const isClickInContainer = searchInputRef.current?.contains(event.target);
+      const isClickInDropdown = dropdownRef.current?.contains(event.target);
+      const isClickInTag = event.target.closest(`.${styles.keywordTag}`);
+      const isClickInRemoveButton = event.target.closest(`.${styles.removeTag}`);
+      const isClickInKeywordItem = event.target.closest(`.${styles.keywordItem}`);
+      
+      // Close if click is outside both container and dropdown
+      if (!isClickInContainer && !isClickInDropdown && !isClickInTag && !isClickInRemoveButton && !isClickInKeywordItem) {
+        setShowKeywordDropdown(false);
+      }
+    };
+
+    if (showKeywordDropdown) {
+      // Use a small delay to allow onClick handlers to run first
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('click', handleClickOutside, false);
+      }, 100);
+
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener('click', handleClickOutside, false);
+      };
+    }
+  }, [showKeywordDropdown]);
+
+  // Handle keyword selection
+  const handleKeywordSelect = (keyword, event) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    if (!keyword || !keyword.trim()) return;
+    
+    const currentKeyword = searchParams?.keyword || '';
+    const keywords = currentKeyword
+      .split(',')
+      .map(k => k.trim())
+      .filter(k => k);
+    
+    // Check if keyword already exists (case-insensitive)
+    const keywordExists = keywords.some(k => 
+      k.toLowerCase().trim() === keyword.toLowerCase().trim()
+    );
+    
+    if (!keywordExists) {
+      // Add new keyword to the list
+      const newKeywords = keywords.length > 0 
+        ? [...keywords, keyword.trim()].join(', ')
+        : keyword.trim();
+      
+      // Update search params with new keywords
+      if (onSearchChange) {
+        onSearchChange({ keyword: newKeywords });
+      }
+      
+      // Close dropdown after selecting a keyword
+      setShowKeywordDropdown(false);
+    } else {
+      // If keyword already exists, close dropdown
+      setShowKeywordDropdown(false);
+    }
+  };
 
   const statusOptions = [
     { label: t('forSale'), value: "sale" },
@@ -60,17 +203,120 @@ export default function Hero({
                     </div>
                   </div>
                   
-                  <form onSubmit={(e) => e.preventDefault()}>
-                    <fieldset>
-                        <input
-                          type="text"
-                          placeholder={t('searchPlaceholder')}
-                          onChange={(e) =>
-                            onSearchChange({ keyword: e.target.value })
-                          }
-                        />
-                    </fieldset>
-                  </form>
+                  <div style={{ position: 'relative', width: '100%', flex: 1 }}>
+                    <form onSubmit={(e) => e.preventDefault()} style={{ width: '100%' }}>
+                      <fieldset style={{ width: '100%', margin: 0, padding: 0, border: 'none' }}>
+                        {/* Keywords Input Container - Only displays selected tags */}
+                        <div 
+                          ref={searchInputRef}
+                          className={styles.keywordsInputContainer}
+                          onClick={(e) => {
+                            // Don't close if clicking on tags or remove buttons
+                            if (e.target.closest(`.${styles.keywordTag}`) || 
+                                e.target.closest(`.${styles.removeTag}`)) {
+                              return;
+                            }
+                            
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            // Always open dropdown when clicking on container
+                            setShowKeywordDropdown(true);
+                          }}
+                        >
+                          {/* Display selected keywords as tags */}
+                          {(() => {
+                            const keywordString = searchParams?.keyword || '';
+                            const keywords = keywordString
+                              .split(',')
+                              .map(k => k.trim())
+                              .filter(k => k);
+                            
+                            return keywords.map((keyword, index) => (
+                              <span key={`selected-${keyword}-${index}`} className={styles.keywordTag}>
+                                {translateKeyword(keyword)}
+                                <button
+                                  type="button"
+                                  className={styles.removeTag}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    const updatedKeywords = keywords
+                                      .filter(k => k !== keyword);
+                                    onSearchChange({ keyword: updatedKeywords.join(', ') });
+                                  }}
+                                  aria-label={locale === 'ar' ? 'إزالة' : 'Remove'}
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ));
+                          })()}
+                          
+                          {/* Placeholder when no keywords selected */}
+                          {(() => {
+                            const keywordString = searchParams?.keyword || '';
+                            const hasKeywords = keywordString
+                              .split(',')
+                              .map(k => k.trim())
+                              .filter(k => k).length > 0;
+                            
+                            if (!hasKeywords) {
+                              return (
+                                <span className={styles.placeholderText}>
+                                  {t('searchPlaceholder')}
+                                </span>
+                              );
+                            }
+                            return null;
+                          })()}
+                        </div>
+                      </fieldset>
+                    </form>
+                    
+                    {/* Keywords Dropdown - Separate from input container */}
+                    {showKeywordDropdown && filteredKeywords.length > 0 && (
+                      <div 
+                        ref={dropdownRef}
+                        className={styles.keywordsDropdown}
+                        style={{ 
+                          direction: isRTL ? 'rtl' : 'ltr',
+                          textAlign: isRTL ? 'right' : 'left'
+                        }}
+                      >
+                        <div className={styles.keywordsList}>
+                          {filteredKeywords.map((keyword, index) => {
+                            const keywordString = searchParams?.keyword || '';
+                            const selectedKeywords = keywordString
+                              .split(',')
+                              .map(k => k.trim())
+                              .filter(k => k)
+                              .map(k => k.toLowerCase());
+                            const isSelected = selectedKeywords.includes(keyword.toLowerCase());
+                            
+                            return (
+                              <button
+                                key={`available-${keyword}-${index}`}
+                                type="button"
+                                className={`${styles.keywordItem} ${isSelected ? styles.selected : ''}`}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleKeywordSelect(keyword, e);
+                                }}
+                              >
+                                {translateKeyword(keyword)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <div className="box-item wrap-btn">
                     <div className="btn-filter show-form searchFormToggler">
                       <div className="icons">

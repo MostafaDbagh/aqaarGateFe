@@ -15,7 +15,27 @@ import styles from "./Sidebar.module.css";
 import { useTranslations } from 'next-intl';
 
 export default function Sidebar() {
-  const t = useTranslations('agent.sidebar');
+  let t;
+  try {
+    t = useTranslations('agent.sidebar');
+  } catch (error) {
+    // Fallback for static generation
+    t = (key) => {
+      const fallbacks = {
+        'dashboards': 'Dashboards',
+        'myPackage': 'My package',
+        'myProfile': 'My Profile',
+        'myFavorites': 'My favorites',
+        'reviews': 'Reviews',
+        'messages': 'Messages',
+        'myProperties': 'My properties',
+        'addProperty': 'Add property',
+        'logout': 'Logout',
+        'deleteMyAccount': 'Delete My Account'
+      };
+      return fallbacks[key] || key;
+    };
+  }
   const pathname = usePathname();
   const router = useRouter();
   const { isAgent, logout: logoutUser, user } = useAuthState();
