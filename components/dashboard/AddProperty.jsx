@@ -168,18 +168,19 @@ export default function AddProperty({ isAdminMode = false }) {
   // Check if user is admin
   const isAdmin = user?.role === 'admin';
 
-  // Update rentType when propertyType changes to Villa and status is rent
+  // Update rentType when propertyType changes to Villa or Holiday Home and status is rent
   useEffect(() => {
-    if (formData.propertyType === "Villa" && formData.status === "rent") {
-      // Set default to "daily" for Villa rent if current value is not in Villa options
-      if (!["daily", "one-week", "two-week", "monthly"].includes(formData.rentType)) {
+    if ((formData.propertyType === "Villa" || formData.propertyType === "Holiday Home") && formData.status === "rent") {
+      // Set default to "daily" for Villa or Holiday Home rent if current value is not in options
+      const validOptions = ["daily", "one-week", "two-week", "monthly"];
+      if (!validOptions.includes(formData.rentType)) {
         setFormData(prev => ({
           ...prev,
           rentType: "daily"
         }));
       }
     } else if (formData.status === "rent") {
-      // Reset to default for non-Villa rent properties
+      // Reset to default for non-Villa/Holiday Home rent properties
       if (["daily", "one-week", "two-week", "monthly"].includes(formData.rentType)) {
         setFormData(prev => ({
           ...prev,
@@ -191,7 +192,7 @@ export default function AddProperty({ isAdminMode = false }) {
   
   // Property types - Holiday Home only for admin
   const getPropertyTypes = () => {
-    const baseTypes = ["Apartment", "Villa", "Office", "House", "Land", "Commercial"];
+    const baseTypes = ["Apartment", "Villa", "Office", "Land", "Commercial"];
     if (isAdmin || isAdminMode) {
       return [...baseTypes, "Holiday Home"];
     }
@@ -343,13 +344,13 @@ export default function AddProperty({ isAdminMode = false }) {
     }));
   };
 
-  // Check if all Arabic fields are filled
+  // Check if all Arabic fields are filled (notes_ar is optional)
   const isArabicSectionComplete = () => {
     return (
       formData.description_ar && formData.description_ar.trim() !== '' &&
       formData.address_ar && formData.address_ar.trim() !== '' &&
-      formData.neighborhood_ar && formData.neighborhood_ar.trim() !== '' &&
-      formData.notes_ar && formData.notes_ar.trim() !== ''
+      formData.neighborhood_ar && formData.neighborhood_ar.trim() !== ''
+      // notes_ar is optional, so we don't check it
     );
   };
 
@@ -369,7 +370,7 @@ export default function AddProperty({ isAdminMode = false }) {
     if (!formData.state) newErrors.state = "State is required";
     if (!formData.neighborhood) newErrors.neighborhood = "Neighborhood is required";
     
-    // Arabic translation fields - REQUIRED
+    // Arabic translation fields - REQUIRED (except notes_ar which is optional)
     if (!formData.description_ar || formData.description_ar.trim() === '') {
       newErrors.description_ar = "Arabic description is required";
     }
@@ -379,9 +380,7 @@ export default function AddProperty({ isAdminMode = false }) {
     if (!formData.neighborhood_ar || formData.neighborhood_ar.trim() === '') {
       newErrors.neighborhood_ar = "Arabic neighborhood is required";
     }
-    if (!formData.notes_ar || formData.notes_ar.trim() === '') {
-      newErrors.notes_ar = "Arabic notes are required";
-    }
+    // notes_ar is optional - no validation needed
     
     // Numeric validations
     if (!formData.bedrooms || isNaN(formData.bedrooms) || parseInt(formData.bedrooms) < 0) {
@@ -913,11 +912,14 @@ export default function AddProperty({ isAdminMode = false }) {
                   <DropdownSelect
                     name="rentType"
                     options={
-                      // For Villa + rent: show daily, one-week, two-week, monthly
-                      formData.propertyType === "Villa" && formData.status === "rent"
+                      // For Villa or Holiday Home + rent: show daily, one-week, two-week, monthly
+                      (formData.propertyType === "Villa" || formData.propertyType === "Holiday Home") && formData.status === "rent"
                         ? ["daily", "one-week", "two-week", "monthly"]
-                        // For admin: show all options
-                        : isAdmin || isAdminMode
+                        // For admin: show all options including daily
+                        : (isAdmin || isAdminMode) && formData.propertyType === "Holiday Home" && formData.status === "rent"
+                        ? ["daily", "one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
+                        // For admin (other types): show one-week, two-week, three-week, one-month, three-month, six-month, one-year
+                        : (isAdmin || isAdminMode)
                         ? ["one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
                         // For regular agents: show three-month, six-month, one-year
                         : ["monthly", "three-month", "six-month", "one-year"]
@@ -1206,23 +1208,17 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box box-fieldset">
                 <label htmlFor="notes_ar">
-                  Notes (الملاحظات):<span style={{ color: '#dc3545' }}>*</span>
+                  Notes (الملاحظات):
                 </label>
                 <textarea
                   name="notes_ar"
-                  className={`textarea ${errors.notes_ar ? 'is-invalid' : ''}`}
+                  className="textarea"
                   placeholder="أدخل أي ملاحظات إضافية بالعربية..."
                   value={formData.notes_ar}
                   onChange={handleInputChange}
                   dir="rtl"
                   rows="4"
-                  required
                 />
-                {errors.notes_ar && (
-                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
-                    {errors.notes_ar}
-                  </span>
-                )}
               </fieldset>
             </div>
           </div>
