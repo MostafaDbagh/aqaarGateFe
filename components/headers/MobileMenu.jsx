@@ -36,7 +36,7 @@ export default function MobileMenu() {
           <Link href={`/`}>
             <Image
               alt="Mobile menu icon"
-              src="/images/logo/logo@2x.png"
+              src="/images/logo/new-logo.png"
               width={138}
               height={48}
             />
@@ -268,7 +268,7 @@ export default function MobileMenu() {
             </Link>
             <ul className="mb-info">
               <li>
-                {t("callUsNow")} <span className="number">+971 50 666 6666</span>
+                {t("callUsNow")} <span className="number">+963 995278383</span>
               </li>
               <li>
                 {t("support247")} <a href="mailto:support@aqaargate.com">support@aqaargate.com</a>

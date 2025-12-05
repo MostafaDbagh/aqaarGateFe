@@ -975,17 +975,15 @@ export default function PrivacyPolicy() {
                   fontFamily: 'sans-serif'
                 }}>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>{t('section14.email')}</strong> privacy@AqaarGate.com
+                    <strong>{t('section14.email')}</strong> support@aqaargate.com
                   </p>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>{t('section14.phone')}</strong> +1 (555) 123-4567
+                    <strong>{t('section14.phone')}</strong> +963995278383
                   </p>
                   <p style={{ margin: '0 0 8px 0' }}>
-                    <strong>{t('section14.address')}</strong> 123 Property Street, Real Estate City, RE 12345
+                    <strong>{t('section14.address')}</strong> Dummyj Street , Latakia , Syria
                   </p>
-                  <p style={{ margin: '0' }}>
-                    <strong>{t('section14.dpo')}</strong> dpo@AqaarGate.com
-                  </p>
+             
                 </div>
 
               </div>
