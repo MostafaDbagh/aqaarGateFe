@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useLocale } from "next-intl";
 import { EyeIcon, EyeOffIcon } from "@/components/icons";
 import styles from "./PasswordInput.module.css";
 
@@ -14,6 +15,8 @@ export default function PasswordInput({
   className = "",
   error = null
 }) {
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -27,17 +30,19 @@ export default function PasswordInput({
         <input
           type={showPassword ? "text" : "password"}
           id={id}
-          className={`form-contact ${styles.passwordInput} ${error ? styles.inputError : ''}`}
+          className={`form-contact ${styles.passwordInput} ${error ? styles.inputError : ''} ${isRTL ? styles.rtlInput : ''}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
           autoComplete={autoComplete}
           required={required}
+          dir={isRTL ? 'rtl' : 'ltr'}
+          style={isRTL ? { textAlign: 'right' } : { textAlign: 'left' }}
         />
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className={styles.eyeButton}
+          className={`${styles.eyeButton} ${isRTL ? styles.eyeButtonRTL : ''}`}
           aria-label={showPassword ? "Hide password" : "Show password"}
         >
           {showPassword ? (

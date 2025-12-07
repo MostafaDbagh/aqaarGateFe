@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
 import { userAPI, authAPI } from "@/apis";
 import { countryCodes, DEFAULT_COUNTRY_CODE, extractCountryCode } from "@/constants/countryCodes";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -11,6 +12,11 @@ import styles from "./MakeMeAgentModal.module.css";
 // Wrapper component to ensure translations are available
 function MakeMeAgentModalContent({ isOpen, onClose }) {
   const { showSuccessModal } = useGlobalModal();
+  const pathname = usePathname();
+  const locale = useLocale();
+  // Extract locale from pathname (e.g., /ar/... or /en/...)
+  const localeFromPath = pathname?.split('/')[1] || locale || 'en';
+  const isRTL = localeFromPath === 'ar';
   // Always call useTranslations - it should work since we're inside NextIntlClientProvider
   const t = useTranslations('makeMeAgent');
   const [user, setUser] = useState(null);
@@ -57,17 +63,84 @@ function MakeMeAgentModalContent({ isOpen, onClose }) {
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [id]: value
-    }));
-    // Clear error for this field
-    if (errors[id]) {
-      setErrors(prev => ({
+    
+    if (id === "phone") {
+      // Prevent phone number from starting with 0
+      let phoneValue = value;
+      if (phoneValue && phoneValue.trim().startsWith('0')) {
+        phoneValue = phoneValue.replace(/^0+/, ''); // Remove leading zeros
+        setErrors(prev => ({
+          ...prev,
+          phone: t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning"
+        }));
+      } else {
+        // Clear error if valid
+        setErrors(prev => ({
+          ...prev,
+          phone: prev.phone === (t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning") ? "" : prev.phone
+        }));
+      }
+      setFormData(prev => ({
         ...prev,
-        [id]: ""
+        [id]: phoneValue
       }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [id]: value
+      }));
+      // Clear error for this field when user starts typing
+      if (errors[id]) {
+        setErrors(prev => ({
+          ...prev,
+          [id]: ""
+        }));
+      }
     }
+  };
+
+  const validatePhoneField = () => {
+    if (!formData.phone || formData.phone.trim() === "") {
+      setErrors(prev => ({ ...prev, phone: t('errors.phoneRequired') }));
+      return false;
+    } else {
+      // Remove all non-digit characters for validation
+      const digitsOnly = formData.phone.replace(/\D/g, '');
+      // Check if phone starts with 0
+      if (digitsOnly.startsWith('0')) {
+        setErrors(prev => ({ ...prev, phone: t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning" }));
+        return false;
+      } else if (digitsOnly.length < 9) {
+        setErrors(prev => ({ ...prev, phone: t('errors.phoneMinLength') || "Phone number must be at least 9 digits" }));
+        return false;
+      } else if (digitsOnly.length > 15) {
+        setErrors(prev => ({ ...prev, phone: t('errors.phoneMaxLength') || "Phone number must be at most 15 digits" }));
+        return false;
+      } else {
+        setErrors(prev => ({ ...prev, phone: "" }));
+        return true;
+      }
+    }
+  };
+
+  // Check if phone number is valid
+  const isPhoneValid = () => {
+    if (!formData.phone || formData.phone.trim() === "") {
+      return false;
+    }
+    const digitsOnly = formData.phone.replace(/\D/g, '');
+    // Check if phone starts with 0
+    if (digitsOnly.startsWith('0')) {
+      return false;
+    }
+    return digitsOnly.length >= 9 && digitsOnly.length <= 15;
+  };
+
+  // Check if form is valid (for button disabled state)
+  const isFormValidForSubmit = () => {
+    return isPhoneValid() &&
+           formData.job && formData.job.trim() !== "" &&
+           formData.company && formData.company.trim() !== "";
   };
 
   const validateForm = () => {
@@ -75,6 +148,17 @@ function MakeMeAgentModalContent({ isOpen, onClose }) {
     
     if (!formData.phone || formData.phone.trim() === "") {
       newErrors.phone = t('errors.phoneRequired');
+    } else {
+      // Remove all non-digit characters for validation
+      const digitsOnly = formData.phone.replace(/\D/g, '');
+      // Check if phone starts with 0
+      if (digitsOnly.startsWith('0')) {
+        newErrors.phone = t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning";
+      } else if (digitsOnly.length < 9) {
+        newErrors.phone = t('errors.phoneMinLength') || "Phone number must be at least 9 digits";
+      } else if (digitsOnly.length > 15) {
+        newErrors.phone = t('errors.phoneMaxLength') || "Phone number must be at most 15 digits";
+      }
     }
     
     if (!formData.job || formData.job.trim() === "") {
@@ -198,8 +282,11 @@ function MakeMeAgentModalContent({ isOpen, onClose }) {
                 id="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
+                onBlur={validatePhoneField}
                 className={`${styles.phoneInput} ${errors.phone ? styles.inputError : ''}`}
                 placeholder={t('phonePlaceholder')}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                style={isRTL ? { textAlign: 'right' } : { textAlign: 'left' }}
                 autoComplete="off"
                 required
               />
@@ -257,7 +344,7 @@ function MakeMeAgentModalContent({ isOpen, onClose }) {
             <button
               type="submit"
               className={styles.submitButton}
-              disabled={loading}
+              disabled={loading || !isFormValidForSubmit()}
             >
               {loading ? t('processing') : t('makeMeAgent')}
             </button>

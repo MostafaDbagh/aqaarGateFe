@@ -185,9 +185,10 @@ export default function Properties2() {
               >
                 {listings.map((property) => {
                   const imageSrc = getImageSource(property);
-                  const status = property.status?.toLowerCase();
-                  const isRent = status === 'rent' || status === 'for rent';
-                  const isSale = status === 'sale' || status === 'for sale';
+                  const statusToCheck = property.statusOriginal || property.status || '';
+                  const status = statusToCheck.toLowerCase().trim();
+                  const isRent = status === 'rent' || status === 'for rent' || status?.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
+                  const isSale = status === 'sale' || status === 'for sale' || status?.includes('sale') || statusToCheck.includes('بيع') || statusToCheck.includes('للبيع');
                   const displayStatus = isRent ? tCommon('forRent') : isSale ? tCommon('forSale') : tCommon('forRent');
                   
                   return (

@@ -522,8 +522,11 @@
             }
             &.has-child {
                 > a {
+                    padding-right: 20px;
+                    padding-left: 0;
                     &::after {
                         right: 0;
+                        left: auto;
                     }
                 }
             }
@@ -614,10 +617,12 @@
             > a {
                 position: relative;
                 padding-right: 20px;
+                padding-left: 0;
                 &::after {
                     @include mixin.transition3();
                     position: absolute;
                     right: 0;
+                    left: auto;
                     font-family: "icomoon";
                     content: "\e902";
                     font-size: 14px;

@@ -49,7 +49,7 @@ export default function Profile() {
     location_ar: "",
     city: "",
     facebook: "",
-    twitter: "",
+    instagram: "",
     linkedin: "",
     whatsapp: "",
     whatsappCountryCode: DEFAULT_COUNTRY_CODE,
@@ -219,7 +219,7 @@ export default function Profile() {
           location_ar: profile.location_ar || "",
           city: profile.city || "",
           facebook: profile.facebook || "",
-          twitter: profile.twitter || "",
+          instagram: profile.instagram || "",
           linkedin: profile.linkedin || "",
           whatsapp: profile.whatsapp ? (extractCountryCode(profile.whatsapp)?.phoneNumber || profile.whatsapp.replace(/^\+\d+/, '')) : "",
           whatsappCountryCode: profile.whatsapp ? (extractCountryCode(profile.whatsapp)?.countryCode || DEFAULT_COUNTRY_CODE) : DEFAULT_COUNTRY_CODE,
@@ -392,8 +392,10 @@ export default function Profile() {
     );
   }
 
+  const isRTL = locale === 'ar';
+
   return (
-    <div className="main-content style-2">
+    <div className={`main-content style-2 ${styles.profileContainer}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="main-content-inner wrap-dashboard-content-2">
         <div className="button-show-hide show-mb">
           <span className="body-1">{t('showDashboard')}</span>
@@ -453,6 +455,8 @@ export default function Profile() {
                 value={formData.username}
                 onChange={handleInputChange}
                 className="form-control"
+                dir={isRTL ? 'rtl' : 'ltr'}
+                style={{ textAlign: isRTL ? 'right' : 'left' }}
               />
             </fieldset>
             
@@ -468,11 +472,13 @@ export default function Profile() {
                   onChange={handleInputChange}
                   className="form-control"
                   disabled={!!formData.email}
+                  dir={isRTL ? 'rtl' : 'ltr'}
                   style={formData.email ? { 
                     backgroundColor: '#f5f5f5', 
                     cursor: 'not-allowed',
-                    opacity: 0.7
-                  } : {}}
+                    opacity: 0.7,
+                    textAlign: isRTL ? 'right' : 'left'
+                  } : { textAlign: isRTL ? 'right' : 'left' }}
                 />
                 {formData.email && (
                   <p className={styles.emailHelperText}>
@@ -488,9 +494,13 @@ export default function Profile() {
                   <select
                     id="countryCode"
                     value={formData.countryCode}
-                    onChange={(e) => setFormData(prev => ({ ...prev, countryCode: e.target.value }))}
-                    disabled={!!formData.phone}
                     className={styles.countryCodeSelect}
+                    disabled
+                    style={{ 
+                      backgroundColor: '#f5f5f5', 
+                      cursor: 'not-allowed',
+                      opacity: 0.7
+                    }}
                   >
                     {countryCodes.map((country) => (
                       <option key={country.code} value={country.code}>
@@ -501,19 +511,23 @@ export default function Profile() {
                   <input
                     type="tel"
                     id="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
+                    value={formData.phone || ''}
+                    readOnly
                     className={styles.phoneInput}
                     placeholder={t('phoneNumber')}
-                    disabled={!!formData.phone}
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    style={{ 
+                      backgroundColor: '#f5f5f5', 
+                      cursor: 'not-allowed',
+                      opacity: 0.7,
+                      textAlign: isRTL ? 'right' : 'left'
+                    }}
                     autoComplete="off"
                   />
                 </div>
-                {formData.phone && (
-                  <p className={styles.phoneHelperText}>
-                    {t('phoneCannotBeChanged')}
-                  </p>
-                )}
+                <p className={styles.phoneHelperText}>
+                  {t('phoneCannotBeChanged')}
+                </p>
               </fieldset>
             </div>
 
@@ -526,6 +540,8 @@ export default function Profile() {
                 value={formData.description}
                 onChange={handleInputChange}
                 rows={4}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                style={{ textAlign: isRTL ? 'right' : 'left' }}
               />
             </fieldset>
 
@@ -541,6 +557,8 @@ export default function Profile() {
                     value={formData.company}
                     onChange={handleInputChange}
                     className="form-control"
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    style={{ textAlign: isRTL ? 'right' : 'left' }}
                   />
                 </div>
                 <div className="box-fieldset">
@@ -553,6 +571,8 @@ export default function Profile() {
                     value={formData.officeNumber}
                     onChange={handleInputChange}
                     className="form-control"
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    style={{ textAlign: isRTL ? 'right' : 'left' }}
                   />
                 </div>
                 <div className="box-fieldset">
@@ -565,6 +585,8 @@ export default function Profile() {
                     value={formData.officeAddress}
                     onChange={handleInputChange}
                     className="form-control"
+                    dir={isRTL ? 'rtl' : 'ltr'}
+                    style={{ textAlign: isRTL ? 'right' : 'left' }}
                   />
                 </div>
               </fieldset>
@@ -581,6 +603,8 @@ export default function Profile() {
                   value={formData.job}
                   onChange={handleInputChange}
                   className="form-control"
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                  style={{ textAlign: isRTL ? 'right' : 'left' }}
                 />
               </div>
               <div className="box-fieldset">
@@ -683,11 +707,13 @@ export default function Profile() {
                   min="0"
                   max="50"
                   placeholder={t('yearsExperiencePlaceholder')}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                  style={{ textAlign: isRTL ? 'right' : 'left' }}
                 />
               </div>
             </div>
 
-<div className="box box-fieldset">
+            <div className="box box-fieldset">
               <label htmlFor="facebook">
                 {t('facebook')}:
               </label>
@@ -697,18 +723,24 @@ export default function Profile() {
                 value={formData.facebook}
                 onChange={handleInputChange}
                 className="form-control"
+                placeholder={t('facebookPlaceholder')}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                style={{ textAlign: isRTL ? 'right' : 'left' }}
               />
             </div>
             <div className="box box-fieldset">
-              <label htmlFor="twitter">
-                {t('twitter')}:
+              <label htmlFor="instagram">
+                {t('instagram')}:
               </label>
               <input
                 type="text"
-                id="twitter"
-                value={formData.twitter}
+                id="instagram"
+                value={formData.instagram}
                 onChange={handleInputChange}
                 className="form-control"
+                placeholder={t('instagramPlaceholder')}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                style={{ textAlign: isRTL ? 'right' : 'left' }}
               />
             </div>
             <div className="box box-fieldset">
@@ -721,6 +753,9 @@ export default function Profile() {
                 value={formData.linkedin}
                 onChange={handleInputChange}
                 className="form-control"
+                placeholder={t('linkedinPlaceholder')}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                style={{ textAlign: isRTL ? 'right' : 'left' }}
               />
             </div>
             <fieldset className="box-fieldset">
@@ -747,6 +782,8 @@ export default function Profile() {
                   onChange={handleInputChange}
                   className={styles.phoneInput}
                   placeholder={t('whatsappPlaceholder')}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                  style={{ textAlign: isRTL ? 'right' : 'left' }}
                   autoComplete="off"
                 />
               </div>

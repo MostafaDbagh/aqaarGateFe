@@ -123,4 +123,45 @@
   line-height: 1.4;
 }
 
+/* RTL Support for all inputs and textareas in Profile */
+.profileContainer :global([dir="rtl"]) :global(.form-control)::placeholder,
+.profileContainer :global([dir="rtl"]) textarea::placeholder {
+  text-align: right;
+  direction: rtl;
+}
+
+.profileContainer :global([dir="rtl"]) :global(.form-control),
+.profileContainer :global([dir="rtl"]) textarea {
+  text-align: right;
+  direction: rtl;
+}
+
+/* RTL Support for Phone Input Placeholder */
+.profileContainer :global([dir="rtl"]) .phoneInput::placeholder {
+  text-align: right;
+  direction: rtl;
+}
+
+.profileContainer :global([dir="rtl"]) .phoneInput {
+  text-align: right;
+}
+
+/* RTL Support for DropdownSelect (nice-select) */
+.profileContainer :global([dir="rtl"]) :global(.nice-select) > :global(.current) {
+  text-align: right !important;
+  direction: rtl !important;
+  padding-right: 0 !important;
+  padding-left: 35px !important;
+}
+
+.profileContainer :global([dir="rtl"]) :global(.nice-select) {
+  padding-left: 40px !important;
+  padding-right: 16px !important;
+}
+
+.profileContainer :global([dir="rtl"]) :global(.nice-select)::after {
+  right: unset !important;
+  left: 16px !important;
+}
+
 

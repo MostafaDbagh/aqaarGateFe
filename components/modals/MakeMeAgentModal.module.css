@@ -258,6 +258,12 @@
   font-weight: 400;
 }
 
+/* RTL Support for Phone Input Placeholder */
+[dir="rtl"] .phoneInput::placeholder {
+  text-align: right;
+  direction: rtl;
+}
+
 .modalFooter {
   display: flex;
   gap: 12px;

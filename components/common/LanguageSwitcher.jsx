@@ -12,23 +12,8 @@ export default function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  const { isAgent } = useAuthState();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  
-  // Check if we're on dashboard or admin pages - disable language switcher
-  // Remove locale from pathname for checking
-  const pathWithoutLocale = pathname?.replace(/^\/(en|ar)/, '') || pathname || '';
-  const isDashboardPage = pathWithoutLocale?.includes('/dashboard') || pathWithoutLocale?.includes('/admin') || 
-                          pathWithoutLocale?.includes('/my-property') || pathWithoutLocale?.includes('/add-property') ||
-                          pathWithoutLocale?.includes('/my-profile') || pathWithoutLocale?.includes('/my-package') ||
-                          pathWithoutLocale?.includes('/messages') || pathWithoutLocale?.includes('/review') ||
-                          pathWithoutLocale?.includes('/my-favorites') || pathWithoutLocale?.includes('/my-save-search');
-  
-  // Don't render if on dashboard pages UNLESS user is an agent
-  if (isDashboardPage && !isAgent) {
-    return null;
-  }
 
   const languages = [
     { code: 'en', flag: '🇬🇧', name: 'English' },

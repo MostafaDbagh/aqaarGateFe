@@ -60,7 +60,7 @@ export default function Header1({ parentClass = "header" }) {
                   </ul>
                 </nav>
                 <div className="header-right">
-                  {(!isDashboardPage || (isDashboardPage && isAgent)) && <LanguageSwitcher />}
+                  <LanguageSwitcher />
                   <DashboardNav />
                   
                   {/* Add Property Button - Only for Agents */}

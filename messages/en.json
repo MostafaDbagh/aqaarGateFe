@@ -177,6 +177,9 @@
       "passwordsNotMatch": "Passwords do not match",
       "phoneRequired": "Phone number is required for agents",
       "phoneInvalid": "Please enter a valid phone number",
+      "phoneMinLength": "Phone number must be at least 9 digits",
+      "phoneMaxLength": "Phone number must be at most 15 digits",
+      "phoneNoLeadingZero": "Type your number without 0 in beginning",
       "companyRequired": "Company name is required for agents",
       "jobRequired": "Job title is required for agents",
       "otpFailed": "Failed to send OTP. Please try again."
@@ -271,6 +274,9 @@
     "makeMeAgent": "Make Me Agent",
     "errors": {
       "phoneRequired": "Phone number is required",
+      "phoneMinLength": "Phone number must be at least 9 digits",
+      "phoneMaxLength": "Phone number must be at most 15 digits",
+      "phoneNoLeadingZero": "Type your number without 0 in beginning",
       "jobRequired": "Job title is required",
       "companyRequired": "Company name is required",
       "submitFailed": "Failed to become an agent. Please try again."

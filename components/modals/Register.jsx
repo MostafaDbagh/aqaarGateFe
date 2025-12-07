@@ -106,6 +106,26 @@ export default function Register({ isOpen, onClose }) {
         company: "",
         job: ""
       }));
+    } else if (name === "phone" && formData.role === "agent") {
+      // Prevent phone number from starting with 0
+      let phoneValue = value;
+      if (phoneValue && phoneValue.trim().startsWith('0')) {
+        phoneValue = phoneValue.replace(/^0+/, ''); // Remove leading zeros
+        setFieldErrors(prev => ({
+          ...prev,
+          phone: t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning"
+        }));
+      } else {
+        // Clear error if valid
+        setFieldErrors(prev => ({
+          ...prev,
+          phone: prev.phone === (t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning") ? "" : prev.phone
+        }));
+      }
+      setFormData(prev => ({
+        ...prev,
+        [name]: phoneValue
+      }));
     } else {
       setFormData(prev => ({
         ...prev,
@@ -113,11 +133,15 @@ export default function Register({ isOpen, onClose }) {
       }));
     }
     
-    // Clear field error when user types
-    setFieldErrors(prev => ({
-      ...prev,
-      [name]: ""
-    }));
+    // Clear field error when user types (except for leading zero error)
+    if (name !== "phone" || formData.role !== "agent" || !value.trim().startsWith('0')) {
+      setFieldErrors(prev => ({
+        ...prev,
+        [name]: name === "phone" && formData.role === "agent" && value.trim().startsWith('0') 
+          ? prev[name] 
+          : ""
+      }));
+    }
     
     // Clear general error when user starts typing
     if (error) {
@@ -162,8 +186,17 @@ export default function Register({ isOpen, onClose }) {
         if (formData.role === "agent") {
           if (!formData.phone || formData.phone.trim() === "") {
             error = t('errors.phoneRequired');
-          } else if (!/^\d{6,15}$/.test(formData.phone.replace(/\s/g, ""))) {
-            error = t('errors.phoneInvalid');
+          } else {
+            // Remove all non-digit characters for validation
+            const digitsOnly = formData.phone.replace(/\D/g, '');
+            // Check if phone starts with 0
+            if (digitsOnly.startsWith('0')) {
+              error = t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning";
+            } else if (digitsOnly.length < 9) {
+              error = t('errors.phoneMinLength') || "Phone number must be at least 9 digits";
+            } else if (digitsOnly.length > 15) {
+              error = t('errors.phoneMaxLength') || "Phone number must be at most 15 digits";
+            }
           }
         }
         break;
@@ -218,6 +251,23 @@ export default function Register({ isOpen, onClose }) {
     }
   };
 
+  // Check if phone number is valid (for agent role)
+  const isPhoneValid = () => {
+    if (formData.role !== "agent") {
+      return true; // Phone not required for regular users
+    }
+    if (!formData.phone || formData.phone.trim() === "") {
+      return false;
+    }
+    // Remove all non-digit characters for validation
+    const digitsOnly = formData.phone.replace(/\D/g, '');
+    // Check if phone starts with 0
+    if (digitsOnly.startsWith('0')) {
+      return false;
+    }
+    return digitsOnly.length >= 9 && digitsOnly.length <= 15;
+  };
+
   const isFormValid = () => {
     const baseValid = formData.username &&
            formData.email &&
@@ -228,9 +278,10 @@ export default function Register({ isOpen, onClose }) {
            formData.agreeToTerms &&
            Object.values(fieldErrors).every(error => !error);
     
-    // If agent, also require phone, company, and job
+    // If agent, also require phone, company, and job, and phone must be valid
     if (formData.role === "agent") {
       return baseValid &&
+             isPhoneValid() &&
              formData.phone &&
              formData.phone.trim() !== "" &&
              formData.company &&
@@ -384,6 +435,8 @@ export default function Register({ isOpen, onClose }) {
                       onBlur={() => validateField("phone")}
                       placeholder={t('phonePlaceholder')}
                       className={styles.phoneInput}
+                      dir={isRTL ? 'rtl' : 'ltr'}
+                      style={isRTL ? { textAlign: 'right' } : { textAlign: 'left' }}
                       required
                     />
                   </div>

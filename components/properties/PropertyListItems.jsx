@@ -436,11 +436,20 @@ export default function PropertyListItems({ listings = [] }) {
               <li 
                 className="flat-tag text-4 fw-6 text_white"
                 style={{
-                  backgroundColor: (property.status?.toLowerCase() === 'rent' || property.status?.toLowerCase() === 'for rent') ? '#3b82f6' : '#10b981',
+                  backgroundColor: (() => {
+                    const statusToCheck = property.statusOriginal || property.status || '';
+                    const statusLower = statusToCheck.toLowerCase().trim();
+                    return statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
+                  })() ? '#3b82f6' : '#10b981',
                   color: 'white'
                 }}
               >
-                {(property.status?.toLowerCase() === 'rent' || property.status?.toLowerCase() === 'for rent') ? t('common.forRent') : t('common.forSale')}
+                {(() => {
+                  const statusToCheck = property.statusOriginal || property.status || '';
+                  const statusLower = statusToCheck.toLowerCase().trim();
+                  const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
+                  return isRent ? t('common.forRent') : t('common.forSale');
+                })()}
               </li>
               {property.isAgentBlocked && (
                 <li className="flat-tag text-4 fw-6 text_white" style={{ backgroundColor: '#dc2626', color: 'white' }}>
@@ -523,7 +532,10 @@ export default function PropertyListItems({ listings = [] }) {
                     const basePrice = `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
                     
                     // Add rent period for rental properties
-                    if (property?.status?.toLowerCase() === 'rent' && property?.rentType) {
+                    const statusToCheck = property?.statusOriginal || property?.status || '';
+                    const statusLower = statusToCheck.toLowerCase().trim();
+                    const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
+                    if (isRent && property?.rentType) {
                       const rentTypeMap = {
                         'monthly': t('common.monthly'),
                         'weekly': t('common.weekly'),

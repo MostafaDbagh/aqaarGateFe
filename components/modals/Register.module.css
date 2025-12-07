@@ -515,6 +515,12 @@
   color: #9ca3af;
 }
 
+/* RTL Support for Phone Input Placeholder */
+[dir="rtl"] .phoneInput::placeholder {
+  text-align: right;
+  direction: rtl;
+}
+
 .required {
   color: #dc2626;
   font-weight: 600;

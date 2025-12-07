@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLocale } from "next-intl";
 const optionsDefault = ["Newest", "Oldest", "3 days"];
 export default function DropdownSelect({
   onChange = (elm) => {},
@@ -10,6 +11,8 @@ export default function DropdownSelect({
   addtionalParentClass = "",
   translateOption = null, // Optional translation function: (option) => translatedText
 }) {
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
   const selectRef = useRef();
   const optionsRef = useRef();
   const [selected, setSelected] = useState(selectedValue || options[0]);
@@ -82,8 +85,18 @@ export default function DropdownSelect({
 
   return (
     <>
-      <div className={`nice-select ${addtionalParentClass}`} ref={selectRef}>
-        <span className="current">
+      <div 
+        className={`nice-select ${addtionalParentClass}`} 
+        ref={selectRef}
+        dir={isRTL ? 'rtl' : 'ltr'}
+      >
+        <span 
+          className="current"
+          style={{ 
+            textAlign: isRTL ? 'right' : 'left',
+            direction: isRTL ? 'rtl' : 'ltr'
+          }}
+        >
           {getDisplayText(currentDisplayValue)}
         </span>
         <ul className="list" ref={optionsRef}>
