@@ -15,26 +15,33 @@ import styles from "./Sidebar.module.css";
 import { useTranslations } from 'next-intl';
 
 export default function Sidebar() {
+  // Fallback translations for static generation
+  const fallbackTranslations = {
+    'dashboards': 'Dashboards',
+    'myPackage': 'My package',
+    'myProfile': 'My Profile',
+    'myFavorites': 'My favorites',
+    'reviews': 'Reviews',
+    'messages': 'Messages',
+    'myProperties': 'My properties',
+    'addProperty': 'Add property',
+    'logout': 'Logout',
+    'deleteMyAccount': 'Delete My Account'
+  };
+
   let t;
   try {
-    t = useTranslations('agent.sidebar');
+    const sidebarT = useTranslations('agent.sidebar');
+    t = (key) => {
+      try {
+        return sidebarT(key);
+      } catch (e) {
+        return fallbackTranslations[key] || key;
+      }
+    };
   } catch (error) {
     // Fallback for static generation
-    t = (key) => {
-      const fallbacks = {
-        'dashboards': 'Dashboards',
-        'myPackage': 'My package',
-        'myProfile': 'My Profile',
-        'myFavorites': 'My favorites',
-        'reviews': 'Reviews',
-        'messages': 'Messages',
-        'myProperties': 'My properties',
-        'addProperty': 'Add property',
-        'logout': 'Logout',
-        'deleteMyAccount': 'Delete My Account'
-      };
-      return fallbacks[key] || key;
-    };
+    t = (key) => fallbackTranslations[key] || key;
   }
   const pathname = usePathname();
   const router = useRouter();
