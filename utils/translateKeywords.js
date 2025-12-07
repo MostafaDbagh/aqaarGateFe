@@ -119,7 +119,8 @@ export const translateKeywordWithT = (keyword, t) => {
   const trimmedKeyword = keyword.trim();
   
   // Skip very short keywords (likely fragments) - minimum 3 characters
-  if (trimmedKeyword.length < 3) {
+  // Also skip single digits or very short numeric strings that are likely fragments
+  if (trimmedKeyword.length < 3 || /^\d+$/.test(trimmedKeyword)) {
     return trimmedKeyword;
   }
   

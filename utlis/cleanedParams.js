@@ -22,7 +22,13 @@ export function cleanParams(params) {
       }
     }
 
-    cleaned[key] = value;
+    // Convert keyword delimiter from ||| to comma for API compatibility
+    // This allows keywords with commas (like "2,400 shares") to work correctly
+    if (key === "keyword" && typeof value === "string") {
+      cleaned[key] = value.replace(/\|\|\|/g, ', ');
+    } else {
+      cleaned[key] = value;
+    }
   });
 
   return cleaned;

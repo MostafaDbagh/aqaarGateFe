@@ -215,7 +215,25 @@ function Properties1Content({ defaultGrid = false }) {
           justify-content: center !important;
           align-items: center !important;
           min-height: 300px !important;
+          width: 100% !important;
           grid-column: 1 / -1 !important;
+          position: relative !important;
+          left: 0 !important;
+          right: 0 !important;
+          margin: 0 auto !important;
+          padding: 0 !important;
+          text-align: center !important;
+        }
+        
+        .tf-grid-layout .loading-container {
+          grid-column: 1 / -1 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
         }
         
         .error-container {
@@ -223,8 +241,26 @@ function Properties1Content({ defaultGrid = false }) {
           justify-content: center !important;
           align-items: center !important;
           min-height: 200px !important;
+          width: 100% !important;
           grid-column: 1 / -1 !important;
           color: #dc3545 !important;
+          position: relative !important;
+          left: 0 !important;
+          right: 0 !important;
+          margin: 0 auto !important;
+          padding: 0 !important;
+          text-align: center !important;
+        }
+        
+        .tf-grid-layout .error-container {
+          grid-column: 1 / -1 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
         }
         
         /* Fix dropdown to show downward in RTL */

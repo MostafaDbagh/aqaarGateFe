@@ -2,6 +2,7 @@
 import SearchForm from "@/components/common/SearchForm";
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslations, useLocale } from 'next-intl';
+import { translateKeywordWithT } from "@/utils/translateKeywords";
 import styles from "./Hero.module.css";
 
 export default function Hero({
@@ -50,18 +51,24 @@ export default function Hero({
     return Array.from(keywordsSet);
   };
 
-  // Translate keyword
+  // Translate keyword using the utility function
   const translateKeyword = (keyword) => {
-    try {
-      const key = keyword.toLowerCase().replace(/[\s-]/g, '_');
-      const translated = tCommon(`propertyKeywords.${key}`);
-      if (translated && !translated.startsWith('propertyKeywords.')) {
-        return translated;
-      }
-    } catch (e) {
-      // Fallback to original
-    }
-    return keyword;
+    return translateKeywordWithT(keyword, tCommon);
+  };
+
+  // Helper function to split keywords using a safe delimiter
+  const splitKeywords = (keywordString) => {
+    if (!keywordString) return [];
+    // Use a delimiter that won't appear in keywords: |||
+    return keywordString
+      .split('|||')
+      .map(k => k.trim())
+      .filter(k => k);
+  };
+
+  // Helper function to join keywords using a safe delimiter
+  const joinKeywords = (keywords) => {
+    return keywords.filter(k => k && k.trim()).join('|||');
   };
 
   // Filter keywords based on search value and exclude already added keywords
@@ -69,11 +76,8 @@ export default function Hero({
     const searchValue = searchParams?.keyword || '';
     const allKeywords = getAllKeywords();
     
-    // Get already added keywords
-    const addedKeywords = searchValue
-      .split(',')
-      .map(k => k.trim())
-      .filter(k => k)
+    // Get already added keywords using safe delimiter
+    const addedKeywords = splitKeywords(searchValue)
       .map(k => k.toLowerCase());
     
     // Filter out already added keywords - this is the main filter
@@ -126,10 +130,7 @@ export default function Hero({
     if (!keyword || !keyword.trim()) return;
     
     const currentKeyword = searchParams?.keyword || '';
-    const keywords = currentKeyword
-      .split(',')
-      .map(k => k.trim())
-      .filter(k => k);
+    const keywords = splitKeywords(currentKeyword);
     
     // Check if keyword already exists (case-insensitive)
     const keywordExists = keywords.some(k => 
@@ -138,20 +139,16 @@ export default function Hero({
     
     if (!keywordExists) {
       // Add new keyword to the list
-      const newKeywords = keywords.length > 0 
-        ? [...keywords, keyword.trim()].join(', ')
-        : keyword.trim();
+      const newKeywords = joinKeywords([...keywords, keyword.trim()]);
       
       // Update search params with new keywords
       if (onSearchChange) {
         onSearchChange({ keyword: newKeywords });
       }
       
-      // Close dropdown after selecting a keyword
-      setShowKeywordDropdown(false);
+      // Keep dropdown open after selecting a keyword (don't close it)
     } else {
-      // If keyword already exists, close dropdown
-      setShowKeywordDropdown(false);
+      // If keyword already exists, keep dropdown open
     }
   };
 
@@ -227,10 +224,7 @@ export default function Hero({
                           {/* Display selected keywords as tags */}
                           {(() => {
                             const keywordString = searchParams?.keyword || '';
-                            const keywords = keywordString
-                              .split(',')
-                              .map(k => k.trim())
-                              .filter(k => k);
+                            const keywords = splitKeywords(keywordString);
                             
                             return keywords.map((keyword, index) => (
                               <span key={`selected-${keyword}-${index}`} className={styles.keywordTag}>
@@ -243,7 +237,7 @@ export default function Hero({
                                     e.stopPropagation();
                                     const updatedKeywords = keywords
                                       .filter(k => k !== keyword);
-                                    onSearchChange({ keyword: updatedKeywords.join(', ') });
+                                    onSearchChange({ keyword: joinKeywords(updatedKeywords) });
                                   }}
                                   aria-label={locale === 'ar' ? 'إزالة' : 'Remove'}
                                 >
@@ -256,10 +250,7 @@ export default function Hero({
                           {/* Placeholder when no keywords selected */}
                           {(() => {
                             const keywordString = searchParams?.keyword || '';
-                            const hasKeywords = keywordString
-                              .split(',')
-                              .map(k => k.trim())
-                              .filter(k => k).length > 0;
+                            const hasKeywords = splitKeywords(keywordString).length > 0;
                             
                             if (!hasKeywords) {
                               return (
@@ -284,13 +275,24 @@ export default function Hero({
                           textAlign: isRTL ? 'right' : 'left'
                         }}
                       >
+                        {/* Close button in top right */}
+                        <button
+                          type="button"
+                          className={styles.closeDropdownButton}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowKeywordDropdown(false);
+                          }}
+                          aria-label={locale === 'ar' ? 'إغلاق' : 'Close'}
+                          title={locale === 'ar' ? 'إغلاق' : 'Close'}
+                        >
+                          ×
+                        </button>
                         <div className={styles.keywordsList}>
                           {filteredKeywords.map((keyword, index) => {
                             const keywordString = searchParams?.keyword || '';
-                            const selectedKeywords = keywordString
-                              .split(',')
-                              .map(k => k.trim())
-                              .filter(k => k)
+                            const selectedKeywords = splitKeywords(keywordString)
                               .map(k => k.toLowerCase());
                             const isSelected = selectedKeywords.includes(keyword.toLowerCase());
                             
