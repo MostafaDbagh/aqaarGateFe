@@ -424,6 +424,7 @@ function Properties1Content({ defaultGrid = false }) {
     setSearchParams((prev) => ({ ...prev, ...newParams }));
     setCurrentPage(1); // Reset to first page when search changes
   };
+  
 
   // Clear all search (both AI and normal)
   const handleClearAllSearch = () => {
