@@ -110,25 +110,27 @@ export default function HomePageClient() {
   const [mostRecentParams, setMostRecentParams] = useState({ limit: 12, sort: 'newest' });
 
   useEffect(() => {
-    // CRITICAL: When AI search is active, "Most Recent Listings" should show last 12 listings (no filters)
-    if (useAISearch) {
-      setMostRecentParams({ limit: 12, sort: 'newest' });
-      return;
-    }
-
+    // CRITICAL: "Most Recent Listings" is COMPLETELY independent of AI search
+    // It should ONLY be affected by normal search filters, never by AI search
+    // When AI search is active, always show default last 12 listings (no filters)
+    
     // Normal search - apply filters but limit to 12 listings
     if (triggerSearch || category) {
+      // Clear AI search when normal search is triggered
       setUseAISearch(false);
       setAiSearchResults(null);
-      sessionStorage.removeItem('aiSearchResults');
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('aiSearchResults');
+      }
       const cleaned = cleanParams(searchParams);
       // Apply normal filters but always limit to 12 for home page
       setMostRecentParams({ ...cleaned, limit: 12, sort: cleaned.sort || 'newest' });
     } else {
       // Default: show only last 12 properties on home page when no search
+      // This applies whether AI search is active or not
       setMostRecentParams({ limit: 12, sort: 'newest' });
     }
-  }, [searchParams, triggerSearch, category, useAISearch]);
+  }, [searchParams, triggerSearch, category]); // Removed useAISearch from dependencies
 
   // CRITICAL: Always fetch normal search listings for "Most Recent Listings" section
   // This hook runs independently of AI search - it's always enabled
