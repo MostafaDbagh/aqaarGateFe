@@ -205,6 +205,24 @@ export const listingAPI = {
     } catch (error) {
       throw error.response?.data || error.message;
     }
+  },
+
+  // AI-powered natural language search
+  aiSearchProperties: async (query, params = {}) => {
+    try {
+      const response = await Axios.post('/listing/ai-search', 
+        { query },
+        { 
+          params: {
+            page: params.page || 1,
+            limit: params.limit || 12
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
   }
 };
 

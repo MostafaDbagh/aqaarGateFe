@@ -1,6 +1,7 @@
 "use client";
 import SearchForm from "@/components/common/SearchForm";
-import React, { useState, useRef, useEffect } from "react";
+import AISearchButton from "./AISearchButton";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from "@/utils/translateKeywords";
 import styles from "./Hero.module.css";
@@ -161,6 +162,17 @@ export default function Hero({
       onSearchChange({ [key]: value });
     }
   };
+
+  // Memoized callback for AI search results
+  const handleAISearchResults = useCallback((results) => {
+    // Store AI search results and navigate to property list
+    if (results && results.listings) {
+      // Store in sessionStorage to pass to property list page
+      sessionStorage.setItem('aiSearchResults', JSON.stringify(results));
+      // Navigate to property list page
+      window.location.href = '/property-list';
+    }
+  }, []);
 
   return (
     <>
@@ -397,10 +409,17 @@ export default function Hero({
                       <a
                         href="#"
                         className="tf-btn bg-color-primary pd-3"
-                        onClick={() => setTriggerSearch(true)}
+                        onClick={() => {
+                          // Clear AI search results when normal search is triggered
+                          if (typeof window !== 'undefined') {
+                            sessionStorage.removeItem('aiSearchResults');
+                          }
+                          setTriggerSearch(true);
+                        }}
                       >
                         {t('searchButton')} <i className="icon-MagnifyingGlass fw-6" />
                       </a>
+                      <AISearchButton onSearchResults={handleAISearchResults} />
                   </div>
                 </div>
                 <SearchForm

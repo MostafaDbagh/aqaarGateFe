@@ -59,12 +59,12 @@ export const useListings = (params = {}) => {
 };
 
 // Search listings hook with debouncing
-export const useSearchListings = (searchParams = {}) => {
+export const useSearchListings = (searchParams = {}, options = {}) => {
   const locale = useLocale();
   return useQuery({
     queryKey: ['listings', 'search', locale, searchParams],
     queryFn: () => listingAPI.searchListings(searchParams),
-    enabled: true, // Always enabled for now to avoid build issues
+    enabled: options.enabled !== undefined ? options.enabled : true,
     staleTime: 5 * 60 * 1000, // 5 minutes - increased for better performance
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
     refetchOnWindowFocus: false, // Prevent refetch on window focus
@@ -509,5 +509,22 @@ export const useDashboardHealth = () => {
     staleTime: 30 * 1000, // 30 seconds
     refetchInterval: 60 * 1000, // Refetch every minute
     retry: 1,
+  });
+};
+
+// AI Search hook
+export const useAISearch = (query, options = {}) => {
+  const locale = useLocale();
+  const { page = 1, limit = 12, enabled = true } = options;
+  
+  return useQuery({
+    queryKey: ['aiSearch', locale, query, page, limit],
+    queryFn: () => listingAPI.aiSearchProperties(query, { page, limit }),
+    enabled: enabled && !!query && query.trim().length > 0,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    retry: 1,
+    retryDelay: 1000,
   });
 };
