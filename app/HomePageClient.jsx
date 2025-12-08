@@ -105,31 +105,38 @@ export default function HomePageClient() {
     }
   }, []);
 
+  // CRITICAL: "Most Recent Listings" should ALWAYS use normal search, regardless of AI search
+  // Create separate params for Most Recent Listings that are NEVER affected by AI search
+  const [mostRecentParams, setMostRecentParams] = useState({ limit: 12, sort: 'newest' });
+
   useEffect(() => {
-    // If using AI search, don't update params
+    // CRITICAL: When AI search is active, "Most Recent Listings" should show last 12 listings (no filters)
     if (useAISearch) {
+      setMostRecentParams({ limit: 12, sort: 'newest' });
       return;
     }
 
-    // Clear AI search when normal search is triggered
+    // Normal search - apply filters but limit to 12 listings
     if (triggerSearch || category) {
       setUseAISearch(false);
       setAiSearchResults(null);
       sessionStorage.removeItem('aiSearchResults');
       const cleaned = cleanParams(searchParams);
-      // Add limit: 12 for home page to improve loading performance
-      setParams({ ...cleaned, limit: 12, sort: cleaned.sort || 'newest' });
+      // Apply normal filters but always limit to 12 for home page
+      setMostRecentParams({ ...cleaned, limit: 12, sort: cleaned.sort || 'newest' });
     } else {
-      // Default: show only 12 properties on home page when no search
-      setParams({ limit: 12, sort: 'newest' });
+      // Default: show only last 12 properties on home page when no search
+      setMostRecentParams({ limit: 12, sort: 'newest' });
     }
   }, [searchParams, triggerSearch, category, useAISearch]);
 
+  // CRITICAL: Always fetch normal search listings for "Most Recent Listings" section
+  // This hook runs independently of AI search - it's always enabled
   const {
     data: listings = [],
     isLoading,
     isError,
-  } = useSearchListings(params);
+  } = useSearchListings(mostRecentParams, { enabled: true }); // Always enabled
 
   // CRITICAL: "Most Recent Listings" section should ALWAYS use normal search
   // It should NOT be affected by AI search - only show last 12 listings from normal search
@@ -181,6 +188,7 @@ export default function HomePageClient() {
     
     // Reset params to default
     setParams({ limit: 12, sort: 'newest' });
+    setMostRecentParams({ limit: 12, sort: 'newest' });
     setTriggerSearch(false);
     setCategory("");
     
