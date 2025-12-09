@@ -193,7 +193,7 @@ const nextConfig = {
                 "font-src 'self' data: https://fonts.gstatic.com",
                 // Allow API connections - includes all HTTPS and localhost for development
                 "connect-src 'self' https: http://localhost:* ws: wss:",
-                "frame-src 'self' https://maps.googleapis.com",
+                "frame-src 'self' https://maps.googleapis.com https://maps.google.com https://www.google.com",
                 "object-src 'none'",
                 "base-uri 'self'",
                 "form-action 'self'",

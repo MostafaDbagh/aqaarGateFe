@@ -10,7 +10,7 @@ import "./PropertyImageFix.css";
 import styles from "./PropertyGridItems.module.css";
 import logger from "@/utlis/logger";
 
-export default function PropertyGridItems({ listings = [] }) {
+export default function PropertyGridItems({ listings = [], isAISearch = false }) {
   const t = useTranslations();
   const tCommon = useTranslations('common');
   const locale = useLocale();
@@ -104,7 +104,23 @@ export default function PropertyGridItems({ listings = [] }) {
   if (!listings || listings.length === 0) {
     return (
       <div className={styles.emptyStateContainer}>
-        <p>{t('common.noPropertiesFound')}</p>
+        {isAISearch ? (
+          <>
+            <div className={styles.emptyIcon}>🔍</div>
+            <h3 className={styles.emptyTitle}>
+              {locale === 'ar' 
+                ? 'لا توجد عقارات تتطابق مع هذه المدخلات' 
+                : 'No properties match these criteria'}
+            </h3>
+            <p className={styles.emptyMessage}>
+              {locale === 'ar' 
+                ? 'الرجاء جرب البحث بشكل يدوي للتأكد' 
+                : 'Please try manual search to verify'}
+            </p>
+          </>
+        ) : (
+          <p>{t('common.noPropertiesFound')}</p>
+        )}
       </div>
     );
   }

@@ -150,9 +150,16 @@ export const translateKeywordWithT = (keyword, t) => {
     const translationKey = `propertyKeywords.${attempt}`;
     
     try {
+      // Use defaultValue to avoid errors when translation is missing
+      // Set defaultValue to null so we can detect if translation exists
       const translated = t(translationKey, { defaultValue: null });
-      // If translation found (not the key itself), return it
-      if (translated && translated !== translationKey && !translated.startsWith('propertyKeywords.') && !translated.startsWith('common.propertyKeywords.')) {
+      
+      // If translation found (not the key itself and not null), return it
+      if (translated && 
+          translated !== translationKey && 
+          translated !== null &&
+          !translated.startsWith('propertyKeywords.') && 
+          !translated.startsWith('common.propertyKeywords.')) {
         return translated;
       }
     } catch (e) {
@@ -161,18 +168,19 @@ export const translateKeywordWithT = (keyword, t) => {
     }
   }
   
-  // Return original keyword if no translation found
-  return trimmedKeyword;
+  // Return empty string if no translation found (don't show the tag)
+  return '';
 };
 
 /**
  * Translates a comma-separated string of property keywords into an array of translated keywords.
  * @param {string} keywordsString - A comma-separated string of keywords.
  * @param {Function} t - The translation function from next-intl.
- * @returns {string[]} An array of translated keywords.
+ * @returns {string[]} An array of translated keywords (only keywords with translations are included).
  */
 export const translateKeywordsString = (keywordsString, t) => {
   if (!keywordsString) return [];
+  // Filter out empty strings (keywords without translations)
   return keywordsString.split(',').map(keyword => translateKeywordWithT(keyword.trim(), t)).filter(Boolean);
 };
 

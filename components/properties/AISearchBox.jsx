@@ -194,6 +194,12 @@ export default function AISearchBox({ onResults, className = "" }) {
         </div>
       </form>
 
+      {/* AI Parser Warning */}
+      <div className={`${styles.aiParserWarning} ${isRTL ? styles.rtl : styles.ltr}`}>
+        <span>⚠️</span>
+        <span>{t('aiParserWarning')}</span>
+      </div>
+
       {/* Extracted Parameters */}
       {showExtractedParams && Object.keys(extractedParams).length > 0 && (
         <div className={styles.extractedParams}>

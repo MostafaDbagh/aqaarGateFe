@@ -142,6 +142,31 @@
   text-align: center !important;
   padding: 40px !important;
   color: #666 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 300px !important;
+}
+
+.emptyIcon {
+  font-size: 64px !important;
+  margin-bottom: 20px !important;
+  opacity: 0.6 !important;
+}
+
+.emptyTitle {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  margin-bottom: 12px !important;
+}
+
+.emptyMessage {
+  font-size: 16px !important;
+  color: #666 !important;
+  margin-top: 8px !important;
+  line-height: 1.6 !important;
 }
 
 /* Property Image */

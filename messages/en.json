@@ -471,7 +471,8 @@
     "showingResults": "Showing {start}-{end} of {total} results.",
     "noResults": "No properties found. Try adjusting your filters.",
     "loadingMessage": "Finding amazing properties for you...",
-    "errorMessage": "Error loading properties"
+    "errorMessage": "Error loading properties",
+    "aiParserWarning": "⚠️ Note: Our AI parser uses Modern Standard Arabic (الفصحى) and English."
   },
   "breadcrumb": {
     "home": "Home",

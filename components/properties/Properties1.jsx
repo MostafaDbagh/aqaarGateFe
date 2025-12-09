@@ -794,7 +794,7 @@ function Properties1Content({ defaultGrid = false }) {
                           <p>Error loading properties: {error?.message || 'Unknown error'}</p>
                         </div>
                       ) : (
-                        <PropertyGridItems listings={paginatedListings} />
+                        <PropertyGridItems listings={paginatedListings} isAISearch={useAISearch} />
                       )}
                     </div>
                   </div>
@@ -816,7 +816,7 @@ function Properties1Content({ defaultGrid = false }) {
                           <p>Error loading properties: {error?.message || 'Unknown error'}</p>
                         </div>
                       ) : (
-                        <PropertyListItems listings={paginatedListings} />
+                        <PropertyListItems listings={paginatedListings} isAISearch={useAISearch} />
                       )}
                     </div>
                   </div>

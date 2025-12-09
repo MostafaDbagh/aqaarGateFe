@@ -243,6 +243,30 @@
   text-align: left;
 }
 
+.aiParserWarning {
+  margin-top: 12px;
+  padding: 10px 15px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.aiParserWarning.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.aiParserWarning.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
 @media (max-width: 768px) {
   .aiSearchInputWrapper {
     flex-direction: column;
@@ -258,4 +282,5 @@
     width: 100%;
   }
 }
+
 

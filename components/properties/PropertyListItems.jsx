@@ -8,7 +8,7 @@ import FavoriteButton from "../common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
 
-export default function PropertyListItems({ listings = [] }) {
+export default function PropertyListItems({ listings = [], isAISearch = false }) {
   const t = useTranslations();
   const tCommon = useTranslations('common');
   const locale = useLocale();
@@ -17,7 +17,23 @@ export default function PropertyListItems({ listings = [] }) {
   if (!listings || listings.length === 0) {
     return (
       <div className="empty-state-container">
-        <p>No properties found matching your criteria.</p>
+        {isAISearch ? (
+          <>
+            <div style={{ fontSize: '64px', marginBottom: '20px', opacity: 0.6 }}>🔍</div>
+            <h3 style={{ fontSize: '24px', fontWeight: 600, color: '#333', marginBottom: '12px' }}>
+              {locale === 'ar' 
+                ? 'لا توجد عقارات تتطابق مع هذه المدخلات' 
+                : 'No properties match these criteria'}
+            </h3>
+            <p style={{ fontSize: '16px', color: '#666', marginTop: '8px', lineHeight: 1.6 }}>
+              {locale === 'ar' 
+                ? 'الرجاء جرب البحث بشكل يدوي للتأكد' 
+                : 'Please try manual search to verify'}
+            </p>
+          </>
+        ) : (
+          <p>No properties found matching your criteria.</p>
+        )}
       </div>
     );
   }

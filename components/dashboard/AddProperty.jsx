@@ -48,6 +48,7 @@ export default function AddProperty({ isAdminMode = false }) {
     amenities: [],
     propertyId: `PROP_${Date.now()}`,
     notes: "",
+    mapLocation: "", // Google Maps location URL or coordinates
     // Arabic translation fields
     description_ar: "",
     address_ar: "",
@@ -550,6 +551,7 @@ export default function AddProperty({ isAdminMode = false }) {
         amenities: [],
         propertyId: `PROP_${Date.now()}`,
         notes: "",
+        mapLocation: "",
         // Arabic translation fields
         description_ar: "",
         address_ar: "",
@@ -864,6 +866,48 @@ export default function AddProperty({ isAdminMode = false }) {
                   {errors.neighborhood && <span className="text-danger">{errors.neighborhood}</span>}
                 </fieldset>
               </div>
+              
+              <fieldset className="box-fieldset">
+                <label htmlFor="mapLocation">
+                  {t('mapLocation') || 'Map Location'} (Google Maps):
+                </label>
+                <input
+                  type="text"
+                  name="mapLocation"
+                  className="form-control"
+                  placeholder={t('enterGoogleMapsLocation') || "Enter Google Maps URL or coordinates (e.g., https://maps.google.com/... or 35.5174,35.7925)"}
+                  value={formData.mapLocation}
+                  onChange={handleInputChange}
+                />
+                <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                  {t('locationHint') || "Optional: Paste Google Maps URL or enter coordinates (latitude,longitude)"}
+                </small>
+                <div style={{ 
+                  marginTop: '15px', 
+                  padding: '12px', 
+                  backgroundColor: '#f8f9fa', 
+                  borderRadius: '6px',
+                  border: '1px solid #e9ecef'
+                }}>
+                  <div style={{ fontWeight: '600', marginBottom: '8px', fontSize: '13px', color: '#495057' }}>
+                    {t('howToGetMapLocation') || 'How to get Google Maps location:'}
+                  </div>
+                  <ol style={{ 
+                    margin: 0, 
+                    paddingLeft: '20px', 
+                    fontSize: '12px', 
+                    color: '#6c757d',
+                    lineHeight: '1.8'
+                  }}>
+                    <li>{t('mapLocationStep1') || '1. Open Google Maps'}</li>
+                    <li>{t('mapLocationStep2') || '2. Click on the location'}</li>
+                    <li>{t('mapLocationStep3') || '3. Click Share / مشاركة'}</li>
+                    <li>{t('mapLocationStep4') || '4. Click Copy link / نسخ الرابط'}</li>
+                    <li>{t('mapLocationStep5') || '5. Paste it in the input field above'}</li>
+                  </ol>
+                </div>
+                {errors.mapLocation && <span className="text-danger">{errors.mapLocation}</span>}
+              </fieldset>
             </div>
           </div>
 

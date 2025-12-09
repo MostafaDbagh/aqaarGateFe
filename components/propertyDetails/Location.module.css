@@ -1,0 +1,74 @@
+.mapContainer {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.mapIframe {
+  border: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: brightness(0.85) contrast(1.1);
+}
+
+.mapOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.infoMap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.infoItem {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .mapContainer {
+    height: 300px;
+  }
+
+  .infoMap {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .infoItem {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mapContainer {
+    height: 250px;
+  }
+
+  .infoMap {
+    gap: 15px;
+  }
+}
+
