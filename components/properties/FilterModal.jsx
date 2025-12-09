@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { useTranslations } from "next-intl";
+import React, { useMemo } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import DropdownSelect from "../common/DropdownSelect";
 import DropdownTagSelect from "../common/DropdownTagSelect";
 import { amenitiesList } from "@/constants/amenities";
@@ -9,6 +9,188 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
   const t = useTranslations('filterModal');
   const tCommon = useTranslations('common');
   const tAmenities = useTranslations('amenities');
+  const locale = useLocale();
+  
+  // City name mapping for fallback
+  const cityNameMap = useMemo(() => ({
+    "latakia": "Latakia",
+    "damascus": "Damascus",
+    "aleppo": "Aleppo",
+    "homs": "Homs",
+    "hama": "Hama",
+    "idlib": "Idlib",
+    "deirEzZor": "Deir ez-Zor",
+    "daraa": "Daraa",
+    "tartous": "Tartous"
+  }), []);
+  
+  // Helper function to get city translation safely
+  const getCityTranslation = useMemo(() => {
+    return (key) => {
+      const englishName = cityNameMap[key] || key;
+      
+      // Try to get translation using raw access to avoid next-intl errors
+      // Since cities are in common.cities, we need to access them differently
+      try {
+        // Use raw translation access with proper namespace
+        const translationKey = `common.cities.${key}`;
+        // For now, use a direct mapping based on locale
+        if (locale === 'ar') {
+          const arabicCities = {
+            "latakia": "اللاذقية",
+            "damascus": "دمشق",
+            "aleppo": "حلب",
+            "homs": "حمص",
+            "hama": "حماة",
+            "idlib": "إدلب",
+            "deirEzZor": "دير الزور",
+            "daraa": "درعا",
+            "tartous": "طرطوس"
+          };
+          return arabicCities[key] || englishName;
+        } else {
+          return englishName;
+        }
+      } catch (e) {
+        return englishName;
+      }
+    };
+  }, [locale, cityNameMap]);
+
+  // Single source of truth for cities (English values for backend)
+  const citiesList = useMemo(() => [
+    "Latakia",
+    "Damascus",
+    "Aleppo",
+    "Homs",
+    "Hama",
+    "Idlib",
+    "Deir ez-Zor",
+    "Daraa",
+    "Tartous"
+  ], []);
+
+  // Single source of truth for property types (English values for backend)
+  const propertyTypesList = useMemo(() => [
+    "Apartment",
+    "Commercial",
+    "Land",
+    "Holiday Home",
+    "Villa/farms",
+    "Office"
+  ], []);
+
+  // Get translated city options based on locale
+  const getCityOptions = useMemo(() => {
+    const allCitiesOption = t('allCities');
+    const translatedCities = citiesList.map(city => {
+      // Map English city names to translation keys
+      const cityKeyMap = {
+        "Latakia": "latakia",
+        "Damascus": "damascus",
+        "Aleppo": "aleppo",
+        "Homs": "homs",
+        "Hama": "hama",
+        "Idlib": "idlib",
+        "Deir ez-Zor": "deirEzZor",
+        "Daraa": "daraa",
+        "Tartous": "tartous"
+      };
+      const key = cityKeyMap[city] || city.toLowerCase();
+      // Get city translation using helper function
+      const translated = getCityTranslation(key);
+      return translated || city;
+    });
+    return [allCitiesOption, ...translatedCities];
+  }, [t, getCityTranslation, citiesList]);
+
+  // Get translated property type options based on locale
+  const getPropertyTypeOptions = useMemo(() => {
+    const anyOption = t('any');
+    const translatedTypes = propertyTypesList.map(type => {
+      // Map English property types to translations
+      if (type === "Holiday Home") {
+        return tCommon('holidayHome');
+      } else if (type === "Villa/farms") {
+        return locale === 'ar' ? "فيلا/مزرعة" : type;
+      } else if (type === "Apartment") {
+        return locale === 'ar' ? "شقة" : type;
+      } else if (type === "Commercial") {
+        return locale === 'ar' ? "محل تجاري" : type;
+      } else if (type === "Land") {
+        return locale === 'ar' ? "أرض" : type;
+      } else if (type === "Office") {
+        return locale === 'ar' ? "مكتب" : type;
+      }
+      return type;
+    });
+    return [anyOption, ...translatedTypes];
+  }, [t, tCommon, locale, propertyTypesList]);
+
+  // Handle city change - send English value to backend
+  const handleCityChange = (displayValue) => {
+    if (displayValue === t('allCities')) {
+      handleChange("cities", "");
+      return;
+    }
+    
+    // Find the English value from the translated display value
+    const cityIndex = getCityOptions.findIndex(opt => opt === displayValue);
+    if (cityIndex > 0) {
+      // cityIndex - 1 because first option is "allCities"
+      handleChange("cities", citiesList[cityIndex - 1]);
+    } else {
+      // Fallback: try to find by matching translation
+      const englishValue = citiesList.find(city => {
+        const key = {
+          "Latakia": "latakia",
+          "Damascus": "damascus",
+          "Aleppo": "aleppo",
+          "Homs": "homs",
+          "Hama": "hama",
+          "Idlib": "idlib",
+          "Deir ez-Zor": "deirEzZor",
+          "Daraa": "daraa",
+          "Tartous": "tartous"
+        }[city];
+        const translated = getCityTranslation(key);
+        return (translated || city) === displayValue;
+      }) || displayValue;
+      handleChange("cities", englishValue);
+    }
+  };
+
+  // Handle property type change - send English value to backend
+  const handlePropertyTypeChange = (displayValue) => {
+    if (displayValue === t('any')) {
+      handleChange("propertyType", "");
+      return;
+    }
+    
+    // Find the English value from the translated display value
+    const typeIndex = getPropertyTypeOptions.findIndex(opt => opt === displayValue);
+    if (typeIndex > 0) {
+      // typeIndex - 1 because first option is "any"
+      handleChange("propertyType", propertyTypesList[typeIndex - 1]);
+    } else {
+      // Fallback: try to match by translation
+      let englishValue = displayValue;
+      if (displayValue === tCommon('holidayHome')) {
+        englishValue = "Holiday Home";
+      } else if (displayValue === "فيلا/مزرعة" || displayValue === "Villa/farms") {
+        englishValue = "Villa/farms";
+      } else if (displayValue === "شقة" || displayValue === "Apartment") {
+        englishValue = "Apartment";
+      } else if (displayValue === "محل تجاري" || displayValue === "Commercial") {
+        englishValue = "Commercial";
+      } else if (displayValue === "أرض" || displayValue === "Land") {
+        englishValue = "Land";
+      } else if (displayValue === "مكتب" || displayValue === "Office") {
+        englishValue = "Office";
+      }
+      handleChange("propertyType", englishValue);
+    }
+  };
   
   // Map amenity names to translation keys
   const getAmenityTranslationKey = (amenity) => {
@@ -301,10 +483,14 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                 </label>
                 <DropdownSelect
                   id="propertyTypeSelect"
-                  options={[t('any'), "Apartment", "Commercial", "Land", tCommon('holidayHome'), "Villa/farms", "Office"]}
+                  options={getPropertyTypeOptions}
                   addtionalParentClass=""
-                  selectedValue={searchParams.propertyType || t('any')}
-                  onChange={(value) => handleChange("propertyType", value === t('any') ? "" : value)}
+                  selectedValue={
+                    searchParams.propertyType 
+                      ? getPropertyTypeOptions.find((opt, idx) => idx > 0 && propertyTypesList[idx - 1] === searchParams.propertyType) || t('any')
+                      : t('any')
+                  }
+                  onChange={(value) => handlePropertyTypeChange(value)}
                 />
               </div>
             </div>
@@ -322,21 +508,14 @@ export default function FilterModal({ onSearchChange, searchParams = {} }) {
                 <div className="city-dropdown">
                   <DropdownSelect
                     id="citiesSelect"
-                    options={[
-                      t('allCities'),
-                      "Latakia",
-                      "Damascus", 
-                      "Aleppo",
-                      "Homs",
-                      "Hama",
-                      "Idlib",
-                      "Deir ez-Zor",
-                      "Daraa",
-                      "Tartous"
-                    ]}
+                    options={getCityOptions}
                     addtionalParentClass=""
-                    selectedValue={searchParams.cities || t('allCities')}
-                    onChange={(value) => handleChange("cities", value === t('allCities') ? "" : value)}
+                    selectedValue={
+                      searchParams.cities 
+                        ? getCityOptions.find((opt, idx) => idx > 0 && citiesList[idx - 1] === searchParams.cities) || t('allCities')
+                        : t('allCities')
+                    }
+                    onChange={(value) => handleCityChange(value)}
                   />
                 </div>
               </div>

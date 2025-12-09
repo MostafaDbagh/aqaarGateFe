@@ -236,6 +236,27 @@
   padding: 15px;
   background: #f8f9fa;
   border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.resultsPreview:hover {
+  background: #e8f4f8;
+  border-color: #ff6b35;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+}
+
+.resultsPreview:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.15);
+}
+
+.resultsPreview:focus {
+  outline: none;
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
 }
 
 .resultsPreviewTitle {

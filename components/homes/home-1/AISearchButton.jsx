@@ -229,6 +229,51 @@ export default function AISearchButton({ onSearchResults }) {
     setIsActive(true);
   };
 
+  // Handle results box click - same behavior as submit button
+  const handleResultsClick = () => {
+    if (listings.length > 0 && !isLoading) {
+      // Normalize the response structure
+      const results = {
+        listings: Array.isArray(listings) ? listings : [],
+        data: Array.isArray(listings) ? listings : [],
+        extractedParams: extractedParams || {},
+        pagination: pagination || {
+          total: listings.length,
+          page: 1,
+          limit: 12,
+          totalPages: Math.ceil(listings.length / 12),
+          hasNextPage: false,
+          hasPrevPage: false
+        },
+        query: debouncedQuery || query
+      };
+      
+      console.log('💾 Storing AI search results (from results box click):', {
+        listingsCount: results.listings.length,
+        hasPagination: !!results.pagination,
+        query: results.query
+      });
+      
+      // Store in sessionStorage
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('aiSearchResults', JSON.stringify(results));
+        sessionStorage.removeItem('aiSearchSubmitted');
+      }
+      
+      // Call callback if provided
+      if (onSearchResults) {
+        onSearchResults(results);
+      }
+      
+      // Close modal
+      setIsOpen(false);
+      setQuery("");
+      
+      // Navigate to property list page
+      router.push('/property-list');
+    }
+  };
+
   const exampleQueries = isRTL ? [
     "شقة غرفتين في حلب",
     "فيلا للايجار في دمشق",
@@ -336,7 +381,19 @@ export default function AISearchButton({ onSearchResults }) {
 
             {/* Results Preview */}
             {listings.length > 0 && !isLoading && (
-              <div className={styles.resultsPreview}>
+              <div 
+                className={styles.resultsPreview}
+                onClick={handleResultsClick}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleResultsClick();
+                  }
+                }}
+                aria-label={isRTL ? "عرض النتائج في صفحة قائمة العقارات" : "View results in property list page"}
+              >
                 <div className={styles.resultsPreviewTitle}>
                   {isRTL ? "النتائج:" : "Results:"}
                 </div>
