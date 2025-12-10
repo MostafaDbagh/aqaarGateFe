@@ -877,6 +877,8 @@
     "postalCode": "Postal code",
     "area": "Area",
     "country": "Country",
+    "viewLargerMap": "View larger map",
+    "notSpecified": "Not specified",
     "contactAgent": "Contact Agent",
     "phoneNotProvided": "Phone number not provided",
     "whatsapp": "WhatsApp",

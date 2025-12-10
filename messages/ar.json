@@ -933,6 +933,8 @@
     "postalCode": "الرمز البريدي",
     "area": "المنطقة",
     "country": "الدولة",
+    "viewLargerMap": "عرض خريطة أكبر",
+    "notSpecified": "غير محدد",
     "contactAgent": "اتصل بالوكيل",
     "phoneNotProvided": "رقم الهاتف غير متوفر",
     "whatsapp": "واتساب",
