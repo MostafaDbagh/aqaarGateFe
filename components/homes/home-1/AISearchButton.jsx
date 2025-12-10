@@ -231,7 +231,7 @@ export default function AISearchButton({ onSearchResults }) {
 
   // Handle results box click - same behavior as submit button
   const handleResultsClick = () => {
-    if (listings.length > 0 && !isLoading) {
+    if (listings.length > 0 && !isLoading && !(!isLoading && !isError && listings.length === 0 && debouncedQuery.trim().length > 0)) {
       // Normalize the response structure
       const results = {
         listings: Array.isArray(listings) ? listings : [],
@@ -339,7 +339,7 @@ export default function AISearchButton({ onSearchResults }) {
                 <button
                   type="submit"
                   className={styles.aiSearchSubmitButton}
-                  disabled={!query.trim() || isLoading}
+                  disabled={!query.trim() || isLoading || (!isLoading && !isError && listings.length === 0 && debouncedQuery.trim().length > 0)}
                   aria-label={isRTL ? "بحث" : "Search"}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -401,6 +401,23 @@ export default function AISearchButton({ onSearchResults }) {
                   {isRTL 
                     ? `تم العثور على ${pagination.total || listings.length} عقار`
                     : `Found ${pagination.total || listings.length} propert${(pagination.total || listings.length) > 1 ? 'ies' : 'y'}`}
+                </div>
+              </div>
+            )}
+
+            {/* No Results Message */}
+            {!isLoading && !isError && listings.length === 0 && debouncedQuery.trim().length > 0 && (
+              <div className={styles.noResultsBox}>
+                <div className={styles.noResultsIcon}>🔍</div>
+                <div className={styles.noResultsTitle}>
+                  {isRTL ? "لا توجد نتائج للبحث" : "No search results found"}
+                </div>
+                <div className={styles.noResultsMessage}>
+                  <div className={styles.noResultsMessageText}>
+                    {isRTL 
+                      ? "لا يوجد أي إعلان يطابق هذه المعايير" 
+                      : "No any listing found match this criteria"}
+                  </div>
                 </div>
               </div>
             )}

@@ -109,17 +109,45 @@ export default function PropertyGridItems({ listings = [], isAISearch = false })
             <div className={styles.emptyIcon}>🔍</div>
             <h3 className={styles.emptyTitle}>
               {locale === 'ar' 
-                ? 'لا توجد عقارات تتطابق مع هذه المدخلات' 
-                : 'No properties match these criteria'}
+                ? 'لا توجد نتائج للبحث' 
+                : 'No search results found'}
             </h3>
-            <p className={styles.emptyMessage}>
-              {locale === 'ar' 
-                ? 'الرجاء جرب البحث بشكل يدوي للتأكد' 
-                : 'Please try manual search to verify'}
-            </p>
+            <div className={styles.emptyMessageBox}>
+              <p className={styles.emptyMessageText}>
+                {locale === 'ar' 
+                  ? 'لا يوجد أي إعلان يطابق هذه المعايير' 
+                  : 'No any listing found match this criteria'}
+              </p>
+            </div>
+            <div className={styles.emptyTipBox}>
+              <p className={styles.emptyTipText}>
+                {locale === 'ar' 
+                  ? '💡 نصيحة: استخدم الفلاتر العادية (المدينة، نوع العقار، السعر، الحجم) للحصول على نتائج أكثر دقة.' 
+                  : '💡 Tip: Use normal filters (city, property type, price, size) to get more accurate results.'}
+              </p>
+            </div>
           </>
         ) : (
-          <p>{t('common.noPropertiesFound')}</p>
+          <>
+            <div className={styles.emptyIcon}>🔍</div>
+            <h3 className={styles.emptyTitle}>
+              {locale === 'ar' 
+                ? 'لا توجد نتائج' 
+                : 'No results found'}
+            </h3>
+            <div className={styles.emptyMessageBox}>
+              <p className={styles.emptyMessageText}>
+                {locale === 'ar' 
+                  ? 'لا يوجد أي إعلان يطابق هذه المعايير' 
+                  : 'No any listing found match this criteria'}
+              </p>
+            </div>
+            <p className={styles.emptyMessageWithMargin}>
+              {locale === 'ar' 
+                ? 'لم يتم العثور على عقارات تتطابق مع معايير البحث الخاصة بك. يرجى محاولة تعديل الفلاتر.' 
+                : 'No properties found matching your search criteria. Please try adjusting your filters.'}
+            </p>
+          </>
         )}
       </div>
     );

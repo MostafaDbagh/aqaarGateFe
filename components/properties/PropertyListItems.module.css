@@ -1,0 +1,81 @@
+/* Empty State */
+.emptyStateContainer {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  background-color: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.emptyMessage {
+  font-size: 16px;
+  color: #666;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+.emptyMessageWithMargin {
+  font-size: 16px;
+  color: #666;
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+.emptyMessageBox {
+  padding: 20px;
+  background-color: #fef3c7;
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.emptyMessageText {
+  font-size: 16px;
+  color: #92400e;
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.emptyTipBox {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 24px auto 0;
+  border: 1px solid #e9ecef;
+}
+
+.emptyTipText {
+  font-size: 14px;
+  color: #495057;
+  margin: 0;
+  line-height: 1.6;
+}
+

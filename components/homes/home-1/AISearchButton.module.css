@@ -241,6 +241,55 @@
   border: 2px solid transparent;
 }
 
+.resultsPreview:disabled,
+.resultsPreview[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.noResultsBox {
+  margin-top: 20px;
+  padding: 30px 20px;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.noResultsIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.noResultsTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.noResultsMessage {
+  padding: 16px;
+  background-color: #fef3c7;
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.noResultsMessageText {
+  font-size: 16px;
+  color: #92400e;
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
 .resultsPreview:hover {
   background: #e8f4f8;
   border-color: #ff6b35;

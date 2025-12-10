@@ -7,6 +7,7 @@ import { translateKeywordsString } from "@/utils/translateKeywords";
 import FavoriteButton from "../common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
+import styles from "./PropertyListItems.module.css";
 
 export default function PropertyListItems({ listings = [], isAISearch = false }) {
   const t = useTranslations();
@@ -16,23 +17,51 @@ export default function PropertyListItems({ listings = [], isAISearch = false })
   const [activeImageIndex, setActiveImageIndex] = useState({});
   if (!listings || listings.length === 0) {
     return (
-      <div className="empty-state-container">
+      <div className={styles.emptyStateContainer}>
         {isAISearch ? (
           <>
-            <div style={{ fontSize: '64px', marginBottom: '20px', opacity: 0.6 }}>🔍</div>
-            <h3 style={{ fontSize: '24px', fontWeight: 600, color: '#333', marginBottom: '12px' }}>
+            <div className={styles.emptyIcon}>🔍</div>
+            <h3 className={styles.emptyTitle}>
               {locale === 'ar' 
-                ? 'لا توجد عقارات تتطابق مع هذه المدخلات' 
-                : 'No properties match these criteria'}
+                ? 'لا توجد نتائج للبحث' 
+                : 'No search results found'}
             </h3>
-            <p style={{ fontSize: '16px', color: '#666', marginTop: '8px', lineHeight: 1.6 }}>
-              {locale === 'ar' 
-                ? 'الرجاء جرب البحث بشكل يدوي للتأكد' 
-                : 'Please try manual search to verify'}
-            </p>
+            <div className={styles.emptyMessageBox}>
+              <p className={styles.emptyMessageText}>
+                {locale === 'ar' 
+                  ? 'لا يوجد أي إعلان يطابق هذه المعايير' 
+                  : 'No any listing found match this criteria'}
+              </p>
+            </div>
+            <div className={styles.emptyTipBox}>
+              <p className={styles.emptyTipText}>
+                {locale === 'ar' 
+                  ? '💡 نصيحة: استخدم الفلاتر العادية (المدينة، نوع العقار، السعر، الحجم) للحصول على نتائج أكثر دقة.' 
+                  : '💡 Tip: Use normal filters (city, property type, price, size) to get more accurate results.'}
+              </p>
+            </div>
           </>
         ) : (
-          <p>No properties found matching your criteria.</p>
+          <>
+            <div className={styles.emptyIcon}>🔍</div>
+            <h3 className={styles.emptyTitle}>
+              {locale === 'ar' 
+                ? 'لا توجد نتائج' 
+                : 'No results found'}
+            </h3>
+            <div className={styles.emptyMessageBox}>
+              <p className={styles.emptyMessageText}>
+                {locale === 'ar' 
+                  ? 'لا يوجد أي إعلان يطابق هذه المعايير' 
+                  : 'No any listing found match this criteria'}
+              </p>
+            </div>
+            <p className={styles.emptyMessageWithMargin}>
+              {locale === 'ar' 
+                ? 'لم يتم العثور على عقارات تتطابق مع معايير البحث الخاصة بك. يرجى محاولة تعديل الفلاتر.' 
+                : 'No properties found matching your search criteria. Please try adjusting your filters.'}
+            </p>
+          </>
         )}
       </div>
     );

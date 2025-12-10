@@ -685,6 +685,14 @@ function Properties1Content({ defaultGrid = false }) {
                         data-bs-toggle="modal"
                         href="#modalFilter"
                         role="button"
+                        style={{
+                          opacity: (!isLoading && !isError && paginatedListings.length === 0) ? 0.5 : 1,
+                          cursor: (!isLoading && !isError && paginatedListings.length === 0) ? 'not-allowed' : 'pointer',
+                          pointerEvents: (!isLoading && !isError && paginatedListings.length === 0) ? 'none' : 'auto'
+                        }}
+                        title={(!isLoading && !isError && paginatedListings.length === 0) 
+                          ? (isRTL ? 'لا توجد نتائج - تم تعطيل الفلترة' : 'No results - Filtering disabled')
+                          : ''}
                       >
                         {t('filter')}
                         <div className="icons">
@@ -905,7 +913,11 @@ function Properties1Content({ defaultGrid = false }) {
         </button>
       )}
       
-      <FilterModal onSearchChange={handleSearchChange} searchParams={searchParams} />
+      <FilterModal 
+        onSearchChange={handleSearchChange} 
+        searchParams={searchParams}
+        disabled={!isLoading && !isError && paginatedListings.length === 0}
+      />
     </>
   );
 }

@@ -5,7 +5,7 @@ import DropdownSelect from "../common/DropdownSelect";
 import DropdownTagSelect from "../common/DropdownTagSelect";
 import { amenitiesList } from "@/constants/amenities";
 
-export default function FilterModal({ onSearchChange, searchParams = {} }) {
+export default function FilterModal({ onSearchChange, searchParams = {}, disabled = false }) {
   const t = useTranslations('filterModal');
   const tCommon = useTranslations('common');
   const tAmenities = useTranslations('amenities');
