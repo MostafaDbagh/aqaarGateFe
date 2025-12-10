@@ -761,6 +761,20 @@
       "investmentGuide": "Investment Guide"
     }
   },
+  "agent": {
+    "sidebar": {
+      "dashboards": "Dashboards",
+      "myPackage": "My package",
+      "myProfile": "My Profile",
+      "myFavorites": "My favorites",
+      "reviews": "Reviews",
+      "messages": "Messages",
+      "myProperties": "My properties",
+      "addProperty": "Add property",
+      "logout": "Logout",
+      "deleteMyAccount": "Delete My Account"
+    }
+  },
   "agents": {
     "pageName": "Agents",
     "title": "Our Agents",

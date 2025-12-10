@@ -1,0 +1,137 @@
+/* Form layout utilities */
+.formRowFlex {
+  display: flex !important;
+  gap: 24px !important;
+  align-items: flex-end !important;
+  flex-wrap: wrap !important;
+}
+
+.formRowItem {
+  flex: 1 !important;
+  min-width: 280px !important;
+}
+
+.formLabel {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  display: block !important;
+}
+
+.formInputEnhanced {
+  width: 100% !important;
+  height: 56px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  border: 2px solid #e8e8e8 !important;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+  color: #333 !important;
+  background-color: #fff !important;
+  transition: all 0.3s ease !important;
+  outline: none !important;
+}
+
+.formInputEnhanced:focus {
+  border-color: #ff6b35 !important;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.15) !important;
+}
+
+.rangeInputs {
+  width: 100% !important;
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-end !important;
+  flex-wrap: wrap !important;
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid rgba(125, 138, 156, 0.22);
+  position: relative;
+}
+
+.rangeInputGroup {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  flex: 1 !important;
+}
+
+.rangeInputGroup .inputLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #333;
+}
+
+.rangeInput {
+  width: 190px !important;
+  height: 52px !important;
+  border-radius: 14px !important;
+  border: 1px solid #cfd5dd !important;
+  padding: 0 18px !important;
+  font-size: 15px !important;
+  color: #222 !important;
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 10px 30px rgba(125, 138, 156, 0.12) !important;
+  transition: all 0.28s ease !important;
+  outline: none !important;
+}
+
+.rangeInput:focus {
+  border-color: #728096 !important;
+  box-shadow: 0 16px 32px rgba(125, 138, 156, 0.18) !important;
+  transform: translateY(-1px);
+}
+
+.rangeReset {
+  position: absolute !important;
+  top: 4px !important;
+  left: 12px !important;
+  padding: 10px 18px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #8f9bb2 0%, #5f6c83 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.05em !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 24px rgba(95, 108, 131, 0.25) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+:global(html[dir="rtl"]) .rangeReset,
+:global(html[dir="rtl"]) .rangeInputs .rangeReset,
+:global([dir="rtl"]) .rangeReset,
+:global([dir="rtl"]) .rangeInputs .rangeReset {
+  right: auto !important;
+  left: 18px !important;
+}
+
+.rangeReset:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(95, 108, 131, 0.3);
+}
+
+.rangeReset:active {
+  transform: translateY(0);
+  box-shadow: 0 10px 20px rgba(95, 108, 131, 0.25);
+}
+
+.rangeInput::-webkit-outer-spin-button,
+.rangeInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.rangeInput {
+  -moz-appearance: textfield;
+}
+
+/* Property type column styles */
+.propertyTypeColumn {
+  max-width: 50% !important;
+  flex: 0 0 50% !important;
+}

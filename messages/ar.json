@@ -761,6 +761,20 @@
       "investmentGuide": "دليل الاستثمار"
     }
   },
+  "agent": {
+    "sidebar": {
+      "dashboards": "لوحات التحكم",
+      "myPackage": "باقتي",
+      "myProfile": "ملفي الشخصي",
+      "myFavorites": "مفضلاتي",
+      "reviews": "التقييمات",
+      "messages": "الرسائل",
+      "myProperties": "عقاراتي",
+      "addProperty": "إضافة عقار",
+      "logout": "تسجيل الخروج",
+      "deleteMyAccount": "حذف حسابي"
+    }
+  },
   "agents": {
     "pageName": "الوكلاء",
     "title": "وكلاؤنا",

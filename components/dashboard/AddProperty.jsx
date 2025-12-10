@@ -83,7 +83,6 @@ export default function AddProperty({ isAdminMode = false }) {
     'super doublex finishing',
     'standard finishing',
     'stone finishing',
-    '2,400 shares',
     'Green Title Deed'
   ];
 

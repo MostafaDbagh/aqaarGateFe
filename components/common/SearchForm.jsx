@@ -7,6 +7,8 @@ import DropdownTagSelect from "./DropdownTagSelect";
 import { provinceOptions } from "@/constants/provinces";
 import { amenitiesList } from "@/constants/amenities";
 import logger from "@/utlis/logger";
+import styles from "./SearchForm.module.css";
+import "./SearchForm.css";
 
 export default function SearchForm({
   parentClass = "wd-search-form",
@@ -301,312 +303,6 @@ export default function SearchForm({
 
   return (
     <>
-      <style jsx>{`
-        /* Form layout utilities */
-        .form-row-flex {
-          display: flex !important;
-          gap: 24px !important;
-          align-items: flex-end !important;
-          flex-wrap: wrap !important;
-        }
-        
-        .form-row-item {
-          flex: 1 !important;
-          min-width: 280px !important;
-        }
-        
-        .form-label {
-          font-size: 14px !important;
-          font-weight: 600 !important;
-          color: #333 !important;
-          display: block !important;
-        }
-        
-        .form-input-enhanced {
-          width: 100% !important;
-          height: 56px !important;
-          border-radius: 12px !important;
-          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
-          border: 2px solid #e8e8e8 !important;
-          padding: 0 20px !important;
-          font-size: 14px !important;
-          color: #333 !important;
-          background-color: #fff !important;
-          transition: all 0.3s ease !important;
-          outline: none !important;
-        }
-        
-        .form-input-enhanced:focus {
-          border-color: #ff6b35 !important;
-          box-shadow: 0 4px 20px rgba(255, 107, 53, 0.15) !important;
-        }
-        
-        .range-inputs {
-          width: 100% !important;
-          display: flex !important;
-          gap: 12px !important;
-          align-items: flex-end !important;
-          flex-wrap: wrap !important;
-          background: #f8f9fa;
-          border-radius: 16px;
-          padding: 18px;
-          border: 1px solid rgba(125, 138, 156, 0.22);
-          position: relative;
-        }
-
-        .range-input-group {
-          display: flex !important;
-          flex-direction: column !important;
-          gap: 4px !important;
-          flex: 1 !important;
-        }
-
-        .range-input-group .input-label {
-          font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #333;
-        }
-
-        .range-input {
-          width: 190px !important;
-          height: 52px !important;
-          border-radius: 14px !important;
-          border: 1px solid #cfd5dd !important;
-          padding: 0 18px !important;
-          font-size: 15px !important;
-          color: #222 !important;
-          background-color: rgba(255, 255, 255, 0.96) !important;
-          box-shadow: 0 10px 30px rgba(125, 138, 156, 0.12) !important;
-          transition: all 0.28s ease !important;
-          outline: none !important;
-        }
-
-        .range-input:focus {
-          border-color: #728096 !important;
-          box-shadow: 0 16px 32px rgba(125, 138, 156, 0.18) !important;
-          transform: translateY(-1px);
-        }
-
-        .range-reset {
-          position: absolute !important;
-          top: 4px !important;
-          left:12px !important;
-          padding: 10px 18px !important;
-          border-radius: 12px !important;
-          border: none !important;
-          background: linear-gradient(135deg, #8f9bb2 0%, #5f6c83 100%) !important;
-          color: white !important;
-          font-weight: 600 !important;
-          font-size: 13px !important;
-          letter-spacing: 0.05em !important;
-          cursor: pointer !important;
-          box-shadow: 0 12px 24px rgba(95, 108, 131, 0.25) !important;
-          transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-        }
-
-        html[dir="rtl"] .range-reset,
-        html[dir="rtl"] .range-inputs .range-reset,
-        [dir="rtl"] .range-reset,
-        [dir="rtl"] .range-inputs .range-reset {
-          right: auto !important;
-          left: 18px !important;
-        }
-
-        .range-reset:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 16px 28px rgba(95, 108, 131, 0.3);
-        }
-
-        .range-reset:active {
-          transform: translateY(0);
-          box-shadow: 0 10px 20px rgba(95, 108, 131, 0.25);
-        }
-
-        .range-input::-webkit-outer-spin-button,
-        .range-input::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-
-        .range-input {
-          -moz-appearance: textfield;
-        }
-
-        /* Enhanced City Dropdown Styling for style-3 */
-        .wd-search-form.style-3 .city-dropdown .nice-select {
-          background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-          border: 2px solid #e1ecff;
-          border-radius: 12px;
-          transition: all 0.3s ease;
-          height: 56px;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select:hover {
-          border-color: #667eea;
-          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
-          transform: translateY(-1px);
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select.open {
-          border-color: #667eea;
-          box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list {
-          background: white;
-          border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-          border: 1px solid #e1ecff;
-          max-height: 300px;
-          overflow-y: auto;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list .option {
-          padding: 12px 16px;
-          font-weight: 500;
-          color: #4a5568;
-          transition: all 0.2s ease;
-          position: relative;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list .option::before {
-          content: "📍";
-          margin-right: 8px;
-          font-size: 14px;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list .option:hover {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          transform: translateX(4px);
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list .option.selected {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          font-weight: 600;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list .option.selected::after {
-          content: "✓";
-          position: absolute;
-          right: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-weight: bold;
-        }
-        
-        /* Custom scrollbar for city dropdown in style-3 */
-        .wd-search-form.style-3 .city-dropdown .nice-select .list::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list::-webkit-scrollbar-thumb {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 10px;
-        }
-        
-        .wd-search-form.style-3 .city-dropdown .nice-select .list::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-        }
-        
-        /* Enhanced City Dropdown Styling for all SearchForm variants */
-        .wd-search-form .city-dropdown .nice-select {
-          background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-          border: 2px solid #e1ecff;
-          border-radius: 12px;
-          transition: all 0.3s ease;
-          height: 56px;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select:hover {
-          border-color: #667eea;
-          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
-          transform: translateY(-1px);
-        }
-        
-        .wd-search-form .city-dropdown .nice-select.open {
-          border-color: #667eea;
-          box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list {
-          background: white;
-          border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-          border: 1px solid #e1ecff;
-          max-height: 300px;
-          overflow-y: auto;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list .option {
-          padding: 12px 16px;
-          font-weight: 500;
-          color: #4a5568;
-          transition: all 0.2s ease;
-          position: relative;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list .option::before {
-          content: "📍";
-          margin-right: 8px;
-          font-size: 14px;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list .option:hover {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          transform: translateX(4px);
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list .option.selected {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          font-weight: 600;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list .option.selected::after {
-          content: "✓";
-          position: absolute;
-          right: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-weight: bold;
-        }
-        
-        /* Custom scrollbar for city dropdown in SearchForm */
-        .wd-search-form .city-dropdown .nice-select .list::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list::-webkit-scrollbar-thumb {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 10px;
-        }
-        
-        .wd-search-form .city-dropdown .nice-select .list::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-        }
-
-        /* Property type column styles */
-        .property-type-column {
-          max-width: 50% !important;
-          flex: 0 0 50% !important;
-        }
-
-      `}</style>
       <div className={parentClass} ref={searchFormRef}>
         <div className="search-form-header mb-32">
           <h4 className="advanced-search-title">{t('advancedSearch')}</h4>
@@ -614,14 +310,14 @@ export default function SearchForm({
         
         {/* Property Type - First Input */}
         <div className="group-input mb-30 col-4">
-        <div className="box-input form-row-item">
-            <label className="mb-2 form-label" htmlFor="propertyId">
+        <div className={`box-input ${styles.formRowItem}`}>
+            <label className={`mb-2 ${styles.formLabel}`} htmlFor="propertyId">
               {t('propertyId')}
             </label>
             <input
               type="text"
               id="propertyId"
-              className="form-control form-input-enhanced"
+              className={`form-control ${styles.formInputEnhanced}`}
               placeholder={t('propertyIdPlaceholder')}
               value={searchParams.propertyId || ""}
               onChange={(e) => handleChange("propertyId", e.target.value)}
@@ -631,9 +327,9 @@ export default function SearchForm({
         </div>
         
                 {/* Syria Cities and Property ID Row */}
-        <div className="group-input mb-30 form-row-flex">
-          <div className="box-input form-row-item">
-            <label className="mb-2 form-label" htmlFor="syriaCitiesSelect">
+        <div className={`group-input mb-30 ${styles.formRowFlex}`}>
+          <div className={`box-input ${styles.formRowItem}`}>
+            <label className={`mb-2 ${styles.formLabel}`} htmlFor="syriaCitiesSelect">
                {t('city')}
             </label>
             <div className="city-dropdown">
@@ -650,8 +346,8 @@ export default function SearchForm({
               />
             </div>
           </div>
-          <div className="box-input form-row-item property-type-column">
-            <label className="mb-2 form-label" htmlFor="propertyTypeSelect">
+          <div className={`box-input ${styles.formRowItem} ${styles.propertyTypeColumn}`}>
+            <label className={`mb-2 ${styles.formLabel}`} htmlFor="propertyTypeSelect">
               {t('propertyType')}
             </label>
             <DropdownSelect
@@ -672,7 +368,7 @@ export default function SearchForm({
       {parentClass.includes('style-3') && (
         <div className="group-input mb-30">
           <div className="box-input">
-            <label className="mb-2 form-label" htmlFor="citiesSelectStyle3">
+            <label className={`mb-2 ${styles.formLabel}`} htmlFor="citiesSelectStyle3">
               {t('cities')}
             </label>
             <div className="city-dropdown">
@@ -750,24 +446,24 @@ export default function SearchForm({
             {t('priceRange')}
           </label>
           <div className="box-title-price">
-            <div className="range-inputs">
-              <div className="range-input-group">
-                <span className="input-label">{t('from')}</span>
+            <div className={styles.rangeInputs}>
+              <div className={styles.rangeInputGroup}>
+                <span className={styles.inputLabel}>{t('from')}</span>
                 <input
                   id="priceMin"
                   type="number"
-                  className="range-input"
+                  className={styles.rangeInput}
                   placeholder={t('minPrice')}
                   value={searchParams.priceMin ?? ""}
                   onChange={(e) => handleNumericInputChange("priceMin", e.target.value)}
                 />
               </div>
-              <div className="range-input-group">
-                <span className="input-label">{t('to')}</span>
+              <div className={styles.rangeInputGroup}>
+                <span className={styles.inputLabel}>{t('to')}</span>
                 <input
                   id="priceMax"
                   type="number"
-                  className="range-input"
+                  className={styles.rangeInput}
                   placeholder={t('maxPrice')}
                   value={searchParams.priceMax ?? ""}
                   onChange={(e) => handleNumericInputChange("priceMax", e.target.value)}
@@ -775,7 +471,7 @@ export default function SearchForm({
               </div>
               <button
                 type="button"
-                className="range-reset"
+                className={styles.rangeReset}
                 onClick={() => {
                   handleChange("priceMin", "");
                   handleChange("priceMax", "");
@@ -791,24 +487,24 @@ export default function SearchForm({
             {t('sizeRange')}
           </label>
           <div className="box-title-price">
-            <div className="range-inputs">
-              <div className="range-input-group">
-                <span className="input-label">{t('from')}</span>
+            <div className={styles.rangeInputs}>
+              <div className={styles.rangeInputGroup}>
+                <span className={styles.inputLabel}>{t('from')}</span>
                 <input
                   id="sizeMin"
                   type="number"
-                  className="range-input"
+                  className={styles.rangeInput}
                   placeholder={t('minSize')}
                   value={searchParams.sizeMin ?? ""}
                   onChange={(e) => handleNumericInputChange("sizeMin", e.target.value)}
                 />
               </div>
-              <div className="range-input-group">
-                <span className="input-label">{t('to')}</span>
+              <div className={styles.rangeInputGroup}>
+                <span className={styles.inputLabel}>{t('to')}</span>
                 <input
                   id="sizeMax"
                   type="number"
-                  className="range-input"
+                  className={styles.rangeInput}
                   placeholder={t('maxSize')}
                   value={searchParams.sizeMax ?? ""}
                   onChange={(e) => handleNumericInputChange("sizeMax", e.target.value)}
@@ -816,7 +512,7 @@ export default function SearchForm({
               </div>
               <button
                 type="button"
-                className="range-reset"
+                className={styles.rangeReset}
                 onClick={() => {
                   handleChange("sizeMin", "");
                   handleChange("sizeMax", "");

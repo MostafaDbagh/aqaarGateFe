@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import SplitTextAnimation from "./SplitTextAnimation";
 import LocationLoader from "./LocationLoader";
+import CircularLoader from "./CircularLoader";
 import { categoryAPI } from "@/apis/category";
 
 export default function Categories({
@@ -41,14 +42,26 @@ export default function Categories({
   const categories = useMemo(() => {
     const icons = ['icon-apartment1', 'icon-villa', 'icon-office1', 'icon-commercial', 'icon-land', 'icon-studio'];
     
+    // If no data yet, show placeholder categories with loading state
+    if (categoriesData.length === 0 && isLoading) {
+      return [
+        { name: 'Apartment', displayName: 'Apartment', count: null, slug: 'apartment', icon: 'icon-apartment1' },
+        { name: 'Villa/farms', displayName: 'Villa/farms', count: null, slug: 'villa-farms', icon: 'icon-villa' },
+        { name: 'Office', displayName: 'Office', count: null, slug: 'office', icon: 'icon-office1' },
+        { name: 'Commercial', displayName: 'Commercial', count: null, slug: 'commercial', icon: 'icon-commercial' },
+        { name: 'Land', displayName: 'Land/Plot', count: null, slug: 'land', icon: 'icon-land' },
+        { name: 'Holiday Home', displayName: 'Holiday Home', count: null, slug: 'holiday-home', icon: 'icon-studio' }
+      ];
+    }
+    
     return categoriesData.map((category, index) => ({
       name: category.name,
       displayName: category.displayName || category.name,
-      count: category.count || 0,
+      count: category.count ?? null, // Use null to indicate loading
       slug: category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-'),
       icon: icons[index] || 'icon-apartment1'
     }));
-  }, [categoriesData]);
+  }, [categoriesData, isLoading]);
 
   // Memoize category click handler to prevent recreation on every render
   const handleCategoryClick = useCallback((category) => {
@@ -65,26 +78,8 @@ export default function Categories({
     1200: { slidesPerView: 6, spaceBetween: 10 },
   }), []);
 
-  // Show loading state with spinner
-  if (isLoading) {
-    return (
-      <section className={parentClass}>
-        <div className="tf-container">
-          <div className="heading-section text-center mb-48">
-            <h2 className="title split-text effect-right">
-              <SplitTextAnimation text={t('trySearchingFor')} />
-            </h2>
-            <p className="text-1 split-text split-lines-transform">
-              {t('trySearchingForSubtitle')}
-            </p>
-          </div>
-          <div style={{ padding: '40px 20px' }}>
-            <LocationLoader size="medium" message="Loading categories..." />
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // Show category cards immediately, even while loading
+  // This provides better UX - users see the cards right away
 
   return (
     <section className={parentClass}>
@@ -118,7 +113,7 @@ export default function Categories({
               dynamicBullets: false,
             }}
           >
-            {categories.length === 0 ? (
+            {categories.length === 0 && !isLoading ? (
               <SwiperSlide className="swiper-slide">
                 <div className="text-center p-4">No categories available</div>
               </SwiperSlide>
@@ -139,7 +134,15 @@ export default function Categories({
                     </div>
                     <div className="content text-center">
                       <h5 className="category-title-h5">{category.displayName}</h5>
-                      <p className="mt-4 text-1">{category.count} Property{category.count !== 1 ? 's' : ''}</p>
+                      <div className="mt-4 text-1 property-count-container">
+                        {category.count === null || isLoading ? (
+                          <div className="property-count-loader">
+                            <CircularLoader size="small" />
+                          </div>
+                        ) : (
+                          <span>{category.count} Property{category.count !== 1 ? 's' : ''}</span>
+                        )}
+                      </div>
                     </div>
                   </button>
                 </SwiperSlide>
@@ -155,6 +158,19 @@ export default function Categories({
           <style jsx>{`
             .category-title-h5 {
               font-size: 18px !important;
+            }
+            
+            .property-count-container {
+              min-height: 24px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            
+            .property-count-loader {
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
             
             .pagination-container {
