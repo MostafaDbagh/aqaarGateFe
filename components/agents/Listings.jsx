@@ -273,7 +273,7 @@ export default function Listings({ agentId }) {
   // Function to extract all image URLs from property (same as PropertyGridItems)
   const extractImageUrls = (property) => {
     if (!property) {
-      return ['/images/section/box-house-2.jpg'];
+      return [];
     }
 
     const urls = [];
@@ -310,10 +310,7 @@ export default function Listings({ agentId }) {
       .filter(Boolean)
       .filter((url, index, arr) => arr.indexOf(url) === index);
 
-    // Return array with at least default image
-    if (uniqueUrls.length === 0) {
-      return ['/images/section/box-house-2.jpg'];
-    }
+    // Return empty array if no images found
 
     return uniqueUrls;
   };
@@ -321,11 +318,8 @@ export default function Listings({ agentId }) {
   // Function to get single image source for property
   const getImageSource = (property) => {
     const imageUrls = extractImageUrls(property);
-    // Check if we have a real image (not just the default)
-    const hasRealImage = imageUrls.length > 0 && 
-                        imageUrls[0] !== '/images/section/box-house-2.jpg' &&
-                        !imageUrls.every(url => url === '/images/section/box-house-2.jpg');
-    return hasRealImage ? imageUrls[0] : null;
+    // Return first image or null
+    return imageUrls.length > 0 ? imageUrls[0] : null;
   };
 
   if (isLoading) {
@@ -422,7 +416,7 @@ export default function Listings({ agentId }) {
               }
               
               const imageSrc = getImageSource(property);
-              const hasImage = imageSrc && imageSrc !== '/images/section/box-house-2.jpg';
+              const hasImage = imageSrc && imageSrc !== null;
               
               return (
               <div key={property._id || i} className={`${styles.listingCard} tf_filter_rent tf-filter-item tf-tab-content`}>

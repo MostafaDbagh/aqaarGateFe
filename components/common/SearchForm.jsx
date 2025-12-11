@@ -90,29 +90,30 @@ export default function SearchForm({
     "Office"
   ], []);
 
+  // Map English city names to translation keys (reusable)
+  const cityKeyMap = useMemo(() => ({
+    "Latakia": "latakia",
+    "Damascus": "damascus",
+    "Aleppo": "aleppo",
+    "Homs": "homs",
+    "Hama": "hama",
+    "Idlib": "idlib",
+    "Deir ez-Zor": "deirEzZor",
+    "Daraa": "daraa",
+    "Tartous": "tartous"
+  }), []);
+
   // Get translated city options based on locale
   const getCityOptions = useMemo(() => {
     const allCitiesOption = t('allCities');
     const translatedCities = citiesList.map(city => {
-      // Map English city names to translation keys
-      const cityKeyMap = {
-        "Latakia": "latakia",
-        "Damascus": "damascus",
-        "Aleppo": "aleppo",
-        "Homs": "homs",
-        "Hama": "hama",
-        "Idlib": "idlib",
-        "Deir ez-Zor": "deirEzZor",
-        "Daraa": "daraa",
-        "Tartous": "tartous"
-      };
       const key = cityKeyMap[city] || city.toLowerCase();
       // Get city translation using helper function
       const translated = getCityTranslation(key);
       return translated || city;
     });
     return [allCitiesOption, ...translatedCities];
-  }, [t, getCityTranslation, citiesList]);
+  }, [t, getCityTranslation, citiesList, cityKeyMap]);
 
   // Get translated property type options based on locale
   const getPropertyTypeOptions = useMemo(() => {
@@ -152,17 +153,7 @@ export default function SearchForm({
     } else {
       // Fallback: try to find by matching translation
       const englishValue = citiesList.find(city => {
-        const key = {
-          "Latakia": "latakia",
-          "Damascus": "damascus",
-          "Aleppo": "aleppo",
-          "Homs": "homs",
-          "Hama": "hama",
-          "Idlib": "idlib",
-          "Deir ez-Zor": "deirEzZor",
-          "Daraa": "daraa",
-          "Tartous": "tartous"
-        }[city];
+        const key = cityKeyMap[city];
         const translated = getCityTranslation(key);
         return (translated || city) === displayValue;
       }) || displayValue;

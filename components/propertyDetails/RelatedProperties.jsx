@@ -1,118 +1,210 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
-import { getPropertyImage, getPropertyTitle } from "@/utlis/propertyHelpers";
+import { getPropertyTitle } from "@/utlis/propertyHelpers";
+import { translateKeywordsString } from "@/utils/translateKeywords";
 import styles from "./RelatedProperties.module.css";
 
 export default function RelatedProperties({ currentProperty }) {
   const t = useTranslations('similarListings');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
+  const [showScrollHint, setShowScrollHint] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const scrollContainerRef = useRef(null);
   
-  // Calculate search parameters - remove price filter to get more results
+  // Resolve image URL helper function
+  const resolveImageUrl = (value) => {
+    if (!value) return null;
+
+    const rawValue = typeof value === 'string' ? value.trim() : value;
+    if (!rawValue) return null;
+
+    if (typeof rawValue !== 'string') {
+      const candidate = rawValue.url || rawValue.secure_url || rawValue.path || rawValue.src;
+      return resolveImageUrl(candidate);
+    }
+
+    const raw = rawValue.trim();
+
+    if (/^https?:\/\//i.test(raw) || raw.startsWith('data:') || raw.startsWith('blob:')) {
+      return raw;
+    }
+
+    if (raw.startsWith('//')) {
+      return `https:${raw}`;
+    }
+
+    if (raw.startsWith('/')) {
+      return raw;
+    }
+
+    const normalized = raw.replace(/\\/g, '/');
+    const trimmed = normalized.replace(/^(\.\/)+/, '').replace(/^\/+/, '');
+    if (!trimmed) {
+      return null;
+    }
+
+    return `/${trimmed}`;
+  };
+
+  // Extract first image from property
+  const getFirstImage = (property) => {
+    if (!property) return null;
+
+    // Try images array first
+    if (Array.isArray(property.images) && property.images.length > 0) {
+      const resolved = resolveImageUrl(property.images[0]);
+      if (resolved) return resolved;
+    }
+
+    // Try galleryImages
+    if (Array.isArray(property.galleryImages) && property.galleryImages.length > 0) {
+      const resolved = resolveImageUrl(property.galleryImages[0]);
+      if (resolved) return resolved;
+    }
+
+    // Try imageNames
+    if (Array.isArray(property.imageNames) && property.imageNames.length > 0) {
+      const resolved = resolveImageUrl(property.imageNames[0]);
+      if (resolved) return resolved;
+    }
+
+    // Try single image fields
+    const singleImageFields = ['coverImage', 'featuredImage', 'mainImage', 'image'];
+    for (const field of singleImageFields) {
+      if (property[field]) {
+        const resolved = resolveImageUrl(property[field]);
+        if (resolved) return resolved;
+      }
+    }
+
+    // No fallback - return null
+    return null;
+  };
+  
+  // Calculate search parameters - same city and same property type
   const searchParams = useMemo(() => {
     if (!currentProperty) return {};
 
     const params = {
-      limit: 50, // Get more results
-      sort: 'newest', // Sort by newest first
+      limit: 50,
+      sort: 'newest',
     };
 
-    // Match same property type (most important filter)
+    // Match same city (required)
+    if (currentProperty.city) {
+      params.city = currentProperty.city;
+    } else if (currentProperty.state) {
+      params.city = currentProperty.state;
+    }
+
+    // Match same property type (required)
     if (currentProperty.propertyType) {
       params.propertyType = currentProperty.propertyType;
     }
 
-    // Match same status (rent/sale)
-    if (currentProperty.status) {
-      params.status = currentProperty.status;
-    }
+    return params;
+  }, [currentProperty]);
 
-    // DON'T filter by price - we'll score by price similarity instead
-    // This ensures we get more results even if price range is narrow
+  // Fetch similar properties - same city and same property type
+  const { data: listingsData, isLoading, isError, error } = useSearchListings(searchParams);
+
+  // Fallback search params - same city only (if main search returns no results)
+  const fallbackSearchParams = useMemo(() => {
+    if (!currentProperty) return null;
+    
+    const params = {
+      limit: 50,
+      sort: 'newest',
+    };
+
+    // Only city (no property type filter)
+    if (currentProperty.city) {
+      params.city = currentProperty.city;
+    } else if (currentProperty.state) {
+      params.city = currentProperty.state;
+    }
 
     return params;
   }, [currentProperty]);
 
-  // Fetch similar properties
-  const { data: listingsData, isLoading, isError, error } = useSearchListings(searchParams);
-
-  // Filter out the current property and prioritize best matches
-  const similarProperties = useMemo(() => {
-    if (!listingsData?.data && !Array.isArray(listingsData)) return [];
-    
-    // Handle both array response and wrapped response
+  // Fallback search - only if main search has no results
+  const shouldUseFallback = useMemo(() => {
+    if (isLoading) return false;
+    if (!listingsData) return true;
     const listings = Array.isArray(listingsData) ? listingsData : (listingsData?.data || []);
+    return listings.length === 0;
+  }, [isLoading, listingsData]);
+
+  const { data: fallbackData } = useSearchListings(
+    fallbackSearchParams || {},
+    { enabled: shouldUseFallback && !!fallbackSearchParams }
+  );
+
+  // Filter out the current property - simple filter
+  const similarProperties = useMemo(() => {
+    // Try main search results first
+    let listings = [];
+    if (listingsData?.data || Array.isArray(listingsData)) {
+      listings = Array.isArray(listingsData) ? listingsData : (listingsData?.data || []);
+    }
+    
+    // If no results, try fallback (same city only)
+    if (listings.length === 0 && (fallbackData?.data || Array.isArray(fallbackData))) {
+      listings = Array.isArray(fallbackData) ? fallbackData : (fallbackData?.data || []);
+    }
     
     if (!Array.isArray(listings) || listings.length === 0) return [];
     
     // Filter out current property, not deleted, and approved
-    const filteredListings = listings.filter(property => 
-      property._id !== currentProperty?._id &&
-      property.isDeleted !== true &&
-      property.approvalStatus === 'approved'
-    );
+    const filteredListings = listings
+      .filter(property => 
+        property._id !== currentProperty?._id &&
+        property.isDeleted !== true &&
+        property.approvalStatus === 'approved'
+      )
+      .slice(0, 6); // Get first 6 results
     
-    if (filteredListings.length === 0) {
-      return [];
-    }
-    
-    // Calculate similarity score for each property
-    const scoredProperties = filteredListings.map(property => {
-      let score = 0;
-      
-      // Exact match on property type (+20 points) - most important
-      if (property.propertyType === currentProperty?.propertyType) {
-        score += 20;
-      }
-      
-      // Exact match on bedrooms (+12 points)
-      if (property.bedrooms === currentProperty?.bedrooms) {
-        score += 12;
-      } else if (currentProperty?.bedrooms !== undefined && currentProperty?.bedrooms !== null) {
-        const bedDiff = Math.abs((property.bedrooms || 0) - currentProperty.bedrooms);
-        if (bedDiff === 1) score += 6; // ±1 bedroom (+6 points)
-        else if (bedDiff === 2) score += 3; // ±2 bedrooms (+3 points)
-      }
-      
-      // Exact match on bathrooms (+12 points)
-      if (property.bathrooms === currentProperty?.bathrooms) {
-        score += 12;
-      } else if (currentProperty?.bathrooms !== undefined && currentProperty?.bathrooms !== null) {
-        const bathDiff = Math.abs((property.bathrooms || 0) - currentProperty.bathrooms);
-        if (bathDiff === 1) score += 6; // ±1 bathroom (+6 points)
-        else if (bathDiff === 2) score += 3; // ±2 bathrooms (+3 points)
-      }
-      
-      // Price similarity (closer price = higher score)
-      if (currentProperty?.propertyPrice && property.propertyPrice) {
-        const priceDiff = Math.abs(property.propertyPrice - currentProperty.propertyPrice);
-        const pricePercent = (priceDiff / currentProperty.propertyPrice) * 100;
-        if (pricePercent <= 10) score += 15; // Within 10% (+15 points)
-        else if (pricePercent <= 20) score += 10; // Within 20% (+10 points)
-        else if (pricePercent <= 30) score += 7; // Within 30% (+7 points)
-        else if (pricePercent <= 50) score += 4; // Within 50% (+4 points)
-        else if (pricePercent <= 100) score += 2; // Within 100% (+2 points)
-      }
-      
-      // Same status (+8 points)
-      if (property.status === currentProperty?.status) {
-        score += 8;
-      }
-      
-      return { ...property, similarityScore: score };
-    })
-    .sort((a, b) => b.similarityScore - a.similarityScore) // Sort by similarity score (highest first)
-    .slice(0, 6); // Get top 6 most similar properties
-    
-    // Return all scored properties (even with score 0) if we have any
-    return scoredProperties.length > 0 ? scoredProperties : [];
-  }, [listingsData, currentProperty]);
+    return filteredListings;
+  }, [listingsData, fallbackData, currentProperty]);
 
-  // Don't render if no similar properties or still loading
+  // Check if content is scrollable and show scroll hint
+  useEffect(() => {
+    const checkScrollable = () => {
+      if (scrollContainerRef.current) {
+        const element = scrollContainerRef.current;
+        const isScrollable = element.scrollWidth > element.clientWidth;
+        setShowScrollHint(isScrollable);
+        
+        // Check if scrolled
+        const handleScroll = () => {
+          setIsScrolled(element.scrollLeft > 0);
+        };
+        
+        element.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial check
+        
+        return () => {
+          element.removeEventListener('scroll', handleScroll);
+        };
+      }
+    };
+    
+    const cleanup = checkScrollable();
+    window.addEventListener('resize', checkScrollable);
+    
+    return () => {
+      window.removeEventListener('resize', checkScrollable);
+      if (cleanup) cleanup();
+    };
+  }, [similarProperties]);
+
+  // Show loading state
   if (isLoading) {
     return (
       <section className="section-similar-properties tf-spacing-3">
@@ -120,7 +212,7 @@ export default function RelatedProperties({ currentProperty }) {
           <div className="row">
             <div className="col-12">
               <div className="heading-section mb-32">
-                <h2 className="title">{t('similarProperties')}</h2>
+                <h2 className="title">{t('title')}</h2>
               </div>
               <div style={{ padding: '40px 20px' }}>
                 <LocationLoader size="medium" message={t('loading')} />
@@ -132,149 +224,8 @@ export default function RelatedProperties({ currentProperty }) {
     );
   }
 
-  if (isError) {
-    // Show "No related listings" message on error
-    return (
-      <section className="section-similar-properties tf-spacing-3">
-        <div className="tf-container">
-          <div className="row">
-            <div className="col-12">
-              <div className="heading-section mb-32">
-                <h2 className="title">{t('title')}</h2>
-              </div>
-              <div className={styles.noListingsMessage}>
-                <p>{t('noRelatedListings')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // Show section even if no similar properties - display message
-  if (similarProperties.length === 0) {
-    // Try to show any approved properties of same type as fallback
-    if (listingsData) {
-      const listings = Array.isArray(listingsData) ? listingsData : (listingsData?.data || []);
-      const fallbackListings = listings
-        .filter(p => 
-          p._id !== currentProperty?._id && 
-          p.isDeleted !== true && 
-          p.approvalStatus === 'approved' &&
-          p.propertyType === currentProperty?.propertyType
-        )
-        .slice(0, 6);
-      
-      if (fallbackListings.length > 0) {
-        // Show fallback listings
-        return (
-          <section className="section-similar-properties tf-spacing-3">
-            <div className="tf-container">
-              <div className="row">
-                <div className="col-12">
-                  <div className="heading-section mb-32">
-                    <h2 className="title">{t('title')}</h2>
-                    <p className="subtitle" style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>
-                      {t('otherProperties', { type: currentProperty?.propertyType || 'properties' })}
-                    </p>
-                  </div>
-                  <div className={styles.propertiesGrid}>
-                    {fallbackListings.map((property) => {
-                      const getBadgeClass = () => {
-                        const status = property.status?.toLowerCase();
-                        if (status === 'rent') return styles.forRent;
-                        if (status === 'sale') return styles.forSale;
-                        return '';
-                      };
-
-                      return (
-                        <div key={property._id} className={styles.propertyCard}>
-                          <div className={styles.imageWrapper}>
-                            <Link href={`/property-detail/${property._id}`}>
-                              <Image
-                                src={getPropertyImage(property)}
-                                alt={getPropertyTitle(property)}
-                                width={400}
-                                height={300}
-                                className={styles.propertyImage}
-                              />
-                            </Link>
-                            {property.offer && (
-                              <span className={styles.offerBadge}>{t('specialOffer')}</span>
-                            )}
-                            {property.status && (
-                              <span className={`${styles.statusBadge} ${getBadgeClass()}`}>
-                                {property.status === 'sale' ? t('forSale') : t('forRent')}
-                              </span>
-                            )}
-                          </div>
-                          <div className={styles.cardContent}>
-                            <h3 className={styles.propertyTitle}>
-                              <Link href={`/property-detail/${property._id}`}>
-                                {getPropertyTitle(property)}
-                              </Link>
-                            </h3>
-                            <div className={styles.location}>
-                              <i className="icon-location" />
-                              <span style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
-                                {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || '')}
-                                {property.state && `, ${property.state}`}
-                              </span>
-                            </div>
-                            <div className={styles.metaInfo}>
-                              <div className={styles.metaItem}>
-                                {t('beds')} <span>{property.bedrooms || 0}</span>
-                              </div>
-                              <div className={styles.metaItem}>
-                                {t('baths')} <span>{property.bathrooms || 0}</span>
-                              </div>
-                              <div className={styles.metaItem}>
-                                {t('sqft')} <span>{property.size || 0}</span>
-                              </div>
-                              <div className={styles.metaItem}>
-                                {t('garage')} <span>{property.garage || t('no')}</span>
-                              </div>
-                            </div>
-                            <div className={styles.cardFooter}>
-                              <h4 className={styles.price}>
-                                ${property.propertyPrice?.toLocaleString()}
-                              </h4>
-                              <Link href={`/property-detail/${property._id}`} className={styles.detailsBtn}>
-                                {t('details')}
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        );
-      }
-    }
-    
-    // Show "No related listings" message
-    return (
-      <section className="section-similar-properties tf-spacing-3">
-        <div className="tf-container">
-          <div className="row">
-            <div className="col-12">
-              <div className="heading-section mb-32">
-                <h2 className="title">{t('title')}</h2>
-              </div>
-              <div className={styles.noListingsMessage}>
-                <p>{t('noRelatedListings')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // Always show section, even if empty or error
+  const propertiesToShow = similarProperties.length > 0 ? similarProperties : [];
 
   return (
     <section className="section-similar-properties tf-spacing-3">
@@ -283,38 +234,62 @@ export default function RelatedProperties({ currentProperty }) {
           <div className="col-12">
             <div className="heading-section mb-32">
               <h2 className="title">{t('title')}</h2>
-              <p className="subtitle" style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>
-                {t('subtitle')}
-              </p>
             </div>
-            <div className={styles.propertiesGrid}>
-              {similarProperties.map((property) => {
-                const getBadgeClass = () => {
+            {propertiesToShow.length > 0 ? (
+              <div 
+                ref={scrollContainerRef}
+                className={styles.propertiesGrid}
+                style={{ position: 'relative' }}
+              >
+                {showScrollHint && !isScrolled && (
+                  <div className={styles.scrollHintRight}>
+                    <i className="icon-arrow-right" />
+                  </div>
+                )}
+                {propertiesToShow.map((property) => {
+                const getBadgeStyle = () => {
                   const status = property.status?.toLowerCase();
-                  if (status === 'rent') return styles.forRent;
-                  if (status === 'sale') return styles.forSale;
-                  return '';
+                  if (status === 'rent' || status === 'for rent') {
+                    return { backgroundColor: '#3b82f6' };
+                  }
+                  if (status === 'sale' || status === 'for sale') {
+                    return { backgroundColor: '#10B981' };
+                  }
+                  return { backgroundColor: '#10B981' }; // Default to forSale
                 };
 
+                const imageUrl = getFirstImage(property);
+                
                 return (
                   <div key={property._id} className={styles.propertyCard}>
                     <div className={styles.imageWrapper}>
-                      <Link href={`/property-detail/${property._id}`}>
-                        <Image
-                          src={getPropertyImage(property)}
-                          alt={getPropertyTitle(property)}
-                          width={400}
-                          height={300}
-                          className={styles.propertyImage}
-                          />
-                        </Link>
+                      {imageUrl ? (
+                        <Link href={`/property-detail/${property._id}`}>
+                          <Image
+                            src={imageUrl}
+                            alt={getPropertyTitle(property)}
+                            width={400}
+                            height={300}
+                            className={styles.propertyImage}
+                            unoptimized={true}
+                            priority={false}
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                            />
+                          </Link>
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f5f5f5', color: '#999', fontSize: '14px' }}>
+                          No Image
+                        </div>
+                      )}
                        
                         {property.offer && (
                           <span className={styles.offerBadge}>{t('specialOffer')}</span>
                         )}
                       
                       {property.status && (
-                        <span className={`${styles.statusBadge} ${getBadgeClass()}`}>
+                        <span className={styles.statusBadge} style={getBadgeStyle()}>
                           {property.status === 'sale' ? t('forSale') : t('forRent')}
                         </span>
                       )}
@@ -326,6 +301,22 @@ export default function RelatedProperties({ currentProperty }) {
                           {getPropertyTitle(property)}
                         </Link>
                       </h3>
+
+                      {/* Property Keyword Tags */}
+                      {(() => {
+                        const keywords = property.propertyKeyword 
+                          ? translateKeywordsString(property.propertyKeyword, tCommon)
+                          : [];
+                        return keywords.length > 0 ? (
+                          <div className={styles.keywordTags}>
+                            {keywords.map((translatedKeyword, index) => (
+                              <span key={index} className={styles.keywordTag}>
+                                {translatedKeyword}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null;
+                      })()}
 
                         <div className={styles.location}>
                           <i className="icon-location" />
@@ -345,6 +336,11 @@ export default function RelatedProperties({ currentProperty }) {
                         <div className={styles.metaItem}>
                           {t('sqft')} <span>{property.size || 0}</span>
                         </div>
+                        {property.floor !== undefined && property.floor !== null && (
+                          <div className={styles.metaItem}>
+                            {t('floor')} <span>{property.floor}</span>
+                          </div>
+                        )}
                         <div className={styles.metaItem}>
                           {t('garage')} <span>{property.garage || t('no')}</span>
                         </div>
@@ -362,7 +358,12 @@ export default function RelatedProperties({ currentProperty }) {
                   </div>
                 );
               })}
-            </div>
+              </div>
+            ) : (
+              <div className={styles.noListingsMessage}>
+                <p>{t('noRelatedListings')}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

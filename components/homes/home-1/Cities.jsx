@@ -39,7 +39,7 @@ export default function Cities() {
         id: index + 1,
         city: city.city || city.displayName,
         properties: `${city.count} Property${city.count !== 1 ? 's' : ''}`,
-        imageSrc: city.imageSrc || '/images/cities/Deir ez-Zur.jpg',
+        imageSrc: city.imageSrc || '/images/cities/Deir ez-ur.jpg',
         alt: city.city || city.displayName,
         width: 400,
         height: 350

@@ -118,7 +118,8 @@ export default function ExtraInfo({ property }) {
                     'yearly': t('rentTypeYearly'),
                     'one-year': t('rentTypeOneYear'),
                     'three-month': t('rentTypeThreeMonth'),
-                    'six-month': t('rentTypeSixMonth')
+                    'six-month': t('rentTypeSixMonth'),
+                    'daily': t('rentTypeDaily')
                   };
                   return rentTypeMap[property.rentType] || property.rentType;
                 })()}

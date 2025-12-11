@@ -125,8 +125,8 @@ export default function Properties({ listings, isLoading, isError }) {
       .filter(Boolean)
       .filter((url, index, arr) => arr.indexOf(url) === index);
 
-    // Return first image or fallback
-    const finalUrl = uniqueUrls.length > 0 ? uniqueUrls[0] : "/images/section/box-house-2.jpg";
+    // Return first image or null
+    const finalUrl = uniqueUrls.length > 0 ? uniqueUrls[0] : null;
     
     // Debug logging removed for production
     
@@ -274,16 +274,11 @@ export default function Properties({ listings, isLoading, isError }) {
                 display: 'block'
               }}
               onError={(e) => {
-                // Try fallback image
-                if (e.target.src !== "/images/section/box-house-2.jpg" && !e.target.src.includes('box-house-2.jpg')) {
-                  e.target.src = "/images/section/box-house-2.jpg";
-                } else {
-                  // If fallback also fails, show placeholder
-                  e.target.style.display = 'none';
-                  const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
-                  if (placeholder) {
-                    placeholder.style.display = 'flex';
-                  }
+                // Hide image on error
+                e.target.style.display = 'none';
+                const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
+                if (placeholder) {
+                  placeholder.style.display = 'flex';
                 }
               }}
               onLoad={(e) => {
@@ -617,10 +612,10 @@ export default function Properties({ listings, isLoading, isError }) {
                     'weekly': t('common.weekly'),
                     'yearly': t('common.yearly'),
                     'one-year': t('common.oneYear'),
-                    'three-month': t('common.threeMonth'),
-                    'six-month': t('common.sixMonth')
+                    'three months': t('common.threeMonth'),
+                    'six months': t('common.sixMonth')
                   };
-                  const rentPeriod = rentTypeMap[listing.rentType] || t('common.monthly');
+                  const rentPeriod = rentTypeMap[listing.rentType.toLowerCase()] || t('common.monthly');
                   return `${basePrice} ${rentPeriod}`;
                 }
                 

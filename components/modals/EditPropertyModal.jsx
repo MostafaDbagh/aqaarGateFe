@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { listingAPI } from '@/apis/listing';
 import DropdownSelect from '../common/DropdownSelect';
 import { amenitiesList } from '@/constants/amenities';
+import { keywordTags } from '@/constants/keywordTags';
+import { normalizeRentType } from '@/constants/rentTypes';
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
 import styles from './EditPropertyModal.module.css'
@@ -36,27 +38,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
   const [error, setError] = useState('');
 
   // Suggested keyword tags
-  const keywordTags = [
-    "South-facing house",
-    "East-facing",
-    "West-facing",
-    "Well-ventilated",
-    "Bright",
-    "Modern building",
-    "Old building",
-    "Spacious",
-    "View",
-    "Open view",
-    "Sea view",
-    "Mountain view",
-    "luxury",
-    'doublex finishing',
-    'super doublex finishing',
-    'standard finishing',
-    'stone finishing',
-    '2,400 shares',
-    'Green Title Deed'
-  ];
 
   // Handle tag click - add/remove tag from propertyKeyword
   const handleTagClick = (tag) => {
@@ -109,23 +90,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       }
       
       // Normalize rentType: handle "Three Months", "three-month", etc.
-      let normalizedRentType = property.rentType || 'monthly';
-      if (normalizedRentType) {
-        const rentTypeLower = normalizedRentType.toLowerCase().trim();
-        // Map common variations to standard format
-        const rentTypeMap = {
-          'three months': 'three-month',
-          'three-month': 'three-month',
-          'six months': 'six-month',
-          'six-month': 'six-month',
-          'one year': 'one-year',
-          'one-year': 'one-year',
-          'monthly': 'monthly',
-          'weekly': 'weekly',
-          'yearly': 'yearly'
-        };
-        normalizedRentType = rentTypeMap[rentTypeLower] || normalizedRentType.toLowerCase();
-      }
+      const normalizedRentType = normalizeRentType(property.rentType || 'monthly');
       
       setFormData({
         propertyKeyword: property.propertyKeyword || '',
@@ -427,9 +392,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   name="rentType"
                   options={[
                     'monthly',
-                    'three-month',
-                    'six-month',
-                    'one-year',
                     'yearly',
                     'weekly'
                   ]}

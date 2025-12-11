@@ -683,6 +683,7 @@
     "baths": "Baths",
     "sqft": "Sqft",
     "garage": "Garage",
+    "floor": "Floor",
     "no": "No",
     "details": "Details"
   },

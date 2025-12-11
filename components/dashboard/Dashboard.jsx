@@ -592,7 +592,7 @@ export default function Dashboard() {
                                   alt={listing.propertyKeyword || listing.propertyTitle || "Property listing"}
                                   width={615}
                                   height={405}
-                                    src={listing.images?.[0]?.url || "/images/section/box-house-2.jpg"}
+                                    src={listing.images?.[0]?.url || null}
                                 />
                               </div>
                               <div className="content" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>

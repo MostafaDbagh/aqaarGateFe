@@ -184,9 +184,7 @@ export default function PropertyGridItems({ listings = [], isAISearch = false })
       .filter(Boolean)
       .filter((url, index, arr) => arr.indexOf(url) === index);
 
-    if (uniqueUrls.length === 0) {
-      uniqueUrls.push('/images/section/box-house-2.jpg');
-    }
+    // No fallback image - return empty array if no images found
 
     return uniqueUrls;
   };

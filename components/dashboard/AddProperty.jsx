@@ -8,6 +8,7 @@ import DashboardFooter from "../common/DashboardFooter";
 import { useRouter } from "next/navigation";
 import { syrianProvinces } from "@/constants/provinces";
 import { amenitiesList } from "@/constants/amenities";
+import { keywordTags } from "@/constants/keywordTags";
 import logger from "@/utlis/logger";
 import styles from "./AddProperty.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -30,7 +31,7 @@ export default function AddProperty({ isAdminMode = false }) {
     propertyPrice: "",
     currency: "USD",
     status: "rent",
-    rentType: isAdminMode ? "one-week" : "three-month",
+    rentType: "monthly",
     bedrooms: "",
     bathrooms: "",
     size: "",
@@ -41,7 +42,7 @@ export default function AddProperty({ isAdminMode = false }) {
     floor: "",
     address: "",
     country: "Syria",
-    state: "Aleppo",
+    state: "Damascus",
     neighborhood: "Downtown",
     agent: "",
     agentId: "",
@@ -65,26 +66,6 @@ export default function AddProperty({ isAdminMode = false }) {
   const createListingMutation = useCreateListing();
 
   // Suggested keyword tags
-  const keywordTags = [
-    "South-facing house",
-    "East-facing",
-    "West-facing",
-    "Well-ventilated",
-    "Bright",
-    "Modern building",
-    "Old building",
-    "Spacious",
-    "View",
-    "Open view",
-    "Sea view",
-    "Mountain view",
-    "luxury",
-    'doublex finishing',
-    'super doublex finishing',
-    'standard finishing',
-    'stone finishing',
-    'Green Title Deed'
-  ];
 
   // Handle tag click - add/remove tag from propertyKeyword
   const handleTagClick = (tag) => {
@@ -172,7 +153,7 @@ export default function AddProperty({ isAdminMode = false }) {
   useEffect(() => {
     if ((formData.propertyType === "Villa" || formData.propertyType === "Holiday Home") && formData.status === "rent") {
       // Set default to "daily" for Villa or Holiday Home rent if current value is not in options
-      const validOptions = ["daily", "one-week", "two-week", "monthly"];
+      const validOptions = ["daily", "weekly", "monthly"];
       if (!validOptions.includes(formData.rentType)) {
         setFormData(prev => ({
           ...prev,
@@ -181,10 +162,10 @@ export default function AddProperty({ isAdminMode = false }) {
       }
     } else if (formData.status === "rent") {
       // Reset to default for non-Villa/Holiday Home rent properties
-      if (["daily", "one-week", "two-week", "monthly"].includes(formData.rentType)) {
+      if (["daily", "weekly", "monthly"].includes(formData.rentType)) {
         setFormData(prev => ({
           ...prev,
-          rentType: isAdmin || isAdminMode ? "one-week" : "three-month"
+          rentType: isAdmin || isAdminMode ? "weekly" : "three-month"
         }));
       }
     }
@@ -534,7 +515,7 @@ export default function AddProperty({ isAdminMode = false }) {
         propertyPrice: "",
         currency: "USD",
         status: "rent",
-        rentType: isAdminMode ? "one-week" : "three-month",
+        rentType: "monthly",
         bedrooms: "",
         bathrooms: "",
         size: "",
@@ -545,7 +526,7 @@ export default function AddProperty({ isAdminMode = false }) {
         floor: "",
         address: "",
         country: "Syria",
-        state: "Aleppo",
+        state: "Damascus",
         neighborhood: "Downtown",
         amenities: [],
         propertyId: `PROP_${Date.now()}`,
@@ -955,17 +936,17 @@ export default function AddProperty({ isAdminMode = false }) {
                   <DropdownSelect
                     name="rentType"
                     options={
-                      // For Villa or Holiday Home + rent: show daily, one-week, two-week, monthly
+                      // For Villa or Holiday Home + rent: show daily, weekly, monthly, yearly
                       (formData.propertyType === "Villa" || formData.propertyType === "Holiday Home") && formData.status === "rent"
-                        ? ["daily", "one-week", "two-week", "monthly"]
+                        ? ["daily", "weekly", "monthly", "yearly"]
                         // For admin: show all options including daily
                         : (isAdmin || isAdminMode) && formData.propertyType === "Holiday Home" && formData.status === "rent"
-                        ? ["daily", "one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
-                        // For admin (other types): show one-week, two-week, three-week, one-month, three-month, six-month, one-year
+                        ? ["daily", "weekly", "monthly", "yearly"]
+                        // For admin (other types): show weekly, monthly, three-month, six-month, one-year, yearly
                         : (isAdmin || isAdminMode)
-                        ? ["one-week", "two-week", "three-week", "one-month", "three-month", "six-month", "one-year"]
-                        // For regular agents: show three-month, six-month, one-year
-                        : ["monthly", "three-month", "six-month", "one-year"]
+                        ? ["weekly", "monthly", "yearly"]
+                        // For regular agents: show monthly, three-month, six-month, one-year
+                        : ["monthly", "yearly"]
                     }
                     selectedValue={formData.rentType}
                     onChange={(value) => handleDropdownChange('rentType', value)}

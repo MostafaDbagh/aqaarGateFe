@@ -34,7 +34,7 @@ export default function PropertyStructuredData({ property }) {
       "description": property.description || `${property.propertyType} in ${property.city || property.state || 'Lattakia'}, Syria`,
       "image": property.images && property.images.length > 0 
         ? property.images.map(img => (typeof img === 'string' ? img : img.url || img))
-        : ["/images/section/box-house-2.jpg"],
+        : [],
       "numberOfRooms": property.bedrooms || 0,
       "numberOfBathroomsTotal": property.bathrooms || 0,
       "floorSize": property.size ? {
@@ -92,7 +92,7 @@ export default function PropertyStructuredData({ property }) {
     "url": `${baseUrl}/property-detail/${property._id}`,
     "image": property.images && property.images.length > 0 
       ? property.images.map(img => (typeof img === 'string' ? img : img.url || img))
-      : ["/images/section/box-house-2.jpg"],
+      : [],
     "address": {
       "@type": "PostalAddress",
       "streetAddress": property.address || "",

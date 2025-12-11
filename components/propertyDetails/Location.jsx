@@ -12,24 +12,25 @@ export default function Location({ property }) {
   const neighborhood = locale === 'ar' && property?.neighborhood_ar ? property.neighborhood_ar : (property?.neighborhood || '');
   
   // Build Google Maps embed URL - convert any Google Maps URL to embed format
+  // Using simple embed format: https://www.google.com/maps?q=...&output=embed
   const mapEmbedUrl = useMemo(() => {
     if (property?.mapLocation) {
       const mapLocation = property.mapLocation.trim();
       
       // If it's already a valid embed URL, use it directly
-      if (mapLocation.includes('google.com/maps/embed') && mapLocation.startsWith('http')) {
+      if (mapLocation.includes('google.com/maps') && mapLocation.includes('output=embed') && mapLocation.startsWith('http')) {
         return mapLocation;
       }
       
-      // If it's a Google Maps URL, extract location and convert to embed
+      // If it's a Google Maps URL (regular or short link), extract location info
       if (mapLocation.includes('google.com/maps') || mapLocation.includes('goo.gl/maps') || mapLocation.includes('maps.app.goo.gl')) {
-        // First, try to extract coordinates from URL (@lat,lng format) - most reliable
+        // Try to extract coordinates from URL (@lat,lng format) - most reliable
         const coordMatch = mapLocation.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
         if (coordMatch) {
           const lat = coordMatch[1];
           const lng = coordMatch[2];
-          // Use the embed API format with coordinates
-          return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s`;
+          // Use simple embed format with coordinates
+          return `https://www.google.com/maps?q=${lat},${lng}&hl=en&z=15&output=embed`;
         }
         
         // Try to extract place ID from URL
@@ -37,22 +38,18 @@ export default function Location({ property }) {
         if (placeIdMatch) {
           const placeId = placeIdMatch[1];
           // Use place ID with embed format
-          return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s&q=place_id:${placeId}`;
+          return `https://www.google.com/maps?q=place_id:${placeId}&hl=en&z=15&output=embed`;
         }
         
         // Extract query parameter
         const qMatch = mapLocation.match(/[?&]q=([^&]+)/);
         if (qMatch) {
           const query = decodeURIComponent(qMatch[1]);
-          return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s&q=${encodeURIComponent(query)}`;
+          return `https://www.google.com/maps?q=${encodeURIComponent(query)}&hl=en&z=15&output=embed`;
         }
         
-        // For short URLs (maps.app.goo.gl), we need to convert them
-        // The best approach is to use the URL with iframe directly
-        // But since short URLs don't work directly, we'll use a workaround
+        // For short URLs (maps.app.goo.gl or goo.gl), use address fallback
         if (mapLocation.includes('maps.app.goo.gl') || mapLocation.includes('goo.gl/maps')) {
-          // For short URLs, we'll use the address as fallback or try to extract info
-          // Since we can't resolve short URLs client-side, use address fallback
           const fullAddress = [
             address,
             neighborhood,
@@ -63,18 +60,6 @@ export default function Location({ property }) {
           if (fullAddress) {
             return `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&hl=en&z=15&output=embed`;
           }
-          
-          // If no address, try using the short URL directly (may not work but worth trying)
-          return mapLocation;
-        }
-        
-        // For regular Google Maps URLs, try to extract location from path
-        if (mapLocation.includes('/maps/')) {
-          const mapsPathMatch = mapLocation.match(/\/maps\/([^?]+)/);
-          if (mapsPathMatch) {
-            const path = mapsPathMatch[1];
-            return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s&q=${encodeURIComponent(path)}`;
-          }
         }
       }
       
@@ -83,12 +68,12 @@ export default function Location({ property }) {
       if (directCoordMatch) {
         const lat = directCoordMatch[1];
         const lng = directCoordMatch[2];
-        return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s`;
+        return `https://www.google.com/maps?q=${lat},${lng}&hl=en&z=15&output=embed`;
       }
       
       // If it's a plain text address, use it as query
       if (!mapLocation.includes('http')) {
-        return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s&q=${encodeURIComponent(mapLocation)}`;
+        return `https://www.google.com/maps?q=${encodeURIComponent(mapLocation)}&hl=en&z=15&output=embed`;
       }
     }
     
@@ -101,11 +86,11 @@ export default function Location({ property }) {
     ].filter(Boolean).join(', ');
     
     if (fullAddress) {
-      return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s&q=${encodeURIComponent(fullAddress)}`;
+      return `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&hl=en&z=15&output=embed`;
     }
     
     // Default fallback - use Damascus, Syria
-    return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d0!3d0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzVcMzEjMDIuNiJOIDM1XzQ3JzMzLjAiRQ!5e0!3m2!1sen!2s!4v${Date.now()}!5m2!1sen!2s&q=Damascus,Syria`;
+    return `https://www.google.com/maps?q=Damascus,Syria&hl=en&z=15&output=embed`;
   }, [property?.mapLocation, address, neighborhood, property?.city, property?.state, property?.country]);
   
   // Don't show map section if no location data available

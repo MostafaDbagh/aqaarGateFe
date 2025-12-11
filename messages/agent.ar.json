@@ -228,14 +228,16 @@
     },
     "rentTypes": {
       "daily": "يومي",
+      "weekly": "أسبوعي",
       "one-week": "أسبوع واحد",
       "two-week": "أسبوعان",
       "three-week": "ثلاثة أسابيع",
+      "monthly": "شهري",
       "one-month": "شهر واحد",
       "three-month": "ثلاثة أشهر",
       "six-month": "ستة أشهر",
-      "one-year": "سنة واحدة",
-      "monthly": "شهري"
+      "yearly": "سنوي",
+      "one-year": "سنة واحدة"
     },
     "currencies": {
       "USD": "دولار أمريكي",

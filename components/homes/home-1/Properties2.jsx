@@ -56,8 +56,8 @@ export default function Properties2() {
       return property.imageNames[0];
     }
     
-    // Return default image
-    return "/images/section/box-house-2.jpg";
+    // No default image - return null
+    return null;
   };
   
   // Show loading state
@@ -201,10 +201,10 @@ export default function Properties2() {
                             <img
                               className={`lazyload property-image-cover ${styles.propertyImage}`}
                               alt={property.propertyKeyword || property.propertyType || "Property"}
-                              src={imageSrc || "/images/section/box-house-2.jpg"}
+                              src={imageSrc}
                               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                               onError={(e) => {
-                                e.currentTarget.src = "/images/section/box-house-2.jpg";
+                                e.currentTarget.style.display = 'none';
                               }}
                             />
                           </Link>

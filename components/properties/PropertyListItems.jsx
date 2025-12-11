@@ -168,9 +168,7 @@ export default function PropertyListItems({ listings = [], isAISearch = false })
       .filter(Boolean)
       .filter((url, index, arr) => arr.indexOf(url) === index);
 
-    if (uniqueUrls.length === 0) {
-      uniqueUrls.push('/images/section/box-house-2.jpg');
-    }
+    // No fallback image - return empty array if no images found
 
     return uniqueUrls;
   };
@@ -587,9 +585,10 @@ export default function PropertyListItems({ listings = [], isAISearch = false })
                         'yearly': t('common.yearly'),
                         'one-year': t('common.oneYear'),
                         'three-month': t('common.threeMonth'),
-                        'six-month': t('common.sixMonth')
+                        'six-month': t('common.sixMonth'),
+                        'daily': t('common.daily')
                       };
-                      const rentPeriod = rentTypeMap[property.rentType] || t('common.monthly');
+                      const rentPeriod = rentTypeMap[property.rentType]  || t('common.monthly');
                       return `${basePrice} ${rentPeriod}`;
                     }
                     
