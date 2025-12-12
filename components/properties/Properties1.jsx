@@ -330,11 +330,12 @@ function Properties1Content({ defaultGrid = false }) {
     }
   }, [useAISearch, aiSearchInitialized, aiSearchResults, searchResponse, listings.length]);
   
-  // Use AI search pagination if available, otherwise calculate from listings
+  // Use AI search pagination if available, otherwise use API pagination or calculate from listings
   const limit = 12;
   let total, totalPages, pagination;
   
   if (useAISearch && aiSearchResults?.pagination) {
+    // AI search pagination
     pagination = aiSearchResults.pagination;
     total = pagination.total || listings.length;
     totalPages = pagination.totalPages || Math.ceil(total / limit);
@@ -348,7 +349,22 @@ function Properties1Content({ defaultGrid = false }) {
       hasNextPage: (pagination.page || currentPage) < totalPages,
       hasPrevPage: (pagination.page || currentPage) > 1
     };
+  } else if (searchResponse?.pagination) {
+    // Normal search with API pagination
+    pagination = searchResponse.pagination;
+    total = pagination.total || listings.length;
+    totalPages = pagination.totalPages || Math.ceil(total / limit);
+    pagination = {
+      ...pagination,
+      page: pagination.page || currentPage,
+      limit: pagination.limit || limit,
+      total: total,
+      totalPages: totalPages,
+      hasNextPage: pagination.hasNextPage !== undefined ? pagination.hasNextPage : (currentPage < totalPages),
+      hasPrevPage: pagination.hasPrevPage !== undefined ? pagination.hasPrevPage : (currentPage > 1)
+    };
   } else {
+    // Fallback: calculate from listings (should not happen if API returns pagination)
     total = listings.length;
     totalPages = Math.ceil(total / limit);
     pagination = {
@@ -362,10 +378,10 @@ function Properties1Content({ defaultGrid = false }) {
   }
   
   // For AI search, use all listings (already paginated from API)
-  // For normal search, paginate client-side
+  // For normal search, listings are already paginated from API, so use them directly
   const paginatedListings = useAISearch && aiSearchResults?.pagination
     ? listings // AI search results are already paginated from API
-    : listings.slice((currentPage - 1) * limit, currentPage * limit);
+    : listings; // Normal search results are already paginated from API
   
   // Combine loading states
   const isSearchLoading = useAISearch ? aiSearchResults?.isLoading : isLoading;
@@ -461,9 +477,23 @@ function Properties1Content({ defaultGrid = false }) {
   };
 
   // Check if there's an active search (AI or normal)
-  const hasActiveSearch = useAISearch || Object.values(searchParams).some(value => 
-    value !== "" && value !== null && (Array.isArray(value) ? value.length > 0 : true)
-  );
+  // Only show Clear Search button when there are actual filters applied (not default values)
+  const hasActiveSearch = useAISearch || Object.entries(searchParams).some(([key, value]) => {
+    // Ignore sort if it's the default value
+    if (key === 'sort' && (value === 'newest' || value === '')) {
+      return false;
+    }
+    // Check if value is not empty
+    if (value === "" || value === null || value === undefined) {
+      return false;
+    }
+    // Check if array has items
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+    // For other values, check if they're not empty strings
+    return value !== "";
+  });
 
   // Debug: Log the API response
 

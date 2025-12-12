@@ -547,7 +547,7 @@
     },
     "agreementFinalization": {
       "title": "Agreement Finalization",
-      "text": "After inspection, we'll finalize the rental agreement, including rental duration, rental price, and commission terms (minimum 25% commission)."
+      "text": "After inspection, we'll finalize the rental agreement, including rental duration, rental price, and commission terms (minimum 20% commission)."
     },
     "managementBegins": {
       "title": "Property Management Begins",
@@ -555,7 +555,7 @@
     },
     "commissionStructure": "Commission Structure",
     "commissionText": "Our company charges a minimum commission of",
-    "commissionPercent": "25%",
+    "commissionPercent": "20%",
     "commissionText2": "of the rental amount. Additional terms and details can be negotiated between both parties to ensure a mutually beneficial agreement.",
     "agreementTerms": "Agreement Terms Include:",
     "agreementTermsText": "Rental duration, rental price, commission percentage, maintenance responsibilities, and any additional negotiated terms.",
