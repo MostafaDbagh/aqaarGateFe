@@ -6,17 +6,19 @@ import { useTranslations } from 'next-intl';
 export default function Breadcumb({ pageName = "Property Listing" }) {
   const t = useTranslations('breadcrumb');
   
-  // Map page names to translation keys
+  // Map page names to translation keys (case-insensitive)
   const getTranslatedPageName = (name) => {
-    if (name ==="Properties Listings") {
+    const normalizedName = name?.toLowerCase().trim();
+    
+    if (normalizedName === "properties listings") {
       return t('propertyGridFullWidth');
-    } else if (name === "Property Listing") {
+    } else if (normalizedName === "property listing") {
       return t('propertyListing');
-    } else if (name === "Property Details") {
+    } else if (normalizedName === "property details") {
       return t('propertyDetails');
-    } else if (name === "Property Rental Service") {
+    } else if (normalizedName === "property rental service") {
       return t('propertyRentalService');
-    } else if (name === "Agents Details") {
+    } else if (normalizedName === "agents details") {
       return t('agentsDetails');
     }
     return name; // Fallback to original if no translation found
