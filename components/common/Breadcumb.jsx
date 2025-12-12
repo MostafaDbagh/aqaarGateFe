@@ -8,7 +8,7 @@ export default function Breadcumb({ pageName = "Property Listing" }) {
   
   // Map page names to translation keys
   const getTranslatedPageName = (name) => {
-    if (name === "Property Grid Full Width") {
+    if (name ==="Properties Listings") {
       return t('propertyGridFullWidth');
     } else if (name === "Property Listing") {
       return t('propertyListing');

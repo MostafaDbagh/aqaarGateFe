@@ -10,7 +10,7 @@ import "./PropertyImageFix.css";
 import styles from "./PropertyGridItems.module.css";
 import logger from "@/utlis/logger";
 
-export default function PropertyGridItems({ listings = [], isAISearch = false }) {
+export default function PropertyGridItems({ listings = [], isAISearch = false, hasActiveSearch = false }) {
   const t = useTranslations();
   const tCommon = useTranslations('common');
   const locale = useLocale();
@@ -102,6 +102,28 @@ export default function PropertyGridItems({ listings = [], isAISearch = false })
   };
 
   if (!listings || listings.length === 0) {
+    // Case 1: No active search/filters - show "no listings to show" message
+    if (!hasActiveSearch) {
+      return (
+        <div className={styles.emptyStateContainer}>
+          <div className={styles.emptyIcon}>🏠</div>
+          <h3 className={styles.emptyTitle}>
+            {locale === 'ar' 
+              ? 'لا توجد إعلانات للعرض' 
+              : 'There are no listings to show'}
+          </h3>
+          <div className={styles.emptyMessageBox}>
+            <p className={styles.emptyMessageText}>
+              {locale === 'ar' 
+                ? 'لا توجد إعلانات متاحة حالياً. يرجى المحاولة لاحقاً.' 
+                : 'There are no listings available at the moment. Please try again later.'}
+            </p>
+          </div>
+        </div>
+      );
+    }
+    
+    // Case 2: Active search/filters but no results - show search-specific message
     return (
       <div className={styles.emptyStateContainer}>
         {isAISearch ? (
