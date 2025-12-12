@@ -22,7 +22,17 @@ export const listingAPI = {
       }
       
       const response = await Axios.get('/listing/search', { params });
-      return response.data;
+      // Handle both old format (array) and new format (object with data and pagination)
+      if (response.data && Array.isArray(response.data)) {
+        // Old format - return as is for backward compatibility
+        return response.data;
+      } else if (response.data && response.data.data) {
+        // New format with pagination
+        return response.data;
+      } else {
+        // Fallback
+        return response.data;
+      }
     } catch (error) {
       throw error.response?.data || error.message;
     }
