@@ -165,7 +165,7 @@ export default function AddProperty({ isAdminMode = false }) {
       if (["daily", "weekly", "monthly"].includes(formData.rentType)) {
         setFormData(prev => ({
           ...prev,
-          rentType: isAdmin || isAdminMode ? "weekly" : "three-month"
+          rentType: isAdmin || isAdminMode ? "weekly" : "monthly"
         }));
       }
     }
@@ -942,10 +942,8 @@ export default function AddProperty({ isAdminMode = false }) {
                         // For admin: show all options including daily
                         : (isAdmin || isAdminMode) && formData.propertyType === "Holiday Home" && formData.status === "rent"
                         ? ["daily", "weekly", "monthly", "yearly"]
-                        // For admin (other types): show weekly, monthly, three-month, six-month, one-year, yearly
                         : (isAdmin || isAdminMode)
                         ? ["weekly", "monthly", "yearly"]
-                        // For regular agents: show monthly, three-month, six-month, one-year
                         : ["monthly", "yearly"]
                     }
                     selectedValue={formData.rentType}
