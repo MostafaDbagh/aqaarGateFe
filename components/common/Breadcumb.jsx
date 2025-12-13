@@ -20,6 +20,10 @@ export default function Breadcumb({ pageName = "Property Listing" }) {
       return t('propertyRentalService');
     } else if (normalizedName === "agents details") {
       return t('agentsDetails');
+    } else if (normalizedName === "about us") {
+      return t('aboutUs');
+    } else if (normalizedName === "our vision") {
+      return t('ourVision');
     }
     return name; // Fallback to original if no translation found
   };

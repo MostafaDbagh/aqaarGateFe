@@ -622,6 +622,18 @@
   }
 }
 
+html[dir="rtl"] .breadcrumb,
+[dir="rtl"] .breadcrumb {
+  li {
+    &:not(:last-child) {
+      &::after {
+        transform: rotate(180deg);
+        margin: 0 11.5px 0 12.5px;
+      }
+    }
+  }
+}
+
 /* section-CTA
 ===============================================================================*/
 .section-CTA {

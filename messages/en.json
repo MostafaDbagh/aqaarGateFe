@@ -476,11 +476,13 @@
   },
   "breadcrumb": {
     "home": "Home",
-    "propertyGridFullWidth": "Property Grid Full Width",
+    "propertyGridFullWidth": "Properties Listings",
     "propertyListing": "Property Listing",
     "propertyDetails": "Property Details",
     "propertyRentalService": "Property Rental Service",
-    "agentsDetails": "Agents Details"
+    "agentsDetails": "Agents Details",
+    "aboutUs": "About Us",
+    "ourVision": "Our Vision"
   },
   "contact": {
     "pageName": "Contact",
@@ -609,7 +611,7 @@
   },
   "cta": {
     "title": "Find a Local Real Estate Agent Today",
-    "subtitle": "If you're looking to buy or sell a home. We'll help you make the most money possible.",
+    "subtitle": "If you are looking to buy or sell a property, we will help you achieve the maximum benefit possible.",
     "button": "Find your location agent"
   },
   "career": {

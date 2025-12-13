@@ -291,6 +291,16 @@
     .wrap-pagination .wg-pagination {
         direction: ltr;
     }
+    .breadcrumb {
+        li {
+            &:not(:last-child) {
+                &::after {
+                    transform: rotate(180deg);
+                    margin: 0 11.5px 0 12.5px;
+                }
+            }
+        }
+    }
     .box-amenities .wrap-feature .box-feature ul {
         padding-left: 0;
         padding-right: 15px;
