@@ -116,10 +116,8 @@ export default function ExtraInfo({ property }) {
                     'monthly': t('rentTypeMonthly'),
                     'weekly': t('rentTypeWeekly'),
                     'yearly': t('rentTypeYearly'),
-                    'one-year': t('rentTypeOneYear'),
-                    'three-month': t('rentTypeThreeMonth'),
-                    'six-month': t('rentTypeSixMonth'),
-                    'daily': t('rentTypeDaily')
+                    'daily': t('rentTypeDaily'),
+                    'one-year': t('rentTypeOneYear')
                   };
                   return rentTypeMap[property.rentType] || property.rentType;
                 })()}

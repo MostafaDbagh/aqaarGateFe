@@ -611,9 +611,8 @@ export default function Properties({ listings, isLoading, isError }) {
                     'monthly': t('common.monthly'),
                     'weekly': t('common.weekly'),
                     'yearly': t('common.yearly'),
-                    'one-year': t('common.oneYear'),
-                    'three months': t('common.threeMonth'),
-                    'six months': t('common.sixMonth')
+                    'daily': t('common.daily'),
+                    'one-year': t('common.oneYear')
                   };
                   const rentPeriod = rentTypeMap[listing.rentType.toLowerCase()] || t('common.monthly');
                   return `${basePrice} ${rentPeriod}`;

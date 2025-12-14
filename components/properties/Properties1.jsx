@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from 'next-intl';
 import DropdownSelect from "../common/DropdownSelect";
@@ -8,7 +8,7 @@ import PropertyListItems from "./PropertyListItems";
 import LayoutHandler from "./LayoutHandler";
 import FilterModal from "./FilterModal";
 import AISearchBox from "./AISearchBox";
-import { useSearchListings } from "@/apis/hooks";
+import { useSearchListings, useAISearch as useAISearchHook } from "@/apis/hooks";
 import { cleanParams } from "@/utlis/cleanedParams";
 import LocationLoader from "../common/LocationLoader";
 
@@ -38,11 +38,21 @@ function Properties1Content({ defaultGrid = false }) {
               ...parsed,
               listings: listings,
               data: listings,
-              query: parsed.query || ""
+              query: parsed.query || "",
+              pagination: parsed.pagination || {
+                total: listings.length,
+                page: 1,
+                limit: 12,
+                totalPages: Math.ceil(listings.length / 12),
+                hasNextPage: listings.length > 12,
+                hasPrevPage: false
+              }
             };
             console.log('🚀 Synchronously initializing AI search from sessionStorage:', {
               listingsCount: listings.length,
-              query: normalizedResults.query
+              query: normalizedResults.query,
+              pagination: normalizedResults.pagination,
+              firstListing: listings[0] ? { id: listings[0]._id || listings[0].propertyId, type: listings[0].propertyType } : null
             });
             return {
               initialUseAISearch: true,
@@ -201,6 +211,18 @@ function Properties1Content({ defaultGrid = false }) {
     enabled: !useAISearch && aiSearchInitialized // Only run normal search if AI search is not active AND we've checked sessionStorage
   }); // Disable normal search when AI search is active
 
+  // Fetch AI search results when page changes (if using AI search)
+  const aiSearchQuery = useAISearch && aiSearchResults?.query ? aiSearchResults.query : '';
+  const {
+    data: aiSearchPageResponse,
+    isLoading: isAISearchPageLoading,
+    isError: isAISearchPageError
+  } = useAISearchHook(aiSearchQuery, {
+    page: currentPage,
+    limit: 12,
+    enabled: useAISearch && !!aiSearchQuery && aiSearchInitialized && currentPage > 1 // Only fetch if page > 1 (page 1 is from sessionStorage)
+  });
+
   // Handle AI Search results - memoized to prevent infinite loops
   const handleAISearchResults = useCallback((results) => {
     if (results && results.query && results.query.trim().length > 0) {
@@ -257,11 +279,17 @@ function Properties1Content({ defaultGrid = false }) {
     let newListings = [];
     
     if (useAISearch) {
-      // AI search is active - ONLY use AI search results
-      if (aiSearchResults?.listings && Array.isArray(aiSearchResults.listings)) {
-        newListings = aiSearchResults.listings;
-      } else if (aiSearchResults?.data && Array.isArray(aiSearchResults.data)) {
-        newListings = aiSearchResults.data;
+      // AI search is active - use page response if available (for page > 1), otherwise use sessionStorage results
+      if (currentPage > 1 && aiSearchPageResponse?.data && Array.isArray(aiSearchPageResponse.data) && aiSearchPageResponse.data.length > 0) {
+        // Use API response for pages > 1
+        newListings = aiSearchPageResponse.data;
+      } else if (currentPage === 1) {
+        // Use sessionStorage results for page 1
+        if (aiSearchResults?.listings && Array.isArray(aiSearchResults.listings)) {
+          newListings = aiSearchResults.listings;
+        } else if (aiSearchResults?.data && Array.isArray(aiSearchResults.data)) {
+          newListings = aiSearchResults.data;
+        }
       }
     } else {
       // Normal search - ONLY use searchResponse
@@ -274,80 +302,38 @@ function Properties1Content({ defaultGrid = false }) {
       }
     }
     
-    setClientListings(newListings);
-  }, [useAISearch, aiSearchResults, searchResponse, isHydrated]);
+    // Only update if listings actually changed to prevent infinite loops
+    const currentIds = clientListings.map(l => l._id || l.propertyId).sort().join(',');
+    const newIds = newListings.map(l => l._id || l.propertyId).sort().join(',');
+    
+    if (currentIds !== newIds) {
+      setClientListings(newListings);
+    }
+  }, [useAISearch, aiSearchPageResponse?.data, searchResponse, isHydrated, currentPage]); // Removed aiSearchResults and clientListings from deps to prevent loops
   
   // Use client listings only after hydration to prevent mismatch
   // During SSR, always use empty array to match initial client render
   const listings = isHydrated ? clientListings : [];
-  
-  // Debug logging - CRITICAL for troubleshooting
-  useEffect(() => {
-    const debugInfo = {
-      useAISearch,
-      aiSearchInitialized,
-      hasAiSearchResults: !!aiSearchResults,
-      aiSearchListingsCount: aiSearchResults?.listings?.length || aiSearchResults?.data?.length || 0,
-      hasSearchResponse: !!searchResponse,
-      searchResponseType: Array.isArray(searchResponse) ? 'array' : typeof searchResponse,
-      searchResponseDataCount: Array.isArray(searchResponse) ? searchResponse.length : searchResponse?.data?.length || 0,
-      finalListingsCount: listings.length,
-      isNormalSearchEnabled: !useAISearch && aiSearchInitialized,
-      sessionStorageHasData: typeof window !== 'undefined' ? !!sessionStorage.getItem('aiSearchResults') : false
-    };
-    
-    console.log('🔍 Search State Debug:', debugInfo);
-    
-    // Log which source is being used
-    if (useAISearch) {
-      if (aiSearchResults?.listings || aiSearchResults?.data) {
-        console.log('✅ USING AI SEARCH RESULTS:', {
-          listingsCount: listings.length,
-          query: aiSearchResults.query,
-          pagination: aiSearchResults.pagination,
-          source: 'aiSearchResults'
-        });
-      } else {
-        console.warn('⚠️ AI Search is active but no results available yet');
-      }
-    } else {
-      if (searchResponse) {
-        console.log('✅ USING NORMAL SEARCH RESULTS:', {
-          listingsCount: listings.length,
-          source: 'searchResponse'
-        });
-      } else {
-        console.log('ℹ️ No search results available');
-      }
-    }
-    
-    // CRITICAL: Warn if we're using wrong source
-    if (useAISearch && listings.length > 0 && !aiSearchResults) {
-      console.error('❌ ERROR: useAISearch is true but listings are from searchResponse!');
-    }
-    if (!useAISearch && listings.length > 0 && !searchResponse) {
-      console.error('❌ ERROR: useAISearch is false but listings are from aiSearchResults!');
-    }
-  }, [useAISearch, aiSearchInitialized, aiSearchResults, searchResponse, listings.length]);
   
   // Use AI search pagination if available, otherwise use API pagination or calculate from listings
   const limit = 12;
   let total, totalPages, pagination;
   
   if (useAISearch && aiSearchResults?.pagination) {
-    // AI search pagination
+    // AI search pagination - use pagination from sessionStorage (has total: 35)
     pagination = aiSearchResults.pagination;
-    total = pagination.total || listings.length;
+    total = pagination.total || 35; // Use total from pagination (35), not listings.length (12)
     totalPages = pagination.totalPages || Math.ceil(total / limit);
     // Ensure pagination object has all required fields
+    // Use currentPage directly (not pagination.page) because pagination.page from sessionStorage is always 1
     pagination = {
       ...pagination,
-      page: pagination.page || currentPage,
+      page: currentPage, // Always use currentPage, not pagination.page from sessionStorage
       limit: pagination.limit || limit,
-      total: total,
+      total: total, // Keep original total (35)
       totalPages: totalPages,
-      hasNextPage: (pagination.page || currentPage) < totalPages,
-      hasPrevPage: (pagination.page || currentPage) > 1
+      hasNextPage: currentPage < totalPages,
+      hasPrevPage: currentPage > 1
     };
   } else if (searchResponse?.pagination) {
     // Normal search with API pagination
@@ -377,15 +363,39 @@ function Properties1Content({ defaultGrid = false }) {
     };
   }
   
-  // For AI search, use all listings (already paginated from API)
+  // For AI search, use listings directly (already paginated from API for page > 1, or from sessionStorage for page 1)
   // For normal search, listings are already paginated from API, so use them directly
-  const paginatedListings = useAISearch && aiSearchResults?.pagination
-    ? listings // AI search results are already paginated from API
-    : listings; // Normal search results are already paginated from API
+  const paginatedListings = useMemo(() => {
+    // For AI search, listings are already the correct page (either from API for page > 1, or from sessionStorage for page 1)
+    // No need for client-side pagination - just use listings directly
+    return listings;
+  }, [listings]);
+  
+  // Debug logging - CRITICAL for troubleshooting (only log once per state change)
+  useEffect(() => {
+    if (!isHydrated) return;
+    
+    // Only log when key values change, not on every render
+    const debugInfo = {
+      useAISearch,
+      currentPage,
+      listingsCount: listings.length,
+      paginatedCount: paginatedListings.length,
+      hasAiSearchResults: !!aiSearchResults,
+      hasAiSearchPageResponse: !!aiSearchPageResponse?.data,
+      totalFromPagination: pagination?.total
+    };
+    
+    console.log('🔍 Search State:', debugInfo);
+  }, [useAISearch, currentPage, listings.length, paginatedListings.length, isHydrated, pagination?.total]);
   
   // Combine loading states
-  const isSearchLoading = useAISearch ? aiSearchResults?.isLoading : isLoading;
-  const isSearchError = useAISearch ? aiSearchResults?.isError : isError;
+  const isSearchLoading = useAISearch 
+    ? (currentPage > 1 ? isAISearchPageLoading : false) // Only show loading for pages > 1
+    : isLoading;
+  const isSearchError = useAISearch 
+    ? (currentPage > 1 ? isAISearchPageError : false) // Only check error for pages > 1
+    : isError;
   
   // Track if AI search was initialized from sessionStorage to prevent clearing it
   const aiSearchFromStorageRef = useRef(!!initialAiSearchResults);
@@ -500,6 +510,7 @@ function Properties1Content({ defaultGrid = false }) {
   const handlePageChange = (page) => {
     setCurrentPage(page);
     // Scroll to top when page changes
+    // Note: useAISearch hook will automatically fetch new page data via aiSearchPageResponse
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

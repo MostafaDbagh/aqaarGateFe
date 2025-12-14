@@ -600,18 +600,17 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
                     const statusToCheck = property?.statusOriginal || property?.status || '';
                     const statusLower = statusToCheck.toLowerCase().trim();
                     const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
-                    if (isRent && property?.rentType) {
+                    if (isRent && property?.rentType && property.rentType !== null && property.rentType !== undefined && property.rentType !== '') {
                       const rentTypeMap = {
                         'monthly': t('common.monthly'),
                         'weekly': t('common.weekly'),
                         'yearly': t('common.yearly'),
-                        'one-year': t('common.oneYear'),
-                        'three-month': t('common.threeMonth'),
-                        'six-month': t('common.sixMonth'),
                         'daily': t('common.daily')
                       };
-                      const rentPeriod = rentTypeMap[property.rentType]  || t('common.monthly');
-                      return `${basePrice} ${rentPeriod}`;
+                      const rentPeriod = rentTypeMap[property.rentType];
+                      if (rentPeriod) {
+                        return `${basePrice} ${rentPeriod}`;
+                      }
                     }
                     
                     return basePrice;

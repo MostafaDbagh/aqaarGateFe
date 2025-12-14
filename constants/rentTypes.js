@@ -3,19 +3,9 @@
 
 /**
  * Map to normalize rent type variations to standard backend format
- * Handles variations like "three months" -> "three-month"
+ * Handles variations like "one year" -> "one-year"
  */
 export const rentTypeNormalizationMap = {
-  'three months': 'three-month',
-  'three-month': 'three-month',
-  'three_months': 'three-month',
-  '3 months': 'three-month',
-  '3-month': 'three-month',
-  'six months': 'six-month',
-  'six-month': 'six-month',
-  'six_months': 'six-month',
-  '6 months': 'six-month',
-  '6-month': 'six-month',
   'one year': 'one-year',
   'one-year': 'one-year',
   'one_year': 'one-year',
@@ -45,12 +35,10 @@ export const normalizeRentType = (rentType) => {
 
 /**
  * Valid rent type values that match backend enum
- * Backend enum: ['monthly', 'three-month', 'six-month', 'one-year', 'yearly', 'weekly', 'daily']
+ * Backend enum: ['monthly', 'one-year', 'yearly', 'weekly', 'daily']
  */
 export const validRentTypes = [
   'monthly',
-  'three-month',
-  'six-month',
   'one-year',
   'yearly',
   'weekly',
