@@ -41,6 +41,12 @@ export default function robots() {
           // Development and private areas
           '/dev-tools/',                      // Development tools
           '/private/',                        // Private/internal pages
+          
+          // Non-existent pages discovered by Google - prevent indexing
+          '/property-filter-popup',           // Internal component/page, not a real route
+          '/property-half-top-map',           // Internal component/page, not a real route
+          '/agency-grid',                     // Internal component/page, not a real route
+          '/agency-list',                     // Internal component/page, not a real route
         ],
         crawlDelay: 1,                        //
       },
@@ -61,7 +67,12 @@ export default function robots() {
           '/dev-tools/',
           '/api/',
           '/admin/',
-          '/private/'
+          '/private/',
+          // Non-existent pages discovered by Google - prevent indexing
+          '/property-filter-popup',
+          '/property-half-top-map',
+          '/agency-grid',
+          '/agency-list'
         ],
         crawlDelay: 0,                       
       }

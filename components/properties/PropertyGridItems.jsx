@@ -109,13 +109,13 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
           <div className={styles.emptyIcon}>🏠</div>
           <h3 className={styles.emptyTitle}>
             {locale === 'ar' 
-              ? 'لا توجد إعلانات للعرض' 
+              ? 'لا توجد عقارات متاحة للعرض' 
               : 'There are no listings to show'}
           </h3>
           <div className={styles.emptyMessageBox}>
             <p className={styles.emptyMessageText}>
               {locale === 'ar' 
-                ? 'لا توجد إعلانات متاحة حالياً. يرجى المحاولة لاحقاً.' 
+                ? 'لا توجد عقارات متاحة حالياً. يرجى المحاولة لاحقاً.' 
                 : 'There are no listings available at the moment. Please try again later.'}
             </p>
           </div>
