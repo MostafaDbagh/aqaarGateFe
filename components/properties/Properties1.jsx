@@ -261,10 +261,28 @@ function Properties1Content({ defaultGrid = false }) {
     }
   }, []);
 
-  // Determine which listings to use - ensure we have valid listings array
-  // CRITICAL: For hydration, ensure server and client render the same initial state
-  // Use a state that's only populated on the client to prevent hydration mismatch
-  const [clientListings, setClientListings] = useState([]);
+  // Initialize clientListings immediately from sessionStorage (before hydration)
+  // This prevents showing "no listings" message before data loads
+  const [clientListings, setClientListings] = useState(() => {
+    // Try to get initial data immediately (client-side only)
+    if (typeof window !== 'undefined') {
+      // Check for AI search in sessionStorage
+      try {
+        const storedResults = sessionStorage.getItem('aiSearchResults');
+        if (storedResults) {
+          const parsed = JSON.parse(storedResults);
+          const listings = parsed?.listings || parsed?.data || [];
+          if (Array.isArray(listings) && listings.length > 0) {
+            return listings;
+          }
+        }
+      } catch (e) {
+        // Ignore errors
+      }
+    }
+    return [];
+  });
+  
   const [isHydrated, setIsHydrated] = useState(false);
   
   // Mark as hydrated after mount to prevent hydration mismatch
@@ -311,9 +329,9 @@ function Properties1Content({ defaultGrid = false }) {
     }
   }, [useAISearch, aiSearchPageResponse?.data, searchResponse, isHydrated, currentPage]); // Removed aiSearchResults and clientListings from deps to prevent loops
   
-  // Use client listings only after hydration to prevent mismatch
-  // During SSR, always use empty array to match initial client render
-  const listings = isHydrated ? clientListings : [];
+  // Use client listings - show data immediately if available, even before hydration
+  // This prevents the "no listings" flash
+  const listings = clientListings;
   
   // Use AI search pagination if available, otherwise use API pagination or calculate from listings
   const limit = 12;
@@ -390,9 +408,10 @@ function Properties1Content({ defaultGrid = false }) {
   }, [useAISearch, currentPage, listings.length, paginatedListings.length, isHydrated, pagination?.total]);
   
   // Combine loading states
+  // Show loading if: normal search is loading, OR AI search page > 1 is loading, OR not hydrated yet and no initial data
   const isSearchLoading = useAISearch 
-    ? (currentPage > 1 ? isAISearchPageLoading : false) // Only show loading for pages > 1
-    : isLoading;
+    ? (currentPage > 1 ? isAISearchPageLoading : false) || (!isHydrated && clientListings.length === 0) // Show loading for pages > 1 or during initial hydration
+    : isLoading || (!isHydrated && clientListings.length === 0); // Show loading during initial hydration if no data
   const isSearchError = useAISearch 
     ? (currentPage > 1 ? isAISearchPageError : false) // Only check error for pages > 1
     : isError;
