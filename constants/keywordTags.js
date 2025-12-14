@@ -2,6 +2,7 @@
 // Used in AddProperty, EditPropertyModal, and other components
 export const keywordTags = [
   "South-facing house",
+  "North-facing",
   "East-facing",
   "West-facing",
   "Well-ventilated",
@@ -18,7 +19,8 @@ export const keywordTags = [
   "super doublex finishing",
   "standard finishing",
   "stone finishing",
-  "Green Title Deed"
+  "Green Title Deed",
+  "Shell house",
 ];
 
 // Export as default as well for convenience

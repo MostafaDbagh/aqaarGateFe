@@ -5,6 +5,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./AdminAgents.module.css";
 import { UserIcon, PhoneIcon, EmailIcon } from "@/components/icons";
+import { extractCountryCode } from "@/constants/countryCodes";
 
 export default function AdminAgents() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
@@ -24,6 +25,15 @@ export default function AdminAgents() {
     limit: 20
   });
   const [pagination, setPagination] = useState(null);
+
+  // Helper function to format phone number with country code
+  const formatPhoneNumber = (phone) => {
+    if (!phone) return '-';
+    const phoneData = extractCountryCode(phone);
+    return phoneData 
+      ? `${phoneData.countryCode} ${phoneData.phoneNumber}`
+      : phone;
+  };
 
   useEffect(() => {
     fetchAgents();
@@ -187,7 +197,7 @@ export default function AdminAgents() {
                       {agent.phone && (
                         <div className={styles.contactRow}>
                           <PhoneIcon width={16} height={16} stroke="currentColor" />
-                          <span>{agent.phone}</span>
+                          <span>{formatPhoneNumber(agent.phone)}</span>
                         </div>
                       )}
                     </div>
@@ -279,7 +289,7 @@ export default function AdminAgents() {
                     </div>
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Phone:</span>
-                      <span className={styles.detailValue}>{agentDetails.phone || '-'}</span>
+                      <span className={styles.detailValue}>{formatPhoneNumber(agentDetails.phone)}</span>
                     </div>
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Role:</span>

@@ -4,6 +4,7 @@ import AISearchButton from "./AISearchButton";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from "@/utils/translateKeywords";
+import { keywordTags } from "@/constants/keywordTags";
 import styles from "./Hero.module.css";
 
 export default function Hero({
@@ -21,35 +22,10 @@ export default function Hero({
   const dropdownRef = useRef(null);
   const isRTL = locale === 'ar';
 
-  // Get all property keywords - comprehensive list from translations
+  // Get all property keywords - use centralized keywordTags from constants
   const getAllKeywords = () => {
-    // Get unique keywords (avoid duplicates with different cases)
-    const keywordsSet = new Set([
-      // From AddProperty.jsx - Core keywords
-      "South-facing house",
-      "East-facing",
-      "West-facing",
-      "Well-ventilated",
-      "Bright",
-      "Modern building",
-      "Old building",
-      "Spacious",
-      "View",
-      "Open view",
-      "Sea view",
-      "Mountain view",
-      "luxury",
-      "doublex finishing",
-      "super doublex finishing",
-      "standard finishing",
-      "stone finishing",
-      "2,400 shares",
-      "Green Title Deed",    
-
-  
-    ]);
-    
-    return Array.from(keywordsSet);
+    // Use keywordTags from constants to ensure consistency with AddProperty
+    return keywordTags;
   };
 
   // Translate keyword using the utility function

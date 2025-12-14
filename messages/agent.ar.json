@@ -125,6 +125,7 @@
     "pleaseLogin": "يرجى تسجيل الدخول لإضافة عقار",
     "accountBlocked": "حسابك محظور. لا يمكنك إضافة عقارات.",
     "fillArabicFields": "يرجى ملء جميع الحقول العربية المطلوبة",
+    "verificationWarning": "لايمكنك اضافة اي عقار قبل عملية التحقق والتاكيد من الوكيل",
     "maxImages": "الحد الأقصى 10 صور",
     "propertyTypeRequired": "نوع العقار مطلوب",
     "propertyKeywordRequired": "الكلمة المفتاحية/العنوان مطلوب",
@@ -208,7 +209,7 @@
       "Gym": "صالة رياضية",
       "Security cameras": "كاميرات أمنية",
       "Reception (nator)": "استقبال (ناطور)",
-      "Balcony": "شرفة",
+      "Balcony": "شرفة (بلكونة)",
       "Swimming pool": "مسبح",
       "Fire alarms": "أجهزة إنذار حريق"
     },

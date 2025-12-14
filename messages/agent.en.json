@@ -125,6 +125,7 @@
     "pleaseLogin": "Please login to add property",
     "accountBlocked": "Your account is blocked. You cannot add properties.",
     "fillArabicFields": "Please fill all required Arabic fields",
+    "verificationWarning": "You can't add any listing until you get verified.",
     "maxImages": "Maximum 10 images allowed",
     "propertyTypeRequired": "Property type is required",
     "propertyKeywordRequired": "Property keyword/title is required",

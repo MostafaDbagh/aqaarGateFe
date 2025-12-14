@@ -71,7 +71,7 @@ export default function page() {
     <>
       <div id="wrapper">
         <Header1 />
-        <Breadcumb pageName="properties Listings" />
+        <Breadcumb pageName="Properties Listings" />
         <div className="main-content">
           <Properties1 defaultGrid />
           <Cta />

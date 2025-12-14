@@ -168,8 +168,9 @@ export const translateKeywordWithT = (keyword, t) => {
     }
   }
   
-  // Return empty string if no translation found (don't show the tag)
-  return '';
+  // Return original keyword if no translation found (show the tag anyway)
+  // This ensures keywords are always visible even if translation is missing
+  return trimmedKeyword;
 };
 
 /**
