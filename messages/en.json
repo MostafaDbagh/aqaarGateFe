@@ -478,7 +478,7 @@
     "noResults": "No properties found. Try adjusting your filters.",
     "loadingMessage": "Finding amazing properties for you...",
     "errorMessage": "Error loading properties",
-    "aiParserWarning": "⚠️ Note: Our AI parser uses Modern Standard Arabic (الفصحى) and English."
+    "aiParserWarning": "AI search uses Modern Standard Arabic. If no results are found, use normal search or filters to ensure accurate results."
   },
   "breadcrumb": {
     "home": "Home",
