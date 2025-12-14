@@ -600,17 +600,23 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
                     const statusToCheck = property?.statusOriginal || property?.status || '';
                     const statusLower = statusToCheck.toLowerCase().trim();
                     const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
-                    if (isRent && property?.rentType && property.rentType !== null && property.rentType !== undefined && property.rentType !== '') {
+                    if (isRent) {
+                      // Get rentType from property - check multiple possible field names
+                      const rentTypeValue = property?.rentType || property?.rent_type || null;
+                      
+                      // Use rentType from property, or default to 'monthly' if not specified
+                      const rentType = (rentTypeValue && rentTypeValue !== null && rentTypeValue !== undefined && rentTypeValue !== '') 
+                        ? String(rentTypeValue).toLowerCase().trim()
+                        : 'monthly'; // Default to monthly if rentType is not specified
+                      
                       const rentTypeMap = {
                         'monthly': t('common.monthly'),
                         'weekly': t('common.weekly'),
                         'yearly': t('common.yearly'),
                         'daily': t('common.daily')
                       };
-                      const rentPeriod = rentTypeMap[property.rentType];
-                      if (rentPeriod) {
-                        return `${basePrice} ${rentPeriod}`;
-                      }
+                      const rentPeriod = rentTypeMap[rentType] || t('common.monthly');
+                      return `${basePrice} ${rentPeriod}`;
                     }
                     
                     return basePrice;
