@@ -7,7 +7,6 @@ import PropertyGridItems from "./PropertyGridItems";
 import PropertyListItems from "./PropertyListItems";
 import LayoutHandler from "./LayoutHandler";
 import FilterModal from "./FilterModal";
-import AISearchBox from "./AISearchBox";
 import { useSearchListings, useAISearch as useAISearchHook } from "@/apis/hooks";
 import { cleanParams } from "@/utlis/cleanedParams";
 import LocationLoader from "../common/LocationLoader";
@@ -734,9 +733,6 @@ function Properties1Content({ defaultGrid = false }) {
         <div className="tf-container">
           <div className="row">
             <div className="col-12">
-              {/* AI Search Box - Available for all users (no authentication required) */}
-              <AISearchBox onResults={handleAISearchResults} />
-              
               <div className="box-title mb-64">
                 <h2>{t('title')}</h2>
                 <div className="right" style={{ display: 'flex', gap: '12px', alignItems: 'center', ...(isRTL ? { flexDirection: 'row-reverse' } : {}) }}>
