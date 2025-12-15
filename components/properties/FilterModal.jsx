@@ -489,7 +489,7 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
                   selectedValue={
                     searchParams.propertyType 
                       ? getPropertyTypeOptions.find((opt, idx) => idx > 0 && propertyTypesList[idx - 1] === searchParams.propertyType) || t('All')
-                      : t('')
+                      : t('All')
                   }
                   onChange={(value) => handlePropertyTypeChange(value)}
                 />
