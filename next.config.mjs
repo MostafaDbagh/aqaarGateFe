@@ -147,8 +147,8 @@ const nextConfig = {
         { source: '/admin/dashboard', destination: '/admin/overview', permanent: true },
         { source: '/admin', destination: '/admin/overview', permanent: true },
         
-        // 404 page redirect
-        { source: '/404', destination: '/', permanent: false },
+        // 404 page redirect - removed to allow 404 page to work properly
+        // { source: '/404', destination: '/', permanent: false },
       ];
     },
     async headers() {

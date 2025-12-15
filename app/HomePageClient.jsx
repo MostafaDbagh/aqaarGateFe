@@ -10,11 +10,12 @@ import { cleanParams } from "@/utlis/cleanedParams";
 import { useLocale } from 'next-intl';
 
 // Lazy load heavy components for better performance
-const Categories = lazy(() => import("@/components/common/Categories"));
-const Properties = lazy(() => import("@/components/homes/home-1/Properties"));
-const Cities = lazy(() => import("@/components/homes/home-1/Cities"));
-const Properties2 = lazy(() => import("@/components/homes/home-1/Properties2"));
-const SEOContent = lazy(() => import("@/components/homes/home-1/SEOContent"));
+// Add error handling to prevent webpack runtime errors
+const Categories = lazy(() => import("@/components/common/Categories").catch(() => ({ default: () => null })));
+const Properties = lazy(() => import("@/components/homes/home-1/Properties").catch(() => ({ default: () => null })));
+const Cities = lazy(() => import("@/components/homes/home-1/Cities").catch(() => ({ default: () => null })));
+const Properties2 = lazy(() => import("@/components/homes/home-1/Properties2").catch(() => ({ default: () => null })));
+const SEOContent = lazy(() => import("@/components/homes/home-1/SEOContent").catch(() => ({ default: () => null })));
 
 // Loading component for Suspense fallback
 const ComponentLoader = ({ name }) => (

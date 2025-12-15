@@ -78,9 +78,10 @@ export default function SEOContent() {
 
                   <div className={styles.ctaSection}>
                     <p className={styles.ctaText}>
-                      Browse our <Link href="/property-list" className={styles.link}>property listings</Link> 
+                      Browse our <Link href="/property-list" className={styles.link} style={{margin:'0 2px'}}>property listings </Link> 
+                    
                       to find your perfect home in Syria or Lattakia. 
-                      Contact our <Link href="/agents" className={styles.link}>real estate agents</Link> 
+                      Contact our  <Link href="/agents" className={styles.link} target="_blank" style={{margin:'0 2px'}}>real estate agents </Link> 
                       for expert guidance.
                     </p>
                   </div>
@@ -149,9 +150,9 @@ export default function SEOContent() {
 
                   <div className={styles.ctaSection}>
                     <p className={styles.ctaText}>
-                      تصفح <Link href="/property-list" className={styles.link}>قائمة العقارات</Link> 
+                      تصفح <Link href="/property-list" className={styles.link} style={{margin:'0 2px'}}>قائمة العقارات</Link> 
                       للعثور على منزل أحلامك في سوريا أو اللاذقية. 
-                      اتصل بـ <Link href="/agents" className={styles.link}>وكلاء العقارات</Link> 
+                      اتصل بـ <Link href="/agents" className={styles.link} target="_blank" style={{margin:'0 2px'}}>وكلاء العقارات</Link> 
                       للحصول على إرشادات الخبراء.
                     </p>
                   </div>
