@@ -61,6 +61,7 @@ export default function Listings({ agentId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'rent', 'sale'
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
+  const [isPageChanging, setIsPageChanging] = useState(false);
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
   const itemsPerPage = 6;
 
@@ -113,15 +114,12 @@ export default function Listings({ agentId }) {
     ? rawPagination?.totalPages ?? computedTotalPages
     : computedTotalPages;
 
+  // Use currentPage as the source of truth for activePage
+  // When server pagination is available, use currentPage (which we control)
+  // When client-side pagination, ensure currentPage doesn't exceed totalPages
   const activePage = hasServerPagination
-    ? rawPagination?.currentPage ?? rawPagination?.page ?? currentPage
+    ? currentPage
     : Math.min(currentPage, totalPages);
-
-  useEffect(() => {
-    if (!hasServerPagination && currentPage !== activePage) {
-      setCurrentPage(activePage);
-    }
-  }, [hasServerPagination, activePage, currentPage]);
 
   const listings = hasServerPagination
     ? serverListings
@@ -145,9 +143,46 @@ export default function Listings({ agentId }) {
 
   // Handle page change
   const handlePageChange = (page) => {
+    // Use totalPages from pagination object which is already computed
+    const maxPages = totalPages;
+    
+    // Validate page number
+    if (page < 1 || page > maxPages) {
+      console.warn(`Invalid page number: ${page}. Valid range: 1-${maxPages}`);
+      return;
+    }
+    
+    // Don't do anything if already on this page
+    if (page === currentPage) {
+      return;
+    }
+    
+    // Set loading state and update page
+    setIsPageChanging(true);
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Scroll to listings section smoothly after a short delay
+    setTimeout(() => {
+      const listingsSection = document.querySelector(`.${styles.wgListing}`);
+      if (listingsSection) {
+        const offsetTop = listingsSection.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 50);
   };
+  
+  // Reset page changing state when data loads
+  useEffect(() => {
+    if (!isLoading && isPageChanging) {
+      // Small delay to ensure smooth transition
+      const timer = setTimeout(() => {
+        setIsPageChanging(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, isPageChanging]);
 
   // Generate pagination items
   const generatePaginationItems = () => {
@@ -394,7 +429,14 @@ export default function Listings({ agentId }) {
         </div>
       </div>
       
-      {listings.length === 0 ? (
+      {(isPageChanging || isLoading) && listings.length > 0 ? (
+        <div className={styles.rootGrid} style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <LocationLoader 
+            size="medium" 
+            message={t('loadingProperties')}
+          />
+        </div>
+      ) : listings.length === 0 ? (
         <div className={styles.rootGrid} style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className="text-center">
             <p className="text-1">{t('noPropertiesFound')}</p>
