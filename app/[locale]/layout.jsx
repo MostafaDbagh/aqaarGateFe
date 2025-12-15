@@ -10,6 +10,7 @@ import KeywordOptimization from '@/components/seo/KeywordOptimization';
 import AdvancedSEO from '@/components/seo/AdvancedSEO';
 import PerformanceOptimization from '@/components/seo/PerformanceOptimization';
 import InternationalSEO from '@/components/seo/InternationalSEO';
+import BrandSEO from '@/components/seo/BrandSEO';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -93,6 +94,7 @@ export default async function LocaleLayout({ children, params }) {
           <AdvancedSEO />
           <PerformanceOptimization />
           <InternationalSEO />
+          <BrandSEO />
           <ClientLayout>{children}</ClientLayout>
         </Providers>
       </NextIntlClientProvider>

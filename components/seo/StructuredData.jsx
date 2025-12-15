@@ -5,8 +5,17 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     "name": "AqaarGate Real Estate",
-    "description": "Premium real estate services for buying, selling, and renting properties",
+    "alternateName": "AqaarGate",
+    "legalName": "AqaarGate Real Estate",
+    "description": "AqaarGate - Premium real estate services for buying, selling, and renting properties in Syria and Lattakia. Expert guidance for international property buyers.",
     "url": baseUrl,
+    "sameAs": [
+      `${baseUrl}`,
+      "https://www.facebook.com/aqaargate",
+      "https://www.twitter.com/aqaargate",
+      "https://www.instagram.com/aqaargate",
+      "https://www.linkedin.com/company/aqaargate"
+    ],
     "logo": `${baseUrl}/images/logo/logo@2x.png`,
     "contactPoint": {
       "@type": "ContactPoint",
@@ -20,12 +29,6 @@ export default function StructuredData() {
       "addressLocality": "Lattakia",
       "addressRegion": "Lattakia Governorate"
     },
-    "sameAs": [
-      "https://www.facebook.com/aqaargate",
-      "https://www.twitter.com/aqaargate",
-      "https://www.instagram.com/aqaargate",
-      "https://www.linkedin.com/company/aqaargate"
-    ],
     "serviceArea": [
       {
         "@type": "Country",
@@ -142,8 +145,10 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "AqaarGate Real Estate",
+    "alternateName": "AqaarGate",
     "url": baseUrl,
-    "description": "Find your dream property with AqaarGate Real Estate",
+    "description": "AqaarGate - Premium Real Estate Properties in Syria & Lattakia. Find your dream property with AqaarGate Real Estate. Buy, sell, and rent properties in Syria.",
+    "keywords": "aqaargate, aqaargate.com, real estate syria, properties syria, lattakia properties, aqaargate real estate",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
