@@ -14,6 +14,7 @@ const Categories = lazy(() => import("@/components/common/Categories"));
 const Properties = lazy(() => import("@/components/homes/home-1/Properties"));
 const Cities = lazy(() => import("@/components/homes/home-1/Cities"));
 const Properties2 = lazy(() => import("@/components/homes/home-1/Properties2"));
+const SEOContent = lazy(() => import("@/components/homes/home-1/SEOContent"));
 
 // Loading component for Suspense fallback
 const ComponentLoader = ({ name }) => (
@@ -234,6 +235,9 @@ export default function HomePageClient() {
         </Suspense>
         <Suspense fallback={<ComponentLoader name="Properties2" />}>
           <Properties2 />
+        </Suspense>
+        <Suspense fallback={null}>
+          <SEOContent />
         </Suspense>
       </main>
       <Footer1 />

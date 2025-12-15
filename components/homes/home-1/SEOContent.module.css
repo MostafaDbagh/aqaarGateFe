@@ -1,0 +1,150 @@
+.seoSection {
+  padding: 60px 0;
+  background: #f8f9fa;
+}
+
+.seoContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contentBlock {
+  direction: inherit;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.contentItem {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contentItem:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.subTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f1913d;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4a4a4a;
+  margin: 0;
+}
+
+.text strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.ctaSection {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.ctaText {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #4a4a4a;
+  margin: 0;
+}
+
+.link {
+  color: #f1913d;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #e07a2e;
+  text-decoration: underline;
+}
+
+/* RTL Support */
+[dir="rtl"] .contentBlock {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .mainTitle {
+  text-align: center;
+}
+
+[dir="rtl"] .subTitle {
+  text-align: right;
+}
+
+[dir="rtl"] .text {
+  text-align: right;
+}
+
+[dir="rtl"] .ctaText {
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .seoSection {
+    padding: 40px 0;
+  }
+
+  .mainTitle {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .contentItem {
+    padding: 20px;
+  }
+
+  .subTitle {
+    font-size: 1.3rem;
+  }
+
+  .text {
+    font-size: 0.95rem;
+  }
+
+  .ctaSection {
+    padding: 20px;
+  }
+
+  .ctaText {
+    font-size: 1rem;
+  }
+}
+

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from 'next-intl';
 import Listings from "./Listings";
 import Link from "next/link";
@@ -11,12 +12,39 @@ import styles from "./AgentDetails.module.css";
 export default function AgentDetails({ agentId }) {
   const t = useTranslations('agentDetails');
   const locale = useLocale();
+  const router = useRouter();
   const [showMoreDetails, setShowMoreDetails] = useState(false);
+  const hasRedirected = useRef(false);
   
   // Fetch agent data from API
   const { data: agentData, isLoading, isError, error } = useAgent(agentId);
   // API returns { success: true, data: agent }, extract the agent object
   const agent = agentData?.data || agentData;
+
+  // Redirect to 404 if agent doesn't exist or has error
+  useEffect(() => {
+    if (!hasRedirected.current && !isLoading) {
+      // Check for specific error types that indicate agent doesn't exist
+      const errorMessage = error?.message || error?.error || '';
+      const isNotFoundError = 
+        isError && (
+          errorMessage.includes('Cast to ObjectId') ||
+          errorMessage.includes('not found') ||
+          errorMessage.includes('Not Found') ||
+          errorMessage.includes('404') ||
+          error?.response?.status === 404 ||
+          error?.status === 404
+        );
+
+      // If error indicates agent doesn't exist, or agent is null after loading
+      if (isNotFoundError || (!isLoading && !agent && !isError)) {
+        hasRedirected.current = true;
+        // Redirect to locale-specific 404 page
+        router.replace(`/${locale}/404`);
+        return;
+      }
+    }
+  }, [isError, error, agent, isLoading, router]);
   
   // Get localized values based on locale
   const getLocalizedValue = (field, arabicField) => {
@@ -50,7 +78,36 @@ export default function AgentDetails({ agentId }) {
     );
   }
 
-  if (isError || !agent) {
+  if (isError) {
+    // Check if this is a "not found" type error
+    const errorMessage = error?.message || error?.error || '';
+    const isNotFoundError = 
+      errorMessage.includes('Cast to ObjectId') ||
+      errorMessage.includes('not found') ||
+      errorMessage.includes('Not Found') ||
+      errorMessage.includes('404') ||
+      error?.response?.status === 404 ||
+      error?.status === 404;
+
+    // If it's a "not found" error, redirect to 404 (handled by useEffect above)
+    if (isNotFoundError) {
+      return (
+        <section className="section-agents-details tf-spacing-4">
+          <div className="tf-container">
+            <div className="row">
+              <div className="col-12 text-center py-5">
+                <LocationLoader 
+                  size="large" 
+                  message={t('loadingProfile')}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // For other errors, show error message
     return (
       <section className="section-agents-details tf-spacing-4">
         <div className="tf-container">
@@ -63,6 +120,24 @@ export default function AgentDetails({ agentId }) {
                   {t('backToAgents')}
                 </Link>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!agent && !isLoading) {
+    // Agent not found, redirect to 404 (handled by useEffect above)
+    return (
+      <section className="section-agents-details tf-spacing-4">
+        <div className="tf-container">
+          <div className="row">
+            <div className="col-12 text-center py-5">
+              <LocationLoader 
+                size="large" 
+                message={t('loadingProfile')}
+              />
             </div>
           </div>
         </div>
