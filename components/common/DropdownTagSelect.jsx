@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function DropdownTagSelect({
   id,
@@ -11,14 +12,33 @@ export default function DropdownTagSelect({
   addtionalParentClass = "",
   placeholder = "Select option"
 }) {
+  // Try to get translation from both namespaces
+  const tFilterModal = useTranslations('filterModal');
+  const tSearchForm = useTranslations('searchForm');
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
 
+  // Get translated "Any" text - try filterModal first, then searchForm
+  let anyText = 'Any'; // fallback
+  try {
+    anyText = tFilterModal('any');
+  } catch {
+    try {
+      anyText = tSearchForm('any');
+    } catch {
+      anyText = locale === 'ar' ? 'أي' : 'Any';
+    }
+  }
+  const isRTL = locale === 'ar';
+
   const handleOptionClick = (option) => {
-    onChange(option === "Any" ? "" : option);
+    // Check if option matches "Any" in both languages
+    const isAnyOption = option === "Any" || option === anyText || option === "";
+    onChange(isAnyOption ? "" : option);
     setIsOpen(false);
   };
 
-  const displayValue = value || "Any";
+  const displayValue = value || anyText;
 
   return (
     <div className={`dropdown-tag-select ${addtionalParentClass}`}>

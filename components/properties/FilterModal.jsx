@@ -106,7 +106,7 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
 
   // Get translated property type options based on locale
   const getPropertyTypeOptions = useMemo(() => {
-    const anyOption = t('any');
+    const anyOption = t('All');
     const translatedTypes = propertyTypesList.map(type => {
       // Map English property types to translations
       if (type === "Holiday Home") {
@@ -162,7 +162,7 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
 
   // Handle property type change - send English value to backend
   const handlePropertyTypeChange = (displayValue) => {
-    if (displayValue === t('any')) {
+    if (displayValue === t('All')) {
       handleChange("propertyType", "");
       return;
     }
@@ -417,8 +417,9 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
 
         .range-reset {
           position: absolute;
-          left: 2px;
-          top: 2px;
+          right: 12px;
+          left: auto;
+          top: 4px;
           padding: 10px 18px;
           border-radius: 12px;
           border: none;
@@ -434,7 +435,7 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
 
         [dir="rtl"] .range-reset {
           right: auto;
-          left: 18px;
+          left: 12px;
         }
 
         .range-reset:hover {
@@ -487,8 +488,8 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
                   addtionalParentClass=""
                   selectedValue={
                     searchParams.propertyType 
-                      ? getPropertyTypeOptions.find((opt, idx) => idx > 0 && propertyTypesList[idx - 1] === searchParams.propertyType) || t('any')
-                      : t('any')
+                      ? getPropertyTypeOptions.find((opt, idx) => idx > 0 && propertyTypesList[idx - 1] === searchParams.propertyType) || t('All')
+                      : t('')
                   }
                   onChange={(value) => handlePropertyTypeChange(value)}
                 />
@@ -552,7 +553,7 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
                 <DropdownTagSelect
                   id="bathsSelect"
                   label={t('baths')}
-                  options={[t('any'), "1", "2", "3", "4", "5", "6"]}
+                  options={["1", "2", "3", "4", "5", "6"]}
                   addtionalParentClass=""
                   value={searchParams.bathrooms || ""}
                   onChange={(value) => handleChange("bathrooms", value)}
@@ -563,7 +564,7 @@ export default function FilterModal({ onSearchChange, searchParams = {}, disable
                 <DropdownTagSelect
                   id="bedsSelect"
                   label={t('rooms')}
-                  options={[t('any'), 'studio', "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+                  options={['studio', "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
                   addtionalParentClass=""
                   value={searchParams.bedrooms || ""}
                   onChange={(value) => handleChange("bedrooms", value)}

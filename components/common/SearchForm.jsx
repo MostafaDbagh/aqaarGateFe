@@ -117,7 +117,7 @@ export default function SearchForm({
 
   // Get translated property type options based on locale
   const getPropertyTypeOptions = useMemo(() => {
-    const anyOption = t('any');
+    const anyOption = t('All');
     const translatedTypes = propertyTypesList.map(type => {
       // Map English property types to translations
       if (type === "Holiday Home") {
@@ -163,7 +163,7 @@ export default function SearchForm({
 
   // Handle property type change - send English value to backend
   const handlePropertyTypeChange = (displayValue) => {
-    if (displayValue === t('any')) {
+    if (displayValue === t('All')) {
       handleChange("propertyType", "");
       return;
     }
@@ -347,8 +347,8 @@ export default function SearchForm({
               addtionalParentClass=""
               selectedValue={
                 searchParams.propertyType 
-                  ? getPropertyTypeOptions.find((opt, idx) => idx > 0 && propertyTypesList[idx - 1] === searchParams.propertyType) || t('any')
-                  : t('any')
+                  ? getPropertyTypeOptions.find((opt, idx) => idx > 0 && propertyTypesList[idx - 1] === searchParams.propertyType) || t('All')
+                  : t('All')
               }
               onChange={handlePropertyTypeChange}
             />
@@ -386,7 +386,7 @@ export default function SearchForm({
           <DropdownTagSelect
             id="bedsSelect"
             label={t('rooms')}
-            options={[t('any'), 'studio', "1", "2", "3", "4", "5", "6"]}
+            options={['studio', "1", "2", "3", "4", "5", "6"]}
             addtionalParentClass=""
             value={searchParams.bedrooms || ""}
             onChange={(value) => handleChange("bedrooms", value)}
@@ -397,7 +397,7 @@ export default function SearchForm({
           <DropdownTagSelect
             id="bathsSelect"
             label={t('baths')}
-            options={[t('any'), "1", "2", "3", "4", "5"]}
+            options={["1", "2", "3", "4", "5","6"]}
             addtionalParentClass=""
             value={searchParams.bathrooms || ""}
             onChange={(value) => handleChange("bathrooms", value)}
@@ -410,20 +410,20 @@ export default function SearchForm({
   </label>
   <DropdownSelect
     id="furnishedSelect"
-    options={[t('furnished'), t('unfurnished')]}
+    options={[t('any'), t('furnished'), t('unfurnished')]}
     addtionalParentClass=""
     value={
       searchParams.furnished === true
         ? t('furnished')
         : searchParams.furnished === false
         ? t('unfurnished')
-        : t('furnished') // Default to "مفروش" if not set
+        : t('any')
     }
     onChange={(value) => {
       let furnishedValue;
       if (value === t('furnished')) furnishedValue = true;
       else if (value === t('unfurnished')) furnishedValue = false;
-      else furnishedValue = true; // Default to furnished
+      else furnishedValue = undefined;
       handleChange("furnished", furnishedValue);
     }}
   />
