@@ -33,35 +33,11 @@ export default function PerformanceOptimization() {
     </style>
   `;
 
-  // Structured data for performance
-  const performanceSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "AqaarGate Real Estate",
-    "url": baseUrl,
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${baseUrl}/property-list?search={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    },
-    "sameAs": [
-      "https://www.facebook.com/aqaargate",
-      "https://www.twitter.com/aqaargate",
-      "https://www.instagram.com/aqaargate"
-    ]
-  };
+  // Note: WebSite schema is handled in StructuredData.jsx to avoid duplication
+  // This component only handles performance optimization meta tags
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(performanceSchema),
-        }}
-      />
       <div dangerouslySetInnerHTML={{ __html: performanceMetaTags }} />
     </>
   );

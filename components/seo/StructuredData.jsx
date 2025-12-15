@@ -25,9 +25,11 @@ export default function StructuredData() {
     },
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "SY",
+      "streetAddress": "123 Baghdad Street",
       "addressLocality": "Lattakia",
-      "addressRegion": "Lattakia Governorate"
+      "addressRegion": "Lattakia Governorate",
+      "addressCountry": "SY",
+      "postalCode": "12345"
     },
     "serviceArea": [
       {

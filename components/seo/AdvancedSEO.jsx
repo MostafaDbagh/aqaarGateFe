@@ -106,7 +106,15 @@ export default function AdvancedSEO() {
     "provider": {
       "@type": "RealEstateAgent",
       "name": "AqaarGate Real Estate",
-      "url": baseUrl
+      "url": baseUrl,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Real Estate Street",
+        "addressLocality": "Lattakia",
+        "addressRegion": "Lattakia Governorate",
+        "addressCountry": "SY",
+        "postalCode": "12345"
+      }
     },
     "areaServed": [
       {
