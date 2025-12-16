@@ -75,14 +75,18 @@ export default function ExtraInfo({ property }) {
             <p className="fw-6">{t('size')}</p>
             <p>{property?.size || '0'} {t('sqft')}</p>
           </li>
-          <li className="flex">
-            <p className="fw-6">{t('bedrooms')}</p>
-            <p>{property?.bedrooms || '0'}</p>
-          </li>
-          <li className="flex">
-            <p className="fw-6">{t('bathrooms')}</p>
-            <p>{property?.bathrooms || '0'}</p>
-          </li>
+          {property?.bedrooms != null && Number(property.bedrooms) > 0 && (
+            <li className="flex">
+              <p className="fw-6">{t('bedrooms')}</p>
+              <p>{property.bedrooms}</p>
+            </li>
+          )}
+          {property?.bathrooms != null && Number(property.bathrooms) > 0 && (
+            <li className="flex">
+              <p className="fw-6">{t('bathrooms')}</p>
+              <p>{property.bathrooms}</p>
+            </li>
+          )}
         </ul>
         <ul>
           <li className="flex">

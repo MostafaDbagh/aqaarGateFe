@@ -25,6 +25,15 @@ export default function Properties({ listings, isLoading, isError }) {
     }));
   };
 
+  // Format phone number for RTL (Arabic) - move + to the right
+  const formatPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) return '';
+    if (locale === 'ar' && phoneNumber.startsWith('+')) {
+      return phoneNumber.substring(1) + '+';
+    }
+    return phoneNumber;
+  };
+
   const handleWhatsAppClick = (phoneNumber) => {
     const message = "Hello! I'm interested in this property. Could you please provide more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
@@ -386,17 +395,21 @@ export default function Properties({ listings, isLoading, isError }) {
           </p>
 
           <ul className="meta-list flex" style={{ gap: '24px' }}>
+            {listing.bedrooms != null && Number(listing.bedrooms) > 0 && (
+              <li className="text-1 flex items-center">
+                <i className="icon-bed" style={{ margin: '0 2px' }} />
+                <span>{listing.bedrooms}</span>
+              </li>
+            )}
+            {listing.bathrooms != null && Number(listing.bathrooms) > 0 && (
+              <li className="text-1 flex items-center">
+                <i className="icon-bath" style={{ margin: '0 2px' }} />
+                <span>{listing.bathrooms}</span>
+              </li>
+            )}
             <li className="text-1 flex items-center">
-              <i className="icon-bed" />
-              <span style={{ marginLeft: '4px' }}>{listing.bedrooms}</span>
-            </li>
-            <li className="text-1 flex items-center">
-              <i className="icon-bath" />
-              <span style={{ marginLeft: '4px' }}>{listing.bathrooms}</span>
-            </li>
-            <li className="text-1 flex items-center">
-              <i className="icon-sqft" />
-              <span style={{ marginLeft: '4px' }}>{listing.size ?? "N/A"}</span> Sqft
+              <i className="icon-sqft" style={{ margin: '0 2px' }} />
+              <span>{listing.size ?? "N/A"}</span> Sqft
             </li>
           </ul>
 
@@ -439,7 +452,7 @@ export default function Properties({ listings, isLoading, isError }) {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04207 3.23945 9.11999 3.72C9.28562 4.68007 9.56648 5.62273 9.95999 6.53C10.0555 6.74431 10.1112 6.97355 10.1241 7.20668C10.137 7.43981 10.1069 7.67342 10.0353 7.896C9.96366 8.11858 9.85182 8.32642 9.70599 8.51L8.08999 10.12C9.51355 12.4885 11.5115 14.4864 13.88 15.91L15.49 14.3C15.6736 14.1542 15.8814 14.0423 16.104 13.9707C16.3266 13.8991 16.5602 13.869 16.7933 13.8819C17.0264 13.8948 17.2557 13.9505 17.47 14.046C18.3773 14.4395 19.3199 14.7204 20.28 14.886C20.7658 14.9656 21.2094 15.2132 21.5265 15.5866C21.8437 15.9601 22.0122 16.4348 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  {showPhoneNumbers[listing._id] ? (listing.agentPhone || '+971549967817') : t('common.call')}
+                  {showPhoneNumbers[listing._id] ? formatPhoneNumber(listing.agentPhone || '+971586057772') : t('common.call')}
                 </button>
                 
                 {showPhoneNumbers[listing._id] && (
@@ -461,7 +474,7 @@ export default function Properties({ listings, isLoading, isError }) {
                   >
                     <div style={{ display: 'flex', gap: '6px' }}>
                       <button
-                        onClick={() => window.open(`tel:${listing.agentPhone || '+971549967817'}`)}
+                        onClick={() => window.open(`tel:${listing.agentPhone || '+971586057772'}`)}
                         style={{
                           flex: 1,
                           background: '#10b981',
@@ -484,7 +497,7 @@ export default function Properties({ listings, isLoading, isError }) {
                         {t('common.call')}
                       </button>
                       <button
-                        onClick={() => handleWhatsAppClick(listing.agentPhone || '+971549967817')}
+                        onClick={() => handleWhatsAppClick(listing.agentPhone || '+971586057772')}
                         style={{
                           flex: 1,
                           background: '#25D366',
@@ -615,7 +628,14 @@ export default function Properties({ listings, isLoading, isError }) {
                     'one-year': t('common.oneYear')
                   };
                   const rentPeriod = rentTypeMap[listing.rentType.toLowerCase()] || t('common.monthly');
-                  return `${basePrice} ${rentPeriod}`;
+                  // Only apply black color and 18px for Holiday Homes
+                  const isHolidayHome = listing?.propertyType === 'Holiday Home' || listing?.propertyType === 'Holiday Homes';
+                  return (
+                    <>
+                      {basePrice}
+                      <span style={{ color: isHolidayHome ? '#000000' : 'inherit', fontSize: isHolidayHome ? '16px' : 'inherit' }}>{rentPeriod}</span>
+                    </>
+                  );
                 }
                 
                 return basePrice;

@@ -139,16 +139,20 @@ export default function PropertyOverview({ property }) {
             {locale === 'ar' && property?.address_ar ? property.address_ar : (property?.address || 'Property Location')}
           </p>
           <ul className="feature-list flex flex-wrap gap-10 " style={{margin: '12px 0'}}>
+            {property?.bedrooms != null && Number(property.bedrooms) > 0 && (
+              <li className="text-1 flex items-center gap-10">
+                <i className="icon-Bed-2" style={{ margin: '0 2px' }} />
+                <span>{property.bedrooms}</span>{tDetail('bed')}
+              </li>
+            )}
+            {property?.bathrooms != null && Number(property.bathrooms) > 0 && (
+              <li className="text-1 flex items-center gap-10">
+                <i className="icon-Bathtub" style={{ margin: '0 2px' }} />
+                <span>{property.bathrooms}</span>{tDetail('bath')}
+              </li>
+            )}
             <li className="text-1 flex items-center gap-10">
-              <i className="icon-Bed-2" />
-              <span>{property?.bedrooms || '0'}</span>{tDetail('bed')}
-            </li>
-            <li className="text-1 flex items-center gap-10">
-              <i className="icon-Bathtub" />
-              <span>{property?.bathrooms || '0'}</span>{tDetail('bath')}
-            </li>
-            <li className="text-1 flex items-center gap-10">
-              <i className="icon-Ruler" />
+              <i className="icon-Ruler" style={{ margin: '0 2px' }} />
               <span>{property?.size || '0'}</span>{tDetail('sqft')}
             </li>
           </ul>
@@ -205,15 +209,17 @@ export default function PropertyOverview({ property }) {
               </div>
             </div>
           </div>
-          <div className="box-icon">
-            <div className="icons">
-              <i className="icon-Bathtub" />
+          {property?.bathrooms != null && Number(property.bathrooms) > 0 && (
+            <div className="box-icon">
+              <div className="icons">
+                <i className="icon-Bathtub" style={{ margin: '0 2px' }} />
+              </div>
+              <div className="content">
+                <div className="text-4 text-color-default">{tDetail('bathrooms')}:</div>
+                <div className="text-1 text-color-heading">{property.bathrooms} {tDetail('rooms')}</div>
+              </div>
             </div>
-            <div className="content">
-              <div className="text-4 text-color-default">{tDetail('bathrooms')}:</div>
-              <div className="text-1 text-color-heading">{property?.bathrooms || '0'} {tDetail('rooms')}</div>
-            </div>
-          </div>
+          )}
           <div className="wrap-box">
           {property?.floor !== undefined && property?.floor !== null && (
             <div className="box-icon">
@@ -250,15 +256,17 @@ export default function PropertyOverview({ property }) {
             </div>
           </div>
 
-          <div className="box-icon">
-            <div className="icons">
-              <i className="icon-Bed-2" />
+          {property?.bedrooms != null && Number(property.bedrooms) > 0 && (
+            <div className="box-icon">
+              <div className="icons">
+                <i className="icon-Bed-2" style={{ margin: '0 2px' }} />
+              </div>
+              <div className="content">
+                <div className="text-4 text-color-default">{tDetail('bedrooms')}:</div>
+                <div className="text-1 text-color-heading">{property.bedrooms} {tDetail('rooms')}</div>
+              </div>
             </div>
-            <div className="content">
-              <div className="text-4 text-color-default">{tDetail('bedrooms')}:</div>
-              <div className="text-1 text-color-heading">{property?.bedrooms || '0'} {tDetail('rooms')}</div>
-            </div>
-          </div>
+          )}
           
 
         </div>

@@ -25,6 +25,15 @@ export default function Properties2() {
     sort: 'newest' // Get newest properties
   });
   // API returns array directly, not wrapped in data property
+  // Format phone number for RTL (Arabic) - move + to the right
+  const formatPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) return '';
+    if (locale === 'ar' && phoneNumber.startsWith('+')) {
+      return phoneNumber.substring(1) + '+';
+    }
+    return phoneNumber;
+  };
+
   const listings = (() => {
     // Handle both array response and wrapped response
     if (Array.isArray(searchResponse)) {
@@ -257,7 +266,48 @@ export default function Properties2() {
                         {/* Price and Details below text */}
                         <div className={styles.priceDetailsSection}>
                           <div className={styles.price}>
-                            ${property.propertyPrice?.toLocaleString() || '0'}
+                            {(() => {
+                              const currencySymbols = {
+                                'USD': '$',
+                                'SYP': 'SYP',
+                                'EUR': '€'
+                              };
+                              const currency = property?.currency || 'USD';
+                              const symbol = currencySymbols[currency] || currency;
+                              const price = property?.propertyPrice?.toLocaleString() || '0';
+                              const basePrice = `${symbol}${price}`;
+                              
+                              // Add rent period for rental properties (especially holiday homes)
+                              const statusToCheck = property?.statusOriginal || property?.status || '';
+                              const statusLower = statusToCheck.toLowerCase().trim();
+                              const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
+                              
+                              if (isRent) {
+                                const rentTypeValue = property?.rentType || property?.rent_type || null;
+                                const rentType = (rentTypeValue && rentTypeValue !== null && rentTypeValue !== undefined && rentTypeValue !== '') 
+                                  ? String(rentTypeValue).toLowerCase().trim()
+                                  : 'monthly';
+                                
+                                const rentTypeMap = {
+                                  'monthly': tCommon('monthly'),
+                                  'weekly': tCommon('weekly'),
+                                  'yearly': tCommon('yearly'),
+                                  'daily': tCommon('daily'),
+                                  'one-year': tCommon('oneYear')
+                                };
+                                const rentPeriod = rentTypeMap[rentType] || tCommon('monthly');
+                                // Only apply black color and 18px for Holiday Homes
+                                const isHolidayHome = property?.propertyType === 'Holiday Home' || property?.propertyType === 'Holiday Homes';
+                                return (
+                                  <>
+                                    {basePrice}
+                                    <span style={{ color: isHolidayHome ? '#000000' : 'inherit', fontSize: isHolidayHome ? '16px' : 'inherit' }}>{rentPeriod}</span>
+                                  </>
+                                );
+                              }
+                              
+                              return basePrice;
+                            })()}
                           </div>
                           <Link href={`/property-detail/${property._id}`} className={styles.detailsBtn}>
                             {tCommon('details')}
@@ -271,16 +321,20 @@ export default function Properties2() {
                         {/* Details Grid */}
                         <div className={styles.detailsSection}>
                           <div className={styles.detailsGrid}>
+                            {property.bedrooms != null && Number(property.bedrooms) > 0 && (
+                              <div className={styles.detailItem}>
+                                <i className="icon-bed" style={{ margin: '0 2px' }} />
+                                <span>{tCommon('beds')} <strong>{property.bedrooms}</strong></span>
+                              </div>
+                            )}
+                            {property.bathrooms != null && Number(property.bathrooms) > 0 && (
+                              <div className={styles.detailItem}>
+                                <i className="icon-bath" style={{ margin: '0 2px' }} />
+                                <span>{tCommon('baths')} <strong>{property.bathrooms}</strong></span>
+                              </div>
+                            )}
                             <div className={styles.detailItem}>
-                              <i className="icon-bed" />
-                              <span>{tCommon('beds')} <strong>{property.bedrooms}</strong></span>
-                            </div>
-                            <div className={styles.detailItem}>
-                              <i className="icon-bath" />
-                              <span>{tCommon('baths')} <strong>{property.bathrooms}</strong></span>
-                            </div>
-                            <div className={styles.detailItem}>
-                              <i className="icon-sqft" />
+                              <i className="icon-sqft" style={{ margin: '0 2px' }} />
                               <span>{tCommon('sqft')} <strong>{property.size}</strong></span>
                             </div>
                             <div className={styles.detailItem}>
@@ -308,7 +362,7 @@ export default function Properties2() {
                               <i className="icon-phone-1" />
                               <span className="phone-number-text" style={{fontSize: '12px'}}>
                                 
-                                  {property.agentNumber || property.agent?.phoneNumber || property.agent?.phone || tCommon('callAgent')}
+                                  {formatPhoneNumber(property.agentNumber || property.agent?.phoneNumber || property.agent?.phone) || tCommon('callAgent')}
                                 
                               </span>
                             </button>

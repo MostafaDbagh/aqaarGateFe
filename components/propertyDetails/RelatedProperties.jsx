@@ -327,12 +327,16 @@ export default function RelatedProperties({ currentProperty }) {
                         </div>
 
                       <div className={styles.metaInfo}>
-                        <div className={styles.metaItem}>
-                          {t('beds')} <span>{property.bedrooms || 0}</span>
-                        </div>
-                        <div className={styles.metaItem}>
-                          {t('baths')} <span>{property.bathrooms || 0}</span>
-                        </div>
+                        {property.bedrooms != null && Number(property.bedrooms) > 0 && (
+                          <div className={styles.metaItem}>
+                            {t('beds')} <span>{property.bedrooms}</span>
+                          </div>
+                        )}
+                        {property.bathrooms != null && Number(property.bathrooms) > 0 && (
+                          <div className={styles.metaItem}>
+                            {t('baths')} <span>{property.bathrooms}</span>
+                          </div>
+                        )}
                         <div className={styles.metaItem}>
                           {t('sqft')} <span>{property.size || 0}</span>
                         </div>

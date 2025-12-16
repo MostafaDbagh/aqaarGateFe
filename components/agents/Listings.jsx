@@ -72,6 +72,15 @@ export default function Listings({ agentId }) {
     }));
   };
 
+  // Format phone number for RTL (Arabic) - move + to the right
+  const formatPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) return '';
+    if (locale === 'ar' && phoneNumber.startsWith('+')) {
+      return phoneNumber.substring(1) + '+';
+    }
+    return phoneNumber;
+  };
+
   const handleWhatsAppClick = (phoneNumber) => {
     const message = "Hello! I'm interested in this property. Could you please provide more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
@@ -549,12 +558,16 @@ export default function Listings({ agentId }) {
                       </span>
                     </p>
                     <ul className="meta-list flex">
-                      <li className="text-1 flex">
-                        <span>{property.bedrooms || 0}</span>{tCommon('beds')}
-                      </li>
-                      <li className="text-1 flex">
-                        <span>{property.bathrooms || 0}</span>{tCommon('baths')}
-                      </li>
+                      {property.bedrooms != null && Number(property.bedrooms) > 0 && (
+                        <li className="text-1 flex">
+                          <span>{property.bedrooms}</span>{tCommon('beds')}
+                        </li>
+                      )}
+                      {property.bathrooms != null && Number(property.bathrooms) > 0 && (
+                        <li className="text-1 flex">
+                          <span>{property.bathrooms}</span>{tCommon('baths')}
+                        </li>
+                      )}
                       <li className="text-1 flex">
                         <span>{property.size || property.landArea || 0}</span>{tCommon('sqft')}
                       </li>
@@ -597,14 +610,14 @@ export default function Listings({ agentId }) {
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04207 3.23945 9.11999 3.72C9.28562 4.68007 9.56648 5.62273 9.95999 6.53C10.0555 6.74431 10.1112 6.97355 10.1241 7.20668C10.137 7.43981 10.1069 7.67342 10.0353 7.896C9.96366 8.11858 9.85182 8.32642 9.70599 8.51L8.08999 10.12C9.51355 12.4885 11.5115 14.4864 13.88 15.91L15.49 14.3C15.6736 14.1542 15.8814 14.0423 16.104 13.9707C16.3266 13.8991 16.5602 13.869 16.7933 13.8819C17.0264 13.8948 17.2557 13.9505 17.47 14.046C18.3773 14.4395 19.3199 14.7204 20.28 14.886C20.7658 14.9656 21.2094 15.2132 21.5265 15.5866C21.8437 15.9601 22.0122 16.4348 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          {showPhoneNumbers[property._id] ? (property.agentPhone || '+971549967817') : tCommon('call')}
+                          {showPhoneNumbers[property._id] ? formatPhoneNumber(property.agentPhone || '+971586057772') : tCommon('call')}
                         </button>
                         
                         {showPhoneNumbers[property._id] && (
                           <div className={styles.phoneOptions + " phone-options"}>
                             <div className={styles.phoneOptionsRow}>
                               <button
-                                onClick={() => window.open(`tel:${property.agentPhone || '+971549967817'}`)}
+                                onClick={() => window.open(`tel:${property.agentPhone || '+971586057772'}`)}
                                 className={styles.phoneBtn}
                               >
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -613,7 +626,7 @@ export default function Listings({ agentId }) {
                                 {tCommon('call')}
                               </button>
                               <button
-                                onClick={() => handleWhatsAppClick(property.agentPhone || '+971549967817')}
+                                onClick={() => handleWhatsAppClick(property.agentPhone || '+971586057772')}
                                 className={styles.whatsappBtn}
                               >
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -658,7 +671,48 @@ export default function Listings({ agentId }) {
                   {/* Price Section - Full Width */}
                   <div className={styles.priceSection + " price-section"}>
                     <h5 className={styles.priceText + " price"}>
-                      $ {(property.propertyPrice || 0).toLocaleString()}
+                      {(() => {
+                        const currencySymbols = {
+                          'USD': '$',
+                          'SYP': 'SYP',
+                          'EUR': '€'
+                        };
+                        const currency = property?.currency || 'USD';
+                        const symbol = currencySymbols[currency] || currency;
+                        const exactPrice = property.propertyPrice || 0;
+                        const basePrice = `${symbol} ${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
+                        
+                        // Add rent period for rental properties
+                        const statusToCheck = property?.statusOriginal || property?.status || '';
+                        const statusLower = statusToCheck.toLowerCase().trim();
+                        const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent') || statusToCheck.includes('إيجار') || statusToCheck.includes('للإيجار');
+                        
+                        if (isRent) {
+                          const rentTypeValue = property?.rentType || property?.rent_type || null;
+                          const rentType = (rentTypeValue && rentTypeValue !== null && rentTypeValue !== undefined && rentTypeValue !== '') 
+                            ? String(rentTypeValue).toLowerCase().trim()
+                            : 'monthly';
+                          
+                          const rentTypeMap = {
+                            'monthly': tCommon('monthly'),
+                            'weekly': tCommon('weekly'),
+                            'yearly': tCommon('yearly'),
+                            'daily': tCommon('daily'),
+                            'one-year': tCommon('oneYear')
+                          };
+                          const rentPeriod = rentTypeMap[rentType] || tCommon('monthly');
+                          // Only apply black color and 18px for Holiday Homes
+                          const isHolidayHome = property?.propertyType === 'Holiday Home' || property?.propertyType === 'Holiday Homes';
+                          return (
+                            <>
+                              {basePrice}
+                              <span style={{ color: isHolidayHome ? '#000000' : 'inherit', fontSize: isHolidayHome ? '16px' : 'inherit' }}>{rentPeriod}</span>
+                            </>
+                          );
+                        }
+                        
+                        return basePrice;
+                      })()}
                     </h5>
                     
                   </div>

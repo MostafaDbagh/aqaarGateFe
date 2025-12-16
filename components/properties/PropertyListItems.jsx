@@ -563,17 +563,21 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
               <i className="icon-location" /> {property.state || property.location || 'Location not specified'}
             </p>
             <ul className="meta-list flex" style={{ gap: '24px' }}>
+              {property.bedrooms != null && Number(property.bedrooms) > 0 && (
+                <li className="text-1 flex items-center">
+                  <i className="icon-bed" style={{ margin: '0 2px' }} />
+                  <span>{property.bedrooms}</span>
+                </li>
+              )}
+              {property.bathrooms != null && Number(property.bathrooms) > 0 && (
+                <li className="text-1 flex items-center">
+                  <i className="icon-bath" style={{ margin: '0 2px' }} />
+                  <span>{property.bathrooms}</span>
+                </li>
+              )}
               <li className="text-1 flex items-center">
-                <i className="icon-bed" />
-                <span style={{ marginLeft: '4px' }}>{property.bedrooms || 0}</span>
-              </li>
-              <li className="text-1 flex items-center">
-                <i className="icon-bath" />
-                <span style={{ marginLeft: '4px' }}>{property.bathrooms || 0}</span>
-              </li>
-              <li className="text-1 flex items-center">
-                <i className="icon-sqft" />
-                <span style={{ marginLeft: '4px' }}>{property.size || 0}</span> Sqft
+                <i className="icon-sqft" style={{ margin: '0 2px' }} />
+                <span>{property.size || 0}</span> Sqft
               </li>
             </ul>
             <div className="bot flex justify-between items-center">
@@ -616,7 +620,14 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
                         'daily': t('common.daily')
                       };
                       const rentPeriod = rentTypeMap[rentType] || t('common.monthly');
-                      return `${basePrice} ${rentPeriod}`;
+                      // Only apply black color and 18px for Holiday Homes
+                      const isHolidayHome = property?.propertyType === 'Holiday Home' || property?.propertyType === 'Holiday Homes';
+                      return (
+                        <>
+                          {basePrice}
+                          <span style={{ color: isHolidayHome ? '#000000' : 'inherit', fontSize: isHolidayHome ? '16px' : 'inherit' }}>{rentPeriod}</span>
+                        </>
+                      );
                     }
                     
                     return basePrice;

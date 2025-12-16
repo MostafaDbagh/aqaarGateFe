@@ -10,7 +10,7 @@ export default function AdvancedSEO() {
     "url": baseUrl,
     "logo": `${baseUrl}/images/logo/logo@2x.png`,
     "image": `${baseUrl}/images/logo/logo@2x.png`,
-    "telephone": "+971549967817",
+    "telephone": "+971586057772",
     "email": "info@aqaargate.com",
     "address": {
       "@type": "PostalAddress",
@@ -66,7 +66,7 @@ export default function AdvancedSEO() {
     "name": "AqaarGate Real Estate",
     "description": "Leading real estate agency in Syria and Lattakia. Expert guidance for international property buyers.",
     "url": baseUrl,
-    "telephone": "+971549967817",
+    "telephone": "+971586057772",
     "email": "info@aqaargate.com",
     "address": {
       "@type": "PostalAddress",
