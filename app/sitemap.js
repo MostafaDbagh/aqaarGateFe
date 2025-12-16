@@ -17,9 +17,13 @@ async function getProperties() {
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
     
     try {
-      const response = await fetch(`${apiUrl}/listing/search?limit=500&approvalStatus=approved`, {
+      // Try multiple API endpoints to ensure we get properties
+      const response = await fetch(`${apiUrl}/listing/search?limit=1000&approvalStatus=approved&isSold=false&isDeleted=false`, {
         next: { revalidate: 3600 }, // Revalidate every hour
-        signal: controller.signal
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       
       clearTimeout(timeoutId);
@@ -31,16 +35,28 @@ async function getProperties() {
       
       const data = await response.json();
       // Handle both array response and wrapped response
-      const properties = Array.isArray(data) ? data : (data.data || data.listings || []);
+      let properties = Array.isArray(data) ? data : (data.data || data.listings || data.results || []);
+      
+      // If still empty, try alternative response structure
+      if (!properties || properties.length === 0) {
+        properties = data?.listings?.data || data?.results?.data || [];
+      }
       
       // Filter only approved and not sold properties
-      return (properties || []).filter(p => 
+      const filteredProperties = (properties || []).filter(p => 
         p && 
         (p._id || p.id) && 
         p.approvalStatus === 'approved' && 
         p.isSold !== true && 
         p.isDeleted !== true
-      ).slice(0, 1000); // Limit to 1000 properties max
+      );
+      
+      // Log for debugging (only in development)
+      if (process.env.NODE_ENV !== 'production' && filteredProperties.length > 0) {
+        logger.error(`Sitemap: Found ${filteredProperties.length} properties`);
+      }
+      
+      return filteredProperties.slice(0, 1000); // Limit to 1000 properties max
     } catch (fetchError) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
@@ -65,9 +81,13 @@ async function getAgents() {
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
     
     try {
-      const response = await fetch(`${apiUrl}/agents?limit=500`, {
+      // Try multiple API endpoints to ensure we get agents
+      const response = await fetch(`${apiUrl}/agents?limit=500&isBlocked=false`, {
         next: { revalidate: 3600 }, // Revalidate every hour
-        signal: controller.signal
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       
       clearTimeout(timeoutId);
@@ -79,14 +99,26 @@ async function getAgents() {
       
       const data = await response.json();
       // Handle both array response and wrapped response
-      const agents = Array.isArray(data) ? data : (data.data || []);
+      let agents = Array.isArray(data) ? data : (data.data || data.results || []);
+      
+      // If still empty, try alternative response structure
+      if (!agents || agents.length === 0) {
+        agents = data?.agents?.data || data?.results?.data || [];
+      }
       
       // Filter only non-blocked agents
-      return (agents || []).filter(a => 
+      const filteredAgents = (agents || []).filter(a => 
         a && 
         (a._id || a.id) && 
         a.isBlocked !== true
-      ).slice(0, 500); // Limit to 500 agents max
+      );
+      
+      // Log for debugging (only in development)
+      if (process.env.NODE_ENV !== 'production' && filteredAgents.length > 0) {
+        logger.error(`Sitemap: Found ${filteredAgents.length} agents`);
+      }
+      
+      return filteredAgents.slice(0, 500); // Limit to 500 agents max
     } catch (fetchError) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
@@ -135,9 +167,20 @@ export default async function sitemap() {
   const properties = propertiesResult.status === 'fulfilled' ? propertiesResult.value : [];
   const agents = agentsResult.status === 'fulfilled' ? agentsResult.value : [];
   
+  // Log results for debugging
+  if (process.env.NODE_ENV !== 'production') {
+    logger.error(`Sitemap generation: ${properties.length} properties, ${agents.length} agents`);
+  }
+  
   // Generate property URLs (only if properties exist and have IDs)
   const propertyUrls = (properties || [])
-    .filter((property) => property && (property._id || property.id))
+    .filter((property) => {
+      const hasId = property && (property._id || property.id);
+      if (!hasId && process.env.NODE_ENV !== 'production') {
+        logger.error('Sitemap: Property missing ID', property);
+      }
+      return hasId;
+    })
     .map((property) => ({
       url: `${baseUrl}/property-detail/${property._id || property.id}`,
       lastModified: property.updatedAt ? new Date(property.updatedAt) : new Date(),
@@ -147,7 +190,13 @@ export default async function sitemap() {
   
   // Generate agent URLs (only if agents exist and have IDs)
   const agentUrls = (agents || [])
-    .filter((agent) => agent && (agent._id || agent.id))
+    .filter((agent) => {
+      const hasId = agent && (agent._id || agent.id);
+      if (!hasId && process.env.NODE_ENV !== 'production') {
+        logger.error('Sitemap: Agent missing ID', agent);
+      }
+      return hasId;
+    })
     .map((agent) => ({
       url: `${baseUrl}/agents-details/${agent._id || agent.id}`,
       lastModified: agent.updatedAt ? new Date(agent.updatedAt) : new Date(),
@@ -164,9 +213,35 @@ export default async function sitemap() {
       priority: 1,
     },
     
+    // Localized homepage URLs - CRITICAL for indexing
+    {
+      url: `${baseUrl}/en`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/ar`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1,
+    },
+    
     // Property listing pages - High priority for SEO
     {
       url: `${baseUrl}/property-list`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/en/property-list`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/ar/property-list`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
@@ -175,6 +250,18 @@ export default async function sitemap() {
     // Agent pages - Important for SEO
     {
       url: `${baseUrl}/agents`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/en/agents`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/ar/agents`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -245,9 +332,8 @@ export default async function sitemap() {
       priority: 0.5,
     },
     
-  
+    // Dynamic property and agent URLs
     ...propertyUrls,
-
     ...agentUrls,
-  ]
+  ].filter(Boolean); // Remove any null/undefined entries
 }

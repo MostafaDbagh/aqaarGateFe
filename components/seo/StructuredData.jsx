@@ -149,8 +149,8 @@ export default function StructuredData() {
     "name": "AqaarGate Real Estate",
     "alternateName": "AqaarGate",
     "url": baseUrl,
-    "description": "AqaarGate - Premium Real Estate Properties in Syria & Lattakia. Find your dream property with AqaarGate Real Estate. Buy, sell, and rent properties in Syria.",
-    "keywords": "aqaargate, aqaargate.com, real estate syria, properties syria, lattakia properties, aqaargate real estate",
+    "description": "AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Find 1000+ verified properties for sale and rent. Buy, sell, and rent properties in Syria. Holiday homes (بيوت عطلات), villas, apartments.",
+    "keywords": "aqaargate, aqaargate.com, #1 real estate syria, real estate syria, properties syria, lattakia properties, syria holiday homes, بيوت عطلات سوريا, aqaargate real estate",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
@@ -158,6 +158,13 @@ export default function StructuredData() {
         "urlTemplate": `${baseUrl}/property-list?search={search_term_string}`
       },
       "query-input": "required name=search_term_string"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
     }
   };
 

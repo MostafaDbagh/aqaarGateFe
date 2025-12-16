@@ -7,8 +7,8 @@ import Properties1 from "@/components/properties/Properties1";
 import React from "react";
 
 export const metadata = {
-  title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
-  description: "Browse our comprehensive collection of properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home, or commercial property with advanced search filters.",
+  title: "#1 Property Listings in Syria & Lattakia - 1000+ Properties for Sale & Rent | AqaarGate",
+  description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home (بيوت عطلات), villa, or commercial property. Advanced search filters. Trusted by expats worldwide. Start your property search today!",
   keywords: [
     'syria property listings',
     'lattakia property listings',
@@ -44,8 +44,8 @@ export const metadata = {
     'lattakia land for sale'
   ],
   openGraph: {
-    title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
-    description: "Browse our comprehensive collection of properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, or holiday home with advanced search filters.",
+    title: "#1 Property Listings in Syria & Lattakia - 1000+ Properties for Sale & Rent",
+    description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home (بيوت عطلات), villa. Advanced search filters. Trusted by expats worldwide.",
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,
     images: [
       {
@@ -58,8 +58,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Property Listings - Browse All Properties for Sale and Rent",
-    description: "Browse our comprehensive collection of properties for sale and rent. Find your perfect home with advanced search filters.",
+    title: "#1 Property Listings in Syria - 1000+ Properties for Sale & Rent",
+    description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Holiday homes (بيوت عطلات), villas, apartments. Advanced search filters.",
     images: ['/images/section/property-grid-bg.jpg'],
   },
   alternates: {
@@ -73,6 +73,36 @@ export default function page() {
         <Header1 />
         <Breadcumb pageName="Properties Listings" />
         <div className="main-content">
+          {/* SEO Content - Visible to Google Crawler */}
+          <section style={{ padding: '40px 0', backgroundColor: '#f8f9fa' }}>
+            <div className="tf-container">
+              <div className="row">
+                <div className="col-12">
+                  <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '20px', color: '#333' }}>
+                    Property Listings in Syria & Lattakia - Find Your Dream Home
+                  </h1>
+                  <p style={{ fontSize: '18px', lineHeight: '1.8', color: '#666', marginBottom: '30px' }}>
+                    Browse our comprehensive collection of <strong>properties for sale and rent in Syria and Lattakia</strong>. 
+                    Discover luxury homes, apartments, <strong>holiday homes (بيوت عطلات)</strong>, villas, and commercial properties. 
+                    Whether you're looking for <strong>syria apartments</strong>, <strong>syria houses</strong>, <strong>syria villas</strong>, 
+                    or <strong>syria holiday homes</strong>, we have the perfect property for you. 
+                    Use our advanced search filters to find properties by location, price, size, amenities, and more.
+                  </p>
+                  <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '15px', color: '#333' }}>
+                    Why Choose AqaarGate for Property Search?
+                  </h2>
+                  <ul style={{ fontSize: '16px', lineHeight: '1.8', color: '#666', marginBottom: '30px', paddingLeft: '20px' }}>
+                    <li><strong>1000+ Verified Properties</strong> - All listings are verified and up-to-date</li>
+                    <li><strong>Advanced Search Filters</strong> - Find exactly what you're looking for</li>
+                    <li><strong>Expert Real Estate Agents</strong> - Get personalized guidance</li>
+                    <li><strong>Multiple Property Types</strong> - Apartments, Villas, Holiday Homes, Commercial Properties</li>
+                    <li><strong>Syria & Lattakia Focus</strong> - Specialized in properties across Syria</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           <Properties1 defaultGrid />
           <Cta />
         </div>

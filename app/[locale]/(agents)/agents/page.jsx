@@ -67,6 +67,36 @@ export default async function page() {
         <Header1 />
         <div className="page-content">
           <Breadcumb pageName={t('pageName')} />
+          
+          {/* SEO Content - Visible to Google Crawler */}
+          <section style={{ padding: '40px 0', backgroundColor: '#f8f9fa' }}>
+            <div className="tf-container">
+              <div className="row">
+                <div className="col-12">
+                  <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '20px', color: '#333' }}>
+                    Expert Real Estate Agents in Syria & Lattakia - AqaarGate
+                  </h1>
+                  <p style={{ fontSize: '18px', lineHeight: '1.8', color: '#666', marginBottom: '30px' }}>
+                    Meet our team of experienced <strong>real estate agents in Syria and Lattakia</strong>. 
+                    Our <strong>property professionals</strong> provide expert guidance for buying, selling, or renting properties. 
+                    Whether you're looking for <strong>syria real estate agents</strong>, <strong>lattakia real estate agents</strong>, 
+                    or <strong>holiday home specialists</strong>, our team has the local market knowledge to help you find your perfect property.
+                  </p>
+                  <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '15px', color: '#333' }}>
+                    Why Work with AqaarGate Real Estate Agents?
+                  </h2>
+                  <ul style={{ fontSize: '16px', lineHeight: '1.8', color: '#666', marginBottom: '30px', paddingLeft: '20px' }}>
+                    <li><strong>Expert Local Knowledge</strong> - Deep understanding of Syria and Lattakia property markets</li>
+                    <li><strong>Personalized Service</strong> - Tailored guidance for your property needs</li>
+                    <li><strong>Verified Listings</strong> - All properties are verified and up-to-date</li>
+                    <li><strong>Multilingual Support</strong> - English and Arabic speaking agents</li>
+                    <li><strong>International Experience</strong> - Serving expats from EU and Gulf countries</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           <Agents />
           <Cta />
         </div>

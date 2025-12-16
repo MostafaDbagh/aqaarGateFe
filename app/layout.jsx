@@ -1,10 +1,10 @@
 // Root layout - minimal, locale-specific layout is in [locale]/layout.jsx
 export const metadata = {
   title: {
-    default: 'AqaarGate - Premium Real Estate Properties in Syria & Lattakia | AqaarGate.com',
-    template: '%s | AqaarGate Real Estate'
+    default: 'AqaarGate - #1 Real Estate Platform in Syria | Buy, Rent & Sell Properties | Holiday Homes (بيوت عطلات)',
+    template: '%s | AqaarGate - Premium Real Estate Syria'
   },
-  description: 'AqaarGate - Premium Real Estate Properties in Syria & Lattakia. Discover luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties for sale and rent (بيع وتأجير). Perfect for expats from Germany, Netherlands, EU countries, and Arab Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman). Expert guidance for international property buyers. Visit AqaarGate.com for the best properties in Syria.',
+  description: 'AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Find luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas, and commercial properties for sale and rent (بيع وتأجير). Trusted by expats from Germany, Netherlands, EU, UAE, Saudi Arabia, Qatar, Kuwait. Expert guidance for international buyers. Browse 1000+ verified properties. Start your property search today!',
   keywords: [
     // Brand keywords - CRITICAL for brand search
     'aqaargate',
@@ -182,8 +182,8 @@ export const metadata = {
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com',
     siteName: 'AqaarGate',
-    title: 'AqaarGate - Premium Real Estate Properties in Syria & Lattakia | AqaarGate.com',
-    description: 'AqaarGate - Discover premium properties for sale and rent in Syria and Lattakia. Luxury homes, apartments, holiday homes (بيوت عطلات), and commercial properties. Perfect for expats from EU and Gulf countries.',
+    title: 'AqaarGate - #1 Real Estate Platform in Syria | Buy, Rent & Sell Properties | Holiday Homes',
+    description: 'AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Find 1000+ verified properties for sale and rent. Luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas. Trusted by expats from Germany, Netherlands, EU, UAE, Saudi Arabia. Start your property search today!',
     images: [
       {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`,
@@ -196,8 +196,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AqaarGate - Premium Real Estate Properties in Syria & Lattakia | AqaarGate.com',
-    description: 'AqaarGate - Discover premium properties for sale and rent in Syria and Lattakia. Luxury homes, apartments, holiday homes, and commercial properties.',
+    title: 'AqaarGate - #1 Real Estate Platform in Syria | Buy, Rent & Sell Properties',
+    description: 'AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Find 1000+ verified properties. Holiday homes (بيوت عطلات), villas, apartments for sale and rent. Trusted by expats worldwide.',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`],
     creator: '@AqaarGate',
     site: '@AqaarGate',
