@@ -1,7 +1,9 @@
 import Image from "next/image";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 export default function Benefits() {
+  const t = useTranslations('career.benefits');
   // Toggle this to show/hide benefits section
   const showBenefits = false; // Set to true when you want to show benefits
 
@@ -52,8 +54,7 @@ export default function Benefits() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  Benefits when you work <br />
-                  at AqaarGate
+                  {t('title')}
                 </h2>
                 <div
                   className="description wow animate__fadeInUp animate__animated"
@@ -81,7 +82,7 @@ export default function Benefits() {
                       <i className="icon-heart-1" />
                     </div>
                     <div className="title text-1 text-center fw-6">
-                      Health care
+                      {t('healthCare')}
                     </div>
                   </div>
                   <div
@@ -93,7 +94,7 @@ export default function Benefits() {
                       <i className="icon-pig" />
                     </div>
                     <div className="title text-1 text-center fw-6">
-                      Attractive salary and bonus
+                      {t('attractiveSalary')}
                     </div>
                   </div>
                   <div
@@ -105,7 +106,7 @@ export default function Benefits() {
                       <i className="icon-family" />
                     </div>
                     <div className="title text-1 text-center fw-6">
-                      Family life
+                      {t('familyLife')}
                     </div>
                   </div>
                 </div>
@@ -115,7 +116,7 @@ export default function Benefits() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  Join our team
+                  {t('joinOurTeam')}
                 </a>
               </div>
             </div>

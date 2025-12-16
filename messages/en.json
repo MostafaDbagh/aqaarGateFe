@@ -493,7 +493,7 @@
   "contact": {
     "pageName": "Contact",
     "title": "We Would Love to Hear From You",
-    "subtitle": "We'll get to know you to understand your selling goals, explain the selling process so you know what to expect.",
+    "subtitle": "We would like to hear from you to ensure we provide a good and satisfactory service.",
     "name": "Name:",
     "namePlaceholder": "Your name",
     "email": "Email:",
@@ -510,7 +510,7 @@
     "contactExperts": "Contact our experts",
     "about": {
       "title": "We provide the most suitable and quality real estate.",
-      "subtitle": "Estimate your payment with our easy-to-use loan calculator. Then get pre-qualified to buy by a local lender.",
+      "subtitle": "What matters most to us is providing clarity and transparency to ensure the satisfaction of both the client and the customer.",
       "officeAddress": "Office address",
       "officeLocation": "Baghdad street, Latakia, Syria",
       "phoneNumberLabel": "Phone number",
@@ -531,6 +531,28 @@
     "noPropertiesAvailable": "No properties available at the moment",
     "holidayHomesListings": "Holiday Homes Listings",
     "holidayHomesListingsSubtitle": "Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties."
+  },
+  "seoContent": {
+    "mainTitle": "AqaarGate - #1 Real Estate Platform in Syria & Lattakia | Buy, Rent & Sell Properties",
+    "syriaProperties": {
+      "title": "Real Estate Properties in Syria",
+      "text": "Discover the best **real estate properties in Syria** with AqaarGate. We offer a wide selection of **properties for sale and rent in Syria**, including luxury homes, apartments, **holiday homes**, and commercial properties. Whether you're looking for **syria apartments**, **syria houses**, or **syria villas**, we have the perfect property for you."
+    },
+    "lattakiaProperties": {
+      "title": "Lattakia Real Estate & Properties",
+      "text": "Explore **Lattakia properties** and **Lattakia real estate** with AqaarGate. Our collection includes **Lattakia apartments**, **Lattakia houses**, **Lattakia villas**, and **Lattakia beach properties**. Find your dream home in one of Syria's most beautiful coastal cities."
+    },
+    "holidayHomes": {
+      "title": "Holiday Homes & Vacation Rentals in Syria",
+      "text": "Looking for **holiday homes in Syria (بيوت عطلات سوريا)** or **vacation rentals**? AqaarGate offers premium **syria holiday homes** and **lattakia holiday homes** for rent. Perfect for families and expats looking for **syria vacation rentals** or **lattakia vacation rentals**. Experience the beauty of Syria with our carefully selected **holiday homes**. From **beachfront holiday homes** to **mountain retreats**, find your perfect **syria holiday home** for your next vacation. Book your **syria vacation rental** today!"
+    },
+    "propertyInvestment": {
+      "title": "Property Investment in Syria",
+      "text": "Invest in **syria property investment** opportunities with AqaarGate. We specialize in **syria real estate** for international buyers from Germany, Netherlands, EU countries, and Arab Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman). Our expert team guides you through **syria home buying** and **syria home selling** processes."
+    },
+    "ctaText": "Browse our {propertyListings} to find your perfect home in Syria or Lattakia. Contact our {realEstateAgents} for expert guidance.",
+    "propertyListings": "property listings",
+    "realEstateAgents": "real estate agents"
   },
   "rentalService": {
     "pageName": "Property Rental Service",
@@ -698,6 +720,12 @@
   "faq": {
     "pageName": "FAQS",
     "title": "Frequently Asked Questions",
+    "seoContent": {
+      "mainTitle": "Syria Real Estate FAQ - Common Questions About Property in Lattakia",
+      "paragraph1": "Find answers to frequently asked questions about **buying, selling, and renting properties** in Syria and Lattakia. Get expert guidance on **real estate transactions, property investment, and legal requirements**. Whether you're looking for **syria real estate help** or **lattakia property advice**, we have the answers you need.",
+      "subtitle": "Common Questions About Real Estate in Syria",
+      "paragraph2": "Our FAQ section covers everything from **syria property buying guides** to **lattakia property investment advice**. Learn about the **real estate process in Syria** and get expert answers to your property questions."
+    },
     "overview": "Overview",
     "costsAndPayments": "Costs and Payments",
     "safetyAndSecurity": "Safety and Security",

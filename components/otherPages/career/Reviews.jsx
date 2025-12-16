@@ -1,7 +1,9 @@
 import Image from "next/image";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 export default function Reviews() {
+  const t = useTranslations('career.reviews');
   // Toggle this to show/hide reviews section
   const showReviews = false; // Set to true when you want to show reviews
 
@@ -22,7 +24,7 @@ export default function Reviews() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  Reviews from employees working at AqaarGate
+                  {t('title')}
                 </h2>
                 <div
                   className="description mb-32 wow animate__fadeInUp animate__animated"
@@ -46,7 +48,7 @@ export default function Reviews() {
                   data-wow-duration="1s"
                   data-wow-delay="0s"
                 >
-                  More stories
+                  {t('moreStories')}
                 </a>
               </div>
               <div className="content-right">

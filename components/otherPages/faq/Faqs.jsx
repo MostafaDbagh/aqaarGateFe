@@ -4,12 +4,49 @@ import Link from "next/link";
 import React from "react";
 import { useTranslations } from 'next-intl';
 
+// Helper function to parse **bold** text and convert to <strong> tags
+const parseBoldText = (text) => {
+  if (!text) return '';
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+};
+
 export default function Faqs() {
   const t = useTranslations('faq');
   
   return (
     <section className="section-faq">
       <div className="tf-container">
+        {/* SEO Content Section */}
+        <div className="row mb-48">
+          <div className="col-12">
+            <div className="seo-content-section" style={{
+              backgroundColor: '#f8f9fa',
+              padding: '40px',
+              borderRadius: '12px',
+              marginBottom: '40px'
+            }}>
+              <h1 className="h2 mb-24" style={{fontSize: '28px', fontWeight: '700'}}>
+                {t('seoContent.mainTitle')}
+              </h1>
+              <p className="text-1 mb-16" style={{fontSize: '16px', lineHeight: '1.8'}}>
+                {parseBoldText(t('seoContent.paragraph1'))}
+              </p>
+              <h2 className="h3 mb-16" style={{fontSize: '22px', fontWeight: '600', marginTop: '24px'}}>
+                {t('seoContent.subtitle')}
+              </h2>
+              <p className="text-1" style={{fontSize: '16px', lineHeight: '1.8'}}>
+                {parseBoldText(t('seoContent.paragraph2'))}
+              </p>
+            </div>
+          </div>
+        </div>
+        
         <div className="row">
           <div className="col-xl-8 col-lg-7">
             <div className="heading-section my-48">
