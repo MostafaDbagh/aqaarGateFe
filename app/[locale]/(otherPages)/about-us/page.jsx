@@ -38,33 +38,6 @@ export default function page() {
         <Header1 />
         <Breadcumb pageName="About Us" />
         <div className="main-content">
-          {/* SEO Content - Visible to Google Crawler (Server-Side Rendered) */}
-          <section style={{ padding: '40px 0', backgroundColor: '#f8f9fa' }}>
-            <div className="tf-container">
-              <div className="row">
-                <div className="col-12">
-                  <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '20px', color: '#333' }}>
-                    About AqaarGate - Ambitious Young Syrians Showcasing Syria's Real Estate
-                  </h1>
-                  <p style={{ fontSize: '18px', lineHeight: '1.8', color: '#666', marginBottom: '30px' }}>
-                    AqaarGate is a group of <strong>ambitious young Syrians</strong> showcasing the beauty, diversity, and 
-                    <strong>real estate potential of Syria</strong>. We highlight Syria's vibrant cities — <strong>Damascus, Aleppo, Latakia, Homs, Tartous</strong>, 
-                    and others — blending modern architecture with ancient heritage. Our mission is to connect international buyers 
-                    with the best <strong>real estate opportunities in Syria</strong>.
-                  </p>
-                  <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '15px', color: '#333' }}>
-                    Our Mission
-                  </h2>
-                  <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#666', marginBottom: '20px' }}>
-                    We are dedicated to showcasing <strong>Syria's real estate potential</strong> to the world. From historic 
-                    <strong>Damascus properties</strong> to coastal <strong>Latakia real estate</strong>, we help buyers discover 
-                    the perfect property in Syria's most beautiful cities.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-          
           <About />
           <Cta />
         </div>
