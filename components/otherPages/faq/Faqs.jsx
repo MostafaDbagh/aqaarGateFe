@@ -12,8 +12,8 @@ export default function Faqs() {
       <div className="tf-container">
         <div className="row">
           <div className="col-xl-8 col-lg-7">
-            <div className="heading-section mb-48">
-              <h2 className="title">{t('title')}</h2>
+            <div className="heading-section my-48">
+              <h2 className="title" style={{marginTop:'48px'}}>{t('title')}</h2>
             </div>
             <div className="tf-faq mb-49">
               <h3 className="fw-8 title mb-24">{t('overview')}</h3>
