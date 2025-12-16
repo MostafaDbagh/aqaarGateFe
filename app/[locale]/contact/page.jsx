@@ -64,6 +64,33 @@ export default function page() {
       <div id="wrapper">
         <Header1 />
         <div className="main-content">
+          {/* SEO Content - Visible to Google Crawler (Server-Side Rendered) */}
+          <section style={{ padding: '40px 0', backgroundColor: '#f8f9fa' }}>
+            <div className="tf-container">
+              <div className="row">
+                <div className="col-12">
+                  <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '20px', color: '#333' }}>
+                    Contact AqaarGate Real Estate - Syria & Lattakia Property Experts
+                  </h1>
+                  <p style={{ fontSize: '18px', lineHeight: '1.8', color: '#666', marginBottom: '30px' }}>
+                    Contact <strong>AqaarGate Real Estate</strong> for expert guidance on <strong>buying, selling, or renting properties in Syria and Lattakia</strong>. 
+                    Our experienced <strong>real estate agents</strong> are here to help you find your dream home or investment property. 
+                    Whether you need <strong>syria real estate consultation</strong> or <strong>lattakia property advice</strong>, 
+                    we provide personalized service for all your property needs.
+                  </p>
+                  <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '15px', color: '#333' }}>
+                    Get Expert Real Estate Guidance
+                  </h2>
+                  <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#666', marginBottom: '20px' }}>
+                    Our team specializes in <strong>syria and lattakia real estate</strong>, offering comprehensive services for 
+                    <strong>property buyers</strong>, <strong>sellers</strong>, and <strong>investors</strong>. Contact us today for 
+                    <strong>property inquiries</strong>, <strong>real estate consultations</strong>, or to schedule a property viewing.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           <Contact />
           <About />
           <Brands />

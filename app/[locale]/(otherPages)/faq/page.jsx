@@ -62,6 +62,33 @@ export default async function page() {
         <Header1 />
         <Breadcumb pageName={t('pageName')} />
         <div className="main-content tf-spacing-6 header-fixed">
+          {/* SEO Content - Visible to Google Crawler (Server-Side Rendered) */}
+          <section style={{ padding: '40px 0', backgroundColor: '#f8f9fa' }}>
+            <div className="tf-container">
+              <div className="row">
+                <div className="col-12">
+                  <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '20px', color: '#333' }}>
+                    Syria Real Estate FAQ - Common Questions About Property in Lattakia
+                  </h1>
+                  <p style={{ fontSize: '18px', lineHeight: '1.8', color: '#666', marginBottom: '30px' }}>
+                    Find answers to frequently asked questions about <strong>buying, selling, and renting properties in Syria and Lattakia</strong>. 
+                    Get expert guidance on <strong>real estate transactions</strong>, <strong>property investment</strong>, and 
+                    <strong>legal requirements</strong>. Whether you're looking for <strong>syria real estate help</strong> or 
+                    <strong>lattakia property advice</strong>, we have the answers you need.
+                  </p>
+                  <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '15px', color: '#333' }}>
+                    Common Questions About Real Estate in Syria
+                  </h2>
+                  <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#666', marginBottom: '20px' }}>
+                    Our FAQ section covers everything from <strong>syria property buying guides</strong> to 
+                    <strong>lattakia property investment advice</strong>. Learn about the <strong>real estate process in Syria</strong> 
+                    and get expert answers to your property questions.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           <Faqs />
           <Cta />
         </div>

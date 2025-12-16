@@ -59,6 +59,33 @@ export default function PropertyRentalServicePage() {
         <Header1 />
         <Breadcumb pageName="Property Rental Service" />
         <div className="main-content">
+          {/* SEO Content - Visible to Google Crawler (Server-Side Rendered) */}
+          <section style={{ padding: '40px 0', backgroundColor: '#f8f9fa' }}>
+            <div className="tf-container">
+              <div className="row">
+                <div className="col-12">
+                  <h1 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '20px', color: '#333' }}>
+                    Property Rental Service | AqaarGate - Full-Service Property Management
+                  </h1>
+                  <p style={{ fontSize: '18px', lineHeight: '1.8', color: '#666', marginBottom: '30px' }}>
+                    Let <strong>AqaarGate manage and rent out your property</strong>. We provide comprehensive <strong>property rental services</strong> 
+                    with a <strong>specialized maintenance team</strong>, <strong>guaranteed property condition maintenance</strong>, and 
+                    <strong>flexible rental agreements</strong>. Our <strong>property management services</strong> in Syria and Lattakia 
+                    ensure your property is well-maintained and generating income.
+                  </p>
+                  <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '15px', color: '#333' }}>
+                    Comprehensive Property Management
+                  </h2>
+                  <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#666', marginBottom: '20px' }}>
+                    AqaarGate offers <strong>full-service property management</strong> including <strong>rental management</strong>, 
+                    <strong>property maintenance</strong>, and <strong>tenant relations</strong>. Start with our simple property submission form 
+                    and let us handle all aspects of <strong>property rental in Syria</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           <PropertyRentalService />
           <Cta />
         </div>
