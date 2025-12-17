@@ -206,3 +206,9 @@
 .resendButton:hover {
   background-color: var(--Sub-primary-1);
 }
+
+.resendButton:disabled {
+  cursor: not-allowed;
+  color: #b0b0b0;
+  background-color: #f5f5f5;
+}

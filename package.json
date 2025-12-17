@@ -38,6 +38,7 @@
     "swiper": "^11.2.4"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "eslint": "9.39.1",
     "eslint-config-next": "16.0.1"
   }

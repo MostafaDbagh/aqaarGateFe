@@ -46,22 +46,64 @@ export default function AISearchButton({ onSearchResults }) {
   const listings = aiSearchResponse?.data || [];
   const extractedParams = aiSearchResponse?.extractedParams || {};
   const pagination = aiSearchResponse?.pagination || {};
+
+  const hasMeaningfulParams = (params) => {
+    if (!params) return false;
+    const {
+      propertyType, bedrooms, bathrooms, sizeMin, sizeMax,
+      priceMin, priceMax, status, city, neighborhood,
+      furnished, garages, viewType, rentType, amenities = [], keywords = []
+    } = params;
+
+    const hasNeighborhood = !!(neighborhood && neighborhood.trim().length > 0);
+    const hasStrong =
+      propertyType ||
+      status ||
+      city ||
+      viewType ||
+      rentType ||
+      (furnished !== null && furnished !== undefined) ||
+      (garages !== null && garages !== undefined) ||
+      (Array.isArray(amenities) && amenities.length > 0) ||
+      (bedrooms !== null && bedrooms !== undefined) ||
+      (bathrooms !== null && bathrooms !== undefined) ||
+      (sizeMin !== null && sizeMin !== undefined) ||
+      (sizeMax !== null && sizeMax !== undefined) ||
+      (priceMin !== null && priceMin !== undefined) ||
+      (priceMax !== null && priceMax !== undefined);
+
+    // keywords alone are not enough; neighborhood alone is weak (needs city)
+    if (hasStrong) return true;
+    if (hasNeighborhood && city) return true;
+    return false;
+  };
+
+  const meaningful = hasMeaningfulParams(extractedParams) && !isError;
+  const effectiveListings = meaningful ? listings : [];
+  const effectivePagination = meaningful && pagination ? pagination : {
+    total: 0,
+    page: 1,
+    limit: 12,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPrevPage: false
+  };
   
   // Debug logging
   useEffect(() => {
-    if (aiSearchResponse && listings.length > 0) {
+    if (aiSearchResponse && effectiveListings.length > 0) {
       console.log('🔍 AI Search Response received:', {
         hasData: !!aiSearchResponse.data,
-        listingsCount: listings.length,
-        hasPagination: !!pagination,
-        paginationTotal: pagination.total
+        listingsCount: effectiveListings.length,
+        hasPagination: !!effectivePagination,
+        paginationTotal: effectivePagination.total
       });
     }
-  }, [aiSearchResponse, listings.length, pagination]);
+  }, [aiSearchResponse, effectiveListings.length, effectivePagination]);
   
   // Auto-close modal and navigate when results are ready (after submit)
   useEffect(() => {
-    if (isOpen && listings.length > 0 && debouncedQuery.trim().length > 0 && !isLoading) {
+    if (isOpen && effectiveListings.length > 0 && debouncedQuery.trim().length > 0 && !isLoading) {
       // Check if this was triggered by a submit
       const wasSubmitted = typeof window !== 'undefined' && sessionStorage.getItem('aiSearchSubmitted') === 'true';
       
@@ -69,17 +111,10 @@ export default function AISearchButton({ onSearchResults }) {
         // Normalize the response structure - API returns { data: [...], pagination: {...} }
         // We store it as { listings: [...], pagination: {...} } for consistency
         const results = {
-          listings: Array.isArray(listings) ? listings : [], // Ensure listings is an array
-          data: Array.isArray(listings) ? listings : [], // Also include 'data' for compatibility
+          listings: Array.isArray(effectiveListings) ? effectiveListings : [],
+          data: Array.isArray(effectiveListings) ? effectiveListings : [],
           extractedParams: extractedParams || {},
-          pagination: pagination || {
-            total: listings.length,
-            page: 1,
-            limit: 12,
-            totalPages: Math.ceil(listings.length / 12),
-            hasNextPage: false,
-            hasPrevPage: false
-          },
+          pagination: effectivePagination,
           query: debouncedQuery || query
         };
         
@@ -179,21 +214,14 @@ export default function AISearchButton({ onSearchResults }) {
       }
       
       // If we already have results, process immediately
-      if (!isLoading && listings.length > 0) {
+      if (!isLoading && effectiveListings.length > 0) {
         // Normalize the response structure - API returns { data: [...], pagination: {...} }
         // We store it as { listings: [...], pagination: {...} } for consistency
         const results = {
-          listings: Array.isArray(listings) ? listings : [], // Ensure listings is an array
-          data: Array.isArray(listings) ? listings : [], // Also include 'data' for compatibility
+          listings: Array.isArray(effectiveListings) ? effectiveListings : [],
+          data: Array.isArray(effectiveListings) ? effectiveListings : [],
           extractedParams: extractedParams || {},
-          pagination: pagination || {
-            total: listings.length,
-            page: 1,
-            limit: 12,
-            totalPages: Math.ceil(listings.length / 12),
-            hasNextPage: false,
-            hasPrevPage: false
-          },
+          pagination: effectivePagination,
           query: debouncedQuery || query
         };
         
@@ -232,17 +260,17 @@ export default function AISearchButton({ onSearchResults }) {
 
   // Handle results box click - same behavior as submit button
   const handleResultsClick = () => {
-    if (listings.length > 0 && !isLoading && !(!isLoading && !isError && listings.length === 0 && debouncedQuery.trim().length > 0)) {
+    if (meaningful && effectiveListings.length > 0 && !isLoading) {
       // Normalize the response structure
       const results = {
-        listings: Array.isArray(listings) ? listings : [],
-        data: Array.isArray(listings) ? listings : [],
+        listings: Array.isArray(effectiveListings) ? effectiveListings : [],
+        data: Array.isArray(effectiveListings) ? effectiveListings : [],
         extractedParams: extractedParams || {},
-        pagination: pagination || {
-          total: listings.length,
+        pagination: effectivePagination || {
+          total: effectiveListings.length,
           page: 1,
           limit: 12,
-          totalPages: Math.ceil(listings.length / 12),
+          totalPages: Math.ceil(effectiveListings.length / 12),
           hasNextPage: false,
           hasPrevPage: false
         },
@@ -340,7 +368,12 @@ export default function AISearchButton({ onSearchResults }) {
                 <button
                   type="submit"
                   className={styles.aiSearchSubmitButton}
-                  disabled={!query.trim() || isLoading || (!isLoading && !isError && listings.length === 0 && debouncedQuery.trim().length > 0)}
+              disabled={
+                !query.trim() ||
+                isLoading ||
+                (!isLoading && !isError && effectiveListings.length === 0 && debouncedQuery.trim().length > 0) ||
+                !meaningful
+              }
                   aria-label={isRTL ? "بحث" : "Search"}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -393,7 +426,7 @@ export default function AISearchButton({ onSearchResults }) {
             )}
 
             {/* Results Preview */}
-            {listings.length > 0 && !isLoading && (
+            {effectiveListings.length > 0 && !isLoading && meaningful && (
               <div 
                 className={styles.resultsPreview}
                 onClick={handleResultsClick}
@@ -412,14 +445,14 @@ export default function AISearchButton({ onSearchResults }) {
                 </div>
                 <div className={styles.resultsCount}>
                   {isRTL 
-                    ? `تم العثور على ${pagination.total || listings.length} عقار`
-                    : `Found ${pagination.total || listings.length} propert${(pagination.total || listings.length) > 1 ? 'ies' : 'y'}`}
+                    ? `تم العثور على ${effectivePagination.total || effectiveListings.length} عقار`
+                    : `Found ${effectivePagination.total || effectiveListings.length} propert${(effectivePagination.total || effectiveListings.length) > 1 ? 'ies' : 'y'}`}
                 </div>
               </div>
             )}
 
             {/* No Results Message */}
-            {!isLoading && !isError && listings.length === 0 && debouncedQuery.trim().length > 0 && (
+            {!isLoading && debouncedQuery.trim().length > 0 && (!meaningful || effectiveListings.length === 0 || isError) && (
               <div className={styles.noResultsBox}>
                 <div className={styles.noResultsIcon}>🔍</div>
                 <div className={styles.noResultsTitle}>

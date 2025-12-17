@@ -27,6 +27,7 @@ export default function OTPVerification({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [otpTimer, setOtpTimer] = useState(300); // 5 minutes in seconds
   const [isSendingOTP, setIsSendingOTP] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -44,6 +45,8 @@ export default function OTPVerification({
       setOtp(['', '', '', '', '', '']);
       setError('');
       setOtpVerified(false);
+      setResendCooldown(300); // disable resend for first 5 minutes after opening
+      setOtpTimer(300); // reset OTP countdown on open
       if (inputRefs.current[0]) {
         setTimeout(() => { inputRefs.current[0].focus(); }, 100);
       }
@@ -57,6 +60,20 @@ export default function OTPVerification({
       return () => clearTimeout(timer);
     }
   }, [resendCooldown]);
+
+  // OTP countdown (5 minutes)
+  useEffect(() => {
+    if (!isOpen) return;
+    if (otpTimer <= 0) return;
+    const timer = setTimeout(() => { setOtpTimer((prev) => Math.max(prev - 1, 0)); }, 1000);
+    return () => clearTimeout(timer);
+  }, [otpTimer, isOpen]);
+
+  const formatSeconds = (totalSeconds) => {
+    const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+    const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
   // Auto-verify OTP when all 6 digits are filled
   useEffect(() => {
@@ -152,11 +169,13 @@ export default function OTPVerification({
 
   const handleResendOTP = async () => {
     if (resendCooldown > 0) return;
+    // Start cooldown immediately to avoid multiple OTP generations
+    setResendCooldown(300); // 5 minutes
+    setOtpTimer(300);       // reset OTP expiry timer
     setIsSendingOTP(true);
     setError('');
     try {
       await authAPI.sendOTP(email, type);
-      setResendCooldown(30);
     } catch (error) {
       setError(t('verificationFailed'));
     } finally {
@@ -220,7 +239,7 @@ export default function OTPVerification({
           <div className={styles.warningBox}>
             <p className={styles.warningText}>
               <span>⏰</span>
-              {t('otpExpires')}
+              {t('otpExpires')} — {formatSeconds(otpTimer)}
             </p>
           </div>
         </div>
@@ -279,9 +298,7 @@ export default function OTPVerification({
               disabled={resendCooldown > 0 || isSendingOTP}
               className={styles.resendButton}
             >
-              {isSendingOTP ? t('resending') : 
-               resendCooldown > 0 ? t('resendIn') + ' ' + resendCooldown + 's' : 
-               t('resendCode')}
+              {isSendingOTP ? t('resending') : t('resendCode')}
             </button>
           </div>
         </form>

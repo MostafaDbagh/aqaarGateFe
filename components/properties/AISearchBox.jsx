@@ -46,6 +46,48 @@ export default function AISearchBox({ onResults, className = "" }) {
   const extractedParams = aiSearchResponse?.extractedParams || {};
   const pagination = aiSearchResponse?.pagination || {};
 
+  const hasMeaningfulParams = (params) => {
+    if (!params) return false;
+    const {
+      propertyType, bedrooms, bathrooms, sizeMin, sizeMax,
+      priceMin, priceMax, status, city, neighborhood,
+      furnished, garages, viewType, rentType, amenities = [], keywords = []
+    } = params;
+
+    const hasNeighborhood = !!(neighborhood && neighborhood.trim().length > 0);
+    const hasStrong =
+      propertyType ||
+      status ||
+      city ||
+      viewType ||
+      rentType ||
+      (furnished !== null && furnished !== undefined) ||
+      (garages !== null && garages !== undefined) ||
+      (Array.isArray(amenities) && amenities.length > 0) ||
+      (bedrooms !== null && bedrooms !== undefined) ||
+      (bathrooms !== null && bathrooms !== undefined) ||
+      (sizeMin !== null && sizeMin !== undefined) ||
+      (sizeMax !== null && sizeMax !== undefined) ||
+      (priceMin !== null && priceMin !== undefined) ||
+      (priceMax !== null && priceMax !== undefined);
+
+    // keywords alone are not enough; neighborhood alone is weak (needs city)
+    if (hasStrong) return true;
+    if (hasNeighborhood && city) return true;
+    return false;
+  };
+
+  const meaningful = hasMeaningfulParams(extractedParams) && !isError;
+  const effectiveListings = meaningful ? listings : [];
+  const effectivePagination = meaningful && pagination ? pagination : {
+    total: 0,
+    page: 1,
+    limit: 12,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPrevPage: false
+  };
+
   // Notify parent component when results change
   // Use ref to track previous values and avoid unnecessary updates
   const prevResultsRef = useRef(null);
@@ -55,13 +97,14 @@ export default function AISearchBox({ onResults, className = "" }) {
     
     // Only call onResults if query exists and results actually changed
     if (debouncedQuery.trim().length > 0) {
+      const meaningful = hasMeaningfulParams(extractedParams);
       const currentResults = {
-        listings,
+        listings: meaningful && !isError ? effectiveListings : [],
         extractedParams,
-        pagination,
+        pagination: meaningful && !isError ? effectivePagination : {},
         query: debouncedQuery,
         isLoading,
-        isError
+        isError: isError || !meaningful // treat non-meaningful parse as error-ish state
       };
       
       // Compare with previous results to avoid unnecessary updates
@@ -231,7 +274,7 @@ export default function AISearchBox({ onResults, className = "" }) {
       )}
 
       {/* Show extracted params button if results exist */}
-      {listings.length > 0 && !showExtractedParams && Object.keys(extractedParams).length > 0 && (
+      {effectiveListings.length > 0 && meaningful && !showExtractedParams && Object.keys(extractedParams).length > 0 && (
         <button
           className={styles.extractedParamsToggleButton}
           onClick={() => setShowExtractedParams(true)}
@@ -271,11 +314,34 @@ export default function AISearchBox({ onResults, className = "" }) {
       )}
 
       {/* Results Count */}
-      {listings.length > 0 && !isLoading && (
+      {effectiveListings.length > 0 && meaningful && !isLoading && (
         <div className={`${styles.resultsCount} ${isRTL ? styles.rtl : styles.ltr}`}>
           {isRTL 
-            ? `تم العثور على ${pagination.total || listings.length} عقار`
-            : `Found ${pagination.total || listings.length} propert${(pagination.total || listings.length) > 1 ? 'ies' : 'y'}`}
+            ? `تم العثور على ${effectivePagination.total || effectiveListings.length} عقار`
+            : `Found ${effectivePagination.total || effectiveListings.length} propert${(effectivePagination.total || effectiveListings.length) > 1 ? 'ies' : 'y'}`}
+        </div>
+      )}
+
+      {/* No Results Message */}
+      {!isLoading && debouncedQuery.trim().length > 0 && (!meaningful || effectiveListings.length === 0 || isError) && (
+        <div className={styles.noResultsBox}>
+          <div className={styles.noResultsIcon}>🔍</div>
+          <div className={styles.noResultsTitle}>
+            {isRTL ? "لا توجد نتائج للبحث" : "No search results found"}
+          </div>
+          <div className={styles.noResultsMessage}>
+            <div className={styles.noResultsMessageText}>
+              {isRTL 
+                ? "لا يوجد أي إعلان يطابق هذه المعايير" 
+                : "We couldn’t find any listing that matches these criteria."}
+            </div>
+            <button 
+              className={styles.clearButtonSecondary}
+              onClick={handleClear}
+            >
+              {isRTL ? "مسح البحث" : "Clear search"}
+            </button>
+          </div>
         </div>
       )}
     </div>
