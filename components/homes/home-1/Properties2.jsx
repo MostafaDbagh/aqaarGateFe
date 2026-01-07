@@ -15,9 +15,16 @@ import styles from "./Properties2.module.css";
 
 export default function Properties2() {
   const t = useTranslations('homeSections');
+  const tAgent = useTranslations('agent.addProperty');
   const tCommon = useTranslations('common');
   const tRoot = useTranslations();
   const locale = useLocale();
+  
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return tCommon('sqft'); // Default fallback
+    return tAgent(`sizeUnits.${sizeUnit}`) || sizeUnit.toUpperCase();
+  };
   // Use search endpoint to get ONLY Holiday Home properties
   const { data: searchResponse, isLoading, isError, error } = useSearchListings({ 
     propertyType: 'Holiday Home', // ONLY show Holiday Homes
@@ -335,7 +342,7 @@ export default function Properties2() {
                             )}
                             <div className={styles.detailItem}>
                               <i className="icon-sqft" style={{ margin: '0 2px' }} />
-                              <span>{tCommon('sqft')} <strong>{property.size}</strong></span>
+                              <span><strong>{property.size}</strong> {getSizeUnitLabel(property.sizeUnit)}</span>
                             </div>
                             <div className={styles.detailItem}>
                               <i className="icon-garage" />

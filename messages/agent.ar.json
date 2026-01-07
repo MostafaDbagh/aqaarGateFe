@@ -162,7 +162,16 @@
     "propertyStatus": "حالة العقار",
     "rentPeriodCharge": "رسوم فترة الإيجار",
     "propertyId": "معرف العقار",
+    "size": "المساحة",
     "sizeSqFt": "المساحة (قدم مربع)",
+    "sizeUnits": {
+      "sqm": "متر مربع",
+      "dunam": "دونم",
+      "sqft": "قدم مربع",
+      "sqyd": "ياردة مربعة"
+    },
+    "sizeUnitRequired": "وحدة القياس مطلوبة",
+    "sizeUnitDefaultWarning": "ملاحظة: إذا لم تحدد وحدة القياس، سيتم استخدام متر مربع كقيمة افتراضية",
     "yearBuilt": "سنة البناء",
     "yearBuiltPlaceholder": "مثال: 2020",
     "floor": "الطابق",

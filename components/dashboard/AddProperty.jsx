@@ -24,6 +24,31 @@ export default function AddProperty({ isAdminMode = false }) {
   const { showSuccessModal, showLoginModal } = useGlobalModal();
   const [user, setUser] = useState(null);
   const [toast, setToast] = useState(null);
+
+  // Hide spinner arrows for number inputs
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const styleId = 'hide-number-spinners';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+          input[type="number"]::-webkit-inner-spin-button,
+          input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+            display: none !important;
+          }
+          input[type="number"] {
+            -moz-appearance: textfield !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
   
   const [formData, setFormData] = useState({
     propertyType: "Apartment",
@@ -36,6 +61,7 @@ export default function AddProperty({ isAdminMode = false }) {
     bedrooms: "",
     bathrooms: "",
     size: "",
+    sizeUnit: "", // Required field - will default to 'sqm' if not selected
     furnished: false,
     garages: false,
     garageSize: "",
@@ -47,6 +73,9 @@ export default function AddProperty({ isAdminMode = false }) {
     neighborhood: "Downtown",
     agent: "",
     agentId: "",
+    agentEmail: "", // Contact email (admin can change this)
+    agentNumber: "", // Contact phone (admin can change this)
+    agentWhatsapp: "", // Contact WhatsApp (admin can change this)
     amenities: [],
     propertyId: `PROP_${Date.now()}`,
     notes: "",
@@ -410,14 +439,24 @@ export default function AddProperty({ isAdminMode = false }) {
     // notes_ar is optional - no validation needed
     
     // Numeric validations
-    if (!formData.bedrooms || isNaN(formData.bedrooms) || parseInt(formData.bedrooms) < 0) {
-      newErrors.bedrooms = "Valid number of bedrooms is required";
+    // Only validate bedrooms if property type is not Land, Commercial, or Office
+    if (formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office") {
+      if (!formData.bedrooms || isNaN(formData.bedrooms) || parseInt(formData.bedrooms) < 0) {
+        newErrors.bedrooms = "Valid number of bedrooms is required";
+      }
     }
-    if (!formData.bathrooms || isNaN(formData.bathrooms) || parseInt(formData.bathrooms) < 0) {
-      newErrors.bathrooms = "Valid number of bathrooms is required";
+    // Only validate bathrooms if property type is not Land, Commercial, or Office
+    // For Commercial and Office, bathrooms is optional
+    if (formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office") {
+      if (!formData.bathrooms || isNaN(formData.bathrooms) || parseInt(formData.bathrooms) < 0) {
+        newErrors.bathrooms = "Valid number of bathrooms is required";
+      }
     }
     if (!formData.size || isNaN(formData.size) || parseInt(formData.size) <= 0) {
       newErrors.size = "Valid size is required";
+    }
+    if (!formData.sizeUnit || formData.sizeUnit.trim() === '') {
+      newErrors.sizeUnit = t('sizeUnitRequired');
     }
     // Year built validation - dynamic max year (current year), min year is 1900
     const currentYear = new Date().getFullYear();
@@ -430,6 +469,23 @@ export default function AddProperty({ isAdminMode = false }) {
     // User/Agent validation
     if (!formData.agent) newErrors.agent = "Agent email is required";
     if (!formData.agentId) newErrors.agentId = "Agent ID is required";
+    
+    // Admin contact information validation
+    if (isAdminMode && user?.role === 'admin') {
+      if (!formData.agentEmail || formData.agentEmail.trim() === '') {
+        newErrors.agentEmail = "Contact email is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.agentEmail)) {
+        newErrors.agentEmail = "Please enter a valid email address";
+      }
+      
+      if (!formData.agentNumber || formData.agentNumber.trim() === '') {
+        newErrors.agentNumber = "Contact phone is required";
+      }
+      
+      if (!formData.agentWhatsapp || formData.agentWhatsapp.trim() === '') {
+        newErrors.agentWhatsapp = "WhatsApp number is required";
+      }
+    }
     if (!formData.propertyId) newErrors.propertyId = "Property ID is required";
 
     setErrors(newErrors);
@@ -514,9 +570,10 @@ export default function AddProperty({ isAdminMode = false }) {
         // Map state to city for backend compatibility (backend requires city field)
         city: formData.state || formData.city || "Aleppo",
         propertyPrice: parsedPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
-        bedrooms: parseInt(formData.bedrooms),
-        bathrooms: parseInt(formData.bathrooms),
+        bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office") ? 0 : parseInt(formData.bedrooms) || 0,
+        bathrooms: formData.propertyType === "Land" ? 0 : parseInt(formData.bathrooms) || 0,
         size: parseInt(formData.size),
+        sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
         landArea: formData.landArea ? parseInt(formData.landArea) : parseInt(formData.size),
         yearBuilt: formData.yearBuilt ? parseInt(formData.yearBuilt) : new Date().getFullYear(),
         floor: formData.floor ? parseInt(formData.floor) : undefined,
@@ -525,11 +582,17 @@ export default function AddProperty({ isAdminMode = false }) {
         isSold: false,
         isDeleted: false,
         // Auto-embed agent contact info from user profile
+        // For admin: use formData values if provided, otherwise use admin defaults
+        // For regular users: ALWAYS use their profile info (cannot change)
         agentEmail: isAdminMode && user?.role === 'admin' 
-          ? 'admin@aqaargate.com' 
-          : (user?.email || ""),
-        agentNumber: user?.phone || "",
-        agentWhatsapp: user?.phone || "",
+          ? (formData.agentEmail || 'admin@aqaargate.com')
+          : (user?.email || ""), // Regular users: always use their email
+        agentNumber: isAdminMode && user?.role === 'admin'
+          ? (formData.agentNumber || user?.phone || "")
+          : (user?.phone || ""), // Regular users: always use their phone
+        agentWhatsapp: isAdminMode && user?.role === 'admin'
+          ? (formData.agentWhatsapp || user?.phone || "")
+          : (user?.phone || ""), // Regular users: always use their phone
         images: images,
         imageNames: images.map(img => img.name)
       };
@@ -1041,17 +1104,61 @@ export default function AddProperty({ isAdminMode = false }) {
             <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="size">
-                  {t('sizeSqFt')}:<span>*</span>
+                  {t('size')}:<span>*</span>
                 </label>
-                <input
-                  type="number"
-                  name="size"
-                  className="form-control"
-                  value={formData.size}
-                  onChange={handleInputChange}
-                  min="0"
-                />
+                <label htmlFor="sizeUnit" style={{ fontSize: '12px', marginLeft: '8px', color: '#6c757d', fontWeight: 'normal' }}>
+                  ({t('sizeUnits.sqm')} / {t('sizeUnits.dunam')} / {t('sizeUnits.sqft')} / {t('sizeUnits.sqyd')})
+                </label>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                  <input
+                    type="number"
+                    name="size"
+                    className="form-control no-spinner"
+                    value={formData.size}
+                    onChange={handleInputChange}
+                    min="0"
+                    style={{ 
+                      flex: 1,
+                      MozAppearance: 'textfield',
+                      WebkitAppearance: 'none',
+                      appearance: 'none'
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                  <select
+                    name="sizeUnit"
+                    className={`form-control ${errors.sizeUnit ? 'is-invalid' : ''}`}
+                    value={formData.sizeUnit || ''}
+                    onChange={handleInputChange}
+                    required
+                    style={{ width: '150px' }}
+                  >
+                    <option value="">{tCommon('select')}...</option>
+                    <option value="sqm">{t('sizeUnits.sqm')}</option>
+                    <option value="dunam">{t('sizeUnits.dunam')}</option>
+                    <option value="sqft">{t('sizeUnits.sqft')}</option>
+                    <option value="sqyd">{t('sizeUnits.sqyd')}</option>
+                  </select>
+                </div>
                 {errors.size && <span className="text-danger">{errors.size}</span>}
+                {errors.sizeUnit && (
+                  <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                    {errors.sizeUnit}
+                  </span>
+                )}
+                <small className="text-muted" style={{ 
+                  fontSize: '12px', 
+                  display: 'block', 
+                  marginTop: '5px',
+                  color: '#6c757d',
+                  fontStyle: 'italic',
+                  padding: '4px 8px',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '4px',
+                  border: '1px solid #e9ecef'
+                }}>
+                  ⓘ {t('sizeUnitDefaultWarning')}
+                </small>
               </fieldset>
               
               <fieldset className="box-fieldset">
@@ -1067,6 +1174,8 @@ export default function AddProperty({ isAdminMode = false }) {
                   min="1900"
                   max={new Date().getFullYear()}
                   placeholder={t('yearBuiltPlaceholder')}
+                  style={{ MozAppearance: 'textfield' }}
+                  onWheel={(e) => e.target.blur()}
                 />
                 {errors.yearBuilt && (
                   <span className="text-danger" style={{ display: 'block', marginTop: '5px', fontSize: '14px', fontWeight: '500' }}>
@@ -1087,40 +1196,54 @@ export default function AddProperty({ isAdminMode = false }) {
                   onChange={handleInputChange}
                   min="0"
                   placeholder={t('floorPlaceholder')}
+                  style={{ MozAppearance: 'textfield' }}
+                  onWheel={(e) => e.target.blur()}
                 />
               </fieldset>
             </div>
             
             <div className="box grid-layout-3 gap-30">
-              <fieldset className="box-fieldset">
-                <label htmlFor="bedrooms">
-                  {t('bedrooms')}:<span>*</span>
-                </label>
-                <input
-                  type="number"
-                  name="bedrooms"
-                  className="form-control"
-                  value={formData.bedrooms}
-                  onChange={handleInputChange}
-                  min="1"
-                />
-                {errors.bedrooms && <span className="text-danger">{errors.bedrooms}</span>}
-              </fieldset>
+              {/* Hide bedrooms for Land, Commercial, and Office */}
+              {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && (
+                <fieldset className="box-fieldset">
+                  <label htmlFor="bedrooms">
+                    {t('bedrooms')}:<span>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="bedrooms"
+                    className="form-control"
+                    value={formData.bedrooms}
+                    onChange={handleInputChange}
+                    min="1"
+                    style={{ MozAppearance: 'textfield' }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                  {errors.bedrooms && <span className="text-danger">{errors.bedrooms}</span>}
+                </fieldset>
+              )}
               
-              <fieldset className="box-fieldset">
-                <label htmlFor="bathrooms">
-                  {t('bathrooms')}:<span>*</span>
-                </label>
-                <input
-                  type="number"
-                  name="bathrooms"
-                  className="form-control"
-                  value={formData.bathrooms}
-                  onChange={handleInputChange}
-                  min="1"
-                />
-                {errors.bathrooms && <span className="text-danger">{errors.bathrooms}</span>}
-              </fieldset>
+              {/* Hide bathrooms for Land only. For Commercial and Office, bathrooms is optional */}
+              {formData.propertyType !== "Land" && (
+                <fieldset className="box-fieldset">
+                  <label htmlFor="bathrooms">
+                    {t('bathrooms')}
+                    {/* Only show * (required) for residential types, not for Commercial/Office */}
+                    {(formData.propertyType !== "Commercial" && formData.propertyType !== "Office") && <span>*</span>}
+                  </label>
+                  <input
+                    type="number"
+                    name="bathrooms"
+                    className="form-control"
+                    value={formData.bathrooms}
+                    onChange={handleInputChange}
+                    min="0"
+                    style={{ MozAppearance: 'textfield' }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                  {errors.bathrooms && <span className="text-danger">{errors.bathrooms}</span>}
+                </fieldset>
+              )}
             </div>
             
             <div className="box" style={{ display: 'flex', gap: '30px', marginTop: '20px' }}>
@@ -1167,6 +1290,8 @@ export default function AddProperty({ isAdminMode = false }) {
                     id="garageSize"
                     className="form-control"
                     value={formData.garageSize}
+                    style={{ MozAppearance: 'textfield' }}
+                    onWheel={(e) => e.target.blur()}
                     onChange={handleInputChange}
                     min="0"
                     placeholder={t('enterGarageSize')}
@@ -1229,6 +1354,93 @@ export default function AddProperty({ isAdminMode = false }) {
               </div>
             </div>
           </div>
+
+          {/* Contact Information Section (Admin Only) */}
+          {isAdminMode && user?.role === 'admin' && (
+            <div className="widget-box-2 mb-20">
+              <h3 className="title">Contact Information (معلومات الاتصال)</h3>
+              <div className="box-info-property">
+                <div style={{ 
+                  marginBottom: '15px', 
+                  padding: '12px', 
+                  backgroundColor: '#fff3cd', 
+                  borderRadius: '6px',
+                  border: '1px solid #ffc107',
+                  fontSize: '14px'
+                }}>
+                  <strong>Note:</strong> By default, admin contact information is used. You can change these fields to display the property owner's contact information instead.
+                </div>
+                
+                <div className="box grid-layout-3 gap-30">
+                  <fieldset className="box-fieldset">
+                    <label htmlFor="agentEmail">
+                      Contact Email (البريد الإلكتروني):<span>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="agentEmail"
+                      className={`form-control ${errors.agentEmail ? 'is-invalid' : ''}`}
+                      placeholder="Enter contact email"
+                      value={formData.agentEmail || ''}
+                      onChange={handleInputChange}
+                    />
+                    {errors.agentEmail && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {errors.agentEmail}
+                      </span>
+                    )}
+                    <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                      Default: admin@aqaargate.com
+                    </small>
+                  </fieldset>
+                  
+                  <fieldset className="box-fieldset">
+                    <label htmlFor="agentNumber">
+                      Contact Phone (رقم الهاتف):<span>*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="agentNumber"
+                      className={`form-control ${errors.agentNumber ? 'is-invalid' : ''}`}
+                      placeholder="Enter contact phone (e.g., +963999999999)"
+                      value={formData.agentNumber || ''}
+                      onChange={handleInputChange}
+                    />
+                    {errors.agentNumber && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {errors.agentNumber}
+                      </span>
+                    )}
+                    <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                      Default: Admin phone number
+                    </small>
+                  </fieldset>
+                  
+                  <fieldset className="box-fieldset">
+                    <label htmlFor="agentWhatsapp">
+                      WhatsApp Number (رقم الواتساب):<span>*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="agentWhatsapp"
+                      className={`form-control ${errors.agentWhatsapp ? 'is-invalid' : ''}`}
+                      placeholder="Enter WhatsApp number (e.g., +963999999999)"
+                      value={formData.agentWhatsapp || ''}
+                      onChange={handleInputChange}
+                    />
+                    {errors.agentWhatsapp && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {errors.agentWhatsapp}
+                      </span>
+                    )}
+                    <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                      Default: Admin WhatsApp number
+                    </small>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Arabic Translation Section */}
           <div className="widget-box-2 mb-20">

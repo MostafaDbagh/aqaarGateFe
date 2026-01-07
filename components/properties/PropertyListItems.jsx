@@ -11,8 +11,15 @@ import styles from "./PropertyListItems.module.css";
 
 export default function PropertyListItems({ listings = [], isAISearch = false, hasActiveSearch = false }) {
   const t = useTranslations();
+  const tAgent = useTranslations('agent.addProperty');
   const tCommon = useTranslations('common');
   const locale = useLocale();
+  
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return 'Sqft'; // Default fallback
+    return tAgent(`sizeUnits.${sizeUnit}`) || sizeUnit.toUpperCase();
+  };
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
   const [activeImageIndex, setActiveImageIndex] = useState({});
   if (!listings || listings.length === 0) {
@@ -577,7 +584,7 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
               )}
               <li className="text-1 flex items-center">
                 <i className="icon-sqft" style={{ margin: '0 2px' }} />
-                <span>{property.size || 0}</span> Sqft
+                <span>{property.size || 0}</span> {getSizeUnitLabel(property.sizeUnit)}
               </li>
             </ul>
             <div className="bot flex justify-between items-center">

@@ -77,6 +77,24 @@ export default async function LocaleLayout({ children, params }) {
       <link rel="icon" href="/images/logo/logo-16x16.png" type="image/png" sizes="16x16" />
       <link rel="icon" href="/images/logo/Logo-32x32.png" type="image/png" sizes="32x32" />
       <link rel="apple-touch-icon" href="/images/logo/Apple-Touch-Icon.png" />
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          input[type="number"]::-webkit-inner-spin-button,
+          input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+          }
+          input[type="number"] {
+            -moz-appearance: textfield !important;
+          }
+        `
+      }} />
       <script
         dangerouslySetInnerHTML={{
           __html: `

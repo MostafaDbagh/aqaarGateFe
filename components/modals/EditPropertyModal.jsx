@@ -7,12 +7,13 @@ import { keywordTags } from '@/constants/keywordTags';
 import { normalizeRentType } from '@/constants/rentTypes';
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
-import styles from './EditPropertyModal.module.css'
+import styles from './EditPropertyModal.module.css';
 
 const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
   const t = useTranslations('agent.addProperty');
   const tCommon = useTranslations('common');
   const locale = useLocale();
+  const [originalContactInfo, setOriginalContactInfo] = useState(null); // Store original contact info to detect changes
   const [formData, setFormData] = useState({
     propertyKeyword: '',
     address: '',
@@ -24,9 +25,14 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     bedrooms: '',
     bathrooms: '',
     squareFootage: '',
+    sizeUnit: 'sqm',
     yearBuilt: '',
     propertyType: '',
     amenities: [],
+    // Contact information (admin can edit)
+    agentEmail: '',
+    agentNumber: '',
+    agentWhatsapp: '',
     // Arabic translation fields
     description_ar: '',
     address_ar: '',
@@ -34,6 +40,17 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     notes_ar: '',
     floor: ''
   });
+  
+  // Get user from localStorage to check if admin
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+  
+  const isAdmin = user?.role === 'admin';
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -79,6 +96,11 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
   // Initialize form data when property changes
   useEffect(() => {
     if (property) {
+      // Get user data to check if admin
+      const userData = localStorage.getItem('user');
+      const currentUser = userData ? JSON.parse(userData) : null;
+      const currentIsAdmin = currentUser?.role === 'admin';
+      
       // Normalize status: handle "for rent", "for sale", "rent", "sale", etc.
       let normalizedStatus = (property.status || 'sale').toLowerCase().trim();
       
@@ -92,6 +114,14 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       // Normalize rentType: handle "Three Months", "three-month", etc.
       const normalizedRentType = normalizeRentType(property.rentType || 'monthly');
       
+      // Store original contact info to detect changes
+      const originalContact = {
+        agentEmail: property.agentEmail || null,
+        agentNumber: property.agentNumber || null,
+        agentWhatsapp: property.agentWhatsapp || null
+      };
+      setOriginalContactInfo(originalContact);
+      
       setFormData({
         propertyKeyword: property.propertyKeyword || '',
         address: property.address || '',
@@ -103,9 +133,14 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         bedrooms: property.bedrooms || '',
         bathrooms: property.bathrooms || '',
         squareFootage: property.squareFootage || property.size || '',
+        sizeUnit: property.sizeUnit || '',
         yearBuilt: property.yearBuilt || '',
         propertyType: property.propertyType || '',
         amenities: property.amenities || [],
+        // Contact information (load from property or use defaults for admin)
+        agentEmail: property.agentEmail || (currentIsAdmin ? 'admin@aqaargate.com' : ''),
+        agentNumber: property.agentNumber || (currentIsAdmin ? (currentUser?.phone || '') : ''),
+        agentWhatsapp: property.agentWhatsapp || (currentIsAdmin ? (currentUser?.phone || '') : ''),
         // Arabic translation fields
         description_ar: property.description_ar || '',
         address_ar: property.address_ar || '',
@@ -175,16 +210,31 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       const updateData = {
         ...formDataWithoutApprovalStatus,
         propertyPrice: exactPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
-        bedrooms: parseInt(formData.bedrooms) || 0,
-        bathrooms: parseInt(formData.bathrooms) || 0,
+        bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office") ? 0 : parseInt(formData.bedrooms) || 0,
+        bathrooms: formData.propertyType === "Land" ? 0 : parseInt(formData.bathrooms) || 0,
         squareFootage: parseInt(formData.squareFootage) || 0,
+        sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
         yearBuilt: parseInt(formData.yearBuilt) || new Date().getFullYear(),
+        // Contact information (admin can edit)
+        // NOTE: agent (legacy field) is NOT sent - it should never change
+        // Only include contact fields if admin is editing AND values have changed
+        ...(isAdmin && originalContactInfo ? {
+          ...(formData.agentEmail !== undefined && formData.agentEmail.trim() !== (originalContactInfo.agentEmail || '').trim() 
+            ? { agentEmail: formData.agentEmail.trim() || null } 
+            : {}),
+          ...(formData.agentNumber !== undefined && formData.agentNumber.trim() !== (originalContactInfo.agentNumber || '').trim() 
+            ? { agentNumber: formData.agentNumber.trim() || null } 
+            : {}),
+          ...(formData.agentWhatsapp !== undefined && formData.agentWhatsapp.trim() !== (originalContactInfo.agentWhatsapp || '').trim() 
+            ? { agentWhatsapp: formData.agentWhatsapp.trim() || null } 
+            : {})
+        } : {}),
         // Arabic translation fields
-        description_ar: formData.description_ar || undefined,
-        address_ar: formData.address_ar || undefined,
-        neighborhood_ar: formData.neighborhood_ar || undefined,
-        notes_ar: formData.notes_ar || undefined,
-        floor: formData.floor ? parseInt(formData.floor) : undefined
+        ...(formData.description_ar ? { description_ar: formData.description_ar } : {}),
+        ...(formData.address_ar ? { address_ar: formData.address_ar } : {}),
+        ...(formData.neighborhood_ar ? { neighborhood_ar: formData.neighborhood_ar } : {}),
+        ...(formData.notes_ar ? { notes_ar: formData.notes_ar } : {}),
+        ...(formData.floor ? { floor: parseInt(formData.floor) } : {})
       };
       
       // Only include rentType if status is "rent"
@@ -405,56 +455,97 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
 
             {/* Property Details Row */}
             <div className={styles.gridThreeCols}>
-              <div>
-                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                  {t('bedrooms')}
-                </label>
-                <input
-                  type="number"
-                  name="bedrooms"
-                  value={formData.bedrooms}
-                  onChange={handleInputChange}
-                  min="0"
-                  className={styles.input}
-                  style={{ direction: 'ltr', textAlign: 'left' }}
-                  onFocus={handleInputFocus}
-                  onBlur={handleInputBlur}
-                />
-              </div>
+              {/* Hide bedrooms for Land, Commercial, and Office */}
+              {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && (
+                <div>
+                  <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                    {t('bedrooms')}
+                  </label>
+                  <input
+                    type="number"
+                    name="bedrooms"
+                    value={formData.bedrooms}
+                    onChange={handleInputChange}
+                    min="0"
+                    className={styles.input}
+                    style={{ direction: 'ltr', textAlign: 'left' }}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+              )}
 
-              <div>
-                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                  {t('bathrooms')}
-                </label>
-                <input
-                  type="number"
-                  name="bathrooms"
-                  value={formData.bathrooms}
-                  onChange={handleInputChange}
-                  min="0"
-                  step="0.5"
-                  className={styles.input}
-                  style={{ direction: 'ltr', textAlign: 'left' }}
-                  onFocus={handleInputFocus}
-                  onBlur={handleInputBlur}
-                />
-              </div>
+              {/* Hide bathrooms for Land only. For Commercial and Office, bathrooms is optional */}
+              {formData.propertyType !== "Land" && (
+                <div>
+                  <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                    {t('bathrooms')}
+                    {/* Only show * (required) for residential types, not for Commercial/Office */}
+                    {(formData.propertyType !== "Commercial" && formData.propertyType !== "Office") && <span style={{ color: 'red' }}> *</span>}
+                  </label>
+                  <input
+                    type="number"
+                    name="bathrooms"
+                    value={formData.bathrooms}
+                    onChange={handleInputChange}
+                    min="0"
+                    step="0.5"
+                    className={styles.input}
+                    style={{ direction: 'ltr', textAlign: 'left' }}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+              )}
 
               <div>
                 <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                   {t('squareFootage')}
                 </label>
-                <input
-                  type="number"
-                  name="squareFootage"
-                  value={formData.squareFootage}
-                  onChange={handleInputChange}
-                  min="0"
-                  className={styles.input}
-                  style={{ direction: 'ltr', textAlign: 'left' }}
-                  onFocus={handleInputFocus}
-                  onBlur={handleInputBlur}
-                />
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                  <input
+                    type="number"
+                    name="squareFootage"
+                    value={formData.squareFootage}
+                    onChange={handleInputChange}
+                    min="0"
+                    className={styles.input}
+                    style={{ direction: 'ltr', textAlign: 'left', flex: 1 }}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                  <select
+                    name="sizeUnit"
+                    value={formData.sizeUnit || ''}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                    required
+                    style={{ width: '120px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  >
+                    <option value="">{tCommon('select')}...</option>
+                    <option value="sqm">{t('sizeUnits.sqm')}</option>
+                    <option value="dunam">{t('sizeUnits.dunam')}</option>
+                    <option value="sqft">{t('sizeUnits.sqft')}</option>
+                    <option value="sqyd">{t('sizeUnits.sqyd')}</option>
+                  </select>
+                </div>
+                <small style={{ 
+                  fontSize: '11px', 
+                  display: 'block', 
+                  marginTop: '4px',
+                  color: '#6c757d',
+                  fontStyle: 'italic',
+                  padding: '4px 8px',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '4px',
+                  border: '1px solid #e9ecef',
+                  direction: locale === 'ar' ? 'rtl' : 'ltr',
+                  textAlign: locale === 'ar' ? 'right' : 'left'
+                }}>
+                  ⓘ {t('sizeUnitDefaultWarning')}
+                </small>
               </div>
             </div>
 
@@ -514,6 +605,84 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onBlur={handleInputBlur}
               />
             </div>
+
+            {/* Contact Information Section (Admin Only) */}
+            {isAdmin && (
+              <div style={{ marginTop: '20px', marginBottom: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+                <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: '600' }}>
+                  Contact Information (معلومات الاتصال)
+                </h3>
+                <div style={{ 
+                  marginBottom: '15px', 
+                  padding: '12px', 
+                  backgroundColor: '#fff3cd', 
+                  borderRadius: '6px',
+                  border: '1px solid #ffc107',
+                  fontSize: '14px'
+                }}>
+                  <strong>Note:</strong> You can change these fields to display the property owner's contact information instead of admin details.
+                </div>
+                
+                <div className={styles.gridThreeCols} style={{ gap: '15px' }}>
+                  <div>
+                    <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      Contact Email (البريد الإلكتروني): <span style={{ color: 'red' }}>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="agentEmail"
+                      value={formData.agentEmail || ''}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      placeholder="Enter contact email"
+                      onFocus={handleInputFocus}
+                      onBlur={handleInputBlur}
+                    />
+                    <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
+                      Default: admin@aqaargate.com
+                    </small>
+                  </div>
+                  
+                  <div>
+                    <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      Contact Phone (رقم الهاتف): <span style={{ color: 'red' }}>*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="agentNumber"
+                      value={formData.agentNumber || ''}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      placeholder="Enter contact phone (e.g., +963999999999)"
+                      onFocus={handleInputFocus}
+                      onBlur={handleInputBlur}
+                    />
+                    <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
+                      Default: Admin phone number
+                    </small>
+                  </div>
+                  
+                  <div>
+                    <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      WhatsApp Number (رقم الواتساب): <span style={{ color: 'red' }}>*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="agentWhatsapp"
+                      value={formData.agentWhatsapp || ''}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      placeholder="Enter WhatsApp number (e.g., +963999999999)"
+                      onFocus={handleInputFocus}
+                      onBlur={handleInputBlur}
+                    />
+                    <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
+                      Default: Admin WhatsApp number
+                    </small>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Arabic Translation Section */}
             <div className={styles.arabicSection}>
