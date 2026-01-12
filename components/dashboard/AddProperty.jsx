@@ -415,7 +415,7 @@ export default function AddProperty({ isAdminMode = false }) {
     
     // Required fields
     if (!formData.propertyType) newErrors.propertyType = "Property type is required";
-    if (!formData.propertyKeyword) newErrors.propertyKeyword = "Property keyword/title is required";
+    // Property keyword is optional - no validation needed
     if (!formData.propertyDesc) newErrors.propertyDesc = "Property description is required";
     if (!formData.propertyPrice || isNaN(formData.propertyPrice) || parseFloat(formData.propertyPrice) <= 0) {
       newErrors.propertyPrice = "Valid price is required";
@@ -472,9 +472,8 @@ export default function AddProperty({ isAdminMode = false }) {
     
     // Admin contact information validation
     if (isAdminMode && user?.role === 'admin') {
-      if (!formData.agentEmail || formData.agentEmail.trim() === '') {
-        newErrors.agentEmail = "Contact email is required";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.agentEmail)) {
+      // Email is optional - only validate format if provided
+      if (formData.agentEmail && formData.agentEmail.trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.agentEmail)) {
         newErrors.agentEmail = "Please enter a valid email address";
       }
       
@@ -585,7 +584,7 @@ export default function AddProperty({ isAdminMode = false }) {
         // For admin: use formData values if provided, otherwise use admin defaults
         // For regular users: ALWAYS use their profile info (cannot change)
         agentEmail: isAdminMode && user?.role === 'admin' 
-          ? (formData.agentEmail || 'admin@aqaargate.com')
+          ? (formData.agentEmail && formData.agentEmail.trim() !== '' ? formData.agentEmail.trim() : null)
           : (user?.email || ""), // Regular users: always use their email
         agentNumber: isAdminMode && user?.role === 'admin'
           ? (formData.agentNumber || user?.phone || "")
@@ -839,7 +838,7 @@ export default function AddProperty({ isAdminMode = false }) {
             <div className="box-info-property">
               <fieldset className="box box-fieldset">
                 <label htmlFor="propertyKeyword">
-                  {t('propertyKeyword')}:<span>*</span>
+                  {t('propertyKeyword')}:
                 </label>
                 
                 {/* Display input showing selected tags (read-only) */}
@@ -1375,13 +1374,13 @@ export default function AddProperty({ isAdminMode = false }) {
                 <div className="box grid-layout-3 gap-30">
                   <fieldset className="box-fieldset">
                     <label htmlFor="agentEmail">
-                      Contact Email (البريد الإلكتروني):<span>*</span>
+                      Contact Email (البريد الإلكتروني):
                     </label>
                     <input
                       type="email"
                       name="agentEmail"
                       className={`form-control ${errors.agentEmail ? 'is-invalid' : ''}`}
-                      placeholder="Enter contact email"
+                      placeholder="Enter contact email (optional)"
                       value={formData.agentEmail || ''}
                       onChange={handleInputChange}
                     />
@@ -1391,7 +1390,7 @@ export default function AddProperty({ isAdminMode = false }) {
                       </span>
                     )}
                     <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
-                      Default: admin@aqaargate.com
+                      Optional: Leave empty to hide email button. Default: admin@aqaargate.com
                     </small>
                   </fieldset>
                   

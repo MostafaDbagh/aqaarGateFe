@@ -93,10 +93,12 @@ export default function ExtraInfo({ property }) {
             <p className="fw-6">{t('landArea')}</p>
             <p>{property?.landArea ? `${property.landArea} ${t('sqft')}` : 'N/A'}</p>
           </li>
-          <li className="flex">
-            <p className="fw-6">{t('yearBuilt')}</p>
-            <p>{property?.yearBuilt || 'N/A'}</p>
-          </li>
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+            <li className="flex">
+              <p className="fw-6">{t('yearBuilt')}</p>
+              <p>{property?.yearBuilt || 'N/A'}</p>
+            </li>
+          )}
           {property?.floor !== undefined && property?.floor !== null && (
             <li className="flex">
               <p className="fw-6">{t('floor')}</p>

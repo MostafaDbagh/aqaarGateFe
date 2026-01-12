@@ -345,9 +345,11 @@ export default function RelatedProperties({ currentProperty }) {
                             {t('floor')} <span>{property.floor}</span>
                           </div>
                         )}
-                        <div className={styles.metaItem}>
-                          {t('garage')} <span>{property.garage || t('no')}</span>
-                        </div>
+                        {property.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+                          <div className={styles.metaItem}>
+                            {t('garage')} <span>{property.garage || t('no')}</span>
+                          </div>
+                        )}
                       </div>
 
                       <div className={styles.cardFooter}>

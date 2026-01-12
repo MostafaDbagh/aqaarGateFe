@@ -19,13 +19,12 @@ export default function ContactAgentModal({
 
   const createMessageMutation = useCreateMessage();
 
-  // Extract agent email from property or agent prop
-  const agentEmail = agent?.email || 
-                     property?.agentEmail || 
-                     property?.agentId?.email || 
-                     (typeof property?.agent === 'string' && property?.agent.includes('@') ? property?.agent : null) ||
-                     property?.agent?.email ||
-                     "contact@property.com";
+  // Extract agent email from property
+  // IMPORTANT: Only use property.agentEmail if explicitly set (admin can leave it blank)
+  // Do NOT fall back to agentId.email or agent.email as admin may intentionally leave it blank
+  const agentEmail = property?.agentEmail && property.agentEmail.trim() !== '' 
+                     ? property.agentEmail 
+                     : null;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -87,12 +86,14 @@ export default function ContactAgentModal({
             <h4 className={styles.agentTitle}>
               Property Agent
             </h4>
-            <div className={styles.agentContact}>
-              <i className={`icon-mail ${styles.agentIcon}`} />
-              <span className={styles.agentEmail}>
-                {agentEmail}
-              </span>
-            </div>
+            {agentEmail && (
+              <div className={styles.agentContact}>
+                <i className={`icon-mail ${styles.agentIcon}`} />
+                <span className={styles.agentEmail}>
+                  {agentEmail}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

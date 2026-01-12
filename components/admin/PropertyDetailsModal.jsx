@@ -339,7 +339,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                         {property.size ? `${property.size} sqft` : 'N/A'}
                       </span>
                     </div>
-                    {property.yearBuilt && (
+                    {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property.yearBuilt && (
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>Year Built:</span>
                         <span className={styles.infoValue}>{property.yearBuilt}</span>
@@ -349,7 +349,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                       <span className={styles.infoLabel}>Furnished:</span>
                       <span className={styles.infoValue}>{property.furnished ? 'Yes' : 'No'}</span>
                     </div>
-                    {property.garages && (
+                    {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property.garages && (
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>Garages:</span>
                         <span className={styles.infoValue}>

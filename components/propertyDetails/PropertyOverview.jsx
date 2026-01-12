@@ -79,7 +79,7 @@ export default function PropertyOverview({ property }) {
       </div>
       
       {/* Arabic Translation Section - Show only when locale is Arabic and Arabic fields exist */}
-      {locale === 'ar' && (property?.description_ar || property?.address_ar || property?.neighborhood_ar || property?.notes_ar) && (
+      {locale === 'ar' && (property?.description_ar || property?.address_ar || property?.neighborhood_ar) && (
         <div className="info-detail mt-30" style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           <h4 className="text-4 fw-6 text-color-heading mb-20" style={{ marginBottom: '20px', fontSize: '18px' }}>
             الترجمة العربية
@@ -111,15 +111,6 @@ export default function PropertyOverview({ property }) {
               </p>
             </div>
           )}
-          
-          {property?.notes_ar && (
-            <div className="mb-20" style={{ marginBottom: '20px' }}>
-              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>ملاحظات:</p>
-              <p className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: 'rtl', textAlign: 'right' }}>
-                {property.notes_ar}
-              </p>
-            </div>
-          )}
         </div>
       )}
       {/* Property Keyword Tags */}
@@ -139,7 +130,7 @@ export default function PropertyOverview({ property }) {
             {locale === 'ar' && property?.address_ar ? property.address_ar : (property?.address || 'Property Location')}
           </p>
           <ul className="feature-list flex flex-wrap gap-10 " style={{margin: '12px 0'}}>
-            {property?.bedrooms != null && Number(property.bedrooms) > 0 && (
+            {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.bedrooms != null && Number(property.bedrooms) > 0 && (
               <li className="text-1 flex items-center gap-10">
                 <i className="icon-Bed-2" style={{ margin: '0 2px' }} />
                 <span>{property.bedrooms}</span>{tDetail('bed')}
@@ -256,7 +247,7 @@ export default function PropertyOverview({ property }) {
             </div>
           </div>
 
-          {property?.bedrooms != null && Number(property.bedrooms) > 0 && (
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.bedrooms != null && Number(property.bedrooms) > 0 && (
             <div className="box-icon">
               <div className="icons">
                 <i className="icon-Bed-2" style={{ margin: '0 2px' }} />
@@ -271,24 +262,28 @@ export default function PropertyOverview({ property }) {
 
         </div>
         <div className="wrap-box">
-          <div className="box-icon">
-            <div className="icons">
-              <i className="icon-Garage-1" />
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+            <div className="box-icon">
+              <div className="icons">
+                <i className="icon-Garage-1" />
+              </div>
+              <div className="content">
+                <div className="text-4 text-color-default">{tDetail('garages')}</div>
+                <div className="text-1 text-color-heading">{property?.garages ? tDetail('yes') : tDetail('no')}</div>
+              </div>
             </div>
-            <div className="content">
-              <div className="text-4 text-color-default">{tDetail('garages')}</div>
-              <div className="text-1 text-color-heading">{property?.garages ? tDetail('yes') : tDetail('no')}</div>
+          )}
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+            <div className="box-icon">
+              <div className="icons">
+                <i className="icon-Hammer" />
+              </div>
+              <div className="content">
+                <div className="text-4 text-color-default">{tDetail('yearBuilt')}:</div>
+                <div className="text-1 text-color-heading">{property?.yearBuilt || 'N/A'}</div>
+              </div>
             </div>
-          </div>
-          <div className="box-icon">
-            <div className="icons">
-              <i className="icon-Hammer" />
-            </div>
-            <div className="content">
-              <div className="text-4 text-color-default">{tDetail('yearBuilt')}:</div>
-              <div className="text-1 text-color-heading">{property?.yearBuilt || 'N/A'}</div>
-            </div>
-          </div>
+          )}
 
           <div className="box-icon">
             <div className="icons">

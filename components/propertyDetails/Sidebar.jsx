@@ -19,11 +19,11 @@ export default function Sidebar({ property }) {
   const createMessageMutation = useCreateMessage();
   
   // Extract agent contact information from property
-  const agentEmail = property?.agentEmail || 
-                     property?.agentId?.email || 
-                     (typeof property?.agent === 'string' && property?.agent.includes('@') ? property?.agent : null) ||
-                     property?.agent?.email ||
-                     "contact@property.com";
+  // IMPORTANT: Only use property.agentEmail if explicitly set (admin can leave it blank)
+  // Do NOT fall back to agentId.email or agent.email as admin may intentionally leave it blank
+  const agentEmail = property?.agentEmail && property.agentEmail.trim() !== '' 
+                     ? property.agentEmail 
+                     : null;
   const agentNumber = property?.agentNumber || 
                       property?.agentId?.phone || 
                       property?.agent?.phone ||

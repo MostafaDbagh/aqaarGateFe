@@ -307,7 +307,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             {/* Property Title */}
             <div>
               <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                {t('propertyTitle')} *
+                {t('propertyTitle')}
               </label>
               
               {/* Display input showing selected tags (read-only) */}
@@ -316,7 +316,6 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 name="propertyKeyword"
                 value={formData.propertyKeyword}
                 readOnly
-                required
                 className={styles.input}
                 placeholder={t('selectTagsPlaceholder')}
                 style={{ cursor: 'not-allowed', backgroundColor: '#f8f9fa', direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
@@ -629,7 +628,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 <div className={styles.gridThreeCols} style={{ gap: '15px' }}>
                   <div>
                     <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                      Contact Email (البريد الإلكتروني): <span style={{ color: 'red' }}>*</span>
+                      Contact Email (البريد الإلكتروني):
                     </label>
                     <input
                       type="email"
@@ -637,12 +636,12 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                       value={formData.agentEmail || ''}
                       onChange={handleInputChange}
                       className={styles.input}
-                      placeholder="Enter contact email"
+                      placeholder="Enter contact email (optional)"
                       onFocus={handleInputFocus}
                       onBlur={handleInputBlur}
                     />
                     <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
-                      Default: admin@aqaargate.com
+                      Optional: Leave empty to hide email button. Default: admin@aqaargate.com
                     </small>
                   </div>
                   
