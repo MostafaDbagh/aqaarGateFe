@@ -168,7 +168,8 @@
       "sqm": "Square Meter",
       "dunam": "Dunam",
       "sqft": "Square Foot",
-      "sqyd": "Square Yard"
+      "sqyd": "Square Yard",
+      "feddan": "Feddan"
     },
     "sizeUnitRequired": "Size unit is required",
     "sizeUnitDefaultWarning": "Note: If you don't select a unit, square meter will be used as default",

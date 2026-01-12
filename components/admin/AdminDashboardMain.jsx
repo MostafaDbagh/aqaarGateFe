@@ -3,6 +3,7 @@ import React, { useState, createContext, useContext, useEffect, useRef } from "r
 import { usePathname } from "next/navigation";
 import AdminDashboard from "./AdminDashboard";
 import AdminProperties from "./AdminProperties";
+import AdminPropertiesByAdmin from "./AdminPropertiesByAdmin";
 import AdminAddProperty from "./AdminAddProperty";
 import AdminSoldProperties from "./AdminSoldProperties";
 import AdminDeletedProperties from "./AdminDeletedProperties";
@@ -17,6 +18,7 @@ export const TABS = {
   OVERVIEW: 'overview',
   PROFILE: 'profile',
   PROPERTIES: 'properties',
+  PROPERTIES_BY_ADMIN: 'properties-by-admin',
   ADD_PROPERTY: 'add-property',
   SOLD_PROPERTIES: 'sold-properties',
   DELETED_PROPERTIES: 'deleted-properties',
@@ -51,7 +53,9 @@ export default function AdminDashboardMain() {
       let tabToSet = TABS.OVERVIEW;
       // Check for both /admin/... and /en/admin/... paths
       const normalizedPath = pathname.replace(/^\/(en|ar)/, '');
-      if (normalizedPath.includes('/admin/properties')) {
+      if (normalizedPath.includes('/admin/properties-by-admin')) {
+        tabToSet = TABS.PROPERTIES_BY_ADMIN;
+      } else if (normalizedPath.includes('/admin/properties')) {
         tabToSet = TABS.PROPERTIES;
       } else if (normalizedPath.includes('/admin/add-property')) {
         tabToSet = TABS.ADD_PROPERTY;
@@ -92,6 +96,8 @@ export default function AdminDashboardMain() {
         return <AdminDashboard />;
       case TABS.PROPERTIES:
         return <AdminProperties />;
+      case TABS.PROPERTIES_BY_ADMIN:
+        return <AdminPropertiesByAdmin />;
       case TABS.ADD_PROPERTY:
         return <AdminAddProperty />;
       case TABS.SOLD_PROPERTIES:

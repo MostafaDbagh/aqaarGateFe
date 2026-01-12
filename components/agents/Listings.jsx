@@ -57,6 +57,7 @@ const extractPagination = (payload) => {
 export default function Listings({ agentId }) {
   const t = useTranslations('agentDetails');
   const tCommon = useTranslations('common');
+  const tAgent = useTranslations('agent.addProperty');
   const locale = useLocale();
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'rent', 'sale'
@@ -64,6 +65,12 @@ export default function Listings({ agentId }) {
   const [isPageChanging, setIsPageChanging] = useState(false);
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
   const itemsPerPage = 6;
+
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return 'sqm'; // Default to sqm
+    return sizeUnit.toUpperCase(); // Return abbreviation: SQM, DUNAM, SQFT, SQYD, FEDDAN
+  };
 
   const togglePhoneNumber = (propertyId) => {
     setShowPhoneNumbers(prev => ({
@@ -579,7 +586,7 @@ export default function Listings({ agentId }) {
                         </li>
                       )}
                       <li className="text-1 flex">
-                        <span>{property.size || property.landArea || 0}</span>{tCommon('sqft')}
+                        <span>{property.size || property.landArea || 0}</span> {getSizeUnitLabel(property.sizeUnit)}
                       </li>
                     </ul>
                     {/* Contact Section */}
@@ -649,17 +656,19 @@ export default function Listings({ agentId }) {
                         )}
                       </div>
                       
-                      {/* Email Button */}
-                      <button
-                        onClick={() => window.open(`mailto:${getPropertyContactInfo(property).email}?subject=Inquiry about ${property.propertyTitle || tCommon('property')}`)}
-                        className={styles.emailBtn}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        {tCommon('email')}
-                      </button>
+                      {/* Email Button - Only show if email exists */}
+                      {(property.agentEmail || property.agent?.email || property.agentId?.email) && (
+                        <button
+                          onClick={() => window.open(`mailto:${getPropertyContactInfo(property).email}?subject=Inquiry about ${property.propertyTitle || tCommon('property')}`)}
+                          className={styles.emailBtn}
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          {tCommon('email')}
+                        </button>
+                      )}
 
                       {/* Details Button */}
                       <button

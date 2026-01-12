@@ -34,6 +34,28 @@ export const adminAPI = {
     }
   },
 
+  getPropertiesByAdmin: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.status) params.append('status', filters.status);
+      if (filters.approvalStatus) params.append('approvalStatus', filters.approvalStatus);
+      if (filters.propertyType) params.append('propertyType', filters.propertyType);
+      if (filters.city) params.append('city', filters.city);
+      if (filters.search) params.append('search', filters.search);
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = `/admin/properties-by-admin${queryString ? `?${queryString}` : ''}`;
+      const response = await Axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   updatePropertyApproval: async (id, approvalStatus, notes) => {
     try {
       const response = await Axios.put(`/admin/properties/${id}/approval`, {

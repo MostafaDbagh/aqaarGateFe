@@ -17,8 +17,8 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
   
   // Helper function to get size unit label
   const getSizeUnitLabel = (sizeUnit) => {
-    if (!sizeUnit) return 'Sqft'; // Default fallback
-    return tAgent(`sizeUnits.${sizeUnit}`) || sizeUnit.toUpperCase();
+    if (!sizeUnit) return 'sqm'; // Default to sqm
+    return sizeUnit.toUpperCase(); // Return abbreviation: SQM, DUNAM, SQFT, SQYD, FEDDAN
   };
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
   const [activeImageIndex, setActiveImageIndex] = useState({});

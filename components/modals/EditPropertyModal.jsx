@@ -454,7 +454,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             )}
 
             {/* Property Details Row */}
-            <div className={styles.gridThreeCols}>
+            <div className={styles.gridTwoCols}>
               {/* Hide bedrooms for Land, Commercial, and Office */}
               {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && (
                 <div>
@@ -497,56 +497,59 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   />
                 </div>
               )}
+            </div>
 
-              <div>
-                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                  {t('squareFootage')}
-                </label>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
-                  <input
-                    type="number"
-                    name="squareFootage"
-                    value={formData.squareFootage}
-                    onChange={handleInputChange}
-                    min="0"
-                    className={styles.input}
-                    style={{ direction: 'ltr', textAlign: 'left', flex: 1 }}
-                    onFocus={handleInputFocus}
-                    onBlur={handleInputBlur}
-                  />
-                  <select
-                    name="sizeUnit"
-                    value={formData.sizeUnit || ''}
-                    onChange={handleInputChange}
-                    className={styles.input}
-                    required
-                    style={{ width: '120px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}
-                    onFocus={handleInputFocus}
-                    onBlur={handleInputBlur}
-                  >
-                    <option value="">{tCommon('select')}...</option>
-                    <option value="sqm">{t('sizeUnits.sqm')}</option>
-                    <option value="dunam">{t('sizeUnits.dunam')}</option>
-                    <option value="sqft">{t('sizeUnits.sqft')}</option>
-                    <option value="sqyd">{t('sizeUnits.sqyd')}</option>
-                  </select>
-                </div>
-                <small style={{ 
-                  fontSize: '11px', 
-                  display: 'block', 
-                  marginTop: '4px',
-                  color: '#6c757d',
-                  fontStyle: 'italic',
-                  padding: '4px 8px',
-                  backgroundColor: '#f8f9fa',
-                  borderRadius: '4px',
-                  border: '1px solid #e9ecef',
-                  direction: locale === 'ar' ? 'rtl' : 'ltr',
-                  textAlign: locale === 'ar' ? 'right' : 'left'
-                }}>
-                  ⓘ {t('sizeUnitDefaultWarning')}
-                </small>
+            {/* Square Footage - Separate Row */}
+            <div>
+              <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                {t('squareFootage')}
+              </label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                <input
+                  type="number"
+                  name="squareFootage"
+                  value={formData.squareFootage}
+                  onChange={handleInputChange}
+                  min="0"
+                  className={`${styles.input} no-spinner`}
+                  style={{ direction: 'ltr', textAlign: 'left', flex: 1 }}
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                  onWheel={(e) => e.target.blur()}
+                />
+                <select
+                  name="sizeUnit"
+                  value={formData.sizeUnit || ''}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  required
+                  style={{ width: '150px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                >
+                  <option value="">{tCommon('select')}...</option>
+                  <option value="sqm">{t('sizeUnits.sqm')}</option>
+                  <option value="dunam">{t('sizeUnits.dunam')}</option>
+                  <option value="sqft">{t('sizeUnits.sqft')}</option>
+                  <option value="sqyd">{t('sizeUnits.sqyd')}</option>
+                  <option value="feddan">{t('sizeUnits.feddan')}</option>
+                </select>
               </div>
+              <small style={{ 
+                fontSize: '11px', 
+                display: 'block', 
+                marginTop: '4px',
+                color: '#6c757d',
+                fontStyle: 'italic',
+                padding: '4px 8px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '4px',
+                border: '1px solid #e9ecef',
+                direction: locale === 'ar' ? 'rtl' : 'ltr',
+                textAlign: locale === 'ar' ? 'right' : 'left'
+              }}>
+                ⓘ {t('sizeUnitDefaultWarning')}
+              </small>
             </div>
 
             {/* Additional Details Row */}

@@ -1107,7 +1107,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   {t('size')}:<span>*</span>
                 </label>
                 <label htmlFor="sizeUnit" style={{ fontSize: '12px', marginLeft: '8px', color: '#6c757d', fontWeight: 'normal' }}>
-                  ({t('sizeUnits.sqm')} / {t('sizeUnits.dunam')} / {t('sizeUnits.sqft')} / {t('sizeUnits.sqyd')})
+                  ({t('sizeUnits.sqm')} / {t('sizeUnits.dunam')} / {t('sizeUnits.sqft')} / {t('sizeUnits.sqyd')} / {t('sizeUnits.feddan')})
                 </label>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
                   <input
@@ -1138,6 +1138,7 @@ export default function AddProperty({ isAdminMode = false }) {
                     <option value="dunam">{t('sizeUnits.dunam')}</option>
                     <option value="sqft">{t('sizeUnits.sqft')}</option>
                     <option value="sqyd">{t('sizeUnits.sqyd')}</option>
+                    <option value="feddan">{t('sizeUnits.feddan')}</option>
                   </select>
                 </div>
                 {errors.size && <span className="text-danger">{errors.size}</span>}

@@ -19,8 +19,8 @@ export default function Properties({ listings, isLoading, isError }) {
   
   // Helper function to get size unit label
   const getSizeUnitLabel = (sizeUnit) => {
-    if (!sizeUnit) return 'Sqft'; // Default fallback
-    return tAgent(`sizeUnits.${sizeUnit}`) || sizeUnit.toUpperCase();
+    if (!sizeUnit) return 'sqm'; // Default to sqm
+    return sizeUnit.toUpperCase(); // Return abbreviation: SQM, DUNAM, SQFT, SQYD, FEDDAN
   };
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
@@ -541,40 +541,42 @@ export default function Properties({ listings, isLoading, isError }) {
                 )}
               </div>
               
-              {/* Email Button */}
-              <button
-                onClick={() => window.open(`mailto:${getPropertyContactInfo(listing).email}?subject=Inquiry about ${listing.propertyType || 'Property'}`)}
-                style={{
-                  background: 'white',
-                  border: '1px solid #F97316',
-                  borderRadius: '8px',
-                  padding: '8px 12px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#F97316',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  transition: 'all 0.2s ease',
-                  minWidth: window.innerWidth <= 360 ? '100%' : '120px',
-                  justifyContent: 'center'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#F97316';
-                  e.target.style.color = 'white';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'white';
-                  e.target.style.color = '#F97316';
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                {t('common.email')}
-              </button>
+              {/* Email Button - Only show if email exists */}
+              {(listing.agentEmail || listing.agent?.email || listing.agentId?.email) && (
+                <button
+                  onClick={() => window.open(`mailto:${getPropertyContactInfo(listing).email}?subject=Inquiry about ${listing.propertyType || 'Property'}`)}
+                  style={{
+                    background: 'white',
+                    border: '1px solid #F97316',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: '#F97316',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    transition: 'all 0.2s ease',
+                    minWidth: window.innerWidth <= 360 ? '100%' : '120px',
+                    justifyContent: 'center'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#F97316';
+                    e.target.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'white';
+                    e.target.style.color = '#F97316';
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {t('common.email')}
+                </button>
+              )}
 
               {/* Details Button */}
               <button

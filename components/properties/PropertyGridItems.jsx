@@ -18,8 +18,8 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
   
   // Helper function to get size unit label
   const getSizeUnitLabel = (sizeUnit) => {
-    if (!sizeUnit) return 'Sqft'; // Default fallback
-    return tAgent(`sizeUnits.${sizeUnit}`) || sizeUnit.toUpperCase();
+    if (!sizeUnit) return 'sqm'; // Default to sqm
+    return sizeUnit.toUpperCase(); // Return abbreviation: SQM, DUNAM, SQFT, SQYD, FEDDAN
   };
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const [activeImageIndex, setActiveImageIndex] = useState({});
@@ -447,17 +447,19 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
                   )}
                 </div>
                 
-                {/* Email Button */}
-                <button
-                  className={styles.actionButton}
-                  onClick={() => window.open(`mailto:${getPropertyContactInfo(property).email}?subject=Inquiry about ${property.propertyTitle || t('common.property')}`)}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  {t('common.email')}
-                </button>
+                {/* Email Button - Only show if email exists */}
+                {(property.agentEmail || property.agent?.email || property.agentId?.email) && (
+                  <button
+                    className={styles.actionButton}
+                    onClick={() => window.open(`mailto:${getPropertyContactInfo(property).email}?subject=Inquiry about ${property.propertyTitle || t('common.property')}`)}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {t('common.email')}
+                  </button>
+                )}
 
                 {/* Details Button */}
                 <button

@@ -143,6 +143,29 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Properties by Admin */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.PROPERTIES_BY_ADMIN ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.PROPERTIES_BY_ADMIN);
+                        router.replace('/en/admin/properties-by-admin');
+                      }
+                    }}
+                  >
+                    <i className="icon-home" />
+                    <span>Properties by Admin</span>
+                  </button>
+                </li>
+
                 {/* Add Property */}
                 <li
                   className={`nav-menu-item ${

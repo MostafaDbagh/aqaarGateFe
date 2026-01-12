@@ -22,8 +22,8 @@ export default function Properties2() {
   
   // Helper function to get size unit label
   const getSizeUnitLabel = (sizeUnit) => {
-    if (!sizeUnit) return tCommon('sqft'); // Default fallback
-    return tAgent(`sizeUnits.${sizeUnit}`) || sizeUnit.toUpperCase();
+    if (!sizeUnit) return 'sqm'; // Default to sqm
+    return sizeUnit.toUpperCase(); // Return abbreviation: SQM, DUNAM, SQFT, SQYD, FEDDAN
   };
   // Use search endpoint to get ONLY Holiday Home properties
   const { data: searchResponse, isLoading, isError, error } = useSearchListings({ 
@@ -373,24 +373,24 @@ export default function Properties2() {
                                 
                               </span>
                             </button>
-                            <button 
-                              className={`${styles.actionTab} ${styles.emailTab}`}
-                              onClick={() => {
-                                const email = property.agentEmail || property.agent?.email;
-                                if (email) {
-                                  window.open(`mailto:${email}`, '_self');
-                                } else {
-                                  alert('Email not available');
-                                }
-                              }}
-                            >
-                              <i className="icon-mail" />
-                              <span>
-                                
-                                  {property.agentEmail || property.agent?.email || tCommon('emailAgent')}
-                                
-                              </span>
-                            </button>
+                            {(property.agentEmail || property.agent?.email || property.agentId?.email) && (
+                              <button 
+                                className={`${styles.actionTab} ${styles.emailTab}`}
+                                onClick={() => {
+                                  const email = property.agentEmail || property.agent?.email || property.agentId?.email;
+                                  if (email) {
+                                    window.open(`mailto:${email}`, '_self');
+                                  }
+                                }}
+                              >
+                                <i className="icon-mail" />
+                                <span>
+                                  
+                                    {property.agentEmail || property.agent?.email || property.agentId?.email || tCommon('emailAgent')}
+                                  
+                                </span>
+                              </button>
+                            )}
                           </div>
                         </div>
                         
