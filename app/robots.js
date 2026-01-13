@@ -48,6 +48,9 @@ export default function robots() {
           '/property-half-top-map',           // Internal component/page, not a real route
           '/agency-grid',                     // Internal component/page, not a real route
           '/agency-list',                     // Internal component/page, not a real route
+          
+          // Static files - prevent indexing
+          '/favicon.ico',                     // Site icon file, not a web page
         ],
         crawlDelay: 1,                        //
       },
@@ -74,7 +77,10 @@ export default function robots() {
           '/property-filter-popup-left',
           '/property-half-top-map',
           '/agency-grid',
-          '/agency-list'
+          '/agency-list',
+          
+          // Static files - prevent indexing
+          '/favicon.ico'
         ],
         crawlDelay: 0,                       
       }
