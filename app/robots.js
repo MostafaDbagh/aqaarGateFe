@@ -44,6 +44,7 @@ export default function robots() {
           
           // Non-existent pages discovered by Google - prevent indexing
           '/property-filter-popup',           // Internal component/page, not a real route
+          '/property-filter-popup-left',      // Internal component/page, not a real route
           '/property-half-top-map',           // Internal component/page, not a real route
           '/agency-grid',                     // Internal component/page, not a real route
           '/agency-list',                     // Internal component/page, not a real route
@@ -70,6 +71,7 @@ export default function robots() {
           '/private/',
           // Non-existent pages discovered by Google - prevent indexing
           '/property-filter-popup',
+          '/property-filter-popup-left',
           '/property-half-top-map',
           '/agency-grid',
           '/agency-list'

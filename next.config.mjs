@@ -155,6 +155,15 @@ const nextConfig = {
         { source: '/admin/dashboard', destination: '/admin/overview', permanent: true },
         { source: '/admin', destination: '/admin/overview', permanent: true },
         
+        // Invalid locale codes - redirect to Arabic locale
+        { source: '/ar-bh', destination: '/ar', permanent: true },
+        { source: '/ar-ae', destination: '/ar', permanent: true },
+        { source: '/ar-kw', destination: '/ar', permanent: true },
+        
+        // Non-existent pages - redirect to home
+        { source: '/compare', destination: '/', permanent: true },
+        { source: '/home-loan-process', destination: '/', permanent: true },
+        
         // 404 page redirect - removed to allow 404 page to work properly
         // { source: '/404', destination: '/', permanent: false },
       ];
