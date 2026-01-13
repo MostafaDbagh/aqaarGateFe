@@ -14,7 +14,8 @@
     /* Remove padding-left for admin pages */
     &.admin-add-property-page,
     &.admin-reviews-page,
-    &.admin-messages-page {
+    &.admin-messages-page,
+    &.admin-properties-by-admin-page {
       padding-left: 0 !important;
     }
   }
@@ -28,7 +29,8 @@
       
       &.admin-add-property-page,
       &.admin-reviews-page,
-      &.admin-messages-page {
+      &.admin-messages-page,
+      &.admin-properties-by-admin-page {
         padding-right: 0 !important;
       }
     }

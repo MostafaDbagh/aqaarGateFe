@@ -367,7 +367,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>Name:</span>
                         <span className={styles.infoValue}>
-                          {property.agentId.username || property.agentId.email || 'N/A'}
+                          {property.agentName || property.agentId?.username || property.agentId?.email || 'N/A'}
                         </span>
                       </div>
                       {property.agentId.email && (

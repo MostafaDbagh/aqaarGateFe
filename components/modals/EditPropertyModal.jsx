@@ -30,6 +30,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     propertyType: '',
     amenities: [],
     // Contact information (admin can edit)
+    agentName: '',
     agentEmail: '',
     agentNumber: '',
     agentWhatsapp: '',
@@ -116,6 +117,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       
       // Store original contact info to detect changes
       const originalContact = {
+        agentName: property.agentName || null,
         agentEmail: property.agentEmail || null,
         agentNumber: property.agentNumber || null,
         agentWhatsapp: property.agentWhatsapp || null
@@ -138,6 +140,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         propertyType: property.propertyType || '',
         amenities: property.amenities || [],
         // Contact information (load from property or use defaults for admin)
+        agentName: property.agentName || (currentIsAdmin ? (currentUser?.agentName || currentUser?.username || '') : ''),
         agentEmail: property.agentEmail || (currentIsAdmin ? 'admin@aqaargate.com' : ''),
         agentNumber: property.agentNumber || (currentIsAdmin ? (currentUser?.phone || '') : ''),
         agentWhatsapp: property.agentWhatsapp || (currentIsAdmin ? (currentUser?.phone || '') : ''),
@@ -219,6 +222,9 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         // NOTE: agent (legacy field) is NOT sent - it should never change
         // Only include contact fields if admin is editing AND values have changed
         ...(isAdmin && originalContactInfo ? {
+          ...(formData.agentName !== undefined && formData.agentName.trim() !== (originalContactInfo.agentName || '').trim() 
+            ? { agentName: formData.agentName.trim() || null } 
+            : {}),
           ...(formData.agentEmail !== undefined && formData.agentEmail.trim() !== (originalContactInfo.agentEmail || '').trim() 
             ? { agentEmail: formData.agentEmail.trim() || null } 
             : {}),
@@ -626,6 +632,26 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 </div>
                 
                 <div className={styles.gridThreeCols} style={{ gap: '15px' }}>
+                  <div>
+                    <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      Agent Name (اسم الوكيل): <span style={{ color: 'red' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="agentName"
+                      value={formData.agentName || ''}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      placeholder="Enter agent name"
+                      required
+                      onFocus={handleInputFocus}
+                      onBlur={handleInputBlur}
+                    />
+                    <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
+                      Required: Name of the agent or property owner
+                    </small>
+                  </div>
+                  
                   <div>
                     <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                       Contact Email (البريد الإلكتروني):

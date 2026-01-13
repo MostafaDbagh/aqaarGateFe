@@ -372,6 +372,29 @@ export default function Sidebar() {
                     <span>Messages</span>
                   </button>
                 </li>
+
+                {/* Create Admin */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.CREATE_ADMIN ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.CREATE_ADMIN);
+                        router.replace('/en/admin/create-admin');
+                      }
+                    }}
+                  >
+                    <UserIcon />
+                    <span>Create Admin</span>
+                  </button>
+                </li>
               </>
             ) : (
               <>

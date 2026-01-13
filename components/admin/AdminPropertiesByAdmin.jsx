@@ -11,7 +11,8 @@ import DropdownSelect from "../common/DropdownSelect";
 import { listingAPI } from "@/apis/listing";
 import logger from "@/utlis/logger";
 import styles from "../dashboard/Property.module.css";
-import adminStyles from "./AdminProperties.module.css";
+import DashboardFooter from "../common/DashboardFooter";
+import { EyeIcon } from "../icons/EyeIcon";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
 
@@ -100,13 +101,18 @@ export default function AdminPropertiesByAdmin() {
   const fetchListings = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
       const filters = {
         page: currentPage,
         limit: itemsPerPage
       };
       
       if (statusFilter !== 'All') {
-        filters.status = statusFilter.toLowerCase() === 'for sale' ? 'sale' : 'rent';
+        // Normalize status filter
+        filters.status = statusFilter.toLowerCase() === 'for sale' ? 'sale' : 
+                         statusFilter.toLowerCase() === 'for rent' ? 'rent' : 
+                         statusFilter.toLowerCase();
       }
       
       if (propertyTypeFilter !== 'All') {
@@ -117,17 +123,31 @@ export default function AdminPropertiesByAdmin() {
         filters.approvalStatus = approvalFilter.toLowerCase();
       }
       
-      if (searchTerm) {
-        filters.search = searchTerm;
+      if (searchTerm && searchTerm.trim()) {
+        filters.search = searchTerm.trim();
       }
       
       const response = await adminAPI.getPropertiesByAdmin(filters);
-      setListings(response.data || []);
-      setPagination(response.pagination);
-      setError(null);
+      
+      if (response && response.success !== false) {
+        setListings(response.data || []);
+        setPagination(response.pagination || {
+          page: currentPage,
+          limit: itemsPerPage,
+          total: response.data?.length || 0,
+          pages: 1
+        });
+      } else {
+        throw new Error(response?.message || 'Failed to load properties');
+      }
     } catch (err) {
-      setError(err.message || "Failed to load properties");
+      const errorMessage = err?.response?.data?.message || 
+                          err?.message || 
+                          "Failed to load properties";
+      setError(errorMessage);
       logger.error('Error fetching admin properties:', err);
+      setListings([]);
+      setPagination(null);
     } finally {
       setLoading(false);
     }
@@ -217,7 +237,7 @@ export default function AdminPropertiesByAdmin() {
       if (typeof firstImage === 'string') {
         return firstImage;
       }
-      return firstImage.url || firstImage.secure_url || firstImage.path || '/images/default-property.jpg';
+      return firstImage.url || firstImage.secure_url || firstImage.path || '/images/section/property-1.jpg';
     }
     if (listing.imageNames && listing.imageNames.length > 0) {
       return listing.imageNames[0];
@@ -228,7 +248,17 @@ export default function AdminPropertiesByAdmin() {
     if (listing.featuredImage) {
       return listing.featuredImage;
     }
-    return '/images/default-property.jpg';
+    return '/images/section/property-1.jpg';
+  };
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   // Use listings directly from API (server-side filtering)
@@ -245,91 +275,163 @@ export default function AdminPropertiesByAdmin() {
     setCurrentPage(1);
   }, [statusFilter, propertyTypeFilter, approvalFilter, searchTerm]);
 
+  // Pagination handlers
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+    
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+      }
+    }
+    
+    return pages;
+  };
+
   return (
-    <div className={adminStyles.container}>
+    <div className="main-content w-100 admin-properties-by-admin-page">
       <div className="main-content-inner wrap-dashboard-content">
         <div className="button-show-hide show-mb">
           <span className="body-1">{t('showDashboard')}</span>
         </div>
-        <div className={adminStyles.filters}>
-          <div className={adminStyles.filterGroup}>
-            <select
-              className={adminStyles.selectInput}
-              value={approvalFilter === 'All' ? '' : approvalFilter.toLowerCase()}
-              onChange={(e) => setApprovalFilter(e.target.value === '' ? 'All' : e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
-            >
-              <option value="">All Approval Status</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="closed">Closed</option>
-            </select>
+        <div className="row">
+          <div className="col-md-2">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <fieldset className="box-fieldset">
+                <label>
+                  {" "}
+                  {t('approvalStatus')}:<span>*</span>{" "}
+                </label>
+                <DropdownSelect
+                  options={[t('all'), t('pending'), t('approved'), t('rejected'), t('closed')]}
+                  addtionalParentClass=""
+                  onChange={(value) => {
+                    if (value === t('all')) setApprovalFilter('All');
+                    else if (value === t('pending')) setApprovalFilter('Pending');
+                    else if (value === t('approved')) setApprovalFilter('Approved');
+                    else if (value === t('rejected')) setApprovalFilter('Rejected');
+                    else if (value === t('closed')) setApprovalFilter('Closed');
+                  }}
+                  translateOption={(option) => {
+                    if (option === 'All') return t('all');
+                    if (option === 'Pending') return t('pending');
+                    if (option === 'Approved') return t('approved');
+                    if (option === 'Rejected') return t('rejected');
+                    if (option === 'Closed') return t('closed');
+                    return option;
+                  }}
+                />
+              </fieldset>
+            </form>
           </div>
-          <div className={adminStyles.filterGroup}>
-            <select
-              className={adminStyles.selectInput}
-              value={statusFilter === 'All' ? '' : statusFilter.toLowerCase() === 'for sale' ? 'sale' : 'rent'}
-              onChange={(e) => setStatusFilter(e.target.value === '' ? 'All' : e.target.value === 'sale' ? 'For Sale' : 'For Rent')}
-            >
-              <option value="">All Status</option>
-              <option value="sale">For Sale</option>
-              <option value="rent">For Rent</option>
-            </select>
+          <div className="col-md-2">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <fieldset className="box-fieldset">
+                <label>
+                  {" "}
+                  {t('status')}:<span>*</span>{" "}
+                </label>
+                <DropdownSelect
+                  options={[t('all'), t('forSale'), t('forRent')]}
+                  addtionalParentClass=""
+                  onChange={(value) => setStatusFilter(value === t('all') ? 'All' : value === t('forSale') ? 'For Sale' : 'For Rent')}
+                  translateOption={(option) => {
+                    if (option === 'All') return t('all');
+                    if (option === 'For Sale') return t('forSale');
+                    if (option === 'For Rent') return t('forRent');
+                    return option;
+                  }}
+                />
+              </fieldset>
+            </form>
           </div>
-          <div className={adminStyles.filterGroup}>
-            <select
-              className={adminStyles.selectInput}
-              value={propertyTypeFilter === 'All' ? '' : propertyTypeFilter}
-              onChange={(e) => setPropertyTypeFilter(e.target.value === '' ? 'All' : e.target.value)}
-            >
-              <option value="">All Property Types</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Villa">Villa</option>
-              <option value="Holiday Home">Holiday Home</option>
-              <option value="Office">Office</option>
-              <option value="Townhouse">Townhouse</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Land">Land</option>
-            </select>
+          <div className="col-md-2">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <fieldset className="box-fieldset">
+                <label>
+                  {" "}
+                  {t('propertyType')}:<span>*</span>{" "}
+                </label>
+                <DropdownSelect
+                  options={["All", "Apartment", "Villa", "Holiday Home", "Office", "Townhouse", "Commercial", "Land"]}
+                  addtionalParentClass=""
+                  onChange={(value) => setPropertyTypeFilter(value)}
+                  translateOption={(option) => {
+                    if (option === 'All') return t('all');
+                    return translatePropertyType(option);
+                  }}
+                />
+              </fieldset>
+            </form>
           </div>
-          <div className={adminStyles.filterGroup}>
-            <input
-              type="text"
-              className={adminStyles.searchInput}
-              placeholder={t('searchPlaceholder')}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="col-md-6">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <fieldset className="box-fieldset">
+                <label>
+                  {" "}
+                  {t('search')}:<span>*</span>{" "}
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder={t('searchPlaceholder')}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </fieldset>
+            </form>
           </div>
         </div>
-        <div style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
-          <h1 className={adminStyles.title}>
+        <div className="widget-box-2 wd-listing mt-20" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+          <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
             Properties by Admin
             {totalListings > 0 && (
-              <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: locale === 'ar' ? '0' : '10px', marginRight: locale === 'ar' ? '10px' : '0', color: '#6b7280' }}>
+              <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: locale === 'ar' ? '0' : '10px', marginRight: locale === 'ar' ? '10px' : '0' }}>
                 ({totalListings} {t('total')} - {t('showing')} {startIndex + 1}-{endIndex})
               </span>
             )}
-          </h1>
-          <div className={adminStyles.tableContainer}>
+          </h3>
+          <div className="wrap-table">
             <div className="table-responsive">
               {loading ? (
-                <div className={adminStyles.loaderContainer}>
+                <div style={{ padding: '40px', textAlign: 'center' }}>
                   <LocationLoader 
                     size="medium" 
                     message={t('loading')}
                   />
                 </div>
               ) : error ? (
-                <div className={adminStyles.error}>
+                <div style={{ padding: '40px', textAlign: 'center', color: '#dc3545' }}>
                   <p>{error}</p>
                 </div>
               ) : displayListings.length === 0 ? (
-                <div className={adminStyles.noData}>
+                <div style={{ padding: '40px', textAlign: 'center' }}>
                   <p>{t('noProperties')}</p>
                 </div>
               ) : (
-                <table className={adminStyles.table} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                <table style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
                   <thead>
                     <tr>
                       <th style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('listing')}</th>
@@ -411,7 +513,10 @@ export default function AdminPropertiesByAdmin() {
                                           borderRadius: '20px',
                                           fontSize: '12px',
                                           color: '#333',
-                                          fontWeight: '500'
+                                          fontWeight: '500',
+                                          direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                          textAlign: 'center',
+                                          whiteSpace: 'nowrap'
                                         }}
                                       >
                                         {translatedKeyword}
@@ -420,92 +525,129 @@ export default function AdminPropertiesByAdmin() {
                                   })}
                                 </div>
                               )}
-                              <p className="location text-1 flex items-center gap-6">
-                                <i className="icon-location" /> {listing.city || listing.state || 'Location not specified'}
-                              </p>
-                              <ul className="meta-list flex" style={{ gap: '24px' }}>
-                                {listing.bedrooms != null && Number(listing.bedrooms) > 0 && (
-                                  <li className="text-1 flex items-center">
-                                    <i className="icon-bed" style={{ margin: '0 2px' }} />
-                                    <span>{listing.bedrooms}</span>
-                                  </li>
-                                )}
-                                {listing.bathrooms != null && Number(listing.bathrooms) > 0 && (
-                                  <li className="text-1 flex items-center">
-                                    <i className="icon-bath" style={{ margin: '0 2px' }} />
-                                    <span>{listing.bathrooms}</span>
-                                  </li>
-                                )}
-                                <li className="text-1 flex items-center">
-                                  <i className="icon-sqft" style={{ margin: '0 2px' }} />
-                                  <span>{listing.size || 0}</span> {getSizeUnitLabel(listing.sizeUnit)}
-                                </li>
-                              </ul>
-                              <div className="bot flex justify-between items-center">
-                                <h5 className="price">
-                                  {(() => {
-                                    const currencySymbols = {
-                                      'USD': '$',
-                                      'SYP': 'SYP',
-                                      'TRY': '₺',
-                                      'EUR': '€'
-                                    };
-                                    const currency = listing?.currency || 'USD';
-                                    const symbol = currencySymbols[currency] || currency;
-                                    const exactPrice = listing.propertyPrice;
-                                    if (exactPrice === null || exactPrice === undefined) {
-                                      return `${symbol}0`;
-                                    }
-                                    const basePrice = `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
-                                    
-                                    const statusToCheck = listing?.statusOriginal || listing?.status || '';
-                                    const statusLower = statusToCheck.toLowerCase().trim();
-                                    const isRent = statusLower === 'rent' || statusLower === 'for rent' || statusLower.includes('rent');
-                                    if (isRent) {
-                                      const rentTypeValue = listing?.rentType || listing?.rent_type || null;
-                                      const rentType = (rentTypeValue && rentTypeValue !== null && rentTypeValue !== undefined && rentTypeValue !== '') 
-                                        ? String(rentTypeValue).toLowerCase().trim()
-                                        : 'monthly';
-                                      
-                                      const rentTypeMap = {
-                                        'monthly': tCommon('monthly'),
-                                        'weekly': tCommon('weekly'),
-                                        'yearly': tCommon('yearly'),
-                                        'daily': tCommon('daily')
-                                      };
-                                      const rentPeriod = rentTypeMap[rentType] || tCommon('monthly');
-                                      return (
-                                        <>
-                                          {basePrice}
-                                          <span>{rentPeriod}</span>
-                                        </>
-                                      );
-                                    }
-                                    
-                                    return basePrice;
-                                  })()}
-                                </h5>
+                              <div className="text-date" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                {t('postingDate')}: {formatDate(listing.createdAt)}
+                              </div>
+                              <div className="text-1 text-color-3" style={{ textAlign: locale === 'ar' ? 'right' : 'left', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                                {locale === 'ar' && listing.address_ar ? listing.address_ar : listing.address}
+                              </div>
+                              <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                ${listing.propertyPrice?.toLocaleString()}
+                                {((listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') && listing.rentType) && ` / ${listing.rentType}`}
+                              </div>
+                              
+                              {/* Info Tags - ID and Views */}
+                              <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                marginTop: '12px',
+                                flexWrap: 'wrap',
+                                justifyContent: locale === 'ar' ? 'flex-end' : 'flex-start'
+                              }}>
+                                {/* Property ID Tag */}
+                                <div style={{
+                                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                  color: 'white',
+                                  padding: '5px 12px',
+                                  borderRadius: '16px',
+                                  fontSize: '10px',
+                                  fontWeight: '700',
+                                  fontFamily: 'monospace',
+                                  letterSpacing: '0.5px',
+                                  textTransform: 'uppercase',
+                                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.4)',
+                                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                                }}>
+                                  ID: {listing.propertyId || listing._id.substring(0, 8).toUpperCase()}
+                                </div>
+                                
+                                {/* Views Count */}
+                                <div style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  background: '#c3c3c3',
+                                  color: 'black',
+                                  padding: '5px 12px',
+                                  borderRadius: '16px',
+                                  fontSize: '11px',
+                                  fontWeight: '600',
+                                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                                }}>
+                                  <EyeIcon 
+                                    width={14} 
+                                    height={14} 
+                                    stroke="#333"
+                                    fill="none"
+                                    style={{ flexShrink: 0 }}
+                                  />
+                                  <span>{listing.visitCount || 0} {t('views')}</span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </td>
                         <td>
-                          {(() => {
-                            const status = listing.approvalStatus?.toLowerCase() || 'pending';
-                            let badgeClass = adminStyles.badgeDefault;
-                            if (status === 'approved') badgeClass = adminStyles.badgeApproved;
-                            else if (status === 'pending') badgeClass = adminStyles.badgePending;
-                            else if (status === 'rejected') badgeClass = adminStyles.badgeRejected;
-                            else if (status === 'closed') badgeClass = adminStyles.badgeClosed;
-                            return (
-                              <span className={`${adminStyles.badge} ${badgeClass}`}>
-                                {listing.approvalStatus || 'Pending'}
-                              </span>
-                            );
-                          })()}
+                          <div className="status-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+                            {(() => {
+                              const normalizedStatus = listing.status?.toLowerCase() || '';
+                              const isSale = normalizedStatus === 'sale' || normalizedStatus === 'for sale';
+                              const isRent = normalizedStatus === 'rent' || normalizedStatus === 'for rent';
+                              return (
+                                <span className="btn-status" style={{
+                                  background: listing.isSold ? '#dc3545' : isSale ? '#00b14f' : '#007bff',
+                                  color: 'white',
+                                  padding: '8px',
+                                  height: '40px',
+                                  minWidth: '80px',
+                                  borderRadius: '8px',
+                                  fontSize: '12px',
+                                  fontWeight: '600',
+                                  textAlign: 'center',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.5px',
+                                  border: 'none',
+                                  outline: 'none',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                                }}>
+                                  {listing.isSold ? t('sold') : isSale ? t('forSale') : t('forRent')}
+                                </span>
+                              );
+                            })()}
+                            <span className="btn-status" style={{
+                              background: 
+                                (listing.approvalStatus?.toLowerCase()) === 'pending' ? '#ff9500' : 
+                                (listing.approvalStatus?.toLowerCase()) === 'approved' ? '#00b14f' : 
+                                (listing.approvalStatus?.toLowerCase()) === 'closed' ? '#6c757d' : 
+                                (listing.approvalStatus?.toLowerCase()) === 'rejected' ? '#dc3545' : '#ff9500',
+                              color: 'white',
+                              padding: '8px',
+                              height: '40px',
+                              minWidth: '80px',
+                              borderRadius: '8px',
+                              fontSize: '12px',
+                              fontWeight: '600',
+                              textAlign: 'center',
+                              textTransform: 'capitalize',
+                              letterSpacing: '0.3px',
+                              border: 'none',
+                              outline: 'none',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}>
+                              {(listing.approvalStatus?.toLowerCase()) === 'pending' ? `⏳ ${t('pending')}` : 
+                               (listing.approvalStatus?.toLowerCase()) === 'approved' ? `✓ ${t('approved')}` :
+                               (listing.approvalStatus?.toLowerCase()) === 'closed' ? `🔒 ${t('closed')}` : 
+                               (listing.approvalStatus?.toLowerCase()) === 'rejected' ? `❌ ${t('rejected')}` : `⏳ ${t('pending')}`}
+                            </span>
+                          </div>
                         </td>
                         <td>
-                          <ul className="action-list flex">
+                          <ul className="list-action" style={{ justifyContent: 'center', direction: 'ltr' }}>
                             <li>
                               <button 
                                 onClick={() => handleEditProperty(listing)} 
@@ -522,8 +664,18 @@ export default function AdminPropertiesByAdmin() {
                                 }}
                                 title={t('edit')}
                               >
-                                <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M11.3333 2.00002C11.5084 1.82491 11.7163 1.68601 11.9444 1.5913C12.1726 1.49659 12.4163 1.44824 12.6622 1.44824C12.9081 1.44824 13.1518 1.49659 13.38 1.5913C13.6081 1.68601 13.816 1.82491 13.9911 2.00002C14.1662 2.17513 14.3051 2.38307 14.3998 2.61122C14.4945 2.83938 14.5429 3.08305 14.5429 3.32891C14.5429 3.57477 14.4945 3.81844 14.3998 4.04659C14.3051 4.27475 14.1662 4.48269 13.9911 4.6578L5.32444 13.3245L1.33331 14.6667L2.67553 10.6755L11.3333 2.00002Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+                                <svg width={16}
+                                  height={16}
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                 aria-hidden="true">
+                                  <path
+                                    d="M11.2413 2.9915L12.366 1.86616C12.6005 1.63171 12.9184 1.5 13.25 1.5C13.5816 1.5 13.8995 1.63171 14.134 1.86616C14.3685 2.10062 14.5002 2.4186 14.5002 2.75016C14.5002 3.08173 14.3685 3.39971 14.134 3.63416L4.55467 13.2135C4.20222 13.5657 3.76758 13.8246 3.29 13.9668L1.5 14.5002L2.03333 12.7102C2.17552 12.2326 2.43442 11.7979 2.78667 11.4455L11.242 2.9915H11.2413ZM11.2413 2.9915L13 4.75016"
+                                    stroke="#A3ABB0"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
                                 </svg>
                                 {t('edit')}
                               </button>
@@ -545,8 +697,18 @@ export default function AdminPropertiesByAdmin() {
                                 }}
                                 title={listing.isSold ? t('unmarkAsSold') : t('markAsSold')}
                               >
-                                <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                  <path d="M12.2427 12.2427C13.3679 11.1175 14.0001 9.59135 14.0001 8.00004C14.0001 6.40873 13.3679 4.8826 12.2427 3.75737C11.1175 2.63214 9.59135 2 8.00004 2C6.40873 2 4.8826 2.63214 3.75737 3.75737M12.2427 12.2427C11.1175 13.3679 9.59135 14.0001 8.00004 14.0001C6.40873 14.0001 4.8826 13.3679 3.75737 12.2427C2.63214 11.1175 2 9.59135 2 8.00004C2 6.40873 2.63214 4.8826 3.75737 3.75737M12.2427 12.2427L3.75737 3.75737" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+                                <svg width={16}
+                                  height={16}
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                 aria-hidden="true">
+                                  <path
+                                    d="M12.2427 12.2427C13.3679 11.1175 14.0001 9.59135 14.0001 8.00004C14.0001 6.40873 13.3679 4.8826 12.2427 3.75737C11.1175 2.63214 9.59135 2 8.00004 2C6.40873 2 4.8826 2.63214 3.75737 3.75737M12.2427 12.2427C11.1175 13.3679 9.59135 14.0001 8.00004 14.0001C6.40873 14.0001 4.8826 13.3679 3.75737 12.2427C2.63214 11.1175 2 9.59135 2 8.00004C2 6.40873 2.63214 4.8826 3.75737 3.75737M12.2427 12.2427L3.75737 3.75737"
+                                    stroke={listing.isSold ? '#ff6b35' : '#A3ABB0'}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
                                 </svg>
                                 {listing.isSold ? t('unmarkAsSold') : t('markAsSold')}
                               </button>
@@ -567,8 +729,18 @@ export default function AdminPropertiesByAdmin() {
                                 }}
                                 title={t('delete')}
                               >
-                                <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                  <path d="M9.82667 6.00035L9.596 12.0003M6.404 12.0003L6.17333 6.00035M12.8187 3.86035C13.0467 3.89501 13.2733 3.93168 13.5 3.97101M12.8187 3.86035L12.1067 13.1157C12.0776 13.4925 11.9074 13.8445 11.63 14.1012C11.3527 14.3579 10.9886 14.5005 10.6107 14.5003H5.38933C5.0114 14.5005 4.64735 14.3579 4.36999 14.1012C4.09262 13.8445 3.92239 13.4925 3.89333 13.1157L3.18133 3.86035M12.8187 3.86035C12.0492 3.74403 11.2758 3.65574 10.5 3.59568M3.18133 3.86035C2.95333 3.89435 2.72667 3.93101 2.5 3.97035M3.18133 3.86035C3.95076 3.74403 4.72416 3.65575 5.5 3.59568M10.5 3.59568V2.98501C10.5 2.19835 9.89333 1.54235 9.10667 1.51768C8.36908 1.49411 7.63092 1.49411 6.89333 1.51768C6.10667 1.54235 5.5 2.19901 5.5 2.98501V3.59568M10.5 3.59568C8.83581 3.46707 7.16419 3.46707 5.5 3.59568" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+                                <svg width={16}
+                                  height={16}
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                 aria-hidden="true">
+                                  <path
+                                    d="M9.82667 6.00035L9.596 12.0003M6.404 12.0003L6.17333 6.00035M12.8187 3.86035C13.0467 3.89501 13.2733 3.93168 13.5 3.97101M12.8187 3.86035L12.1067 13.1157C12.0776 13.4925 11.9074 13.8445 11.63 14.1012C11.3527 14.3579 10.9886 14.5005 10.6107 14.5003H5.38933C5.0114 14.5005 4.64735 14.3579 4.36999 14.1012C4.09262 13.8445 3.92239 13.4925 3.89333 13.1157L3.18133 3.86035M12.8187 3.86035C12.0492 3.74403 11.2758 3.65574 10.5 3.59568M3.18133 3.86035C2.95333 3.89435 2.72667 3.93101 2.5 3.97035M3.18133 3.86035C3.95076 3.74403 4.72416 3.65575 5.5 3.59568M10.5 3.59568V2.98501C10.5 2.19835 9.89333 1.54235 9.10667 1.51768C8.36908 1.49411 7.63092 1.49411 6.89333 1.51768C6.10667 1.54235 5.5 2.19901 5.5 2.98501V3.59568M10.5 3.59568C8.83581 3.46707 7.16419 3.46707 5.5 3.59568"
+                                    stroke="#A3ABB0"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
                                 </svg>
                                 {t('delete')}
                               </button>
@@ -582,31 +754,75 @@ export default function AdminPropertiesByAdmin() {
               )}
             </div>
             
-            {/* Pagination */}
-            {!loading && !error && pagination && pagination.pages > 1 && (
-              <div className={adminStyles.pagination}>
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                  className={adminStyles.pageBtn}
-                >
-                  {t('previous')}
-                </button>
-                <span className={adminStyles.pageInfo}>
-                  {t('page')} {pagination.page} {t('of')} {pagination.pages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage(prev => prev + 1)}
-                  disabled={currentPage >= pagination.pages}
-                  className={adminStyles.pageBtn}
-                >
-                  {t('next')}
-                </button>
-              </div>
+            {/* Pagination - Keep numbers in English and LTR direction for both languages */}
+            {!loading && !error && displayListings.length > 0 && pagination && pagination.pages > 1 && (
+              <ul 
+                className="wg-pagination" 
+                style={{ 
+                  marginTop: '20px',
+                  direction: 'ltr', // Force LTR for pagination in both languages
+                  textAlign: 'left' // Keep left alignment
+                }}
+              >
+                <li className={`arrow ${currentPage === 1 ? 'disabled' : ''}`}>
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) handlePrevPage();
+                    }}
+                    style={{ 
+                      cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                      opacity: currentPage === 1 ? 0.5 : 1
+                    }}
+                  >
+                    <i className="icon-arrow-left" />
+                  </a>
+                </li>
+                
+                {getPageNumbers().map((page, index) => (
+                  <li key={index} className={currentPage === page ? 'active' : ''}>
+                    {page === '...' ? (
+                      <span style={{ padding: '0 10px' }}>...</span>
+                    ) : (
+                      <a 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePageClick(page);
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {page}
+                      </a>
+                    )}
+                  </li>
+                ))}
+                
+                <li className={`arrow ${currentPage >= totalPages ? 'disabled' : ''}`}>
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) handleNextPage();
+                    }}
+                    style={{ 
+                      cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+                      opacity: currentPage >= totalPages ? 0.5 : 1
+                    }}
+                  >
+                    <i className="icon-arrow-right" />
+                  </a>
+                </li>
+              </ul>
             )}
           </div>
         </div>
+        {/* .footer-dashboard */}
+        <DashboardFooter />
+        {/* .footer-dashboard */}
       </div>
+      <div className="overlay-dashboard" />
 
       {/* Edit Property Modal */}
       {editModalOpen && selectedProperty && (

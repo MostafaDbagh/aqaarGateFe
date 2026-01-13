@@ -13,6 +13,7 @@ import AdminRentalServices from "./AdminRentalServices";
 import AdminContacts from "./AdminContacts";
 import AdminReviews from "./AdminReviews";
 import AdminMessages from "./AdminMessages";
+import AdminCreateAdmin from "./AdminCreateAdmin";
 
 export const TABS = {
   OVERVIEW: 'overview',
@@ -27,7 +28,8 @@ export const TABS = {
   RENTAL_SERVICES: 'rental-services',
   CONTACTS: 'contacts',
   REVIEWS: 'reviews',
-  MESSAGES: 'messages'
+  MESSAGES: 'messages',
+  CREATE_ADMIN: 'create-admin'
 };
 
 export const AdminTabContext = createContext(null);
@@ -75,6 +77,8 @@ export default function AdminDashboardMain() {
         tabToSet = TABS.REVIEWS;
       } else if (normalizedPath.includes('/admin/messages')) {
         tabToSet = TABS.MESSAGES;
+      } else if (normalizedPath.includes('/admin/create-admin')) {
+        tabToSet = TABS.CREATE_ADMIN;
       } else if (normalizedPath.includes('/admin/overview')) {
         tabToSet = TABS.OVERVIEW;
       }
@@ -116,6 +120,8 @@ export default function AdminDashboardMain() {
         return <AdminReviews />;
       case TABS.MESSAGES:
         return <AdminMessages />;
+      case TABS.CREATE_ADMIN:
+        return <AdminCreateAdmin />;
       default:
         return <AdminDashboard />;
     }

@@ -73,6 +73,7 @@ export default function AddProperty({ isAdminMode = false }) {
     neighborhood: "Downtown",
     agent: "",
     agentId: "",
+    agentName: "", // Agent name (admin can specify when posting on behalf of others)
     agentEmail: "", // Contact email (admin can change this)
     agentNumber: "", // Contact phone (admin can change this)
     agentWhatsapp: "", // Contact WhatsApp (admin can change this)
@@ -168,6 +169,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 ...prev,
                 agent: 'admin@aqaargate.com',
                 agentId: finalUserData._id,
+                agentName: finalUserData.agentName || finalUserData.username || '',
                 agentEmail: 'admin@aqaargate.com',
                 agentNumber: finalUserData.phone || '',
                 agentWhatsapp: finalUserData.phone || ''
@@ -198,6 +200,7 @@ export default function AddProperty({ isAdminMode = false }) {
           ...prev,
           agent: 'admin@aqaargate.com',
           agentId: userData._id,
+          agentName: userData.agentName || userData.username || '',
           agentEmail: 'admin@aqaargate.com',
           agentNumber: userData.phone || '',
           agentWhatsapp: userData.phone || ''
@@ -472,6 +475,11 @@ export default function AddProperty({ isAdminMode = false }) {
     
     // Admin contact information validation
     if (isAdminMode && user?.role === 'admin') {
+      // Agent name is required for admin
+      if (!formData.agentName || formData.agentName.trim() === '') {
+        newErrors.agentName = "Agent name is required";
+      }
+      
       // Email is optional - only validate format if provided
       if (formData.agentEmail && formData.agentEmail.trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.agentEmail)) {
         newErrors.agentEmail = "Please enter a valid email address";
@@ -583,6 +591,9 @@ export default function AddProperty({ isAdminMode = false }) {
         // Auto-embed agent contact info from user profile
         // For admin: use formData values if provided, otherwise use admin defaults
         // For regular users: ALWAYS use their profile info (cannot change)
+        agentName: isAdminMode && user?.role === 'admin'
+          ? (formData.agentName && formData.agentName.trim() !== '' ? formData.agentName.trim() : null)
+          : (user?.agentName || user?.username || ""), // Regular users: use their agentName or username
         agentEmail: isAdminMode && user?.role === 'admin' 
           ? (formData.agentEmail && formData.agentEmail.trim() !== '' ? formData.agentEmail.trim() : null)
           : (user?.email || ""), // Regular users: always use their email
@@ -1372,6 +1383,29 @@ export default function AddProperty({ isAdminMode = false }) {
                 </div>
                 
                 <div className="box grid-layout-3 gap-30">
+                  <fieldset className="box-fieldset">
+                    <label htmlFor="agentName">
+                      Agent Name (اسم الوكيل) <span className="text-danger">*</span>:
+                    </label>
+                    <input
+                      type="text"
+                      name="agentName"
+                      className={`form-control ${errors.agentName ? 'is-invalid' : ''}`}
+                      placeholder="Enter agent name"
+                      value={formData.agentName || ''}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    {errors.agentName && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {errors.agentName}
+                      </span>
+                    )}
+                    <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                      Required: Name of the agent or property owner
+                    </small>
+                  </fieldset>
+                  
                   <fieldset className="box-fieldset">
                     <label htmlFor="agentEmail">
                       Contact Email (البريد الإلكتروني):
