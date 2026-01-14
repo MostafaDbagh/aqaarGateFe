@@ -22,10 +22,20 @@ export default function AdminPropertiesByAdmin() {
   const tCommon = useTranslations('common');
   const locale = useLocale();
 
-  // Helper function to get size unit label - return abbreviations
+  // Helper function to get size unit label
   const getSizeUnitLabel = (sizeUnit) => {
-    if (!sizeUnit) return 'sqm'; // Default to sqm
-    return sizeUnit.toUpperCase(); // Return abbreviation: SQM, DUNAM, SQFT, SQYD, FEDDAN
+    if (!sizeUnit) return locale === 'ar' ? tCommon('sqm') : 'SQM';
+    const unit = sizeUnit.toLowerCase();
+    // Map size units to translation keys
+    const unitMap = {
+      'sqm': 'sqm',
+      'dunam': 'dunam',
+      'feddan': 'feddan',
+      'sqft': 'sqft',
+      'sqyd': 'sqyd'
+    };
+    const translationKey = unitMap[unit] || 'sqm';
+    return tCommon(translationKey);
   };
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);

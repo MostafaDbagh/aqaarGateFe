@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 export default function Cities() {
   const router = useRouter();
   const t = useTranslations('homeSections');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   
   // Use new city API - much more efficient than fetching all listings
@@ -38,13 +39,13 @@ export default function Cities() {
       .map((city, index) => ({
         id: index + 1,
         city: city.city || city.displayName,
-        properties: `${city.count} Property${city.count !== 1 ? 's' : ''}`,
+        properties: `${city.count} ${city.count !== 1 ? tCommon('properties') : tCommon('property')}`,
         imageSrc: city.imageSrc || '/images/cities/Deir ez-ur.jpg',
         alt: city.city || city.displayName,
         width: 400,
         height: 350
       }));
-  }, [citiesData]);
+  }, [citiesData, tCommon]);
 
   // Handle city button click - scroll to properties and trigger search
   const handleCityClick = (e, cityName) => {
@@ -132,7 +133,17 @@ export default function Cities() {
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
           font-weight: 700 !important;
           line-height: 1.2;
-          direction: ltr !important;
+        }
+        
+        /* RTL support - align text to right for Arabic */
+        html[dir="rtl"] .city-title,
+        [dir="rtl"] .city-title {
+          text-align: right !important;
+        }
+        
+        /* LTR support - align text to left for English */
+        html[dir="ltr"] .city-title,
+        [dir="ltr"] .city-title {
           text-align: left !important;
         }
         
@@ -271,7 +282,7 @@ export default function Cities() {
               {t('exploreSyriaCitiesSubtitle')}
             </p>
           </div>
-          <div className="row g-4">
+          <div className="row g-4" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
             {locations.slice(0, 9).map((location) => (
               <div key={location.id} className="col-lg-4 col-md-6 col-sm-6">
                 <div 
@@ -279,7 +290,7 @@ export default function Cities() {
                   onClick={(e) => handleCityClick(e, location.city)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="image-wrap position-relative overflow-hidden rounded-3 ariirirriri" style={{height:'100% !important'}}>
+                  <div className="image-wrap position-relative overflow-hidden rounded-3" style={{height:'100% !important'}}>
                     <Image
                       className="city-image"
                       alt={location.alt}
@@ -297,8 +308,8 @@ export default function Cities() {
                     <div className="city-overlay"></div>
                   </div>
                   <div className="city-content position-absolute bottom-0 start-0 end-0 p-4">
-                    <h4 className="text-white mb-3 fw-bold city-title" dir="ltr">{location.city}</h4>
-                    <div className="d-flex align-items-center justify-content-between">
+                    <h4 className="text-white mb-3 fw-bold city-title" dir={locale === 'ar' ? 'rtl' : 'ltr'}>{location.city}</h4>
+                    <div className="d-flex align-items-center justify-content-between" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                       <span 
                         className="city-count" 
                         onClick={(e) => handleCityClick(e, location.city)}
@@ -306,13 +317,7 @@ export default function Cities() {
                       >
                         {location.properties}
                       </span>
-                      <a
-                        href="#"
-                        className="text-1 tf-btn style-border pd-23 text_white city-btn"
-                        onClick={(e) => handleCityClick(e, location.city)}
-                      >
-                        {location.properties} <i className="icon-arrow-right" />
-                      </a>
+               
                     </div>
                   </div>
                 </div>

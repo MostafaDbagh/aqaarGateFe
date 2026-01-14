@@ -17,6 +17,7 @@ export default function Categories({
   setCategory
 }) {
   const t = useTranslations('homeSections');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   
   // Use new category API - much more efficient than fetching all listings
@@ -140,7 +141,9 @@ export default function Categories({
                             <CircularLoader size="small" />
                           </div>
                         ) : (
-                          <span>{category.count} Property{category.count !== 1 ? 's' : ''}</span>
+                          <span>
+                            {category.count} {category.count !== 1 ? tCommon('properties') : tCommon('property')}
+                          </span>
                         )}
                       </div>
                     </div>

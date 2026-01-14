@@ -660,6 +660,15 @@ html[dir="rtl"] .checkbox-item,
     left: unset;
     right: 24px;
   }
+
+  // RTL support: badges/tags should start from the right in Arabic
+  html[dir="rtl"] &,
+  [dir="rtl"] & {
+    .box-tag {
+      left: auto !important;
+      right: 8px !important;
+    }
+  }
   .list-btn {
     z-index: 2;
     position: absolute;
