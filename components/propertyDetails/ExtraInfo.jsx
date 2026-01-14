@@ -110,7 +110,7 @@ export default function ExtraInfo({ property }) {
             <p className="fw-6">{t('landArea')}</p>
             <p>{property?.landArea ? `${property.landArea} ${getSizeUnitLabel(property?.sizeUnit)}` : 'N/A'}</p>
           </li>
-          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
             <li className="flex">
               <p className="fw-6">{t('yearBuilt')}</p>
               <p>{property?.yearBuilt || 'N/A'}</p>

@@ -215,7 +215,7 @@ export default function PropertyOverview({ property }) {
           </ul>
         </div>
       </div>
-      <div className="info-detail" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '30px', marginBottom: '40px' }}>
+      <div className={`info-detail ${styles.infoDetailGrid}`}>
         <div className="wrap-box">
           <div className="box-icon">
             <div className="icons">
@@ -262,7 +262,6 @@ export default function PropertyOverview({ property }) {
               </div>
             </div>
           )}
-          <div className="wrap-box">
           {property?.floor !== undefined && property?.floor !== null && (
             <div className="box-icon">
               <div className="icons">
@@ -274,9 +273,6 @@ export default function PropertyOverview({ property }) {
               </div>
             </div>
           )}
-   
-   
-        </div>
         </div>
         <div className="wrap-box">
           <div className="box-icon">
@@ -324,7 +320,7 @@ export default function PropertyOverview({ property }) {
               </div>
             </div>
           )}
-          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
             <div className="box-icon">
               <div className="icons">
                 <i className="icon-Hammer" />
