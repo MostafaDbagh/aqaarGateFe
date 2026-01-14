@@ -9,6 +9,7 @@ import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
 import styles from "./PropertyGridItems.module.css";
 import logger from "@/utlis/logger";
+import { translateCity } from "@/constants/cityTranslations";
 
 export default function PropertyGridItems({ listings = [], isAISearch = false, hasActiveSearch = false }) {
   const t = useTranslations();
@@ -395,7 +396,7 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
   
             <p className={`location text-1 flex items-center gap-6 ${styles.locationText}`}>
               <i className="icon-location" /> <span className={`${styles.locationContent} ${locale === 'ar' ? styles.locationContentRtl : styles.locationContentLtr}`}>
-                <span className={styles.locationState}>{property.state}</span>-
+                <span className={styles.locationState}>{translateCity(property.city || property.state, locale)}</span>-
                 {locale === 'ar' && property?.address_ar ? property.address_ar : (property.address || 'Location not specified')}
               </span>
             </p>

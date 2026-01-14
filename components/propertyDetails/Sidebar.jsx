@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import MoreAboutPropertyModal from "../modals/MoreAboutPropertyModal";
 import { useCreateMessage } from "@/apis/hooks";
+import styles from "./Sidebar.module.css";
 
 export default function Sidebar({ property }) {
   const t = useTranslations('propertyDetail');
+  const locale = useLocale();
   const [isMoreInfoModalOpen, setIsMoreInfoModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     senderName: '',
@@ -24,10 +26,25 @@ export default function Sidebar({ property }) {
                      (typeof property?.agent === 'string' && property?.agent.includes('@') ? property?.agent : null) ||
                      property?.agent?.email ||
                      "contact@property.com";
-  const agentNumber = property?.agentNumber || 
-                      property?.agentId?.phone || 
-                      property?.agent?.phone ||
-                      "Not provided";
+  const rawAgentNumber = property?.agentNumber || 
+                         property?.agentId?.phone || 
+                         property?.agent?.phone ||
+                         null;
+  
+  // Format phone number: always put + sign on the right
+  // Arabic: 9999999999+ (plus sign on the right)
+  // English: 9999999999+ (plus sign on the right)
+  const formatPhoneNumber = (phone) => {
+    if (!phone || phone === "Not provided") return null;
+    // Remove any existing + sign
+    let cleaned = phone.toString().replace(/\+/g, '').trim();
+    if (!cleaned) return null;
+    
+    // Always put + at the end (right side) for both Arabic and English
+    return `${cleaned}+`;
+  };
+  
+  const agentNumber = rawAgentNumber ? formatPhoneNumber(rawAgentNumber) : null;
   const agentWhatsapp = property?.agentWhatsapp || 
                         property?.agentNumber || 
                         property?.agentId?.phone ||
@@ -105,12 +122,7 @@ export default function Sidebar({ property }) {
                 src={agentAvatar}
                 width={200}
                 height={200}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  borderRadius: '50%'
-                }}
+                className={styles.avatarImage}
                 onError={() => {
                   setImageError(true);
                 }}
@@ -122,7 +134,12 @@ export default function Sidebar({ property }) {
               <ul className="contact">
                 <li>
                   <i className="icon-phone-1" />
-                  <span>{agentNumber && agentNumber !== "Not provided" ? agentNumber : t('phoneNotProvided')}</span>
+                  <span 
+                    dir="ltr" 
+                    className={`${styles.phoneNumber} ${locale === 'ar' ? styles.phoneNumberRtl : styles.phoneNumberLtr}`}
+                  >
+                    {agentNumber || t('phoneNotProvided')}
+                  </span>
                 </li>
                 {agentEmail && (
                   <li>
@@ -151,18 +168,7 @@ export default function Sidebar({ property }) {
             const isSuccess = submitMessage.toLowerCase().includes('success');
             return (
               <div
-                className={`alert ${isSuccess ? 'alert-success' : 'alert-danger'} mb-3`}
-                style={{
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  marginBottom: '20px',
-                  textAlign: 'center',
-                  backgroundColor: isSuccess ? '#fef7f1' : '#fee2e2',
-                  color: isSuccess ? '#f1913d' : '#991b1b',
-                  border: `1px solid ${isSuccess ? 'rgba(241, 145, 61, 0.15)' : '#fecaca'}`
-                }}
+                className={`alert ${isSuccess ? 'alert-success' : 'alert-danger'} mb-3 ${styles.submitMessage} ${isSuccess ? styles.submitMessageSuccess : styles.submitMessageError}`}
               >
                 {submitMessage}
               </div>
@@ -196,12 +202,7 @@ export default function Sidebar({ property }) {
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="tf-btn bg-color-primary w-full"
-            style={{ 
-              border: 'none', 
-              cursor: isSubmitting ? 'not-allowed' : 'pointer',
-              opacity: isSubmitting ? 0.7 : 1
-            }}
+            className={`tf-btn bg-color-primary w-full ${styles.submitButton} ${isSubmitting ? styles.submitButtonDisabled : styles.submitButtonEnabled}`}
           >
             {isSubmitting ? t('sending') : t('sendMessage')}
           </button>

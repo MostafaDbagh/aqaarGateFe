@@ -28,9 +28,11 @@ export default function SearchForm({
     "homs": "Homs",
     "hama": "Hama",
     "idlib": "Idlib",
-    "deirEzZor": "Deir ez-Zor",
+    "deirEzZor": "Deir ez-Zur", // Backend uses "Zur"
     "daraa": "Daraa",
-    "tartous": "Tartous"
+    "tartous": "Tartus", // Backend uses "Tartus"
+    "asSuwayda": "As-Suwayda",
+    "raqqah": "Raqqah" // Added to match backend
   }), []);
   
   // Helper function to get city translation safely
@@ -54,7 +56,9 @@ export default function SearchForm({
             "idlib": "إدلب",
             "deirEzZor": "دير الزور",
             "daraa": "درعا",
-            "tartous": "طرطوس"
+            "tartous": "طرطوس",
+            "asSuwayda": "السويداء",
+            "raqqah": "الرقة"
           };
           return arabicCities[key] || englishName;
         } else {
@@ -68,6 +72,7 @@ export default function SearchForm({
   const searchFormRef = useRef();
 
   // Single source of truth for cities (English values for backend)
+  // NOTE: Must match backend city names exactly
   const citiesList = useMemo(() => [
     "Latakia",
     "Damascus",
@@ -75,9 +80,11 @@ export default function SearchForm({
     "Homs",
     "Hama",
     "Idlib",
-    "Deir ez-Zor",
+    "Deir ez-Zur", // Backend uses "Zur" not "Zor"
     "Daraa",
-    "Tartous"
+    "Tartus", // Backend uses "Tartus" not "Tartous"
+    "As-Suwayda",
+    "Raqqah" // Added to match backend
   ], []);
 
   // Single source of truth for property types (English values for backend)
@@ -98,9 +105,11 @@ export default function SearchForm({
     "Homs": "homs",
     "Hama": "hama",
     "Idlib": "idlib",
-    "Deir ez-Zor": "deirEzZor",
+    "Deir ez-Zur": "deirEzZor", // Backend uses "Zur"
     "Daraa": "daraa",
-    "Tartous": "tartous"
+    "Tartus": "tartous", // Backend uses "Tartus"
+    "As-Suwayda": "asSuwayda",
+    "Raqqah": "raqqah" // Added to match backend
   }), []);
 
   // Get translated city options based on locale

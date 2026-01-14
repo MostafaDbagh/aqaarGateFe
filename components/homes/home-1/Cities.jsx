@@ -7,6 +7,8 @@ import LocationLoader from "@/components/common/LocationLoader";
 import { useQuery } from "@tanstack/react-query";
 import { cityAPI } from "@/apis/city";
 import { useRouter } from "next/navigation";
+import styles from "./Cities.module.css";
+import { translateCity, getCityTranslationMap } from "@/constants/cityTranslations";
 
 export default function Cities() {
   const router = useRouter();
@@ -31,29 +33,39 @@ export default function Cities() {
       return cityStatsResponse.data.cities;
   }, [cityStatsResponse]);
 
+  // City translation mapping
+  const cityTranslationMap = useMemo(() => {
+    return getCityTranslationMap(locale);
+  }, [locale]);
+
   // Memoize locations array to prevent recreation on every render
   const locations = useMemo(() => {
     return citiesData
       .sort((a, b) => b.count - a.count) // Sort by count descending
       .slice(0, 9) // Show only top 9 cities
-      .map((city, index) => ({
-        id: index + 1,
-        city: city.city || city.displayName,
-        properties: `${city.count} ${city.count !== 1 ? tCommon('properties') : tCommon('property')}`,
-        imageSrc: city.imageSrc || '/images/cities/Deir ez-ur.jpg',
-        alt: city.city || city.displayName,
-        width: 400,
-        height: 350
-      }));
-  }, [citiesData, tCommon]);
+      .map((city, index) => {
+        const cityName = city.city || city.displayName;
+        return {
+          id: index + 1,
+          city: translateCity(cityName, locale),
+          cityOriginal: cityName, // Keep original for API calls
+          properties: `${city.count} ${city.count !== 1 ? tCommon('properties') : tCommon('property')}`,
+          imageSrc: city.imageSrc || '/images/cities/Deir ez-zur.jpg',
+          alt: translateCity(cityName, locale),
+          width: 400,
+          height: 350
+        };
+      });
+  }, [citiesData, tCommon, cityTranslationMap, locale]);
 
   // Handle city button click - scroll to properties and trigger search
-  const handleCityClick = (e, cityName) => {
+  const handleCityClick = (e, cityName, cityOriginal) => {
     e.preventDefault();
     
     // Navigate to property list page with city filter
+    // Use original English name for API
     const searchParams = new URLSearchParams();
-    searchParams.set('cities', cityName);
+    searchParams.set('cities', cityOriginal || cityName);
     
     // Route to property list page with city filter
     router.push(`/property-list?${searchParams.toString()}`);
@@ -71,214 +83,14 @@ export default function Cities() {
 
   return (
     <>
-      <style jsx>{`
-        .hero-cities-section {
-          padding: 80px 0;
-          position: relative;
-        }
-        
-        .city-card {
-          height: 350px;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-          transition: all 0.3s ease;
-          position: relative;
-          cursor: pointer;
-          
-        }
-        
-        .city-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .city-card .image-wrap {
-          height: 100% !important;
-          position: relative;
-        }
-        
-        .city-image {
-          object-fit: contain !important;
-          width: 100% !important;
-          height: 100% !important;
-        }
-        
-        .city-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          pointer-events: none;
-          background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.45) 100%);
-          opacity: 0.6;
-          transition: opacity 0.3s ease;
-        }
-        
-        .city-card:hover .city-overlay {
-          opacity: 0.7;
-        }
-        
-        .city-card:hover .city-image {
-          transform: scale(1.05);
-        }
-        
-        .city-content {
-          z-index: 10;
-        }
-        
-        .city-title {
-          font-size: 2rem !important;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-          font-weight: 700 !important;
-          line-height: 1.2;
-        }
-        
-        /* RTL support - align text to right for Arabic */
-        html[dir="rtl"] .city-title,
-        [dir="rtl"] .city-title {
-          text-align: right !important;
-        }
-        
-        /* LTR support - align text to left for English */
-        html[dir="ltr"] .city-title,
-        [dir="ltr"] .city-title {
-          text-align: left !important;
-        }
-        
-        .city-count {
-          font-size: 1.4rem !important;
-          font-weight: 700 !important;
-          color: #ffffff !important;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-          background: linear-gradient(135deg, #ff6b35, #ff8c42);
-          padding: 8px 16px;
-          border-radius: 25px;
-          border: none;
-          box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-          transition: all 0.3s ease;
-          display: inline-block;
-        }
-        
-        .city-count:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-          background: linear-gradient(135deg, #ff8c42, #ff6b35);
-        }
-        
-        .city-btn {
-          font-size: 1rem !important;
-          padding: 12px 24px !important;
-          border-radius: 6px !important;
-          font-weight: 600 !important;
-          text-transform: none !important;
-          border: 2px solid rgba(255, 255, 255, 0.8) !important;
-          background-color: transparent !important;
-          color: white !important;
-          transition: all 0.3s ease !important;
-          min-width: 140px !important;
-        }
-        
-        .city-btn:hover {
-          background-color: rgba(255, 255, 255, 0.15) !important;
-          border-color: white !important;
-          color: white !important;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        .city-btn i {
-          font-size: 1.1rem !important;
-          margin-left: 8px !important;
-        }
-        
-        .heading-section .title {
-          font-size: 40px !important;
-          font-weight: 700 !important;
-          color: #000000 !important;
-          margin-bottom: 1rem !important;
-          text-align: center !important;
-          display: block !important;
-          visibility: visible !important;
-          text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
-        }
-        
-        .heading-section .text-1 {
-          color: #000000 !important;
-          text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-          .hero-cities-section {
-            min-height: 80vh;
-            padding: 60px 0;
-            background-attachment: scroll;
-          }
-          
-          .heading-section .title {
-            font-size: 32px !important;
-          }
-          .city-title {
-            font-size: 1.6rem !important;
-          }
-          
-          .city-count {
-            font-size: 1.2rem !important;
-            padding: 5px 10px;
-          }
-          
-          .city-btn {
-            font-size: 0.9rem !important;
-            padding: 10px 20px !important;
-            min-width: 120px !important;
-          }
-          
-          .city-card {
-            height: 320px;
-          }
-        }
-        
-        @media (max-width: 576px) {
-          .hero-cities-section {
-            min-height: 70vh;
-            padding: 40px 0;
-          }
-          
-          .heading-section .title {
-            font-size: 28px !important;
-          }
-          
-          .city-title {
-            font-size: 1.4rem !important;
-          }
-          
-          .city-count {
-            font-size: 1.1rem !important;
-            padding: 4px 8px;
-          }
-          
-          .city-btn {
-            font-size: 0.85rem !important;
-            padding: 8px 16px !important;
-            min-width: 100px !important;
-          }
-          
-          .city-card {
-            height: 300px;
-          }
-        }
-      `}</style>
-      
-      <section className="section-neighborhoods hero-cities-section">
+      <section className={`section-neighborhoods ${styles.heroCitiesSection}`}>
         <div className="tf-container">
           <div className="col-12">
           <div className="heading-section text-center mb-48">
-            <h2 className="title">
+            <h2 className={`title ${styles.headingTitle}`}>
               {t('exploreSyriaCities')}
             </h2>
-            <p className="text-1 split-text split-lines-transform">
+            <p className={`text-1 split-text split-lines-transform ${styles.headingText}`}>
               {t('exploreSyriaCitiesSubtitle')}
             </p>
           </div>
@@ -286,34 +98,26 @@ export default function Cities() {
             {locations.slice(0, 9).map((location) => (
               <div key={location.id} className="col-lg-4 col-md-6 col-sm-6">
                 <div 
-                  className="box-location city-card"
-                  onClick={(e) => handleCityClick(e, location.city)}
-                  style={{ cursor: 'pointer' }}
+                  className={`box-location ${styles.cityCard}`}
+                  onClick={(e) => handleCityClick(e, location.city, location.cityOriginal)}
                 >
-                  <div className="image-wrap position-relative overflow-hidden rounded-3" style={{height:'100% !important'}}>
+                  <div className={`image-wrap position-relative overflow-hidden rounded-3 ${styles.imageWrap}`}>
                     <Image
-                      className="city-image"
+                      className={styles.cityImage}
                       alt={location.alt}
                       src={location.imageSrc}
                       width={location.width}
                       height={location.height}
-                      style={{
-                        objectFit: 'cover',
-                        width: '100%',
-                        height: '100%',
-                        transition: 'transform 0.3s ease'
-                      }}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                    <div className="city-overlay"></div>
+                    <div className={styles.cityOverlay}></div>
                   </div>
-                  <div className="city-content position-absolute bottom-0 start-0 end-0 p-4">
-                    <h4 className="text-white mb-3 fw-bold city-title" dir={locale === 'ar' ? 'rtl' : 'ltr'}>{location.city}</h4>
+                  <div className={`city-content position-absolute bottom-0 start-0 end-0 p-4 ${styles.cityContent}`}>
+                    <h4 className={`text-white mb-3 fw-bold ${styles.cityTitle} ${locale === 'ar' ? styles.cityTitleRtl : styles.cityTitleLtr}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>{location.city}</h4>
                     <div className="d-flex align-items-center justify-content-between" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                       <span 
-                        className="city-count" 
-                        onClick={(e) => handleCityClick(e, location.city)}
-                        style={{ cursor: 'pointer' }}
+                        className={styles.cityCount}
+                        onClick={(e) => handleCityClick(e, location.city, location.cityOriginal)}
                       >
                         {location.properties}
                       </span>

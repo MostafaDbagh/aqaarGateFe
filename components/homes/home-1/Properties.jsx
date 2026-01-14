@@ -9,6 +9,7 @@ import FavoriteButton from "@/components/common/FavoriteButton";
 import { usePropertyActions } from "@/hooks/usePropertyActions";
 import LocationLoader from "@/components/common/LocationLoader";
 import styles from "./Properties.module.css";
+import { translateCity } from "@/constants/cityTranslations";
 
 export default function Properties({ listings, isLoading, isError }) {
   const t = useTranslations();
@@ -413,7 +414,7 @@ export default function Properties({ listings, isLoading, isError }) {
           <p className="location text-1 line-clamp-1">
             <i className="icon-location" />
             <span style={{ color: '#f1913d',fontWeight: '600' }}>
-              {listing.state || ''}
+              {translateCity(listing.city || listing.state || '', locale)}
             </span>
             {locale === 'ar' && listing.address_ar 
               ? `-${listing.address_ar}` 

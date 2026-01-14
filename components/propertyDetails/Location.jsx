@@ -2,6 +2,7 @@
 import React, { useMemo } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import styles from './Location.module.css';
+import { translateCity } from "@/constants/cityTranslations";
 
 export default function Location({ property }) {
   const t = useTranslations('propertyDetail');
@@ -133,7 +134,7 @@ export default function Location({ property }) {
         </div>
         <div className={styles.infoItem}>
           <span className={`label fw-6 ${styles.label}`}>{t('city')}</span>
-          <div className="text text-variant-1">{property?.city || property?.state || 'N/A'}</div>
+          <div className="text text-variant-1">{translateCity(property?.city || property?.state || 'N/A', locale)}</div>
         </div>
         <div className={styles.infoItem}>
           <span className={`label fw-6 ${styles.label}`}>{t('area')}</span>
