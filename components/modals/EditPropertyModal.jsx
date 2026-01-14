@@ -136,7 +136,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         bathrooms: property.bathrooms || '',
         squareFootage: property.squareFootage || property.size || '',
         sizeUnit: property.sizeUnit || '',
-        yearBuilt: property.yearBuilt || '',
+        yearBuilt: (property.yearBuilt && property.yearBuilt !== 0 && property.yearBuilt !== null) ? property.yearBuilt : '',
         propertyType: property.propertyType || '',
         amenities: property.amenities || [],
         // Contact information (load from property or use defaults for admin)
@@ -217,7 +217,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         bathrooms: formData.propertyType === "Land" ? 0 : parseInt(formData.bathrooms) || 0,
         squareFootage: parseInt(formData.squareFootage) || 0,
         sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
-        yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : '',
+        yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : null,
         // Contact information (admin can edit)
         // NOTE: agent (legacy field) is NOT sent - it should never change
         // Only include contact fields if admin is editing AND values have changed

@@ -358,7 +358,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                         {property.size ? `${property.size} ${getSizeUnitLabel(property.sizeUnit)}` : 'N/A'}
                       </span>
                     </div>
-                    {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
+                    {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== 0 && property?.yearBuilt !== '0' && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>Year Built:</span>
                         <span className={styles.infoValue}>{property.yearBuilt}</span>

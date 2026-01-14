@@ -320,7 +320,7 @@ export default function PropertyOverview({ property }) {
               </div>
             </div>
           )}
-          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== 0 && property?.yearBuilt !== '0' && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
             <div className="box-icon">
               <div className="icons">
                 <i className="icon-Hammer" />

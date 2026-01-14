@@ -582,7 +582,7 @@ export default function AddProperty({ isAdminMode = false }) {
         size: parseInt(formData.size),
         sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
         landArea: formData.landArea ? parseInt(formData.landArea) : parseInt(formData.size),
-        yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : '',
+        yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : null,
         floor: formData.floor ? parseInt(formData.floor) : undefined,
         garageSize: formData.garages && formData.garageSize ? parseInt(formData.garageSize) : 0,
         approvalStatus: isAdminMode && user?.role === 'admin' ? "approved" : "pending",
