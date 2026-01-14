@@ -22,6 +22,22 @@ export default function PropertyOverview({ property }) {
   
   const statusBadge = getStatusBadge(property?.status, t);
   
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return locale === 'ar' ? tCommon('sqm') : 'SQM';
+    const unit = sizeUnit.toLowerCase();
+    // Map size units to translation keys
+    const unitMap = {
+      'sqm': 'sqm',
+      'dunam': 'dunam',
+      'feddan': 'feddan',
+      'sqft': 'sqft',
+      'sqyd': 'sqyd'
+    };
+    const translationKey = unitMap[unit] || 'sqm';
+    return tCommon(translationKey);
+  };
+  
   // Handle copy property ID
   const handleCopyPropertyId = async (propertyId) => {
     try {
@@ -78,38 +94,73 @@ export default function PropertyOverview({ property }) {
         </div>
       </div>
       
-      {/* Arabic Translation Section - Show only when locale is Arabic and Arabic fields exist */}
-      {locale === 'ar' && (property?.description_ar || property?.address_ar || property?.neighborhood_ar) && (
+      {/* Property Location Section - Show for both Arabic and English */}
+      {((locale === 'en' && (property?.propertyDesc || property?.description || property?.address || property?.neighborhood)) ||
+        (locale === 'ar' && (property?.description_ar || property?.address_ar || property?.neighborhood_ar))) && (
         <div className="info-detail mt-30" style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-          <h4 className="text-4 fw-6 text-color-heading mb-20" style={{ marginBottom: '20px', fontSize: '18px' }}>
-            الترجمة العربية
+          <h4 className="text-4 fw-6 text-color-heading mb-20" style={{ marginBottom: '20px', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="icon-location" style={{ fontSize: '18px' }} />
+            {locale === 'ar' ? 'موقع العقار' : tDetail('propertyLocation')}
           </h4>
           
-          {property?.description_ar && (
-            <div className="mb-20" style={{ marginBottom: '20px' }}>
-              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>الوصف:</p>
-              <p className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: 'rtl', textAlign: 'right' }}>
-                {property.description_ar}
-              </p>
-            </div>
-          )}
-          
-          {property?.address_ar && (
-            <div className="mb-20" style={{ marginBottom: '20px' }}>
-              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>العنوان الكامل:</p>
-              <p className="text-1 text-color-heading" style={{ direction: 'rtl', textAlign: 'right' }}>
-                {property.address_ar}
-              </p>
-            </div>
-          )}
-          
-          {property?.neighborhood_ar && (
-            <div className="mb-20" style={{ marginBottom: '20px' }}>
-              <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>الحي:</p>
-              <p className="text-1 text-color-heading" style={{ direction: 'rtl', textAlign: 'right' }}>
-                {property.neighborhood_ar}
-              </p>
-            </div>
+          {locale === 'en' ? (
+            <>
+              {(property?.propertyDesc || property?.description) && (
+                <div className="mb-20" style={{ marginBottom: '20px' }}>
+                  <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>{tDetail('description')}:</p>
+                  <p className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: 'ltr', textAlign: 'left' }}>
+                    {property?.propertyDesc || property?.description}
+                  </p>
+                </div>
+              )}
+              
+              {property?.address && (
+                <div className="mb-20" style={{ marginBottom: '20px' }}>
+                  <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>{tDetail('fullAddress')}:</p>
+                  <p className="text-1 text-color-heading" style={{ direction: 'ltr', textAlign: 'left' }}>
+                    {property.address}
+                  </p>
+                </div>
+              )}
+              
+              {property?.neighborhood && (
+                <div className="mb-20" style={{ marginBottom: '20px' }}>
+                  <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>{tDetail('neighborhood')}:</p>
+                  <p className="text-1 text-color-heading" style={{ direction: 'ltr', textAlign: 'left' }}>
+                    {property.neighborhood}
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {property?.description_ar && (
+                <div className="mb-20" style={{ marginBottom: '20px' }}>
+                  <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>{tDetail('description')}:</p>
+                  <p className="text-1 text-color-heading" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', direction: 'rtl', textAlign: 'right' }}>
+                    {property.description_ar}
+                  </p>
+                </div>
+              )}
+              
+              {property?.address_ar && (
+                <div className="mb-20" style={{ marginBottom: '20px' }}>
+                  <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>{tDetail('fullAddress')}:</p>
+                  <p className="text-1 text-color-heading" style={{ direction: 'rtl', textAlign: 'right' }}>
+                    {property.address_ar}
+                  </p>
+                </div>
+              )}
+              
+              {property?.neighborhood_ar && (
+                <div className="mb-20" style={{ marginBottom: '20px' }}>
+                  <p className="text-4 text-color-default mb-10" style={{ marginBottom: '10px', fontWeight: '600' }}>{tDetail('neighborhood')}:</p>
+                  <p className="text-1 text-color-heading" style={{ direction: 'rtl', textAlign: 'right' }}>
+                    {property.neighborhood_ar}
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -144,7 +195,7 @@ export default function PropertyOverview({ property }) {
             )}
             <li className="text-1 flex items-center gap-10">
               <i className="icon-Ruler" style={{ margin: '0 2px' }} />
-              <span>{property?.size || '0'}</span>{tDetail('sqft')}
+              <span>{property?.size || '0'}</span> {getSizeUnitLabel(property?.sizeUnit)}
             </li>
           </ul>
         </div>
@@ -243,7 +294,7 @@ export default function PropertyOverview({ property }) {
             </div>
             <div className="content">
               <div className="text-4 text-color-default">{tDetail('landSize')}:</div>
-              <div className="text-1 text-color-heading">{property?.landArea || '0'} {tDetail('sqft')}</div>
+              <div className="text-1 text-color-heading">{property?.landArea || '0'} {getSizeUnitLabel(property?.sizeUnit)}</div>
             </div>
           </div>
 
@@ -291,7 +342,7 @@ export default function PropertyOverview({ property }) {
             </div>
             <div className="content">
               <div className="text-4 text-color-default">{tDetail('size')}:</div>
-              <div className="text-1 text-color-heading">{property?.size || '0'} {tDetail('sqft')}</div>
+              <div className="text-1 text-color-heading">{property?.size || '0'} {getSizeUnitLabel(property?.sizeUnit)}</div>
             </div>
           </div>
 

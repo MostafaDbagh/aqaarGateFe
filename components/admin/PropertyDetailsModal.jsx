@@ -3,13 +3,32 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { listingAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
+import { useTranslations, useLocale } from 'next-intl';
 import styles from "./PropertyDetailsModal.module.css";
 
 export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onApprove, onReject, onDelete }) {
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return locale === 'ar' ? tCommon('sqm') : 'SQM';
+    const unit = sizeUnit.toLowerCase();
+    // Map size units to translation keys
+    const unitMap = {
+      'sqm': 'sqm',
+      'dunam': 'dunam',
+      'feddan': 'feddan',
+      'sqft': 'sqft',
+      'sqyd': 'sqyd'
+    };
+    const translationKey = unitMap[unit] || 'sqm';
+    return tCommon(translationKey);
+  };
 
   useEffect(() => {
     if (isOpen && propertyId) {
@@ -336,7 +355,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                     <div className={styles.infoRow}>
                       <span className={styles.infoLabel}>Size:</span>
                       <span className={styles.infoValue}>
-                        {property.size ? `${property.size} sqft` : 'N/A'}
+                        {property.size ? `${property.size} ${getSizeUnitLabel(property.sizeUnit)}` : 'N/A'}
                       </span>
                     </div>
                     {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property.yearBuilt && (

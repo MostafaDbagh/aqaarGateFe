@@ -17,6 +17,22 @@ export default function RelatedProperties({ currentProperty }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollContainerRef = useRef(null);
   
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return locale === 'ar' ? tCommon('sqm') : 'SQM';
+    const unit = sizeUnit.toLowerCase();
+    // Map size units to translation keys
+    const unitMap = {
+      'sqm': 'sqm',
+      'dunam': 'dunam',
+      'feddan': 'feddan',
+      'sqft': 'sqft',
+      'sqyd': 'sqyd'
+    };
+    const translationKey = unitMap[unit] || 'sqm';
+    return tCommon(translationKey);
+  };
+  
   // Resolve image URL helper function
   const resolveImageUrl = (value) => {
     if (!value) return null;
@@ -338,7 +354,7 @@ export default function RelatedProperties({ currentProperty }) {
                           </div>
                         )}
                         <div className={styles.metaItem}>
-                          {t('sqft')} <span>{property.size || 0}</span>
+                          <span>{property.size || 0}</span> {getSizeUnitLabel(property.sizeUnit)}
                         </div>
                         {property.floor !== undefined && property.floor !== null && (
                           <div className={styles.metaItem}>

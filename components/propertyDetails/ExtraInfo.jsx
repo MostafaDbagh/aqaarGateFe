@@ -7,6 +7,7 @@ import logger from "@/utlis/logger";
 
 export default function ExtraInfo({ property }) {
   const t = useTranslations('propertyDetail');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   const [copiedId, setCopiedId] = useState(null);
   
@@ -14,6 +15,22 @@ export default function ExtraInfo({ property }) {
   const description = locale === 'ar' && property?.description_ar 
     ? property.description_ar 
     : (property?.propertyDesc || t('noDescription'));
+  
+  // Helper function to get size unit label
+  const getSizeUnitLabel = (sizeUnit) => {
+    if (!sizeUnit) return locale === 'ar' ? tCommon('sqm') : 'SQM';
+    const unit = sizeUnit.toLowerCase();
+    // Map size units to translation keys
+    const unitMap = {
+      'sqm': 'sqm',
+      'dunam': 'dunam',
+      'feddan': 'feddan',
+      'sqft': 'sqft',
+      'sqyd': 'sqyd'
+    };
+    const translationKey = unitMap[unit] || 'sqm';
+    return tCommon(translationKey);
+  };
   
   // Handle copy property ID
   const handleCopyPropertyId = async (propertyId) => {
@@ -73,7 +90,7 @@ export default function ExtraInfo({ property }) {
           </li>
           <li className="flex">
             <p className="fw-6">{t('size')}</p>
-            <p>{property?.size || '0'} {t('sqft')}</p>
+            <p>{property?.size || '0'} {getSizeUnitLabel(property?.sizeUnit)}</p>
           </li>
           {property?.bedrooms != null && Number(property.bedrooms) > 0 && (
             <li className="flex">
@@ -91,7 +108,7 @@ export default function ExtraInfo({ property }) {
         <ul>
           <li className="flex">
             <p className="fw-6">{t('landArea')}</p>
-            <p>{property?.landArea ? `${property.landArea} ${t('sqft')}` : 'N/A'}</p>
+            <p>{property?.landArea ? `${property.landArea} ${getSizeUnitLabel(property?.sizeUnit)}` : 'N/A'}</p>
           </li>
           {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
             <li className="flex">
