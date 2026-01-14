@@ -41,7 +41,7 @@ export default function Sidebar({ property }) {
     if (!cleaned) return null;
     
     // Always put + at the end (right side) for both Arabic and English
-    return `${cleaned}+`;
+    return `+${cleaned}`;
   };
   
   const agentNumber = rawAgentNumber ? formatPhoneNumber(rawAgentNumber) : null;
