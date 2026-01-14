@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Gallery, Item } from "react-photoswipe-gallery";
+import styles from "./Slider3.module.css";
 
 // Fallback images if property has no images
 const fallbackImages = [
@@ -161,7 +162,9 @@ export default function Slider3({ property }) {
             border: '2px dashed #dee2e6',
             borderRadius: '8px',
             padding: '40px 20px'
-          }}>
+          }}
+          className={styles.noImagesContainer}
+          >
             <div style={{
               textAlign: 'center',
               color: '#6c757d'
@@ -206,14 +209,7 @@ export default function Slider3({ property }) {
                     <a
                       data-fancybox="gallery"
                       onClick={open}
-                      className="image-wrap d-block"
-                      style={{
-                        maxHeight: '520px',
-                        minWidth: '970px',
-                        overflow: 'hidden',
-                        display: 'block',
-                        margin: '0 auto'
-                      }}
+                      className={`image-wrap d-block ${styles.imageWrap}`}
                     >
                       <Image
                         ref={ref}
@@ -225,8 +221,6 @@ export default function Slider3({ property }) {
                         style={{
                           width: '100%',
                           height: 'auto',
-                          maxHeight: '520px',
-                          minWidth: '970px',
                           objectFit: 'contain'
                         }}
                       />
@@ -251,6 +245,20 @@ export default function Slider3({ property }) {
           className="swiper thumbs-sw-pagi"
           spaceBetween={15}
           slidesPerView={5}
+          breakpoints={{
+            320: {
+              slidesPerView: 3,
+              spaceBetween: 10
+            },
+            480: {
+              slidesPerView: 4,
+              spaceBetween: 12
+            },
+            768: {
+              slidesPerView: 5,
+              spaceBetween: 15
+            }
+          }}
         >
           {images.map((elm, i) => (
             <SwiperSlide key={`thumb-${elm.src}-${i}`} className="swiper-slide">
