@@ -179,7 +179,7 @@ export default function About() {
                   </div>
                   <div className="content">
                     <div className="sub">{t("emailAddressLabel")}</div>
-                    <a href="#">mohammaddbagh0@gmail.com</a>
+                    <a href="mailto:contact@aqaargate.com">contact@aqaargate.com</a>
                   </div>
                 </li>
               </ul>

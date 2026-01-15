@@ -293,7 +293,7 @@ export default function MobileMenu() {
                       </a>
                     </li>
                     <li>
-                      <a href="https://www.instagram.com/aqaargate" target="_blank" rel="noopener noreferrer">
+                      <a href="https://www.instagram.com/aqaar_gate?igsh=cG41aDg2YTlyeXo2" target="_blank" rel="noopener noreferrer">
                         <i className="icon-ins" />
                       </a>
                     </li>

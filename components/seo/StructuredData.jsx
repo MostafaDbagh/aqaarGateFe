@@ -13,7 +13,7 @@ export default function StructuredData() {
       `${baseUrl}`,
       "https://www.facebook.com/profile.php?id=61585950591929",
       "https://www.twitter.com/aqaargate",
-      "https://www.instagram.com/aqaargate",
+      "https://www.instagram.com/aqaar_gate?igsh=cG41aDg2YTlyeXo2",
       "https://www.linkedin.com/company/aqaargate"
     ],
     "logo": `${baseUrl}/images/logo/logo@2x.png`,

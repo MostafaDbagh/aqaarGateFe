@@ -125,7 +125,7 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
                   <div className="content">
                     <div className="title text-1">{t('needLiveHelp')}</div>
                     <h6 className="fw-4">
-                      <a href="#">mohammaddbagh0@gmail.com</a>
+                      <a href="mailto:contact@aqaargate.com">contact@aqaargate.com</a>
                     </h6>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="https://www.instagram.com/aqaar_gate?igsh=cG41aDg2YTlyeXo2" target="_blank" rel="noopener noreferrer">
                     <i className="icon-ins" />
                   </a>
                 </li>

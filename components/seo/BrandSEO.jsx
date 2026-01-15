@@ -78,7 +78,7 @@ export default function BrandSEO() {
               `${baseUrl}`,
               "https://www.facebook.com/profile.php?id=61585950591929",
               "https://www.twitter.com/aqaargate",
-              "https://www.instagram.com/aqaargate",
+              "https://www.instagram.com/aqaar_gate?igsh=cG41aDg2YTlyeXo2",
               "https://www.linkedin.com/company/aqaargate"
             ]
           }),

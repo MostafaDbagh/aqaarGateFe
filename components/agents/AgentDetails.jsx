@@ -279,7 +279,7 @@ export default function AgentDetails({ agentId }) {
                         </a>
                       </li>
                       <li>
-                        <a href="#" title="Instagram (Coming Soon)">
+                        <a href="https://www.instagram.com/aqaar_gate?igsh=cG41aDg2YTlyeXo2" target="_blank" rel="noopener noreferrer" title="Instagram">
                           <i className="icon-ins" />
                         </a>
                       </li>
