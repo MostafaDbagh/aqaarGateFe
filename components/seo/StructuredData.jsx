@@ -11,7 +11,7 @@ export default function StructuredData() {
     "url": baseUrl,
     "sameAs": [
       `${baseUrl}`,
-      "https://www.facebook.com/aqaargate",
+      "https://www.facebook.com/profile.php?id=61585950591929",
       "https://www.twitter.com/aqaargate",
       "https://www.instagram.com/aqaargate",
       "https://www.linkedin.com/company/aqaargate"

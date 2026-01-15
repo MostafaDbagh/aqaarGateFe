@@ -278,7 +278,7 @@ export default function MobileMenu() {
                   <p>{t("followUs")}</p>
                   <ul className="tf-social style-2">
                     <li>
-                      <a href="https://www.facebook.com/aqaargate" target="_blank" rel="noopener noreferrer">
+                      <a href="https://www.facebook.com/profile.php?id=61585950591929" target="_blank" rel="noopener noreferrer">
                         <i className="icon-fb" />
                       </a>
                     </li>

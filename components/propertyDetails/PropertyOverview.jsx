@@ -218,7 +218,7 @@ export default function PropertyOverview({ property }) {
       <div className={`info-detail ${styles.infoDetailGrid}`}>
         <div className="wrap-box">
           <div className="box-icon">
-            <div className="icons">
+            <div className="icons"> 
               <i className="icon-HouseLine" />
             </div>
             <div className="content">

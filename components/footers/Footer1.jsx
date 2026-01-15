@@ -192,7 +192,7 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
               <div className="text-3  fw-6 text_white">{t('followUs')}</div>
               <ul className="tf-social ">
                 <li>
-                  <a href="#">
+                  <a href="https://www.facebook.com/profile.php?id=61585950591929" target="_blank" rel="noopener noreferrer">
                     <i className="icon-fb" />
                   </a>
                 </li>

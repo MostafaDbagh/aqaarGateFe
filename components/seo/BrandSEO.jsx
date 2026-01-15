@@ -76,7 +76,7 @@ export default function BrandSEO() {
             "slogan": "Find Your Dream Property with AqaarGate",
             "sameAs": [
               `${baseUrl}`,
-              "https://www.facebook.com/aqaargate",
+              "https://www.facebook.com/profile.php?id=61585950591929",
               "https://www.twitter.com/aqaargate",
               "https://www.instagram.com/aqaargate",
               "https://www.linkedin.com/company/aqaargate"

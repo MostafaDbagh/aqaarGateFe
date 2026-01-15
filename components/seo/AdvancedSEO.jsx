@@ -51,7 +51,7 @@ export default function AdvancedSEO() {
     "paymentAccepted": "Cash, Credit Card, Bank Transfer",
     "openingHours": "Mo-Fr 09:00-18:00, Sa 09:00-16:00",
     "sameAs": [
-      "https://www.facebook.com/aqaargate",
+      "https://www.facebook.com/profile.php?id=61585950591929",
       "https://www.twitter.com/aqaargate",
       "https://www.instagram.com/aqaargate",
       "https://www.linkedin.com/company/aqaargate"
