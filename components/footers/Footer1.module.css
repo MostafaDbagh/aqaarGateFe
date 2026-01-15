@@ -142,3 +142,17 @@
   background: rgba(241, 145, 61, 0.3);
   box-shadow: 0 0 0 2px rgba(241, 145, 61, 0.5);
 }
+
+/* WhatsApp icon in footer-top */
+#footer .footer-top .contact-item .icons img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+@media (max-width: 757px) {
+  #footer .footer-top .contact-item .icons img {
+    width: 35px;
+    height: 35px;
+  }
+}

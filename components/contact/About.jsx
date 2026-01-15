@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslations } from "next-intl";
+import styles from "./About.module.css";
 
 export default function About() {
   const t = useTranslations("contact.about");
@@ -30,7 +31,7 @@ export default function About() {
                   {t("subtitle")}
                 </p>
               </div>
-              <ul className="list-info">
+              <ul className={`list-info ${styles.listInfo}`}>
                 <li>
                   <div className="icon">
                     <svg width={50}
@@ -180,6 +181,28 @@ export default function About() {
                   <div className="content">
                     <div className="sub">{t("emailAddressLabel")}</div>
                     <a href="mailto:contact@aqaargate.com">contact@aqaargate.com</a>
+                  </div>
+                </li>
+                <li>
+                  <div className="icon">
+                    <img 
+                      src="/icons/whatsapp-contact.svg" 
+                      alt="WhatsApp" 
+                      width={50}
+                      height={50}
+                      style={{ width: '50px', height: '50px' }}
+                    />
+                  </div>
+                  <div className="content">
+                    <div className="sub">{t("whatsapp")}</div>
+                    <a 
+                      href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`whatsapp-link ${styles.whatsappLink}`}
+                    >
+                      +971586057772
+                    </a>
                   </div>
                 </li>
               </ul>

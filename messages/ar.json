@@ -339,6 +339,7 @@
     "comingSoon": "قريباً",
     "callUs": "اتصل بنا",
     "needLiveHelp": "تحتاج مساعدة مباشرة",
+    "whatsapp": "واتساب",
     "followUs": "تابعنا",
     "copyright": "حقوق النشر ©",
     "designedBy": "صمم وطور بواسطة",
@@ -518,7 +519,8 @@
       "officeAddress": "عنوان المكتب",
       "officeLocation": "شارع بغداد، اللاذقية، سوريا",
       "phoneNumberLabel": "رقم الهاتف",
-      "emailAddressLabel": "عنوان البريد الإلكتروني"
+      "emailAddressLabel": "عنوان البريد الإلكتروني",
+      "whatsapp": "واتساب"
     }
   },
   "homeSections": {

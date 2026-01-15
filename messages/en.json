@@ -340,6 +340,7 @@
     "comingSoon": "Coming soon",
     "callUs": "Call us",
     "needLiveHelp": "Need live help",
+    "whatsapp": "WhatsApp",
     "followUs": "Follow us",
     "copyright": "Copyright ©",
     "designedBy": "Designed & Developed by",
@@ -519,7 +520,8 @@
       "officeAddress": "Office address",
       "officeLocation": "Baghdad street, Latakia, Syria",
       "phoneNumberLabel": "Phone number",
-      "emailAddressLabel": "Email address"
+      "emailAddressLabel": "Email address",
+      "whatsapp": "WhatsApp"
     }
   },
   "homeSections": {
