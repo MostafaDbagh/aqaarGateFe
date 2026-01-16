@@ -1,11 +1,9 @@
 .tooltipContainer {
   position: relative;
-  display: inline-block;
-  min-width: 0;
 }
 
 .textContainer {
-  display: inline-block;
+  /* No styles - let parent handle all styling */
 }
 
 .tooltip {

@@ -27,7 +27,7 @@ export default function LocationTooltip({ location, children, className = "" }) 
     };
   }, [location, children]);
 
-  if (!location) return children;
+  if (!location) return <>{children}</>;
 
   return (
     <span
