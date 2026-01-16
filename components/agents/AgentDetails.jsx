@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAgent } from "@/apis/hooks";
 import LocationLoader from "../common/LocationLoader";
+import CopyIcon from "../common/CopyIcon";
 import styles from "./AgentDetails.module.css";
 
 export default function AgentDetails({ agentId }) {
@@ -214,6 +215,7 @@ export default function AgentDetails({ agentId }) {
                         />
                       </svg>
                         <a href={`mailto:${agent.email}`}>{agent.email}</a>
+                        <CopyIcon text={agent.email} />
                     </li>
                     )}
                     {location && (
@@ -426,9 +428,10 @@ export default function AgentDetails({ agentId }) {
                       <div className={`contact-grid ${styles.contactGrid}`}>
                         <div className={`contact-item ${styles.contactItem}`}>
                           <div className={styles.contactIcon}>📧</div>
-                          <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                             <strong className={styles.contactLabel}>{t('emailLabel')}</strong>
                             <span className={styles.contactValue}>{agent.email || 'contact@property.com'}</span>
+                            {agent.email && <CopyIcon text={agent.email} />}
                           </div>
                         </div>
                         

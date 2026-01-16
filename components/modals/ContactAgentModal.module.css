@@ -73,8 +73,9 @@
 
 .agentDetails {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
 }
 
 .agentTitle {
@@ -89,6 +90,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  margin-top: 4px;
 }
 
 .agentIcon {
@@ -97,9 +100,17 @@
 }
 
 .agentEmail {
-  color: #6c757d;
+  color: #6366f1;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.agentContact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Form */

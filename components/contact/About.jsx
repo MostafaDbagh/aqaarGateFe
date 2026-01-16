@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslations } from "next-intl";
+import CopyIcon from "../common/CopyIcon";
 import styles from "./About.module.css";
 
 export default function About() {
@@ -180,7 +181,10 @@ export default function About() {
                   </div>
                   <div className="content">
                     <div className="sub">{t("emailAddressLabel")}</div>
-                    <a href="mailto:contact@aqaargate.com">contact@aqaargate.com</a>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <a href="mailto:contact@aqaargate.com">contact@aqaargate.com</a>
+                      <CopyIcon text="contact@aqaargate.com" />
+                    </div>
                   </div>
                 </li>
                 <li>
@@ -194,15 +198,24 @@ export default function About() {
                     />
                   </div>
                   <div className="content">
-                    <div className="sub">{t("whatsapp")}</div>
-                    <a 
-                      href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`whatsapp-link ${styles.whatsappLink}`}
-                    >
-                      +971586057772
-                    </a>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                      <a 
+                        href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`whatsapp-link ${styles.whatsappLink}`}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        <img 
+                          src="/icons/whatsapp-contact.svg" 
+                          alt="WhatsApp" 
+                          width={20}
+                          height={20}
+                          style={{ width: '20px', height: '20px', display: 'inline-block' }}
+                        />
+                        <span>+971586057772</span>
+                      </a>
+                    </div>
                   </div>
                 </li>
               </ul>

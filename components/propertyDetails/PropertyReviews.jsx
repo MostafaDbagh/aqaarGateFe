@@ -245,7 +245,6 @@ export default function PropertyReviews({ propertyId }) {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      required
                     />
                   </fieldset>
                 </div>

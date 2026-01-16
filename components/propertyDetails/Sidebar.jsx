@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useTranslations, useLocale } from 'next-intl';
 import MoreAboutPropertyModal from "../modals/MoreAboutPropertyModal";
 import { useCreateMessage } from "@/apis/hooks";
+import CopyIcon from "../common/CopyIcon";
 import styles from "./Sidebar.module.css";
 
 export default function Sidebar({ property }) {
@@ -145,17 +146,24 @@ export default function Sidebar({ property }) {
                   <li>
                     <i className="icon-mail" />
                     <a href={`mailto:${agentEmail}`}>{agentEmail}</a>
+                    <CopyIcon text={agentEmail} />
                   </li>
                 )}
                 {agentWhatsapp && agentWhatsapp !== "Not provided" && (
-                  <li>
-                    <i className="icon-whatsapp" />
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <img 
+                      src="/icons/whatsapp-contact.svg" 
+                      alt="WhatsApp" 
+                      width={16}
+                      height={16}
+                      style={{ width: '16px', height: '16px', display: 'inline-block' }}
+                    />
                     <a 
                       href={`https://wa.me/${agentWhatsapp.replace(/[^0-9]/g, '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {t('whatsapp')}
+                      {formatPhoneNumber(agentWhatsapp)}
                     </a>
                   </li>
                 )}

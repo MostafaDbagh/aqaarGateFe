@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useCreateMessage } from "@/apis/hooks";
+import CopyIcon from "../common/CopyIcon";
 import styles from "./ContactAgentModal.module.css"
 
 export default function ContactAgentModal({ 
@@ -92,6 +93,7 @@ export default function ContactAgentModal({
                 <span className={styles.agentEmail}>
                   {agentEmail}
                 </span>
+                <CopyIcon text={agentEmail} />
               </div>
             )}
           </div>
@@ -118,15 +120,14 @@ export default function ContactAgentModal({
           {/* Email */}
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>
-              Email *
+              Email (optional)
             </label>
             <input
               type="email"
               name="senderEmail"
               value={formData.senderEmail}
               onChange={handleInputChange}
-              placeholder="Email Address"
-              required
+              placeholder="Email Address (Optional)"
               className={styles.input}
             />
           </div>

@@ -10,6 +10,7 @@ import { usePropertyActions } from "@/hooks/usePropertyActions";
 import LocationLoader from "@/components/common/LocationLoader";
 import styles from "./Properties.module.css";
 import { translateCity } from "@/constants/cityTranslations";
+import LocationTooltip from "@/components/common/LocationTooltip";
 
 export default function Properties({ listings, isLoading, isError }) {
   const t = useTranslations();
@@ -413,13 +414,17 @@ export default function Properties({ listings, isLoading, isError }) {
 
           <p className="location text-1 line-clamp-1">
             <i className="icon-location" />
-            <span style={{ color: '#f1913d',fontWeight: '600' }}>
-              {translateCity(listing.city || listing.state || '', locale)}
-            </span>
-            {locale === 'ar' && listing.address_ar 
-              ? `-${listing.address_ar}` 
-              : (listing.address ? `-${listing.address}` : '')
-            }
+            <LocationTooltip
+              location={`${translateCity(listing.city || listing.state || '', locale)}${locale === 'ar' && listing.address_ar ? `-${listing.address_ar}` : (listing.address ? `-${listing.address}` : '')}`}
+            >
+              <span style={{ color: '#f1913d',fontWeight: '600' }}>
+                {translateCity(listing.city || listing.state || '', locale)}
+              </span>
+              {locale === 'ar' && listing.address_ar 
+                ? `-${listing.address_ar}` 
+                : (listing.address ? `-${listing.address}` : '')
+              }
+            </LocationTooltip>
           </p>
 
           <ul className="meta-list flex" style={{ gap: '24px' }}>

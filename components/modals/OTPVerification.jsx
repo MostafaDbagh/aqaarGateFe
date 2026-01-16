@@ -103,6 +103,34 @@ export default function OTPVerification({
     }
   };
 
+  const handlePaste = async (e) => {
+    e.preventDefault();
+    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+    
+    // Extract only numeric digits from pasted text
+    const digits = pastedText.replace(/\D/g, '').slice(0, 6);
+    
+    if (digits.length > 0) {
+      const newOtp = [...otp];
+      // Fill boxes with pasted digits
+      for (let i = 0; i < 6; i++) {
+        newOtp[i] = digits[i] || '';
+      }
+      setOtp(newOtp);
+      setError('');
+      
+      // Focus the appropriate input box
+      // If we got 6 digits, focus the last one (will auto-verify)
+      // Otherwise, focus the next empty box
+      if (digits.length === 6) {
+        inputRefs.current[5]?.focus();
+      } else {
+        const nextIndex = Math.min(digits.length, 5);
+        inputRefs.current[nextIndex]?.focus();
+      }
+    }
+  };
+
   const handleVerifyOTP = async (e) => {
     if (e) e.preventDefault();
     const otpString = otp.join('');
@@ -256,9 +284,12 @@ export default function OTPVerification({
                   key={index}
                   ref={(el) => inputRefs.current[index] = el}
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={digit}
                   onChange={(e) => handleOTPChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={handlePaste}
                   maxLength="1"
                   className={styles.otpInput}
                   onFocus={(e) => { e.target.classList.add(styles.otpInputFocused); }}

@@ -9,6 +9,7 @@ import { usePropertyActions } from "@/hooks/usePropertyActions";
 import "./PropertyImageFix.css";
 import styles from "./PropertyListItems.module.css";
 import { translateCity } from "@/constants/cityTranslations";
+import LocationTooltip from "../common/LocationTooltip";
 
 export default function PropertyListItems({ listings = [], isAISearch = false, hasActiveSearch = false }) {
   const t = useTranslations();
@@ -578,7 +579,10 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
               </div>
             )}
             <p className="location text-1 flex items-center gap-6">
-              <i className="icon-location" /> {translateCity(property.city || property.state || property.location || 'Location not specified', locale)}
+              <i className="icon-location" />
+              <LocationTooltip location={translateCity(property.city || property.state || property.location || 'Location not specified', locale)}>
+                {translateCity(property.city || property.state || property.location || 'Location not specified', locale)}
+              </LocationTooltip>
             </p>
             <ul className="meta-list flex" style={{ gap: '24px' }}>
               {property.bedrooms != null && Number(property.bedrooms) > 0 && (

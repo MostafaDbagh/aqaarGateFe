@@ -1,0 +1,17 @@
+.copyButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.copyButton.copied {
+  color: #10b981;
+}
+
