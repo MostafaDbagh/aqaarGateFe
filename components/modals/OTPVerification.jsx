@@ -166,8 +166,11 @@ export default function OTPVerification({
         }
       } else {
         setError(t('invalidOTP'));
-        setOtp(['', '', '', '', '', '']);
-        inputRefs.current[0]?.focus();
+        // Keep values in boxes for 3 seconds before resetting
+        setTimeout(() => {
+          setOtp(['', '', '', '', '', '']);
+          inputRefs.current[0]?.focus();
+        }, 3000);
       }
     } catch (error) {
       // Extract error message from different error formats
@@ -185,11 +188,11 @@ export default function OTPVerification({
       }
       
       setError(errorMsg);
-      setOtp(['', '', '', '', '', '']);
-      // Reset focus after a short delay to ensure input is cleared
+      // Keep values in boxes for 3 seconds before resetting
       setTimeout(() => {
+        setOtp(['', '', '', '', '', '']);
         inputRefs.current[0]?.focus();
-      }, 100);
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -284,8 +287,6 @@ export default function OTPVerification({
                   key={index}
                   ref={(el) => inputRefs.current[index] = el}
                   type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
                   value={digit}
                   onChange={(e) => handleOTPChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}

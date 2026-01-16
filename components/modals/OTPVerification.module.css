@@ -27,9 +27,8 @@
 /* Mobile responsive container */
 @media (max-width: 480px) {
   .container {
-    padding: 20px;
+    padding: 20px 16px;
     width: 95%;
-    border-radius: 8px;
   }
 }
 
@@ -45,13 +44,6 @@
   font-weight: 600;
   color: var(--Heading);
   text-align: center;
-}
-
-/* Mobile responsive title */
-@media (max-width: 480px) {
-  .title {
-    font-size: 20px;
-  }
 }
 
 .closeIcon {
@@ -133,20 +125,12 @@
   color: var(--Heading);
 }
 
-/* Mobile responsive label */
-@media (max-width: 480px) {
-  .otpLabel {
-    font-size: 13px;
-    margin-bottom: 10px;
-  }
-}
-
 .otpInputs {
   display: flex;
   gap: 12px;
   justify-content: center;
   margin-bottom: 16px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .otpInput {
@@ -161,34 +145,38 @@
   outline: none;
   color: var(--Heading);
   transition: border-color 0.2s ease;
+  padding: 0;
+  line-height: 56px;
+  vertical-align: middle;
 }
 
 /* Mobile responsive OTP inputs */
 @media (max-width: 480px) {
   .otpInputs {
-    gap: 8px;
-    padding: 0 10px;
+    gap: 6px;
+    padding: 0 4px;
   }
 
   .otpInput {
-    width: 42px;
-    height: 50px;
+    width: 40px;
+    height: 48px;
     font-size: 20px;
+    line-height: 48px;
     border-radius: 6px;
-    flex: 0 0 auto;
   }
 }
 
 @media (max-width: 360px) {
   .otpInputs {
-    gap: 6px;
-    padding: 0 5px;
+    gap: 4px;
+    padding: 0 2px;
   }
 
   .otpInput {
-    width: 38px;
-    height: 48px;
+    width: 36px;
+    height: 44px;
     font-size: 18px;
+    line-height: 44px;
   }
 }
 
