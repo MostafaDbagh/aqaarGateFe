@@ -11,14 +11,21 @@ export default function LocationTooltip({ location, children, className = "" }) 
     const checkTruncation = () => {
       if (textRef.current) {
         const element = textRef.current;
-        setIsTruncated(element.scrollWidth > element.clientWidth);
+        // Check if text is truncated
+        const truncated = element.scrollWidth > element.clientWidth;
+        setIsTruncated(truncated);
       }
     };
 
-    checkTruncation();
+    // Use setTimeout to ensure DOM is fully rendered
+    const timeoutId = setTimeout(checkTruncation, 0);
     window.addEventListener('resize', checkTruncation);
-    return () => window.removeEventListener('resize', checkTruncation);
-  }, [location]);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', checkTruncation);
+    };
+  }, [location, children]);
 
   if (!location) return children;
 
