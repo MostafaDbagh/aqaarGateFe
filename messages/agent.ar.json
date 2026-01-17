@@ -39,7 +39,8 @@
     "allProperties": "جميع العقارات",
     "properties": "عقارات",
     "topPerformingProperties": "أفضل العقارات أداءً",
-    "propertyListing": "قائمة العقار"
+    "propertyListing": "قائمة العقار",
+    "new": "جديد"
   },
   "property": {
     "title": "عقاراتي",

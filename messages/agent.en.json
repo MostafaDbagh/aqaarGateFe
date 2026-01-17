@@ -39,7 +39,8 @@
     "allProperties": "All Properties",
     "properties": "Properties",
     "topPerformingProperties": "Top Performing Properties",
-    "propertyListing": "Property Listing"
+    "propertyListing": "Property Listing",
+    "new": "New"
   },
   "property": {
     "title": "My Properties",
