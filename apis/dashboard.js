@@ -57,6 +57,82 @@ const dashboardAPI = {
       logger.error('Error fetching dashboard health:', error);
       throw error;
     }
+  },
+
+  /**
+   * Get conversion rates (views → inquiries → contacts)
+   * @param {string} period - Time period (7d, 30d, 90d, 1y)
+   * @returns {Promise<Object>} Conversion rates data
+   */
+  getConversionRates: async (period = '30d') => {
+    try {
+      const response = await axios.get(`/dashboard/conversion-rates?period=${period}`);
+      return response.data;
+    } catch (error) {
+      logger.error('Error fetching conversion rates:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get top performing properties
+   * @param {number} limit - Number of properties to return
+   * @param {string} sortBy - Sort by: visits, inquiries, conversion
+   * @returns {Promise<Object>} Top performing properties data
+   */
+  getTopPerformingProperties: async (limit = 5, sortBy = 'visits') => {
+    try {
+      const response = await axios.get(`/dashboard/top-properties?limit=${limit}&sortBy=${sortBy}`);
+      return response.data;
+    } catch (error) {
+      logger.error('Error fetching top performing properties:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get stats comparison (current vs previous period)
+   * @param {string} period - Time period (7d, 30d, 90d, 1y)
+   * @returns {Promise<Object>} Stats comparison data
+   */
+  getStatsComparison: async (period = '30d') => {
+    try {
+      const response = await axios.get(`/dashboard/stats-comparison?period=${period}`);
+      return response.data;
+    } catch (error) {
+      logger.error('Error fetching stats comparison:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get health scores for listings
+   * @param {number} limit - Number of listings to return
+   * @returns {Promise<Object>} Health scores data
+   */
+  getHealthScores: async (limit = 10) => {
+    try {
+      const response = await axios.get(`/dashboard/health-scores?limit=${limit}`);
+      return response.data;
+    } catch (error) {
+      logger.error('Error fetching health scores:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get lead pipeline statistics
+   * @param {string} period - Time period (7d, 30d, 90d, 1y)
+   * @returns {Promise<Object>} Lead pipeline data
+   */
+  getLeadPipeline: async (period = '30d') => {
+    try {
+      const response = await axios.get(`/dashboard/lead-pipeline?period=${period}`);
+      return response.data;
+    } catch (error) {
+      logger.error('Error fetching lead pipeline:', error);
+      throw error;
+    }
   }
 };
 

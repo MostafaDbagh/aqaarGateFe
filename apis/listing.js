@@ -233,6 +233,94 @@ export const listingAPI = {
     } catch (error) {
       throw error.response?.data || error.message;
     }
+  },
+
+  /**
+   * Export properties to CSV
+   * @returns {Promise<Blob>} CSV file blob
+   */
+  exportProperties: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await Axios.get('/listing/export', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: 'blob', // Important for file downloads
+        validateStatus: (status) => status < 500 // Accept 4xx as errors to parse JSON
+      });
+      
+      // Check if response is successful (200-299)
+      if (response.status >= 200 && response.status < 300) {
+        // Check if it's actually a blob
+        if (response.data instanceof Blob) {
+          return response.data;
+        }
+      }
+      
+      // If status is error (4xx), try to parse error message from blob
+      if (response.status >= 400) {
+        try {
+          const text = await new Response(response.data).text();
+          const errorData = JSON.parse(text);
+          throw errorData;
+        } catch (parseError) {
+          throw { message: 'Failed to export properties', error: 'Export failed' };
+        }
+      }
+      
+      return response.data;
+    } catch (error) {
+      // Handle axios errors
+      if (error.response) {
+        // Try to parse blob error response
+        if (error.response.data instanceof Blob) {
+          try {
+            const text = await new Response(error.response.data).text();
+            const errorData = JSON.parse(text);
+            throw errorData;
+          } catch (parseError) {
+            throw { 
+              message: error.response.statusText || 'Export failed', 
+              error: 'Failed to export properties' 
+            };
+          }
+        }
+        // If already JSON error
+        throw error.response.data || { 
+          message: error.response.statusText || 'Export failed', 
+          error: 'Failed to export properties' 
+        };
+      }
+      // Network or other errors
+      throw { 
+        message: error.message || 'Export failed', 
+        error: 'Failed to export properties' 
+      };
+    }
+  },
+
+  /**
+   * Import properties from CSV file
+   * @param {File} file - CSV file to import
+   * @returns {Promise<Object>} Import results
+   */
+  importProperties: async (file) => {
+    try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('csvFile', file);
+
+      const response = await Axios.post('/listing/import', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
   }
 };
 

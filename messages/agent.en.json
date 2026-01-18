@@ -40,7 +40,17 @@
     "properties": "Properties",
     "topPerformingProperties": "Top Performing Properties",
     "propertyListing": "Property Listing",
-    "new": "New"
+    "new": "New",
+    "conversionRates": "Conversion Rates",
+    "viewsToInquiries": "Views to Inquiries",
+    "inquiriesToContacts": "Inquiries to Contacts",
+    "viewsToContacts": "Views to Contacts",
+    "inquiries": "Inquiries",
+    "contacts": "Contacts",
+    "performanceComparison": "Performance Comparison",
+    "vsPrevious": "vs Previous",
+    "leadPipeline": "Lead Pipeline",
+    "healthScores": "Health Scores"
   },
   "property": {
     "title": "My Properties",
@@ -95,7 +105,21 @@
     "onlyDeleteOwn": "You can only delete your own listings.",
     "propertyNotFound": "Property not found.",
     "serverError": "Server error. Please try again later.",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "export": "Export",
+    "import": "Import",
+    "exportProperties": "Export Properties",
+    "importProperties": "Import Properties",
+    "exportSuccess": "Properties exported successfully!",
+    "exportError": "Failed to export properties. Please try again.",
+    "importSuccess": "Properties imported successfully",
+    "importError": "Failed to import properties. Please try again.",
+    "selectFile": "Select CSV File",
+    "selectedFile": "Selected file",
+    "importing": "Importing...",
+    "invalidFileType": "Please select a valid CSV file.",
+    "importNote": "Note: The CSV file should match the export format. Duplicate Property IDs will be skipped.",
+    "properties": "properties"
   },
   "addProperty": {
     "title": "Add Property",

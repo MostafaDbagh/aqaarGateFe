@@ -154,7 +154,11 @@
     "makeMeAgent": "Make Me Agent",
     "noPropertiesFound": "No properties found.",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "notifications": "Notifications",
+    "noNewNotifications": "No new notifications",
+    "markAllRead": "Mark all read",
+    "viewAllNotifications": "View all notifications"
   },
   "register": {
     "title": "Create Account",
@@ -340,6 +344,7 @@
     "comingSoon": "Coming soon",
     "callUs": "Call us",
     "needLiveHelp": "Need live help",
+    "chatWhatsapp": "Chat WhatsApp",
     "whatsapp": "WhatsApp",
     "followUs": "Follow us",
     "copyright": "Copyright ©",

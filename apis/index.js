@@ -14,6 +14,7 @@ import categoryAPI from './category';
 import cityAPI from './city';
 import propertyRentalAPI from './propertyRental';
 import adminAPI from './admin';
+import notificationAPI from './notification';
 
 // Export all APIs
 export {
@@ -31,7 +32,8 @@ export {
   categoryAPI,
   cityAPI,
   propertyRentalAPI,
-  adminAPI
+  adminAPI,
+  notificationAPI
 };
 
 // Default export with all APIs
@@ -50,7 +52,8 @@ export default {
   category: categoryAPI,
   city: cityAPI,
   propertyRental: propertyRentalAPI,
-  admin: adminAPI
+  admin: adminAPI,
+  notification: notificationAPI
 };
 
 // Individual exports for convenience
@@ -69,3 +72,4 @@ export const category = categoryAPI;
 export const city = cityAPI;
 export const propertyRental = propertyRentalAPI;
 export const admin = adminAPI;
+export const notification = notificationAPI;

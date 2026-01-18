@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale } from 'next-intl';
-import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI } from './index';
+import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI, notificationAPI } from './index';
 
 // Authentication hooks
 export const useAuth = () => {
@@ -512,6 +512,51 @@ export const useDashboardHealth = () => {
   });
 };
 
+export const useConversionRates = (period = '30d') => {
+  return useQuery({
+    queryKey: ['dashboard', 'conversion-rates', period],
+    queryFn: () => dashboardAPI.getConversionRates(period),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+  });
+};
+
+export const useTopPerformingProperties = (limit = 5, sortBy = 'visits') => {
+  return useQuery({
+    queryKey: ['dashboard', 'top-properties', limit, sortBy],
+    queryFn: () => dashboardAPI.getTopPerformingProperties(limit, sortBy),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+  });
+};
+
+export const useStatsComparison = (period = '30d') => {
+  return useQuery({
+    queryKey: ['dashboard', 'stats-comparison', period],
+    queryFn: () => dashboardAPI.getStatsComparison(period),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+  });
+};
+
+export const useHealthScores = (limit = 10) => {
+  return useQuery({
+    queryKey: ['dashboard', 'health-scores', limit],
+    queryFn: () => dashboardAPI.getHealthScores(limit),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+  });
+};
+
+export const useLeadPipeline = (period = '30d') => {
+  return useQuery({
+    queryKey: ['dashboard', 'lead-pipeline', period],
+    queryFn: () => dashboardAPI.getLeadPipeline(period),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+  });
+};
+
 // AI Search hook
 export const useAISearch = (query, options = {}) => {
   const locale = useLocale();
@@ -527,4 +572,72 @@ export const useAISearch = (query, options = {}) => {
     retry: 1,
     retryDelay: 1000,
   });
+};
+
+// Notification hooks
+export const useNotifications = (params = {}) => {
+  return useQuery({
+    queryKey: ['notifications', params],
+    queryFn: () => notificationAPI.getNotifications(params),
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchInterval: 2 * 60 * 1000, // Refetch every 2 minutes
+    retry: 2,
+  });
+};
+
+export const useUnreadCount = () => {
+  return useQuery({
+    queryKey: ['notifications', 'unreadCount'],
+    queryFn: () => notificationAPI.getUnreadCount(),
+    staleTime: 30 * 1000, // 30 seconds
+    refetchInterval: 1 * 60 * 1000, // Refetch every minute
+    retry: 2,
+  });
+};
+
+export const useNotificationMutations = () => {
+  const queryClient = useQueryClient();
+
+  const markAsReadMutation = useMutation({
+    mutationFn: notificationAPI.markAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['notifications']);
+    },
+  });
+
+  const markAllAsReadMutation = useMutation({
+    mutationFn: notificationAPI.markAllAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['notifications']);
+    },
+  });
+
+  const deleteNotificationMutation = useMutation({
+    mutationFn: notificationAPI.deleteNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['notifications']);
+    },
+  });
+
+  const deleteAllReadMutation = useMutation({
+    mutationFn: notificationAPI.deleteAllRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['notifications']);
+    },
+  });
+
+  return {
+    markAsRead: markAsReadMutation.mutate,
+    markAllAsRead: markAllAsReadMutation.mutate,
+    deleteNotification: deleteNotificationMutation.mutate,
+    deleteAllRead: deleteAllReadMutation.mutate,
+    isMarkingAsRead: markAsReadMutation.isPending,
+    isMarkingAllAsRead: markAllAsReadMutation.isPending,
+    isDeleting: deleteNotificationMutation.isPending,
+    isDeletingAllRead: deleteAllReadMutation.isPending,
+    markAsReadError: markAsReadMutation.error,
+    markAllAsReadError: markAllAsReadMutation.error,
+    deleteError: deleteNotificationMutation.error,
+    deleteAllReadError: deleteAllReadMutation.error,
+  };
 };

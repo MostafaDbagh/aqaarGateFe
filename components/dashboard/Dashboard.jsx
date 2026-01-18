@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import LineChart from "./Chart";
 import Link from "next/link";
 import Image from "next/image";
-import { useMessagesByAgent, useReviewsByAgent, useMostVisitedListings, useDashboardStats, useDashboardAnalytics, useDashboardNotifications } from "@/apis/hooks";
+import { useMessagesByAgent, useReviewsByAgent, useMostVisitedListings, useDashboardStats, useDashboardAnalytics, useDashboardNotifications, useConversionRates, useTopPerformingProperties, useStatsComparison, useHealthScores, useLeadPipeline } from "@/apis/hooks";
 import LocationLoader from "@/components/common/LocationLoader";
 import DashboardFooter from "@/components/common/DashboardFooter";
 import logger from "@/utlis/logger";
@@ -84,6 +84,37 @@ export default function Dashboard() {
     error: notificationsError 
   } = useDashboardNotifications();
 
+  // Fetch new analytics features
+  const { 
+    data: conversionRatesData, 
+    isLoading: conversionRatesLoading, 
+    error: conversionRatesError 
+  } = useConversionRates('30d');
+
+  const { 
+    data: topPropertiesData, 
+    isLoading: topPropertiesLoading, 
+    error: topPropertiesError 
+  } = useTopPerformingProperties(5, 'visits');
+
+  const { 
+    data: statsComparisonData, 
+    isLoading: statsComparisonLoading, 
+    error: statsComparisonError 
+  } = useStatsComparison('30d');
+
+  const { 
+    data: healthScoresData, 
+    isLoading: healthScoresLoading, 
+    error: healthScoresError 
+  } = useHealthScores(10);
+
+  const { 
+    data: leadPipelineData, 
+    isLoading: leadPipelineLoading, 
+    error: leadPipelineError 
+  } = useLeadPipeline('30d');
+
   const recentMessages = messagesData?.data || [];
   const recentReviews = reviewsData?.data || [];
   const mostVisitedListings = Array.isArray(mostVisitedData) ? mostVisitedData : (mostVisitedData?.data || []);
@@ -92,6 +123,11 @@ export default function Dashboard() {
   const stats = useMemo(() => dashboardStats?.data || {}, [dashboardStats?.data]);
   const analytics = useMemo(() => dashboardAnalytics?.data || {}, [dashboardAnalytics?.data]);
   const notifications = useMemo(() => dashboardNotifications?.data || {}, [dashboardNotifications?.data]);
+  const conversionRates = useMemo(() => conversionRatesData?.data || {}, [conversionRatesData?.data]);
+  const topProperties = useMemo(() => topPropertiesData?.data?.properties || [], [topPropertiesData?.data]);
+  const statsComparison = useMemo(() => statsComparisonData?.data || {}, [statsComparisonData?.data]);
+  const healthScores = useMemo(() => healthScoresData?.data?.scores || [], [healthScoresData?.data]);
+  const leadPipeline = useMemo(() => leadPipelineData?.data || {}, [leadPipelineData?.data]);
 
   // Memoize utility functions to prevent recreation on every render
   const formatDate = useCallback((dateString) => {
@@ -645,7 +681,15 @@ export default function Dashboard() {
                                 <div className="text-date" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                                     {t('posted')}: {formatDate(listing.createdAt)}
                                 </div>
-                                <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                <div style={{ marginTop: '8px', marginBottom: '8px', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                                  <Link 
+                                    href={`/property-detail/${listing._id}`}
+                                    className={styles.propertyIdBadge}
+                                  >
+                                    ID: {listing.propertyId || listing._id.toString().substring(0, 8).toUpperCase()}
+                                  </Link>
+                                </div>
+                                <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left', marginTop: '4px' }}>
                                     ${listing.propertyPrice?.toLocaleString()}
                                 </div>
                               </div>
@@ -781,79 +825,217 @@ export default function Dashboard() {
                       </h6>
                       <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                         {mostVisitedListings.slice(0, 3).map((listing, index) => (
-                          <div key={listing._id} style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            padding: '12px 0',
-                            borderBottom: index < 2 ? '1px solid #eee' : 'none',
-                            direction: locale === 'ar' ? 'rtl' : 'ltr'
-                          }}>
-                            <div style={{ flex: 1, textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                              <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>
-                                {listing.propertyType || t('propertyListing')}
-                                {/* Property Keyword Tags */}
-                                {listing.propertyKeyword && (
-                                  <div style={{ 
-                                    marginTop: '16px', 
-                                    marginBottom: '16px', 
-                                    display: 'flex', 
-                                    flexWrap: 'wrap', 
-                                    gap: '6px',
-                                    direction: locale === 'ar' ? 'rtl' : 'ltr',
-                                    justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end'
-                                  }}>
-                                    {listing.propertyKeyword.split(',').map((keyword, index) => {
-                                      const trimmedKeyword = keyword.trim();
-                                      if (!trimmedKeyword) return null;
-                                      const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
-                                      return (
-                                        <span 
-                                          key={index} 
-                                          style={{
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            padding: '4px 10px',
-                                            backgroundColor: '#f0f0f0',
-                                            border: '1px solid #e0e0e0',
-                                            borderRadius: '20px',
-                                            fontSize: '12px',
-                                            color: '#333',
-                                            fontWeight: '500',
-                                            direction: locale === 'ar' ? 'rtl' : 'ltr',
-                                            textAlign: 'center'
-                                          }}
-                                        >
-                                          {translatedKeyword}
-                                        </span>
-                                      );
-                                    })}
-                                  </div>
-                                )}
+                          <div 
+                            key={listing._id} 
+                            className={`${styles.topPropertyItem} ${index < 2 ? styles.topPropertyItemBorder : ''}`}
+                            style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}
+                          >
+                            <div className={styles.topPropertyInfo} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                              <div className={styles.topPropertyTitle}>
+                                <Link 
+                                  href={`/property-detail/${listing._id}`}
+                                  className={styles.topPropertyLink}
+                                >
+                                  {listing.propertyType || t('propertyListing')}
+                                </Link>
                               </div>
-                              <div style={{ fontSize: '12px', color: '#6c757d' }}>
+                              <div className={styles.topPropertyPrice} style={{ marginTop: '6px', marginBottom: '8px' }}>
                                 ${listing.propertyPrice?.toLocaleString()}
                               </div>
-                    </div>
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              background: '#f8f9fa',
-                              padding: '6px 12px',
-                              borderRadius: '20px'
-                            }}>
+                              <div style={{ marginTop: '8px', marginBottom: '8px' }}>
+                                <Link 
+                                  href={`/property-detail/${listing._id}`}
+                                  className={styles.propertyIdBadge}
+                                >
+                                  ID: {listing.propertyId || listing._id.toString().substring(0, 8).toUpperCase()}
+                                </Link>
+                              </div>
+                              {/* Property Keyword Tags */}
+                              {listing.propertyKeyword && (
+                                <div 
+                                  className={styles.propertyKeywordsContainer}
+                                  style={{ 
+                                    direction: locale === 'ar' ? 'rtl' : 'ltr',
+                                    justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end'
+                                  }}
+                                >
+                                  {listing.propertyKeyword.split(',').map((keyword, index) => {
+                                    const trimmedKeyword = keyword.trim();
+                                    if (!trimmedKeyword) return null;
+                                    const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
+                                    return (
+                                      <span 
+                                        key={index} 
+                                        className={styles.propertyKeywordTag}
+                                        style={{
+                                          direction: locale === 'ar' ? 'rtl' : 'ltr'
+                                        }}
+                                      >
+                                        {translatedKeyword}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                            <div className={styles.topPropertyCount}>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#F1913D"/>
                               </svg>
-                              <span style={{ fontSize: '14px', fontWeight: '600', color: '#F1913D' }}>
+                              <span className={styles.topPropertyCountText}>
                                 {listing.visitCount || 0} {t('views')}
-                      </span>
-                    </div>
-                  </div>
+                              </span>
+                            </div>
+                          </div>
                         ))}
                     </div>
                   </div>
+                  )}
+
+                  {/* New Analytics Features */}
+                  {/* Conversion Rates Section */}
+                  {conversionRates && Object.keys(conversionRates).length > 0 && (
+                    <div style={{ marginTop: '30px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                      <h6 style={{ 
+                        marginBottom: '20px', 
+                        fontSize: '18px', 
+                        fontWeight: '600', 
+                        color: '#333',
+                        textAlign: locale === 'ar' ? 'right' : 'left'
+                      }}>
+                        {t('conversionRates')}
+                      </h6>
+                      <div className="row">
+                        <div className="col-md-4 mb-3">
+                          <div style={{
+                            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            color: 'white',
+                            textAlign: 'center'
+                          }}>
+                            <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('viewsToInquiries')}</h6>
+                            <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '5px' }}>
+                              {conversionRates.rates?.viewsToInquiries?.toFixed(2) || '0.00'}%
+                            </div>
+                            <div style={{ fontSize: '12px', opacity: 0.8 }}>{conversionRates.funnel?.views || 0} {t('views')}</div>
+                          </div>
+                        </div>
+                        <div className="col-md-4 mb-3">
+                          <div style={{
+                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            color: 'white',
+                            textAlign: 'center'
+                          }}>
+                            <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('inquiriesToContacts')}</h6>
+                            <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '5px' }}>
+                              {conversionRates.rates?.inquiriesToContacts?.toFixed(2) || '0.00'}%
+                            </div>
+                            <div style={{ fontSize: '12px', opacity: 0.8 }}>{conversionRates.funnel?.inquiries || 0} {t('inquiries')}</div>
+                          </div>
+                        </div>
+                        <div className="col-md-4 mb-3">
+                          <div style={{
+                            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            color: 'white',
+                            textAlign: 'center'
+                          }}>
+                            <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t('viewsToContacts')}</h6>
+                            <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '5px' }}>
+                              {conversionRates.rates?.viewsToContacts?.toFixed(2) || '0.00'}%
+                            </div>
+                            <div style={{ fontSize: '12px', opacity: 0.8 }}>{conversionRates.funnel?.contacts || 0} {t('contacts')}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Stats Comparison Section */}
+                  {statsComparison && Object.keys(statsComparison).length > 0 && (
+                    <div style={{ marginTop: '30px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                      <h6 style={{ 
+                        marginBottom: '20px', 
+                        fontSize: '18px', 
+                        fontWeight: '600', 
+                        color: '#333',
+                        textAlign: locale === 'ar' ? 'right' : 'left'
+                      }}>
+                        {t('performanceComparison')}
+                      </h6>
+                      <div className="row">
+                        {statsComparison.comparisons && Object.keys(statsComparison.comparisons).map((key, index) => {
+                          const comp = statsComparison.comparisons[key];
+                          const isPositive = (comp.percentageChange || 0) >= 0;
+                          return (
+                            <div key={key} className="col-md-6 mb-3">
+                              <div style={{
+                                background: '#fff',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '12px',
+                                padding: '20px',
+                                textAlign: locale === 'ar' ? 'right' : 'left'
+                              }}>
+                                <div style={{ fontSize: '14px', color: '#6c757d', marginBottom: '8px' }}>{t(key) || key}</div>
+                                <div style={{ fontSize: '24px', fontWeight: '700', color: '#333', marginBottom: '8px' }}>
+                                  {comp.current?.toLocaleString() || '0'}
+                                </div>
+                                <div style={{ 
+                                  fontSize: '12px', 
+                                  color: isPositive ? '#10b981' : '#ef4444',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  flexDirection: locale === 'ar' ? 'row-reverse' : 'row'
+                                }}>
+                                  <span>{isPositive ? '↑' : '↓'}</span>
+                                  <span>{Math.abs(comp.percentageChange || 0).toFixed(1)}%</span>
+                                  <span style={{ color: '#6c757d' }}>{t('vsPrevious')}</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Lead Pipeline Section */}
+                  {leadPipeline && Object.keys(leadPipeline).length > 0 && (
+                    <div style={{ marginTop: '30px', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                      <h6 style={{ 
+                        marginBottom: '20px', 
+                        fontSize: '18px', 
+                        fontWeight: '600', 
+                        color: '#333',
+                        textAlign: locale === 'ar' ? 'right' : 'left'
+                      }}>
+                        {t('leadPipeline')}
+                      </h6>
+                      <div className="row">
+                        {leadPipeline.stages && leadPipeline.stages.map((stage, index) => (
+                          <div key={index} className="col-md-3 mb-3">
+                            <div style={{
+                              background: stage.color ? `linear-gradient(135deg, ${stage.color} 0%, ${stage.color}dd 100%)` : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                              borderRadius: '12px',
+                              padding: '20px',
+                              color: 'white',
+                              textAlign: 'center'
+                            }}>
+                              <h6 style={{ margin: '0 0 10px 0', fontSize: '14px', opacity: 0.9 }}>{t(stage.name) || stage.name}</h6>
+                              <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '5px' }}>
+                                {stage.count || 0}
+                              </div>
+                              <div style={{ fontSize: '12px', opacity: 0.8 }}>{stage.percentage || 0}%</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
             </div>
                     </div>

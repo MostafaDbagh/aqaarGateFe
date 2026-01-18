@@ -153,7 +153,11 @@
     "noPropertiesFound": "لم يتم العثور على عقارات.",
     "makeMeAgent": "اجعلني وكيل",
     "login": "تسجيل الدخول",
-    "register": "إنشاء حساب"
+    "register": "إنشاء حساب",
+    "notifications": "الإشعارات",
+    "noNewNotifications": "لا توجد إشعارات جديدة",
+    "markAllRead": "تعليم الكل كمقروء",
+    "viewAllNotifications": "عرض جميع الإشعارات"
   },
   "register": {
     "title": "إنشاء حساب",
@@ -339,6 +343,7 @@
     "comingSoon": "قريباً",
     "callUs": "اتصل بنا",
     "needLiveHelp": "تحتاج مساعدة مباشرة",
+    "chatWhatsapp": "دردشة واتساب",
     "whatsapp": "واتساب",
     "followUs": "تابعنا",
     "copyright": "حقوق النشر ©",

@@ -259,6 +259,7 @@
 
 .topPropertyInfo {
   flex: 1;
+  min-width: 0;
 }
 
 .topPropertyTitle {
@@ -268,8 +269,9 @@
 }
 
 .topPropertyPrice {
-  font-size: 12px;
-  color: #6c757d;
+  font-size: 14px;
+  color: #6366f1;
+  font-weight: 600;
 }
 
 .topPropertyCount {
@@ -285,6 +287,61 @@
   font-size: 14px;
   font-weight: 600;
   color: #F1913D;
+}
+
+.topPropertyLink {
+  color: #333;
+  text-decoration: none;
+}
+
+.topPropertyLink:hover {
+  color: #6366f1;
+}
+
+.propertyIdBadge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.propertyIdBadge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+  color: white;
+  text-decoration: none;
+}
+
+.propertyKeywordsContainer {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.propertyKeywordTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
 }
 
 /* Recent Messages/Reviews */

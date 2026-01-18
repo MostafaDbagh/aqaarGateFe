@@ -40,7 +40,17 @@
     "properties": "عقارات",
     "topPerformingProperties": "أفضل العقارات أداءً",
     "propertyListing": "قائمة العقار",
-    "new": "جديد"
+    "new": "جديد",
+    "conversionRates": "معدلات التحويل",
+    "viewsToInquiries": "من المشاهدات إلى الاستفسارات",
+    "inquiriesToContacts": "من الاستفسارات إلى جهات الاتصال",
+    "viewsToContacts": "من المشاهدات إلى جهات الاتصال",
+    "inquiries": "استفسارات",
+    "contacts": "جهات اتصال",
+    "performanceComparison": "مقارنة الأداء",
+    "vsPrevious": "مقارنة بالفترة السابقة",
+    "leadPipeline": "مسار العملاء المحتملين",
+    "healthScores": "نقاط الصحة"
   },
   "property": {
     "title": "عقاراتي",
@@ -95,7 +105,21 @@
     "onlyDeleteOwn": "يمكنك حذف قوائمك فقط.",
     "propertyNotFound": "العقار غير موجود.",
     "serverError": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.",
-    "confirm": "تأكيد"
+    "confirm": "تأكيد",
+    "export": "تصدير",
+    "import": "استيراد",
+    "exportProperties": "تصدير العقارات",
+    "importProperties": "استيراد العقارات",
+    "exportSuccess": "تم تصدير العقارات بنجاح!",
+    "exportError": "فشل تصدير العقارات. يرجى المحاولة مرة أخرى.",
+    "importSuccess": "تم استيراد العقارات بنجاح",
+    "importError": "فشل استيراد العقارات. يرجى المحاولة مرة أخرى.",
+    "selectFile": "اختر ملف CSV",
+    "selectedFile": "الملف المحدد",
+    "importing": "جاري الاستيراد...",
+    "invalidFileType": "يرجى اختيار ملف CSV صالح.",
+    "importNote": "ملاحظة: يجب أن يتطابق ملف CSV مع تنسيق التصدير. سيتم تخطي معرفات العقارات المكررة.",
+    "properties": "عقارات"
   },
   "addProperty": {
     "title": "إضافة عقار",

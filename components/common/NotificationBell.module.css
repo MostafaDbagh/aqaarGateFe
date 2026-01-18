@@ -1,0 +1,83 @@
+.notificationBellContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.bellButton {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--Primary, #6366f1);
+  font-size: 20px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.bellButton:hover {
+  background-color: rgba(99, 102, 241, 0.1);
+  color: var(--Primary, #6366f1);
+}
+
+.bellIcon {
+  transition: all 0.3s ease;
+}
+
+.bellButton.hasNotifications {
+  animation: pulseBlue 2s ease-in-out infinite;
+}
+
+@keyframes pulseBlue {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.5));
+  }
+}
+
+.bellButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .bellButton {
+    padding: 6px 10px;
+    font-size: 18px;
+  }
+
+  .badge {
+    top: 2px;
+    right: 2px;
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    padding: 2px 5px;
+  }
+}
+
