@@ -13,6 +13,7 @@ import DeleteAccountModal from "@/components/modals/DeleteAccountModal";
 import Toast from "@/components/common/Toast";
 import styles from "./Sidebar.module.css";
 import { useTranslations } from 'next-intl';
+import NotificationBell from "@/components/common/NotificationBell";
 
 export default function Sidebar() {
   // Fallback translations for static generation
@@ -373,6 +374,14 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Notifications */}
+                <li className="nav-menu-item">
+                  <div className={`nav-menu-link ${styles.adminButton}`} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+                    <NotificationBell />
+                    <span>Notifications</span>
+                  </div>
+                </li>
+
                 {/* Create Admin */}
                 <li
                   className={`nav-menu-item ${
@@ -467,6 +476,15 @@ export default function Sidebar() {
                       <i className="icon-message" />
                       {t('messages')}
                     </Link>
+                  </li>
+                )}
+                {/* Notifications - For agents */}
+                {isAgent && (
+                  <li className="nav-menu-item">
+                    <div className="nav-menu-link" style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+                      <NotificationBell />
+                      <span>{t('notifications') || 'Notifications'}</span>
+                    </div>
                   </li>
                 )}
                 {/* My properties - Only for agents */}

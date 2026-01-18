@@ -56,6 +56,21 @@ export const adminAPI = {
     }
   },
 
+  exportAdminProperties: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await Axios.get('/admin/properties-by-admin/export', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: 'blob', // Important for file downloads
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   updatePropertyApproval: async (id, approvalStatus, notes) => {
     try {
       const response = await Axios.put(`/admin/properties/${id}/approval`, {
