@@ -197,3 +197,30 @@
   min-height: 400px;
 }
 
+.deleteBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #dc2626;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.deleteBtn:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.deleteBtn:disabled,
+.deleteBtnLoading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.noAction {
+  color: #9ca3af;
+  font-size: 13px;
+}
+

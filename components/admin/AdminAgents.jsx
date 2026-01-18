@@ -15,6 +15,7 @@ export default function AdminAgents() {
   const [blockReason, setBlockReason] = useState("");
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState(null);
+  const [deletingAgentId, setDeletingAgentId] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [agentDetails, setAgentDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
@@ -109,6 +110,34 @@ export default function AdminAgents() {
       setShowDetailsModal(false);
     } finally {
       setLoadingDetails(false);
+    }
+  };
+
+  const handleDeleteAgent = async (id) => {
+    const agent = agents.find(a => a._id === id);
+    const agentName = agent?.username || agent?.email || 'this agent';
+    const listingCount = agent?.listingCount || 0;
+    
+    const confirmMessage = listingCount > 0
+      ? `Are you sure you want to delete ${agentName}? This will also delete all ${listingCount} listing(s) associated with this agent. This action cannot be undone.`
+      : `Are you sure you want to delete ${agentName}? This action cannot be undone.`;
+    
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      setDeletingAgentId(id);
+      const result = await adminAPI.deleteAgent(id);
+      const message = result.deletedListingsCount > 0
+        ? `Agent and ${result.deletedListingsCount} listing(s) deleted successfully`
+        : 'Agent deleted successfully';
+      showSuccessModal("Success", message);
+      fetchAgents();
+    } catch (err) {
+      showWarningModal("Error", err.message || "Failed to delete agent");
+    } finally {
+      setDeletingAgentId(null);
     }
   };
 
@@ -243,6 +272,13 @@ export default function AdminAgents() {
                           Block
                         </button>
                       )}
+                      <button
+                        className={`${styles.btn} ${styles.btnDelete} ${deletingAgentId === agent._id ? styles.btnLoading : ''}`}
+                        onClick={() => handleDeleteAgent(agent._id)}
+                        disabled={deletingAgentId === agent._id}
+                      >
+                        {deletingAgentId === agent._id ? 'Deleting...' : 'Delete'}
+                      </button>
                     </div>
                   </td>
                 </tr>

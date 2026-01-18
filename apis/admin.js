@@ -211,7 +211,7 @@ export const adminAPI = {
     }
   },
 
-  // Users (read-only)
+  // Users
   getAllUsers: async (filters = {}) => {
     try {
       const params = new URLSearchParams();
@@ -228,6 +228,15 @@ export const adminAPI = {
       const queryString = params.toString();
       const url = `/admin/users${queryString ? `?${queryString}` : ''}`;
       const response = await Axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deleteUser: async (id) => {
+    try {
+      const response = await Axios.delete(`/admin/users/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -268,6 +277,15 @@ export const adminAPI = {
   unblockAgent: async (id) => {
     try {
       const response = await Axios.put(`/admin/agents/${id}/unblock`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deleteAgent: async (id) => {
+    try {
+      const response = await Axios.delete(`/admin/agents/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

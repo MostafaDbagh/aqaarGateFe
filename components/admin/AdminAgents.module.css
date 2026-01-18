@@ -308,6 +308,21 @@
   background-color: #2563eb;
 }
 
+.btnDelete {
+  background-color: #dc2626;
+  color: white;
+}
+
+.btnDelete:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.btnDelete:disabled,
+.btnLoading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Details Modal Styles */
 .detailsModalContent {
   background: white;

@@ -2,13 +2,16 @@
 import React, { useState, useEffect } from "react";
 import { adminAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
+import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./AdminUsers.module.css";
 import { UserIcon, PhoneIcon, EmailIcon } from "@/components/icons";
 
 export default function AdminUsers() {
+  const { showSuccessModal, showWarningModal } = useGlobalModal();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deletingUserId, setDeletingUserId] = useState(null);
   const [filters, setFilters] = useState({
     search: "",
     role: "",
@@ -39,6 +42,26 @@ export default function AdminUsers() {
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
+  };
+
+  const handleDeleteUser = async (userId) => {
+    const user = users.find(u => u._id === userId);
+    const userName = user?.username || user?.email || 'this user';
+    
+    if (!window.confirm(`Are you sure you want to delete ${userName}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      setDeletingUserId(userId);
+      await adminAPI.deleteUser(userId);
+      showSuccessModal("Success", "User deleted successfully");
+      fetchUsers();
+    } catch (err) {
+      showWarningModal("Error", err.message || "Failed to delete user");
+    } finally {
+      setDeletingUserId(null);
+    }
   };
 
   if (loading && users.length === 0) {
@@ -104,12 +127,13 @@ export default function AdminUsers() {
               <th>Company/Job</th>
               <th>Location</th>
               <th>Joined Date</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan="7" className={styles.noData}>No users found</td>
+                <td colSpan="8" className={styles.noData}>No users found</td>
               </tr>
             ) : (
               users.map((user) => (
@@ -174,6 +198,19 @@ export default function AdminUsers() {
                       </span>
                     ) : (
                       '-'
+                    )}
+                  </td>
+                  <td>
+                    {user.role !== 'admin' ? (
+                      <button
+                        className={`${styles.deleteBtn} ${deletingUserId === user._id ? styles.deleteBtnLoading : ''}`}
+                        onClick={() => handleDeleteUser(user._id)}
+                        disabled={deletingUserId === user._id}
+                      >
+                        {deletingUserId === user._id ? 'Deleting...' : 'Delete'}
+                      </button>
+                    ) : (
+                      <span className={styles.noAction}>-</span>
                     )}
                   </td>
                 </tr>
