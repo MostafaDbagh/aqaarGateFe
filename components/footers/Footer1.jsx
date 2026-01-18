@@ -139,21 +139,15 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
                     />
                   </div>
                   <div className="content">
-                    <h6 className="fw-4" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div className="title text-1">{t('chatWhatsapp')}</div>
+                    <h6 className="fw-4">
                       <a 
                         href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: '#f1913d', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}
+                        style={{ color: '#f1913d', fontWeight: '600' }}
                       >
-                        <img 
-                          src="/icons/whatsapp.svg" 
-                          alt="WhatsApp" 
-                          width={20}
-                          height={20}
-                          style={{ width: '20px', height: '20px' }}
-                        />
-                        <span>+971586057772</span>
+                        +971586057772
                       </a>
                     </h6>
                   </div>

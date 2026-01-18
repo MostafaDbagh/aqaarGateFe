@@ -72,6 +72,7 @@ export default function Property() {
     message: '',
     type: 'success'
   });
+  
 
   // Get user from localStorage on component mount
   useEffect(() => {
@@ -124,6 +125,35 @@ export default function Property() {
     refetch();
     showToast(t('propertyUpdated'), 'success');
   };
+
+  // Handle export properties
+  const handleExportProperties = async () => {
+    if (isAgentBlocked) {
+      showToast(t('accountBlocked'), 'error');
+      return;
+    }
+
+    try {
+      const blob = await listingAPI.exportProperties();
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `properties_export_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      showToast(t('exportSuccess'), 'success');
+    } catch (error) {
+      logger.error('Export error:', error);
+      const errorMessage = error?.message || error?.error || t('exportError');
+      showToast(errorMessage, 'error');
+    }
+  };
+
 
   // Handle mark as sold/unsold
   const handleMarkSold = (listing) => {
@@ -494,12 +524,41 @@ export default function Property() {
           </div>
         </div>
         <div className="widget-box-2 wd-listing mt-20" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
-          <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-            {t('title')}
-            {user && <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: locale === 'ar' ? '0' : '10px', marginRight: locale === 'ar' ? '10px' : '0' }}>
-              ({filteredListings.length} {t('total')} - {t('showing')} {startIndex + 1}-{Math.min(endIndex, filteredListings.length)})
-            </span>}
-          </h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+            <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left', margin: 0 }}>
+              {t('title')}
+              {user && <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: locale === 'ar' ? '0' : '10px', marginRight: locale === 'ar' ? '10px' : '0' }}>
+                ({filteredListings.length} {t('total')} - {t('showing')} {startIndex + 1}-{Math.min(endIndex, filteredListings.length)})
+              </span>}
+            </h3>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={handleExportProperties}
+                disabled={isAgentBlocked || filteredListings.length === 0}
+                className="tf-btn"
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  border: '1px solid #6366f1',
+                  backgroundColor: '#6366f1',
+                  color: 'white',
+                  cursor: (isAgentBlocked || filteredListings.length === 0) ? 'not-allowed' : 'pointer',
+                  opacity: (isAgentBlocked || filteredListings.length === 0) ? 0.5 : 1,
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {t('export')}
+              </button>
+            </div>
+          </div>
           <div className="wrap-table">
             <div className="table-responsive">
               {isLoading ? (

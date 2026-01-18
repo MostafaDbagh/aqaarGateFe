@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import DashboardNav from "./DashboardNav";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import NotificationBell from "@/components/common/NotificationBell";
 import { useAuthState } from "@/store/hooks/useAuth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { useTranslations } from 'next-intl';
@@ -61,6 +62,7 @@ export default function Header1({ parentClass = "header" }) {
                 </nav>
                 <div className="header-right">
                   <LanguageSwitcher />
+                  {isLoggedIn && <NotificationBell />}
                   <DashboardNav />
                   
                   {/* Add Property Button - Only for Agents */}

@@ -16,6 +16,7 @@ import {
   AddPropertyIcon, 
   LogoutIcon 
 } from "@/components/icons";
+import NotificationBell from "@/components/common/NotificationBell";
 
 export default function DashboardNav({ color = "" }) {
   const [isDDOpen, setIsDDOpen] = useState(false);
