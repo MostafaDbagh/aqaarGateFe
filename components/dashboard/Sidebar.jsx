@@ -402,10 +402,9 @@ export default function Sidebar() {
                 {/* Notifications - For admin only */}
                 {isAdmin && (
                   <li className={`nav-menu-item ${pathname?.includes('/notifications') ? 'active' : ''}`}>
-                    <button 
-                      type="button"
+                    <div 
                       className={`nav-menu-link ${styles.adminButton}`}
-                      style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left', cursor: 'pointer' }}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -414,10 +413,21 @@ export default function Sidebar() {
                           router.push('/notifications');
                         }
                       }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (!e.target.closest('.notificationBellContainer')) {
+                            router.push('/notifications');
+                          }
+                        }
+                      }}
                     >
                       <NotificationBell />
                       <span>{t('notifications') || 'Notifications'}</span>
-                    </button>
+                    </div>
                   </li>
                 )}
 
@@ -522,20 +532,32 @@ export default function Sidebar() {
                 {/* Notifications - For agents */}
                 {isAgent && (
                   <li className={`nav-menu-item ${pathname?.includes('/notifications') ? 'active' : ''}`}>
-                    <Link 
-                      href="/notifications" 
+                    <div 
                       className="nav-menu-link"
-                      style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
                       onClick={(e) => {
-                        // Allow NotificationBell to handle its own clicks
-                        if (e.target.closest('.notificationBellContainer')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Only navigate if not clicking on the bell icon
+                        if (!e.target.closest('.notificationBellContainer')) {
+                          router.push('/notifications');
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
+                          e.stopPropagation();
+                          if (!e.target.closest('.notificationBellContainer')) {
+                            router.push('/notifications');
+                          }
                         }
                       }}
                     >
                       <NotificationBell />
                       <span>{t('notifications') || 'Notifications'}</span>
-                    </Link>
+                    </div>
                   </li>
                 )}
                 {/* My properties - Only for agents */}

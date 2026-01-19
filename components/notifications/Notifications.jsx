@@ -212,7 +212,46 @@ export default function Notifications() {
               </div>
             ) : (
               <ul className={styles.notificationList}>
-              {notifications.map((notification) => (
+              {notifications.map((notification) => {
+                // Extract propertyId from notification data if available
+                const propertyId = notification.data?.propertyId || null;
+                
+                // Replace MongoDB ObjectId pattern (24 hex characters) with propertyId in message
+                let displayMessage = notification.message || '';
+                
+                if (propertyId && displayMessage) {
+                  // Pattern to match ObjectId in format: (ID: 696e0a310d5ccf893f140983)
+                  const objectIdInParenthesesPattern = /\(ID:\s*[a-f0-9]{24}\)/gi;
+                  
+                  // Replace ObjectId in parentheses format
+                  if (objectIdInParenthesesPattern.test(displayMessage)) {
+                    displayMessage = displayMessage.replace(objectIdInParenthesesPattern, `(ID: ${propertyId})`);
+                  }
+                  
+                  // Also replace standalone ObjectId (24 hex chars) that might appear in the message
+                  // but only if it's clearly an ID (not part of another word/number)
+                  const standaloneObjectIdPattern = /\b([a-f0-9]{24})\b/gi;
+                  if (standaloneObjectIdPattern.test(displayMessage) && !displayMessage.includes(propertyId)) {
+                    // Replace ObjectId only if it appears to be an ID reference
+                    displayMessage = displayMessage.replace(standaloneObjectIdPattern, (match) => {
+                      // Check if this ObjectId is part of an ID reference
+                      const beforeMatch = displayMessage.substring(0, displayMessage.indexOf(match));
+                      const afterMatch = displayMessage.substring(displayMessage.indexOf(match) + match.length);
+                      
+                      // If it's preceded by "ID:" or similar, replace it
+                      if (beforeMatch.trim().endsWith('ID:') || beforeMatch.trim().endsWith('id:')) {
+                        return propertyId;
+                      }
+                      // If it's in parentheses with "ID:", replace it
+                      if (beforeMatch.includes('(ID:') || beforeMatch.includes('(id:')) {
+                        return propertyId;
+                      }
+                      return match;
+                    });
+                  }
+                }
+                
+                return (
                 <li
                   key={notification._id}
                   className={`${styles.notificationItem} ${!notification.isRead ? styles.unread : ''} ${getAlertClass(notification.alertType)}`}
@@ -244,7 +283,7 @@ export default function Notifications() {
                         </button>
                       </div>
                     </div>
-                    <p className={styles.notificationMessage}>{notification.message}</p>
+                    <p className={styles.notificationMessage}>{displayMessage}</p>
                     <div className={styles.notificationFooter}>
                       <span className={styles.notificationTime}>
                         {formatTimeAgo(notification.createdAt)}
@@ -255,7 +294,8 @@ export default function Notifications() {
                     </div>
                   </div>
                 </li>
-              ))}
+              );
+              })}
               </ul>
             )}
           </div>
