@@ -1,0 +1,406 @@
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.allReadText {
+  color: #6366f1 !important;
+  font-weight: 600;
+}
+
+.statCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.statValue {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.markAllButton {
+  padding: 10px 20px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+.markAllButton:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filterLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+}
+
+.filterSelect {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  min-width: 180px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.filterSelect:hover {
+  border-color: #6366f1;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.loading,
+.empty {
+  padding: 40px 20px;
+}
+
+.emptyIconWrapper {
+  margin-bottom: 16px;
+}
+
+.empty h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.notificationList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notificationItem {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: all 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+.notificationItem:last-child {
+  border-bottom: none;
+}
+
+.notificationItem:hover {
+  background-color: #f9fafb;
+  transform: translateX(4px);
+}
+
+.notificationItem.unread {
+  background: linear-gradient(to right, #eff6ff 0%, #ffffff 100%);
+  border-left: 4px solid #6366f1;
+}
+
+.notificationItem.unread:hover {
+  background: linear-gradient(to right, #dbeafe 0%, #f9fafb 100%);
+}
+
+.notificationItem.alertSuccess {
+  border-left-color: #10b981;
+}
+
+.notificationItem.alertSuccess.unread {
+  background: linear-gradient(to right, #ecfdf5 0%, #ffffff 100%);
+}
+
+.notificationItem.alertInfo {
+  border-left-color: #3b82f6;
+}
+
+.notificationItem.alertInfo.unread {
+  background: linear-gradient(to right, #eff6ff 0%, #ffffff 100%);
+}
+
+.notificationItem.alertWarning {
+  border-left-color: #f59e0b;
+}
+
+.notificationItem.alertWarning.unread {
+  background: linear-gradient(to right, #fffbeb 0%, #ffffff 100%);
+}
+
+.notificationItem.alertError {
+  border-left-color: #ef4444;
+}
+
+.notificationItem.alertError.unread {
+  background: linear-gradient(to right, #fef2f2 0%, #ffffff 100%);
+}
+
+.notificationItem.alertPrimary {
+  border-left-color: #6366f1;
+}
+
+.notificationItem.alertPrimary.unread {
+  background: linear-gradient(to right, #eef2ff 0%, #ffffff 100%);
+}
+
+.notificationContent {
+  width: 100%;
+}
+
+.notificationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 16px;
+}
+
+.notificationTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.notificationTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.unreadBadge {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+  white-space: nowrap;
+}
+
+.notificationActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.markReadButton,
+.deleteButton {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.markReadButton:hover {
+  background: #d1fae5;
+  color: #10b981;
+  transform: scale(1.1);
+}
+
+.deleteButton:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.notificationMessage {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin: 0 0 12px 0;
+  padding-left: 4px;
+}
+
+.notificationFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.notificationTime {
+  font-weight: 500;
+}
+
+.notificationDate {
+  font-weight: 400;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.paginationButton {
+  padding: 10px 20px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.paginationButton:hover:not(:disabled) {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+}
+
+.paginationButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #f3f4f6;
+}
+
+.paginationInfo {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 600;
+  padding: 0 12px;
+}
+
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .markAllButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filterGroup {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filterSelect {
+    width: 100%;
+  }
+
+  .statCard {
+    padding: 16px;
+  }
+
+  .statValue {
+    font-size: 24px;
+  }
+
+  .notificationItem {
+    padding: 16px;
+  }
+
+  .notificationHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .notificationActions {
+    align-self: flex-end;
+  }
+
+  .notificationFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .paginationButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

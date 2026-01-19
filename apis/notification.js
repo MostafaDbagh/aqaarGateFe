@@ -9,8 +9,17 @@ const notificationAPI = {
    */
   getNotifications: async (params = {}) => {
     try {
-      const queryString = new URLSearchParams(params).toString();
-      const response = await axios.get(`/notifications?${queryString}`);
+      // Filter out null, undefined, and empty string values
+      const cleanParams = Object.entries(params).reduce((acc, [key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+      
+      const queryString = new URLSearchParams(cleanParams).toString();
+      const url = queryString ? `/notifications?${queryString}` : '/notifications';
+      const response = await axios.get(url);
       return response.data;
     } catch (error) {
       logger.error('Error fetching notifications:', error);

@@ -36,7 +36,7 @@ export default function NotificationBell() {
   };
 
   return (
-    <div ref={dropdownRef} className={styles.notificationBellContainer}>
+    <div ref={dropdownRef} className={`${styles.notificationBellContainer} notificationBellContainer`}>
       <button
         type="button"
         onClick={handleBellClick}

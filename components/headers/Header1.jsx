@@ -62,7 +62,7 @@ export default function Header1({ parentClass = "header" }) {
                 </nav>
                 <div className="header-right">
                   <LanguageSwitcher />
-                  {isLoggedIn && <NotificationBell />}
+                  {isLoggedIn && (isAgent || isAdmin) && <NotificationBell />}
                   <DashboardNav />
                   
                   {/* Add Property Button - Only for Agents */}

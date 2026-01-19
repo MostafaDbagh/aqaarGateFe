@@ -24,6 +24,7 @@ export default function Sidebar() {
     'myFavorites': 'My favorites',
     'reviews': 'Reviews',
     'messages': 'Messages',
+    'notifications': 'Notifications',
     'myProperties': 'My properties',
     'addProperty': 'Add property',
     'logout': 'Logout',
@@ -374,13 +375,27 @@ export default function Sidebar() {
                   </button>
                 </li>
 
-                {/* Notifications */}
-                <li className="nav-menu-item">
-                  <div className={`nav-menu-link ${styles.adminButton}`} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                    <NotificationBell />
-                    <span>Notifications</span>
-                  </div>
-                </li>
+                {/* Notifications - For admin only */}
+                {isAdmin && (
+                  <li className={`nav-menu-item ${pathname?.includes('/notifications') ? 'active' : ''}`}>
+                    <button 
+                      type="button"
+                      className={`nav-menu-link ${styles.adminButton}`}
+                      style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Only navigate if not clicking on the bell icon
+                        if (!e.target.closest('.notificationBellContainer')) {
+                          router.push('/notifications');
+                        }
+                      }}
+                    >
+                      <NotificationBell />
+                      <span>{t('notifications') || 'Notifications'}</span>
+                    </button>
+                  </li>
+                )}
 
                 {/* Create Admin */}
                 <li
@@ -480,11 +495,21 @@ export default function Sidebar() {
                 )}
                 {/* Notifications - For agents */}
                 {isAgent && (
-                  <li className="nav-menu-item">
-                    <div className="nav-menu-link" style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+                  <li className={`nav-menu-item ${pathname?.includes('/notifications') ? 'active' : ''}`}>
+                    <Link 
+                      href="/notifications" 
+                      className="nav-menu-link"
+                      style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+                      onClick={(e) => {
+                        // Allow NotificationBell to handle its own clicks
+                        if (e.target.closest('.notificationBellContainer')) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
                       <NotificationBell />
                       <span>{t('notifications') || 'Notifications'}</span>
-                    </div>
+                    </Link>
                   </li>
                 )}
                 {/* My properties - Only for agents */}
