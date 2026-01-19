@@ -114,6 +114,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.OVERVIEW);
                         router.replace('/en/admin/overview');
+                      } else {
+                        router.push('/en/admin/overview');
                       }
                     }}
                   >
@@ -137,6 +139,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.PROPERTIES);
                         router.replace('/en/admin/properties');
+                      } else {
+                        router.push('/en/admin/properties');
                       }
                     }}
                   >
@@ -160,6 +164,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.PROPERTIES_BY_ADMIN);
                         router.replace('/en/admin/properties-by-admin');
+                      } else {
+                        router.push('/en/admin/properties-by-admin');
                       }
                     }}
                   >
@@ -183,6 +189,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.ADD_PROPERTY);
                         router.replace('/en/admin/add-property');
+                      } else {
+                        router.push('/en/admin/add-property');
                       }
                     }}
                   >
@@ -206,6 +214,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.SOLD_PROPERTIES);
                         router.replace('/en/admin/sold-properties');
+                      } else {
+                        router.push('/en/admin/sold-properties');
                       }
                     }}
                   >
@@ -229,6 +239,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.DELETED_PROPERTIES);
                         router.replace('/en/admin/deleted-properties');
+                      } else {
+                        router.push('/en/admin/deleted-properties');
                       }
                     }}
                   >
@@ -252,6 +264,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.AGENTS);
                         router.replace('/en/admin/agents');
+                      } else {
+                        router.push('/en/admin/agents');
                       }
                     }}
                   >
@@ -275,6 +289,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.USERS);
                         router.replace('/en/admin/users');
+                      } else {
+                        router.push('/en/admin/users');
                       }
                     }}
                   >
@@ -298,6 +314,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.RENTAL_SERVICES);
                         router.replace('/en/admin/rental-services');
+                      } else {
+                        router.push('/en/admin/rental-services');
                       }
                     }}
                   >
@@ -321,6 +339,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.CONTACTS);
                         router.replace('/en/admin/contacts');
+                      } else {
+                        router.push('/en/admin/contacts');
                       }
                     }}
                   >
@@ -344,6 +364,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.REVIEWS);
                         router.replace('/en/admin/reviews');
+                      } else {
+                        router.push('/en/admin/reviews');
                       }
                     }}
                   >
@@ -367,6 +389,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.MESSAGES);
                         router.replace('/en/admin/messages');
+                      } else {
+                        router.push('/en/admin/messages');
                       }
                     }}
                   >
@@ -412,6 +436,8 @@ export default function Sidebar() {
                       if (adminTabContext) {
                         adminTabContext.setActiveTab(TABS.CREATE_ADMIN);
                         router.replace('/en/admin/create-admin');
+                      } else {
+                        router.push('/en/admin/create-admin');
                       }
                     }}
                   >
