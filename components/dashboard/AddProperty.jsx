@@ -77,6 +77,7 @@ export default function AddProperty({ isAdminMode = false }) {
     agentEmail: "", // Contact email (admin can change this)
     agentNumber: "", // Contact phone (admin can change this)
     agentWhatsapp: "", // Contact WhatsApp (admin can change this)
+    agentFacebook: "", // Facebook URL (optional, admin only)
     amenities: [],
     propertyId: `PROP_${Date.now()}`,
     notes: "",
@@ -603,6 +604,9 @@ export default function AddProperty({ isAdminMode = false }) {
         agentWhatsapp: isAdminMode && user?.role === 'admin'
           ? (formData.agentWhatsapp || user?.phone || "")
           : (user?.phone || ""), // Regular users: always use their phone
+        agentFacebook: isAdminMode && user?.role === 'admin'
+          ? (formData.agentFacebook && formData.agentFacebook.trim() !== '' ? formData.agentFacebook.trim() : null)
+          : null, // Only admin can set Facebook URL
         images: images,
         imageNames: images.map(img => img.name)
       };
@@ -1469,6 +1473,28 @@ export default function AddProperty({ isAdminMode = false }) {
                     )}
                     <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
                       Default: Admin WhatsApp number
+                    </small>
+                  </fieldset>
+                  
+                  <fieldset className="box-fieldset">
+                    <label htmlFor="agentFacebook">
+                      Facebook URL (رابط فيسبوك):
+                    </label>
+                    <input
+                      type="url"
+                      name="agentFacebook"
+                      className={`form-control ${errors.agentFacebook ? 'is-invalid' : ''}`}
+                      placeholder="Enter Facebook URL (optional, e.g., https://facebook.com/username)"
+                      value={formData.agentFacebook || ''}
+                      onChange={handleInputChange}
+                    />
+                    {errors.agentFacebook && (
+                      <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
+                        {errors.agentFacebook}
+                      </span>
+                    )}
+                    <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                      Optional: Facebook profile or page URL. Will be displayed in listing card if provided.
                     </small>
                   </fieldset>
                 </div>

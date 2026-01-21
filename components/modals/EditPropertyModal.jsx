@@ -34,6 +34,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     agentEmail: '',
     agentNumber: '',
     agentWhatsapp: '',
+    agentFacebook: '',
     // Arabic translation fields
     description_ar: '',
     address_ar: '',
@@ -120,7 +121,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         agentName: property.agentName || null,
         agentEmail: property.agentEmail || null,
         agentNumber: property.agentNumber || null,
-        agentWhatsapp: property.agentWhatsapp || null
+        agentWhatsapp: property.agentWhatsapp || null,
+        agentFacebook: property.agentFacebook || null
       };
       setOriginalContactInfo(originalContact);
       
@@ -144,6 +146,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         agentEmail: property.agentEmail || (currentIsAdmin ? 'admin@aqaargate.com' : ''),
         agentNumber: property.agentNumber || (currentIsAdmin ? (currentUser?.phone || '') : ''),
         agentWhatsapp: property.agentWhatsapp || (currentIsAdmin ? (currentUser?.phone || '') : ''),
+        agentFacebook: property.agentFacebook || '',
         // Arabic translation fields
         description_ar: property.description_ar || '',
         address_ar: property.address_ar || '',
@@ -233,6 +236,9 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             : {}),
           ...(formData.agentWhatsapp !== undefined && formData.agentWhatsapp.trim() !== (originalContactInfo.agentWhatsapp || '').trim() 
             ? { agentWhatsapp: formData.agentWhatsapp.trim() || null } 
+            : {}),
+          ...(formData.agentFacebook !== undefined && formData.agentFacebook.trim() !== (originalContactInfo.agentFacebook || '').trim() 
+            ? { agentFacebook: formData.agentFacebook.trim() || null } 
             : {})
         } : {}),
         // Arabic translation fields
@@ -706,6 +712,25 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                     />
                     <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
                       Default: Admin WhatsApp number
+                    </small>
+                  </div>
+                  
+                  <div>
+                    <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      Facebook URL (رابط فيسبوك):
+                    </label>
+                    <input
+                      type="url"
+                      name="agentFacebook"
+                      value={formData.agentFacebook || ''}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      placeholder="Enter Facebook URL (optional, e.g., https://facebook.com/username)"
+                      onFocus={handleInputFocus}
+                      onBlur={handleInputBlur}
+                    />
+                    <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
+                      Optional: Facebook profile or page URL. Will be displayed in listing card if provided.
                     </small>
                   </div>
                 </div>
