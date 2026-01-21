@@ -13,16 +13,16 @@ export default function InternationalSEO() {
       <link rel="alternate" hrefLang="ar-SY" href={`${baseUrl}/ar-sy`} />
       <link rel="alternate" hrefLang="en-DE" href={`${baseUrl}/en-de`} />
       <link rel="alternate" hrefLang="en-NL" href={`${baseUrl}/en-nl`} />
-      <link rel="alternate" hrefLang="en-AE" href={`${baseUrl}/en-ae`} />
-      <link rel="alternate" hrefLang="ar-AE" href={`${baseUrl}/ar-ae`} />
-      <link rel="alternate" hrefLang="en-SA" href={`${baseUrl}/en-sa`} />
-      <link rel="alternate" hrefLang="ar-SA" href={`${baseUrl}/ar-sa`} />
-      <link rel="alternate" hrefLang="en-QA" href={`${baseUrl}/en-qa`} />
-      <link rel="alternate" hrefLang="ar-QA" href={`${baseUrl}/ar-qa`} />
-      <link rel="alternate" hrefLang="en-KW" href={`${baseUrl}/en-kw`} />
-      <link rel="alternate" hrefLang="ar-KW" href={`${baseUrl}/ar-kw`} />
-      <link rel="alternate" hrefLang="en-BH" href={`${baseUrl}/en-bh`} />
-      <link rel="alternate" hrefLang="ar-BH" href={`${baseUrl}/ar-bh`} />
+      <link rel="alternate" hrefLang="en-AE" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-AE" href={`${baseUrl}/ar`} />
+      <link rel="alternate" hrefLang="en-SA" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-SA" href={`${baseUrl}/ar`} />
+      <link rel="alternate" hrefLang="en-QA" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-QA" href={`${baseUrl}/ar`} />
+      <link rel="alternate" hrefLang="en-KW" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-KW" href={`${baseUrl}/ar`} />
+      <link rel="alternate" hrefLang="en-BH" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-BH" href={`${baseUrl}/ar`} />
       <link rel="alternate" hrefLang="en-OM" href={`${baseUrl}/en-om`} />
       <link rel="alternate" hrefLang="ar-OM" href={`${baseUrl}/ar-om`} />
       <link rel="alternate" hrefLang="x-default" href={`${baseUrl}`} />
