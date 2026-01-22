@@ -6,9 +6,13 @@ import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./AdminAgents.module.css";
 import { UserIcon, PhoneIcon, EmailIcon } from "@/components/icons";
 import { extractCountryCode, DEFAULT_COUNTRY_CODE } from "@/constants/countryCodes";
+import { useTranslations, useLocale } from 'next-intl';
+import { translateApiMessage } from "@/utils/translateApiMessages";
 
 export default function AdminAgents() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
+  const t = useTranslations('apiMessages');
+  const locale = useLocale();
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,34 +90,36 @@ export default function AdminAgents() {
 
   const confirmBlock = async () => {
     if (!blockReason || !blockReason.trim()) {
-      showWarningModal("Error", "Please provide a reason for blocking");
+      showWarningModal(t('error'), t('provideBlockReason'));
       return;
     }
 
     try {
       await adminAPI.blockAgent(selectedAgent._id, blockReason);
       showSuccessModal(
-        "Success",
-        "Agent blocked successfully. All their listings have been set to pending."
+        t('success'),
+        t('agentBlockedSuccess')
       );
       setShowBlockModal(false);
       setBlockReason("");
       setSelectedAgent(null);
       fetchAgents();
     } catch (err) {
-      showWarningModal("Error", err.message || "Failed to block agent");
+      const errorMsg = translateApiMessage(err.message || "Failed to block agent", locale, t);
+      showWarningModal(t('error'), errorMsg);
     }
   };
 
   const handleUnblock = async (id) => {
-    if (!confirm("Are you sure you want to unblock this agent?")) return;
+    if (!confirm(locale === 'ar' ? "هل أنت متأكد من إلغاء حظر هذا الوكيل؟" : "Are you sure you want to unblock this agent?")) return;
 
     try {
       await adminAPI.unblockAgent(id);
-      showSuccessModal("Success", "Agent unblocked successfully");
+      showSuccessModal(t('success'), t('agentUnblockedSuccess'));
       fetchAgents();
     } catch (err) {
-      showWarningModal("Error", err.message || "Failed to unblock agent");
+      const errorMsg = translateApiMessage(err.message || "Failed to unblock agent", locale, t);
+      showWarningModal(t('error'), errorMsg);
     }
   };
 
@@ -126,7 +132,8 @@ export default function AdminAgents() {
       const agent = response.data || response;
       setAgentDetails(agent);
     } catch (err) {
-      showWarningModal("Error", err.message || "Failed to load agent details");
+      const errorMsg = translateApiMessage(err.message || "Failed to load agent details", locale, t);
+      showWarningModal(t('error'), errorMsg);
       setShowDetailsModal(false);
     } finally {
       setLoadingDetails(false);
@@ -150,12 +157,15 @@ export default function AdminAgents() {
       setDeletingAgentId(id);
       const result = await adminAPI.deleteAgent(id);
       const message = result.deletedListingsCount > 0
-        ? `Agent and ${result.deletedListingsCount} listing(s) deleted successfully`
-        : 'Agent deleted successfully';
-      showSuccessModal("Success", message);
+        ? (locale === 'ar' 
+            ? `تم حذف الوكيل و ${result.deletedListingsCount} قائمة بنجاح`
+            : `Agent and ${result.deletedListingsCount} listing(s) deleted successfully`)
+        : t('agentDeletedSuccess');
+      showSuccessModal(t('success'), message);
       fetchAgents();
     } catch (err) {
-      showWarningModal("Error", err.message || "Failed to delete agent");
+      const errorMsg = translateApiMessage(err.message || "Failed to delete agent", locale, t);
+      showWarningModal(t('error'), errorMsg);
     } finally {
       setDeletingAgentId(null);
     }
