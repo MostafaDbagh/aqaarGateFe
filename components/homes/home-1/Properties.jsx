@@ -559,7 +559,10 @@ export default function Properties({ listings, isLoading, isError }) {
               </div>
               
               {/* Email Button - Only show if email exists */}
-              {(listing.agentEmail || listing.agent?.email || listing.agentId?.email) && (
+              {(() => {
+                const email = listing.agentEmail || listing.agent?.email || listing.agentId?.email;
+                return email && email.trim() !== '' && email !== 'info@example.com';
+              })() && (
                 <button
                   onClick={() => window.open(`mailto:${getPropertyContactInfo(listing).email}?subject=Inquiry about ${listing.propertyType || 'Property'}`)}
                   style={{

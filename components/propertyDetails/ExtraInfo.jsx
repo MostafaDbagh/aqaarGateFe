@@ -106,10 +106,19 @@ export default function ExtraInfo({ property }) {
           )}
         </ul>
         <ul>
-          <li className="flex">
-            <p className="fw-6">{t('landArea')}</p>
-            <p>{property?.landArea ? `${property.landArea} ${getSizeUnitLabel(property?.sizeUnit)}` : 'N/A'}</p>
-          </li>
+          {(() => {
+            const propertyType = property?.propertyType?.toLowerCase()?.trim() || '';
+            const showLandSize = propertyType === 'villa' || 
+                                propertyType === 'فيلا' || 
+                                propertyType === 'land' || 
+                                propertyType === 'أرض';
+            return showLandSize ? (
+              <li className="flex">
+                <p className="fw-6">{t('landArea')}</p>
+                <p>{property?.landArea ? `${property.landArea} ${getSizeUnitLabel(property?.sizeUnit)}` : 'N/A'}</p>
+              </li>
+            ) : null;
+          })()}
           {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.yearBuilt != null && property?.yearBuilt !== 0 && property?.yearBuilt !== '0' && property?.yearBuilt !== '' && property.yearBuilt.toString().trim() !== '' && (
             <li className="flex">
               <p className="fw-6">{t('yearBuilt')}</p>

@@ -284,15 +284,24 @@ export default function PropertyOverview({ property }) {
               <div className="text-1 text-color-heading">{property?.propertyType || 'House'}</div>
             </div>
           </div>
-          <div className="box-icon">
-            <div className="icons">
-              <i className="icon-Crop" />
-            </div>
-            <div className="content">
-              <div className="text-4 text-color-default">{tDetail('landSize')}:</div>
-              <div className="text-1 text-color-heading">{property?.landArea || '0'} {getSizeUnitLabel(property?.sizeUnit)}</div>
-            </div>
-          </div>
+          {(() => {
+            const propertyType = property?.propertyType?.toLowerCase()?.trim() || '';
+            const showLandSize = propertyType === 'villa' || 
+                                propertyType === 'فيلا' || 
+                                propertyType === 'land' || 
+                                propertyType === 'أرض';
+            return showLandSize ? (
+              <div className="box-icon">
+                <div className="icons">
+                  <i className="icon-Crop" />
+                </div>
+                <div className="content">
+                  <div className="text-4 text-color-default">{tDetail('landSize')}:</div>
+                  <div className="text-1 text-color-heading">{property?.landArea || '0'} {getSizeUnitLabel(property?.sizeUnit)}</div>
+                </div>
+              </div>
+            ) : null;
+          })()}
 
           {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.bedrooms != null && Number(property.bedrooms) > 0 && (
             <div className="box-icon">

@@ -465,7 +465,10 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
                 </div>
                 
                 {/* Email Button - Only show if email exists */}
-                {(property.agentEmail || property.agent?.email || property.agentId?.email) && (
+                {(() => {
+                  const email = property.agentEmail || property.agent?.email || property.agentId?.email;
+                  return email && email.trim() !== '' && email !== 'info@example.com';
+                })() && (
                   <button
                     className={styles.actionButton}
                     onClick={() => window.open(`mailto:${getPropertyContactInfo(property).email}?subject=Inquiry about ${property.propertyTitle || t('common.property')}`)}

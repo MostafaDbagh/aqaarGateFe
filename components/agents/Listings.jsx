@@ -668,7 +668,10 @@ export default function Listings({ agentId }) {
                       </div>
                       
                       {/* Email Button - Only show if email exists */}
-                      {(property.agentEmail || property.agent?.email || property.agentId?.email) && (
+                      {(() => {
+                        const email = property.agentEmail || property.agent?.email || property.agentId?.email;
+                        return email && email.trim() !== '' && email !== 'info@example.com';
+                      })() && (
                         <button
                           onClick={() => window.open(`mailto:${getPropertyContactInfo(property).email}?subject=Inquiry about ${property.propertyTitle || tCommon('property')}`)}
                           className={styles.emailBtn}
