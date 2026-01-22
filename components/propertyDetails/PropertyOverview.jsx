@@ -258,7 +258,7 @@ export default function PropertyOverview({ property }) {
               </div>
               <div className="content">
                 <div className="text-4 text-color-default">{tDetail('bathrooms')}:</div>
-                <div className="text-1 text-color-heading">{property.bathrooms} {tDetail('rooms')}</div>
+                <div className="text-1 text-color-heading">{property.bathrooms} {tDetail('bath')}</div>
               </div>
             </div>
           )}
