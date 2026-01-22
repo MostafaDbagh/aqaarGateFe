@@ -53,8 +53,13 @@ export default function Sidebar({ property }) {
                         property?.agentNumber || 
                         property?.agentId?.phone ||
                         property?.agent?.phone;
-  // Get agent name - prioritize fullName from agentId over agentName to show complete name
+  // Get agent name for display - use Arabic name if locale is Arabic and agentName_ar exists, otherwise use English
   const agentName = (() => {
+    // If Arabic locale and agentName_ar exists, use it for display
+    if (locale === 'ar' && property?.agentName_ar && property.agentName_ar.trim()) {
+      return property.agentName_ar.trim();
+    }
+    
     // First priority: agentId.fullName (complete name)
     if (property?.agentId?.fullName && property.agentId.fullName.trim()) {
       return property.agentId.fullName.trim();
@@ -75,7 +80,58 @@ export default function Sidebar({ property }) {
       return `${property.agent.firstName} ${property.agent.lastName}`.trim();
     }
     
-    // Fifth priority: agentName (may be incomplete)
+    // Fifth priority: agentName (English name)
+    if (property?.agentName && property.agentName.trim()) {
+      return property.agentName.trim();
+    }
+    
+    // Sixth priority: username from agent object
+    if (typeof property?.agent === 'object' && property.agent?.username && property.agent.username.trim()) {
+      return property.agent.username.trim();
+    }
+    
+    // Seventh priority: username from agentId
+    if (property?.agentId?.username && property.agentId.username.trim()) {
+      return property.agentId.username.trim();
+    }
+    
+    // Eighth priority: agent as string
+    if (typeof property?.agent === 'string' && property.agent.trim()) {
+      return property.agent.trim();
+    }
+    
+    // Ninth priority: email from agentId
+    if (property?.agentId?.email && property.agentId.email.trim()) {
+      return property.agentId.email.trim();
+    }
+    
+    // Default fallback
+    return "Property Agent";
+  })();
+
+  // Get English name for initials (always use English name for initials, not Arabic)
+  const agentNameForInitials = (() => {
+    // First priority: agentId.fullName (complete name)
+    if (property?.agentId?.fullName && property.agentId.fullName.trim()) {
+      return property.agentId.fullName.trim();
+    }
+    
+    // Second priority: firstName + lastName from agentId
+    if (property?.agentId?.firstName && property?.agentId?.lastName) {
+      return `${property.agentId.firstName} ${property.agentId.lastName}`.trim();
+    }
+    
+    // Third priority: fullName from agent object
+    if (typeof property?.agent === 'object' && property.agent?.fullName && property.agent.fullName.trim()) {
+      return property.agent.fullName.trim();
+    }
+    
+    // Fourth priority: firstName + lastName from agent object
+    if (typeof property?.agent === 'object' && property.agent?.firstName && property.agent?.lastName) {
+      return `${property.agent.firstName} ${property.agent.lastName}`.trim();
+    }
+    
+    // Fifth priority: agentName (English name)
     if (property?.agentName && property.agentName.trim()) {
       return property.agentName.trim();
     }
@@ -113,7 +169,7 @@ export default function Sidebar({ property }) {
                              property?.agent?.imageUrl ||
                              null;
   
-  // Generate initials from agent name
+  // Generate initials from agent name (always use English name for initials)
   const getInitials = (name) => {
     if (!name || name === "Property Agent") return "PA";
     const words = name.trim().split(/\s+/);
@@ -123,7 +179,7 @@ export default function Sidebar({ property }) {
     return name.substring(0, 2).toUpperCase();
   };
   
-  const agentInitials = getInitials(agentName);
+  const agentInitials = getInitials(agentNameForInitials);
   const hasAvatarImage = !imageError && agentAvatarInitial;
   
   // Use initials if no image available

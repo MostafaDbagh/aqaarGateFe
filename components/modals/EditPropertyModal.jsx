@@ -31,6 +31,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     amenities: [],
     // Contact information (admin can edit)
     agentName: '',
+    agentName_ar: '',
     agentEmail: '',
     agentNumber: '',
     agentWhatsapp: '',
@@ -119,6 +120,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       // Store original contact info to detect changes
       const originalContact = {
         agentName: property.agentName || null,
+        agentName_ar: property.agentName_ar || null,
         agentEmail: property.agentEmail || null,
         agentNumber: property.agentNumber || null,
         agentWhatsapp: property.agentWhatsapp || null,
@@ -143,6 +145,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         amenities: property.amenities || [],
         // Contact information (load from property or use defaults for admin)
         agentName: property.agentName || (currentIsAdmin ? (currentUser?.agentName || currentUser?.username || '') : ''),
+        agentName_ar: property.agentName_ar || '',
         agentEmail: property.agentEmail || (currentIsAdmin ? 'admin@aqaargate.com' : ''),
         agentNumber: property.agentNumber || (currentIsAdmin ? (currentUser?.phone || '') : ''),
         agentWhatsapp: property.agentWhatsapp || (currentIsAdmin ? (currentUser?.phone || '') : ''),
@@ -227,6 +230,9 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         ...(isAdmin && originalContactInfo ? {
           ...(formData.agentName !== undefined && formData.agentName.trim() !== (originalContactInfo.agentName || '').trim() 
             ? { agentName: formData.agentName.trim() || null } 
+            : {}),
+          ...(formData.agentName_ar !== undefined && formData.agentName_ar.trim() !== (originalContactInfo.agentName_ar || '').trim() 
+            ? { agentName_ar: formData.agentName_ar.trim() || null } 
             : {}),
           ...(formData.agentEmail !== undefined && formData.agentEmail.trim() !== (originalContactInfo.agentEmail || '').trim() 
             ? { agentEmail: formData.agentEmail.trim() || null } 
@@ -637,7 +643,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   <strong>Note:</strong> You can change these fields to display the property owner's contact information instead of admin details.
                 </div>
                 
-                <div className={styles.gridThreeCols} style={{ gap: '15px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   <div>
                     <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                       Agent Name (اسم الوكيل): <span style={{ color: 'red' }}>*</span>
@@ -655,6 +661,25 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                     />
                     <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
                       Required: Name of the agent or property owner
+                    </small>
+                  </div>
+
+                  <div>
+                    <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                      Agent Name in Arabic (اسم الوكيل بالعربي):
+                    </label>
+                    <input
+                      type="text"
+                      name="agentName_ar"
+                      value={formData.agentName_ar || ''}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      placeholder="أدخل اسم الوكيل بالعربي"
+                      onFocus={handleInputFocus}
+                      onBlur={handleInputBlur}
+                    />
+                    <small style={{ fontSize: '12px', color: '#6c757d', display: 'block', marginTop: '5px' }}>
+                      Optional: Arabic name of the agent or property owner
                     </small>
                   </div>
                   

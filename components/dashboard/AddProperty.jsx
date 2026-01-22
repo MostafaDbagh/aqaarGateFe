@@ -74,6 +74,7 @@ export default function AddProperty({ isAdminMode = false }) {
     agent: "",
     agentId: "",
     agentName: "", // Agent name (admin can specify when posting on behalf of others)
+    agentName_ar: "", // Arabic agent name
     agentEmail: "", // Contact email (admin can change this)
     agentNumber: "", // Contact phone (admin can change this)
     agentWhatsapp: "", // Contact WhatsApp (admin can change this)
@@ -595,6 +596,9 @@ export default function AddProperty({ isAdminMode = false }) {
         agentName: isAdminMode && user?.role === 'admin'
           ? (formData.agentName && formData.agentName.trim() !== '' ? formData.agentName.trim() : null)
           : (user?.agentName || user?.username || ""), // Regular users: use their agentName or username
+        agentName_ar: isAdminMode && user?.role === 'admin'
+          ? (formData.agentName_ar && formData.agentName_ar.trim() !== '' ? formData.agentName_ar.trim() : null)
+          : null, // Only admin can set Arabic name
         agentEmail: isAdminMode && user?.role === 'admin' 
           ? (formData.agentEmail && formData.agentEmail.trim() !== '' ? formData.agentEmail.trim() : null)
           : (user?.email || ""), // Regular users: always use their email
@@ -1407,6 +1411,23 @@ export default function AddProperty({ isAdminMode = false }) {
                     )}
                     <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
                       Required: Name of the agent or property owner
+                    </small>
+                  </fieldset>
+
+                  <fieldset className="box-fieldset">
+                    <label htmlFor="agentName_ar">
+                      Agent Name in Arabic (اسم الوكيل بالعربي):
+                    </label>
+                    <input
+                      type="text"
+                      name="agentName_ar"
+                      className="form-control"
+                      placeholder="أدخل اسم الوكيل بالعربي"
+                      value={formData.agentName_ar || ''}
+                      onChange={handleInputChange}
+                    />
+                    <small className="text-muted" style={{ fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                      Optional: Arabic name of the agent or property owner
                     </small>
                   </fieldset>
                   
