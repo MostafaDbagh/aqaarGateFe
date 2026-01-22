@@ -5,7 +5,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./AdminAgents.module.css";
 import { UserIcon, PhoneIcon, EmailIcon } from "@/components/icons";
-import { extractCountryCode } from "@/constants/countryCodes";
+import { extractCountryCode, DEFAULT_COUNTRY_CODE } from "@/constants/countryCodes";
 
 export default function AdminAgents() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
@@ -28,12 +28,32 @@ export default function AdminAgents() {
   const [pagination, setPagination] = useState(null);
 
   // Helper function to format phone number with country code
-  const formatPhoneNumber = (phone) => {
+  const formatPhoneNumber = (phone, countryCode = null) => {
     if (!phone) return '-';
+    
+    // First, try to extract country code from phone number
     const phoneData = extractCountryCode(phone);
-    return phoneData 
-      ? `${phoneData.countryCode} ${phoneData.phoneNumber}`
-      : phone;
+    
+    if (phoneData) {
+      // If country code was found in phone number, use it
+      return `${phoneData.countryCode} ${phoneData.phoneNumber}`;
+    }
+    
+    // If countryCode is provided separately, use it
+    if (countryCode) {
+      // Remove any existing country code from phone
+      const cleanPhone = phone.replace(/^\+?\d{1,4}\s?/, '').trim();
+      return `${countryCode} ${cleanPhone}`;
+    }
+    
+    // If no country code found and no countryCode provided, try to use default
+    // Check if phone starts with a number (likely doesn't have country code)
+    if (/^\d/.test(phone.trim())) {
+      return `${DEFAULT_COUNTRY_CODE} ${phone.trim()}`;
+    }
+    
+    // Fallback: return phone as is
+    return phone;
   };
 
   useEffect(() => {
@@ -325,7 +345,7 @@ export default function AdminAgents() {
                     </div>
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Phone:</span>
-                      <span className={styles.detailValue}>{formatPhoneNumber(agentDetails.phone)}</span>
+                      <span className={styles.detailValue}>{formatPhoneNumber(agentDetails.phone, agentDetails.countryCode)}</span>
                     </div>
                     <div className={styles.detailItem}>
                       <span className={styles.detailLabel}>Role:</span>
@@ -392,7 +412,7 @@ export default function AdminAgents() {
                       {agentDetails.officeNumber && (
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Office Phone:</span>
-                          <span className={styles.detailValue}>{agentDetails.officeNumber}</span>
+                          <span className={styles.detailValue}>{formatPhoneNumber(agentDetails.officeNumber, agentDetails.countryCode)}</span>
                         </div>
                       )}
                     </div>

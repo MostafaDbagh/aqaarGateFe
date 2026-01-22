@@ -287,7 +287,11 @@
     "resendIn": "Resend in",
     "enterAllDigits": "Please enter all 6 digits",
     "invalidOTP": "Invalid OTP. Please try again.",
-    "verificationFailed": "OTP verification failed. Please try again."
+    "verificationFailed": "OTP verification failed. Please try again.",
+    "otpNotFound": "OTP not found or expired. Please request a new OTP.",
+    "otpExpired": "OTP has expired. Please request a new OTP.",
+    "tooManyAttempts": "Too many attempts. Please request a new OTP.",
+    "invalidOTPFormat": "OTP must be exactly 6 digits."
   },
   "passwordResetSuccess": {
     "title": "Password Reset Successful!",

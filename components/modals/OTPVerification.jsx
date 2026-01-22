@@ -173,18 +173,34 @@ export default function OTPVerification({
         }, 3000);
       }
     } catch (error) {
-      // Extract error message from different error formats
+      // Extract error message from different error formats and translate it
       let errorMsg = t('verificationFailed');
-      if (error?.message) {
-        errorMsg = error.message;
-      } else if (error?.error) {
-        errorMsg = error.error;
-      } else if (typeof error === 'string') {
-        errorMsg = error;
-      } else if (error?.response?.data?.message) {
-        errorMsg = error.response.data.message;
-      } else if (error?.response?.data?.error) {
-        errorMsg = error.response.data.error;
+      
+      // Get error message from response
+      const backendError = error?.response?.data?.message || 
+                          error?.response?.data?.error || 
+                          error?.message || 
+                          error?.error || 
+                          (typeof error === 'string' ? error : null);
+      
+      // Map backend error messages to translation keys
+      if (backendError) {
+        const errorLower = backendError.toLowerCase();
+        
+        if (errorLower.includes('otp not found') || errorLower.includes('otp_not_found')) {
+          errorMsg = t('otpNotFound');
+        } else if (errorLower.includes('otp has expired') || errorLower.includes('otp_expired')) {
+          errorMsg = t('otpExpired');
+        } else if (errorLower.includes('too many attempts') || errorLower.includes('too_many_attempts')) {
+          errorMsg = t('tooManyAttempts');
+        } else if (errorLower.includes('invalid otp') || errorLower.includes('invalid_otp')) {
+          errorMsg = t('invalidOTP');
+        } else if (errorLower.includes('must be exactly 6 digits') || errorLower.includes('invalid_otp_format')) {
+          errorMsg = t('invalidOTPFormat');
+        } else {
+          // Fallback to default message
+          errorMsg = t('verificationFailed');
+        }
       }
       
       setError(errorMsg);
