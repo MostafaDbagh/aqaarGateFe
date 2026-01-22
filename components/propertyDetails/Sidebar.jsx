@@ -170,13 +170,26 @@ export default function Sidebar({ property }) {
                              null;
   
   // Generate initials from agent name (always use English name for initials)
+  // Remove titles like "Mr.", "Mrs.", "Dr.", etc. before generating initials
   const getInitials = (name) => {
     if (!name || name === "Property Agent") return "PA";
-    const words = name.trim().split(/\s+/);
+    
+    // Remove common titles (Mr., Mrs., Miss, Dr., Prof., etc.)
+    // Handle both "Mr. " (with space) and "Mr." (without space)
+    let cleanName = name.trim();
+    // Match titles at the start: Mr., Mrs., Miss, Dr., Prof., Ms., etc.
+    // Match with or without space after the dot
+    cleanName = cleanName.replace(/^(Mr\.|Mrs\.|Miss|Dr\.|Prof\.|Ms\.|Sir|Madam|Lord|Lady)\.?\s*/i, '');
+    
+    // Split into words
+    const words = cleanName.split(/\s+/).filter(word => word.length > 0);
+    
     if (words.length >= 2) {
+      // Get first letter of first word and first letter of last word
       return (words[0][0] + words[words.length - 1][0]).toUpperCase();
     }
-    return name.substring(0, 2).toUpperCase();
+    // If only one word, take first 2 letters
+    return cleanName.substring(0, 2).toUpperCase();
   };
   
   const agentInitials = getInitials(agentNameForInitials);
