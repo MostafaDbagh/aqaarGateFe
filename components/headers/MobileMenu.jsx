@@ -1,10 +1,11 @@
 "use client";
 import { blogMenu, homes, otherPages, propertyLinks } from "@/constants/menu";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
+import { Link, usePathname } from "@/i18n/routing";
+import React, { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { useAuthState } from "@/store/hooks/useAuth";
+import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 
 export default function MobileMenu() {
   const pathname = usePathname();
@@ -12,6 +13,48 @@ export default function MobileMenu() {
   const tNav = useTranslations("navigation");
   const tCommon = useTranslations("common");
   const locale = useLocale();
+  const { isAuthenticated, user } = useAuthState();
+  const { showModal } = useGlobalModal();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  // Check authentication status and user role
+  useEffect(() => {
+    const checkAuth = () => {
+      if (typeof window === 'undefined') return;
+      
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      const isLoggedIn = !!(token && userStr);
+      setIsLoggedIn(isLoggedIn);
+      
+      if (isLoggedIn && userStr) {
+        try {
+          const userData = JSON.parse(userStr);
+          setUserRole(userData?.role || null);
+        } catch (error) {
+          setUserRole(null);
+        }
+      } else {
+        setUserRole(null);
+      }
+    };
+    
+    checkAuth();
+    setIsLoggedIn(isAuthenticated);
+    
+    // Also check from Redux user if available
+    if (user?.role) {
+      setUserRole(user.role);
+    }
+    
+    // Listen for storage changes
+    const handleStorageChange = () => checkAuth();
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [isAuthenticated, user]);
+
   const isParentActive = (menus) =>
     menus.some((menu) =>
       menu.submenu
@@ -113,7 +156,17 @@ export default function MobileMenu() {
                 data-bs-parent="#menu-mobile-menu"
               >
                 <ul className="sub-mobile">
-                  {otherPages.map((links, i) => (
+                  {otherPages
+                    .filter(links => {
+                      // Hide "Future Interest Buyer" for guests and agents
+                      if (links.href === '/future-buyer-interest') {
+                        if (!isLoggedIn || userRole === 'guest' || userRole === 'agent') {
+                          return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .map((links, i) => (
                     <React.Fragment key={i}>
                       {links.submenu ? (
                         <li
@@ -157,6 +210,8 @@ export default function MobileMenu() {
                                      link.href === "/career" ? tNav("career") :
                                      link.href === "/faq" ? tNav("faq") :
                                      link.href === "/blog-grid" ? tNav("blog") :
+                                     link.href === "/property-rental-service" ? tNav("rentalService") :
+                                     link.href === "/future-buyer-interest" ? tNav("futureInterestBuyer") :
                                      link.label}
                                   </Link>
                                 </li>
@@ -172,12 +227,16 @@ export default function MobileMenu() {
                               : ""
                           }`}
                         >
-                          <Link href={links.href}>
+                          <Link 
+                            href={links.href}
+                          >
                             {links.href === "/about-us" ? tNav("aboutUs") :
                              links.href === "/vision" ? tNav("ourVision") :
                              links.href === "/career" ? tNav("career") :
                              links.href === "/faq" ? tNav("faq") :
                              links.href === "/blog-grid" ? tNav("blog") :
+                             links.href === "/property-rental-service" ? tNav("rentalService") :
+                             links.href === "/future-buyer-interest" ? tNav("futureInterestBuyer") :
                              links.label}
                           </Link>
                         </li>
@@ -210,11 +269,11 @@ export default function MobileMenu() {
             </li>
             <li
               className={`menu-item ${
-                pathname?.split("/")[1] === "property-rental-service" ? "current-menu-item" : ""
+                pathname?.split("/")[1] === "future-buyer-interest" ? "current-menu-item" : ""
               }`}
             >
               <Link
-                href="/property-rental-service"
+                href="/future-buyer-interest"
                 className="item-menu-mobile"
                 onClick={() => {
                   const offcanvas = document.getElementById('menu-mobile');
@@ -226,7 +285,7 @@ export default function MobileMenu() {
                   }
                 }}
               >
-                {t("rentalService")}
+                {tNav("futureInterestBuyer")}
               </Link>
             </li>
             <li

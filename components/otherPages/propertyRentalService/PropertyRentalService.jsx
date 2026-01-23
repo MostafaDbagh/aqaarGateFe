@@ -1,13 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import styles from "./PropertyRentalService.module.css";
 import { propertyRentalAPI } from "@/apis";
+import { useAuthState } from "@/store/hooks/useAuth";
+import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import { translateApiMessage } from "@/utils/translateApiMessages";
 
 export default function PropertyRentalService() {
   const t = useTranslations('rentalService');
+  const tApi = useTranslations('apiMessages');
+  const locale = useLocale();
+  const { isAuthenticated, user } = useAuthState();
+  const { showWarningModal, showModal, closeModal, showLoginModal } = useGlobalModal();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const [formData, setFormData] = useState({
     propertyType: "",
     propertySize: "",
@@ -23,6 +32,40 @@ export default function PropertyRentalService() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+  
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = () => {
+      if (typeof window === 'undefined') return;
+      
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      const isLoggedIn = !!(token && userStr);
+      setIsLoggedIn(isLoggedIn);
+      
+      if (isLoggedIn && userStr) {
+        try {
+          const userData = JSON.parse(userStr);
+          setUserRole(userData?.role || null);
+        } catch (error) {
+          setUserRole(null);
+        }
+      } else {
+        setUserRole(null);
+      }
+    };
+    
+    checkAuth();
+    setIsLoggedIn(isAuthenticated);
+    
+    if (user?.role) {
+      setUserRole(user.role);
+    }
+  }, [isAuthenticated, user]);
+  
+  // Check if user is guest or agent (not allowed to submit)
+  const isGuestOrAgent = !isLoggedIn || userRole === 'guest' || userRole === 'agent';
+  const canSubmit = isLoggedIn && (userRole === 'user' || userRole === 'admin');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +77,28 @@ export default function PropertyRentalService() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prevent submission if user is guest or agent - show login modal
+    if (isGuestOrAgent) {
+      const warningMsg = locale === 'ar' 
+        ? 'هذه الميزة متاحة للمستخدمين المسجلين فقط. يرجى تسجيل الدخول أو إنشاء حساب جديد.'
+        : 'This feature is available for registered users only. Please log in or create a new account.';
+      setSubmitMessage(warningMsg);
+      showWarningModal(
+        locale === 'ar' ? 'تنبيه' : 'Warning',
+        warningMsg
+      );
+      // Show login modal after 3 seconds, close warning modal first
+      setTimeout(() => {
+        closeModal(); // Close only the warning modal
+        // Small delay before opening login modal to ensure warning modal is closed
+        setTimeout(() => {
+          showLoginModal();
+        }, 200);
+      }, 3000);
+      return;
+    }
+    
     setIsSubmitting(true);
     setSubmitMessage("");
 
@@ -69,8 +134,12 @@ export default function PropertyRentalService() {
         setSubmitMessage(t('errorMessage'));
       }
     } catch (error) {
-      const errorMessage = error?.message || error?.error || t('errorMessage');
-      setSubmitMessage(errorMessage);
+      const errorMsg = translateApiMessage(
+        error?.response?.data?.message || error?.message || t('errorMessage'),
+        locale,
+        tApi
+      );
+      setSubmitMessage(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -269,8 +338,16 @@ export default function PropertyRentalService() {
                       </p>
 
                       {submitMessage && (
-                        <div className={`${styles.alert} ${submitMessage.includes('successfully') ? styles.alertSuccess : styles.alertDanger}`}>
+                        <div className={`${styles.alert} ${submitMessage.includes('successfully') || submitMessage.includes('نجاح') ? styles.alertSuccess : submitMessage.includes('registered users') || submitMessage.includes('المستخدمين المسجلين') ? styles.alertWarning : styles.alertDanger}`}>
                           {submitMessage}
+                        </div>
+                      )}
+                      {isGuestOrAgent && (
+                        <div className={`${styles.alert} ${styles.alertWarning}`}>
+                          <i className="icon-alert" style={{ marginRight: '8px' }} />
+                          {locale === 'ar' 
+                            ? 'هذه الميزة متاحة للمستخدمين المسجلين فقط. يرجى تسجيل الدخول أو إنشاء حساب جديد لإرسال الطلب.'
+                            : 'This feature is available for registered users only. Please log in or create a new account to submit your request.'}
                         </div>
                       )}
 
@@ -493,6 +570,7 @@ export default function PropertyRentalService() {
                               type="submit"
                               className={`tf-btn bg-color-primary w-full ${styles.submitButton}`}
                               disabled={isSubmitting}
+                              title={isGuestOrAgent ? (locale === 'ar' ? 'للمستخدمين المسجلين فقط' : 'For registered users only') : ''}
                             >
                               <i className="icon-file" /> {isSubmitting ? t('submitting') : t('submitPropertyButton')}
                             </button>

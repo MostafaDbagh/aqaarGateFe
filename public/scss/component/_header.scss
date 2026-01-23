@@ -657,6 +657,21 @@
                 }
             }
         }
+        &.disabled-menu-item {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+            pointer-events: auto;
+            > a,
+            > span {
+                cursor: not-allowed !important;
+                color: var(--Text) !important;
+                opacity: 0.6;
+                &:hover {
+                    color: var(--Text) !important;
+                    opacity: 0.6;
+                }
+            }
+        }
         &:hover {
             > a {
                 color: #f1913D !important;

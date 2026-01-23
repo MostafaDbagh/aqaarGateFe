@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import logger from '@/utlis/logger';
 
 const useRouteProtection = (requiredRole = null) => {
@@ -11,6 +11,12 @@ const useRouteProtection = (requiredRole = null) => {
   useEffect(() => {
     const checkUser = () => {
       try {
+        // Check if we're in browser environment
+        if (typeof window === 'undefined') {
+          setIsLoading(false);
+          return;
+        }
+
         const storedUser = localStorage.getItem('user');
         const token = localStorage.getItem('token');
         
@@ -31,6 +37,24 @@ const useRouteProtection = (requiredRole = null) => {
     };
 
     checkUser();
+    
+    // Safety timeout - ensure loading state is cleared after max 2 seconds
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    
+    // Also listen for storage changes
+    const handleStorageChange = () => checkUser();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', handleStorageChange);
+    }
+    
+    return () => {
+      clearTimeout(timeoutId);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('storage', handleStorageChange);
+      }
+    };
   }, []);
 
   const getUserRole = () => {
@@ -59,6 +83,22 @@ const useRouteProtection = (requiredRole = null) => {
   const checkRouteAccess = (pathname, requiredRole = null) => {
     const userRole = getUserRole();
     
+    // usePathname from @/i18n/routing returns path WITHOUT locale prefix
+    // But we need to handle both cases: with and without prefix
+    let pathWithoutLocale = pathname || '';
+    
+    // Remove locale prefix if present (e.g., /en/future-buyer-interest -> /future-buyer-interest)
+    if (pathWithoutLocale.startsWith('/en/') || pathWithoutLocale.startsWith('/ar/')) {
+      pathWithoutLocale = pathWithoutLocale.replace(/^\/(en|ar)/, '');
+    }
+    
+    // Ensure path starts with /
+    if (!pathWithoutLocale.startsWith('/')) {
+      pathWithoutLocale = '/' + pathWithoutLocale;
+    }
+    
+    const normalizedPath = pathWithoutLocale === '/' ? '/' : pathWithoutLocale;
+    
     // Define route categories
     const adminRoutes = [
       '/admin'
@@ -76,7 +116,9 @@ const useRouteProtection = (requiredRole = null) => {
     const userRoutes = [
       '/my-favorites',
       '/my-package', 
-      '/my-profile'
+      '/my-profile',
+      '/future-buyer-interest',
+      '/property-rental-service'
     ];
     
     const guestBlockedRoutes = [
@@ -88,27 +130,29 @@ const useRouteProtection = (requiredRole = null) => {
       '/my-favorites',
       '/messages',
       '/review',
-      '/admin'
+      '/admin',
+      '/future-buyer-interest',
+      '/property-rental-service'
     ];
 
     // Check if current path is an admin route
     const isAdminRoute = adminRoutes.some(route => 
-      pathname.startsWith(route)
+      normalizedPath.startsWith(route)
     );
     
     // Check if current path is an agent route
     const isAgentRoute = agentRoutes.some(route => 
-      pathname.startsWith(route)
+      normalizedPath.startsWith(route)
     );
     
     // Check if current path is a user route
     const isUserRoute = userRoutes.some(route => 
-      pathname.startsWith(route)
+      normalizedPath.startsWith(route)
     );
     
     // Check if current path is blocked for guests
     const isGuestBlocked = guestBlockedRoutes.some(route => 
-      pathname.startsWith(route)
+      normalizedPath.startsWith(route)
     );
 
     // Determine access level needed

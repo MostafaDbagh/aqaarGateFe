@@ -17,6 +17,8 @@ export const otherPages = [
   { href: "/career", label: "Career" },
   { href: "/faq", label: "FAQ's" },
   { href: "/blog-grid", label: "Blog" },
+  { href: "/property-rental-service", label: "Rental Service" },
+  { href: "/future-buyer-interest", label: "Future Interest Buyer" },
 ];
 
 export const blogMenu = [

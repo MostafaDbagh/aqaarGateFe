@@ -15,6 +15,7 @@ import cityAPI from './city';
 import propertyRentalAPI from './propertyRental';
 import adminAPI from './admin';
 import notificationAPI from './notification';
+import futureBuyerAPI from './futureBuyer';
 
 // Export all APIs
 export {
@@ -33,7 +34,8 @@ export {
   cityAPI,
   propertyRentalAPI,
   adminAPI,
-  notificationAPI
+  notificationAPI,
+  futureBuyerAPI
 };
 
 // Default export with all APIs
@@ -53,7 +55,8 @@ export default {
   city: cityAPI,
   propertyRental: propertyRentalAPI,
   admin: adminAPI,
-  notification: notificationAPI
+  notification: notificationAPI,
+  futureBuyer: futureBuyerAPI
 };
 
 // Individual exports for convenience

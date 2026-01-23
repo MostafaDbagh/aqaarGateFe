@@ -66,6 +66,8 @@ export const translateApiMessage = (message, locale, t) => {
     'server error': t('serverError'),
     'network error': t('networkError'),
     'timeout': t('timeout'),
+    'maximum limit reached. you can only submit 3 future buyer interest requests.': t('maxLimitReached'),
+    'maximum limit reached. you can only submit 5 rental service requests.': t('maxRentalLimitReached'),
   };
 
   // Check for exact match first

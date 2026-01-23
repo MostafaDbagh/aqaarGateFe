@@ -362,7 +362,9 @@
     "ourVision": "Our Vision",
     "career": "Career",
     "faq": "FAQ's",
-    "blog": "Blog"
+    "blog": "Blog",
+    "futureInterestBuyer": "Future Buyer",
+    "forRegisteredUsersOnly": "For registered users only"
   },
   "footer": {
     "aboutUs": "About us",
@@ -527,7 +529,8 @@
     "propertyRentalService": "Property Rental Service",
     "agentsDetails": "Agents Details",
     "aboutUs": "About Us",
-    "ourVision": "Our Vision"
+    "ourVision": "Our Vision",
+    "futureBuyerInterest": "Future Buyer Interest"
   },
   "contact": {
     "pageName": "Contact",
@@ -676,6 +679,50 @@
     },
     "successMessage": "Thank you! Your property rental service request has been submitted successfully. Our team will contact you shortly to schedule a property inspection.",
     "errorMessage": "There was an error submitting your request. Please try again or contact us directly."
+  },
+  "futureBuyer": {
+    "heroTitle": "Couldn't Find Your Perfect Property?",
+    "heroSubtitle": "If you haven't found the right property or you're planning to buy or rent in the future, fill out our Future Interest form. You'll get an email when a matching property becomes available, and our team will contact you to help.",
+    "formTitle": "Future Interest Buyer Form",
+    "formSubtitle": "Tell us your search criteria and we'll keep you informed when a property matching your requirements becomes available. Our team will personally reach out to help you find your perfect property.",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "city": "City",
+    "propertyType": "Property Type",
+    "status": "Status",
+    "minPrice": "Minimum Price",
+    "minPricePlaceholder": "Enter minimum price",
+    "maxPrice": "Maximum Price",
+    "maxPricePlaceholder": "Enter maximum price",
+    "currency": "Currency",
+    "minSize": "Minimum Size",
+    "minSizePlaceholder": "Enter minimum size",
+    "maxSize": "Maximum Size",
+    "maxSizePlaceholder": "Enter maximum size",
+    "sizeUnit": "Size Unit",
+    "bedrooms": "Bedrooms",
+    "bedroomsPlaceholder": "Enter number of bedrooms",
+    "bathrooms": "Bathrooms",
+    "bathroomsPlaceholder": "Enter number of bathrooms",
+    "amenities": "Amenities",
+    "notes": "Additional Notes",
+    "notesPlaceholder": "Enter any additional notes...",
+    "submitButton": "Submit Request",
+    "submitting": "Submitting...",
+    "forRegisteredUsersOnly": "This feature is available for registered users only. Please log in or create a new account to submit your request.",
+    "warning": "Warning",
+    "requiredFields": "Please fill in all required fields",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPriceRange": "Minimum price cannot be greater than maximum price",
+    "invalidSizeRange": "Minimum size cannot be greater than maximum size",
+    "successMessage": "Your request has been submitted successfully! Found {count} matching properties. We will contact you soon.",
+    "errorMessage": "Failed to submit request",
+    "maxLimitReached": "Maximum limit reached. You can only submit 3 future buyer interest requests.",
+    "maxRentalLimitReached": "Maximum limit reached. You can only submit 5 rental service requests."
   },
   "cta": {
     "title": "Find a Local Real Estate Agent Today",
@@ -1466,6 +1513,8 @@
     "networkError": "Network error. Please check your connection",
     "timeout": "Request timeout. Please try again",
     "rateLimitExceeded": "Too many requests. Please try again later.",
-    "rateLimitExceededWithTime": "Too many requests. Please try again after {minutes} minutes."
+    "rateLimitExceededWithTime": "Too many requests. Please try again after {minutes} minutes.",
+    "maxLimitReached": "Maximum limit reached. You can only submit 3 future buyer interest requests.",
+    "maxRentalLimitReached": "Maximum limit reached. You can only submit 5 rental service requests."
   }
 }
