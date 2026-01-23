@@ -923,7 +923,7 @@ export default function AddProperty({ isAdminMode = false }) {
               </fieldset>
               
               <fieldset className="box box-fieldset">
-                <label htmlFor="propertyDesc">{t('description')}:</label>
+                <label htmlFor="propertyDesc">{t('description')}:<span style={{ color: '#dc3545' }}>*</span></label>
                 <textarea
                   name="propertyDesc"
                   className="textarea"
@@ -931,12 +931,13 @@ export default function AddProperty({ isAdminMode = false }) {
                   value={formData.propertyDesc}
                   onChange={handleInputChange}
                 />
+                {errors.propertyDesc && <span className="text-danger">{errors.propertyDesc}</span>}
               </fieldset>
               
               <div className="box grid-layout-3 gap-30">
                 <fieldset className="box-fieldset">
                   <label htmlFor="address">
-                    {t('fullAddress')}:<span>*</span>
+                    {t('fullAddress')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -951,7 +952,7 @@ export default function AddProperty({ isAdminMode = false }) {
                
                 <fieldset className="box-fieldset">
                   <label htmlFor="country">
-                    {t('country')}:<span>*</span>
+                    {t('country')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -967,7 +968,7 @@ export default function AddProperty({ isAdminMode = false }) {
               <div className="box grid-layout-2 gap-30">
                 <fieldset className="box-fieldset">
                   <label htmlFor="state">
-                    {t('provinceState')}:<span>*</span>
+                    {t('provinceState')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <DropdownSelect
                     name="state"
@@ -982,7 +983,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 
                 <fieldset className="box-fieldset">
                   <label htmlFor="neighborhood">
-                    {t('neighborhood')}:<span>*</span>
+                    {t('neighborhood')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -1049,7 +1050,7 @@ export default function AddProperty({ isAdminMode = false }) {
             <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="propertyType">
-                  {t('propertyType')}:<span>*</span>
+                  {t('propertyType')}:<span style={{ color: '#dc3545' }}>*</span>
                 </label>
                 <DropdownSelect
                   name="propertyType"
@@ -1064,7 +1065,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box-fieldset">
                 <label htmlFor="status">
-                  {t('propertyStatus')}:<span>*</span>
+                  {t('propertyStatus')}:<span style={{ color: '#dc3545' }}>*</span>
                 </label>
                 <DropdownSelect
                   name="status"
@@ -1080,7 +1081,7 @@ export default function AddProperty({ isAdminMode = false }) {
               {formData.status === "rent" && (
                 <fieldset className="box-fieldset">
                   <label htmlFor="rentType">
-                    {t('rentPeriodCharge')}:<span>*</span>
+                    {t('rentPeriodCharge')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <DropdownSelect
                     name="rentType"
@@ -1106,7 +1107,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box-fieldset">
                 <label htmlFor="propertyId">
-                  {t('propertyId')}:<span>*</span>
+                  {t('propertyId')}:<span style={{ color: '#dc3545' }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -1122,10 +1123,10 @@ export default function AddProperty({ isAdminMode = false }) {
             <div className="box grid-layout-3 gap-30">
               <fieldset className="box-fieldset">
                 <label htmlFor="size">
-                  {t('size')}:<span>*</span>
+                  {t('size')}:<span style={{ color: '#dc3545' }}>*</span>
                 </label>
                 <label htmlFor="sizeUnit" style={{ fontSize: '12px', marginLeft: '8px', color: '#6c757d', fontWeight: 'normal' }}>
-                  ({t('sizeUnits.sqm')} / {t('sizeUnits.dunam')} / {t('sizeUnits.sqft')} / {t('sizeUnits.sqyd')} / {t('sizeUnits.feddan')})
+                  ({t('sizeUnits.sqm')} / {t('sizeUnits.dunam')} / {t('sizeUnits.sqft')} / {t('sizeUnits.sqyd')} / {t('sizeUnits.feddan')}) <span style={{ color: '#dc3545' }}>*</span>
                 </label>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
                   <input
@@ -1226,7 +1227,7 @@ export default function AddProperty({ isAdminMode = false }) {
               {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && (
                 <fieldset className="box-fieldset">
                   <label htmlFor="bedrooms">
-                    {t('bedrooms')}:<span>*</span>
+                    {t('bedrooms')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <input
                     type="number"
@@ -1248,7 +1249,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   <label htmlFor="bathrooms">
                     {t('bathrooms')}
                     {/* Only show * (required) for residential types, not for Commercial/Office */}
-                    {(formData.propertyType !== "Commercial" && formData.propertyType !== "Office") && <span>*</span>}
+                    {(formData.propertyType !== "Commercial" && formData.propertyType !== "Office") && <span style={{ color: '#dc3545' }}>*</span>}
                   </label>
                   <input
                     type="number"
@@ -1341,7 +1342,7 @@ export default function AddProperty({ isAdminMode = false }) {
               <div className="box grid-2 gap-30">
                 <fieldset className="box-fieldset mb-30">
                   <label htmlFor="propertyPrice">
-                    {t('price')}:<span>*</span>
+                    {t('price')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -1358,7 +1359,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 
                 <fieldset className="box-fieldset mb-30">
                   <label htmlFor="currency">
-                    {t('currency')}:<span>*</span>
+                    {t('currency')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
                   <input
                     type="text"
@@ -1455,7 +1456,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   
                   <fieldset className="box-fieldset">
                     <label htmlFor="agentNumber">
-                      Contact Phone (رقم الهاتف):<span>*</span>
+                      Contact Phone (رقم الهاتف):<span style={{ color: '#dc3545' }}>*</span>
                     </label>
                     <input
                       type="tel"
@@ -1477,7 +1478,7 @@ export default function AddProperty({ isAdminMode = false }) {
                   
                   <fieldset className="box-fieldset">
                     <label htmlFor="agentWhatsapp">
-                      WhatsApp Number (رقم الواتساب):<span>*</span>
+                      WhatsApp Number (رقم الواتساب):<span style={{ color: '#dc3545' }}>*</span>
                     </label>
                     <input
                       type="tel"
