@@ -439,6 +439,15 @@
   border: 1px solid #fecaca;
 }
 
+.alertWarning {
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .formLabel {
   display: flex;
   align-items: center;

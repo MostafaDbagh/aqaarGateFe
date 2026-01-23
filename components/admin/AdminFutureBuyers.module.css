@@ -1,0 +1,325 @@
+.container {
+  padding: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1f2937;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchInput,
+.selectInput {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.error {
+  padding: 12px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buyerCard {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.buyerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.buyerHeader:hover {
+  background-color: #f9fafb;
+}
+
+.buyerInfo {
+  flex: 1;
+}
+
+.buyerName {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.buyerDetails {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.buyerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.matchCount {
+  font-size: 14px;
+  font-weight: 500;
+  color: #059669;
+  background-color: #d1fae5;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.expandBtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: transform 0.2s;
+}
+
+.expandBtn.expanded {
+  transform: rotate(90deg);
+}
+
+.buyerExpanded {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.requirementsSection,
+.matchedPropertiesSection {
+  margin-bottom: 24px;
+}
+
+.requirementsSection h4,
+.matchedPropertiesSection h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1f2937;
+}
+
+.requirementsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  font-size: 14px;
+}
+
+.requirementsGrid div {
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.propertiesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.propertyMatch {
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+}
+
+.propertyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.propertyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.propertyId {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.matchScore {
+  font-weight: 600;
+  color: #059669;
+  background-color: #d1fae5;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.propertyDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.propertyDetails div {
+  padding: 4px 0;
+}
+
+.viewPropertyBtn {
+  padding: 6px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: flex-start;
+}
+
+.viewPropertyBtn:hover {
+  background-color: #2563eb;
+}
+
+.propertyNotFound {
+  padding: 12px;
+  background-color: #fef3c7;
+  color: #92400e;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.noMatches {
+  padding: 24px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.actionsSection {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btnRecalculate {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btnRecalculate:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.btnRecalculate:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btnDelete {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btnDelete:hover {
+  background-color: #dc2626;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.noData {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  background: white;
+  border-radius: 8px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.pageBtn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+

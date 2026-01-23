@@ -374,6 +374,31 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Future Buyers */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.FUTURE_BUYERS ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.FUTURE_BUYERS);
+                        router.replace('/en/admin/future-buyers');
+                      } else {
+                        router.push('/en/admin/future-buyers');
+                      }
+                    }}
+                  >
+                    <i className="icon-user" />
+                    <span>Future Buyers</span>
+                  </button>
+                </li>
+
                 {/* Messages */}
                 <li
                   className={`nav-menu-item ${

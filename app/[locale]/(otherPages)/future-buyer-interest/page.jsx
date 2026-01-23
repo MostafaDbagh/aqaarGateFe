@@ -3,15 +3,16 @@ import Breadcumb from "@/components/common/Breadcumb";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Cta from "@/components/common/Cta";
-import PropertyRentalService from "@/components/otherPages/propertyRentalService/PropertyRentalService";
+import FutureBuyerInterest from "@/components/otherPages/futureBuyerInterest/FutureBuyerInterest";
+import React from "react";
 
-export default function PropertyRentalServicePage() {
+export default function page() {
   return (
     <div id="wrapper" className="counter-scroll">
       <Header1 />
-      <Breadcumb pageName="Property Rental Service" />
+      <Breadcumb pageName="Future Buyer Interest" />
       <div className="main-content">
-        <PropertyRentalService />
+        <FutureBuyerInterest />
         <Cta />
       </div>
       <Footer1 />
