@@ -1,62 +1,57 @@
-// Import logger for server-side logging
+// Sitemap Generator for AqaarGate Real Estate
+// Generates sitemap.xml with all public pages and dynamic content
+
 const logger = {
   error: (...args) => {
-    // Server-side logging - only log in development or use proper logging service
     if (process.env.NODE_ENV !== 'production') {
       console.error(...args);
     }
-  }
+  },
 };
 
 async function getProperties() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
-    
-    // Create AbortController for timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-    
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
-      // Try multiple API endpoints to ensure we get properties
       const response = await fetch(`${apiUrl}/listing/search?limit=1000&approvalStatus=approved&isSold=false&isDeleted=false`, {
-        next: { revalidate: 3600 }, // Revalidate every hour
+        next: { revalidate: 3600 },
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         logger.error('Failed to fetch properties for sitemap');
         return [];
       }
-      
+
       const data = await response.json();
-      // Handle both array response and wrapped response
       let properties = Array.isArray(data) ? data : (data.data || data.listings || data.results || []);
-      
-      // If still empty, try alternative response structure
+
       if (!properties || properties.length === 0) {
         properties = data?.listings?.data || data?.results?.data || [];
       }
-      
-      // Filter only approved and not sold properties
-      const filteredProperties = (properties || []).filter(p => 
-        p && 
-        (p._id || p.id) && 
-        p.approvalStatus === 'approved' && 
-        p.isSold !== true && 
-        p.isDeleted !== true
+
+      const filteredProperties = (properties || []).filter(
+        (p) =>
+          p &&
+          (p._id || p.id) &&
+          p.approvalStatus === 'approved' &&
+          p.isSold !== true &&
+          p.isDeleted !== true
       );
-      
-      // Log for debugging (only in development)
+
       if (process.env.NODE_ENV !== 'production' && filteredProperties.length > 0) {
         logger.error(`Sitemap: Found ${filteredProperties.length} properties`);
       }
-      
-      return filteredProperties.slice(0, 1000); // Limit to 1000 properties max
+
+      return filteredProperties.slice(0, 1000);
     } catch (fetchError) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
@@ -75,50 +70,41 @@ async function getProperties() {
 async function getAgents() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
-    
-    // Create AbortController for timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-    
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
-      // Try multiple API endpoints to ensure we get agents
       const response = await fetch(`${apiUrl}/agents?limit=500&isBlocked=false`, {
-        next: { revalidate: 3600 }, // Revalidate every hour
+        next: { revalidate: 3600 },
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         logger.error('Failed to fetch agents for sitemap');
         return [];
       }
-      
+
       const data = await response.json();
-      // Handle both array response and wrapped response
       let agents = Array.isArray(data) ? data : (data.data || data.results || []);
-      
-      // If still empty, try alternative response structure
+
       if (!agents || agents.length === 0) {
         agents = data?.agents?.data || data?.results?.data || [];
       }
-      
-      // Filter only non-blocked agents
-      const filteredAgents = (agents || []).filter(a => 
-        a && 
-        (a._id || a.id) && 
-        a.isBlocked !== true
+
+      const filteredAgents = (agents || []).filter(
+        (a) => a && (a._id || a.id) && a.isBlocked !== true
       );
-      
-      // Log for debugging (only in development)
+
       if (process.env.NODE_ENV !== 'production' && filteredAgents.length > 0) {
         logger.error(`Sitemap: Found ${filteredAgents.length} agents`);
       }
-      
-      return filteredAgents.slice(0, 500); // Limit to 500 agents max
+
+      return filteredAgents.slice(0, 500);
     } catch (fetchError) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
@@ -134,45 +120,23 @@ async function getAgents() {
   }
 }
 
-/**
- * Sitemap Generator for AqaarGate Real Estate
- * 
- * This file generates a sitemap.xml file that lists all public pages
- * that should be indexed by search engines.
- * 
- * The sitemap includes:
- * - Static pages (homepage, property-list, agents, etc.)
- * - Dynamic property detail pages (fetched from API)
- * - Dynamic agent detail pages (fetched from API)
- * 
- * Note: Only approved properties and non-blocked agents are included
- */
-
-// Configure sitemap generation - revalidate every hour
 export const revalidate = 3600;
 
 export default async function sitemap() {
-  // Base URL for the website - Update this to your production domain
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'
-  
-  // Fetch all properties and agents from the API in parallel with timeout protection
-  // Properties are filtered to only include approved ones
-  // Agents are filtered to exclude blocked ones
-  // Use Promise.allSettled to prevent one failure from breaking the entire sitemap
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
   const [propertiesResult, agentsResult] = await Promise.allSettled([
     getProperties(),
-    getAgents()
+    getAgents(),
   ]);
-  
+
   const properties = propertiesResult.status === 'fulfilled' ? propertiesResult.value : [];
   const agents = agentsResult.status === 'fulfilled' ? agentsResult.value : [];
-  
-  // Log results for debugging
+
   if (process.env.NODE_ENV !== 'production') {
     logger.error(`Sitemap generation: ${properties.length} properties, ${agents.length} agents`);
   }
-  
-  // Generate property URLs (only if properties exist and have IDs)
+
   const propertyUrls = (properties || [])
     .filter((property) => {
       const hasId = property && (property._id || property.id);
@@ -187,8 +151,7 @@ export default async function sitemap() {
       changeFrequency: 'daily',
       priority: 0.8,
     }));
-  
-  // Generate agent URLs (only if agents exist and have IDs)
+
   const agentUrls = (agents || [])
     .filter((agent) => {
       const hasId = agent && (agent._id || agent.id);
@@ -203,17 +166,14 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.7,
     }));
-  
-  return [
-    // Homepage - Highest priority
+
+  const staticPages = [
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
-    
-    // Localized homepage URLs - CRITICAL for indexing
     {
       url: `${baseUrl}/en`,
       lastModified: new Date(),
@@ -226,8 +186,6 @@ export default async function sitemap() {
       changeFrequency: 'daily',
       priority: 1,
     },
-    
-    // Property listing pages - High priority for SEO
     {
       url: `${baseUrl}/property-list`,
       lastModified: new Date(),
@@ -246,8 +204,6 @@ export default async function sitemap() {
       changeFrequency: 'daily',
       priority: 0.9,
     },
-    
-    // Agent pages - Important for SEO
     {
       url: `${baseUrl}/agents`,
       lastModified: new Date(),
@@ -266,8 +222,6 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    
-    // Legal and policy pages - Required for compliance (with localized versions)
     {
       url: `${baseUrl}/terms-and-conditions`,
       lastModified: new Date(),
@@ -304,8 +258,6 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    
-    // Company information pages (with localized versions)
     {
       url: `${baseUrl}/about-us`,
       lastModified: new Date(),
@@ -342,8 +294,6 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
-    
-    // Blog pages - Content marketing (with localized versions)
     {
       url: `${baseUrl}/blog-grid`,
       lastModified: new Date(),
@@ -362,9 +312,6 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
-    // Note: blog-list page removed - redirects to blog-grid
-    
-    // Service pages (with localized versions)
     {
       url: `${baseUrl}/property-rental-service`,
       lastModified: new Date(),
@@ -383,8 +330,24 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    
-    // Contact and support pages (with localized versions)
+    {
+      url: `${baseUrl}/future-buyer-interest`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/en/future-buyer-interest`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/ar/future-buyer-interest`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
@@ -439,9 +402,8 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
-    
-    // Dynamic property and agent URLs
-    ...propertyUrls,
-    ...agentUrls,
-  ].filter(Boolean); // Remove any null/undefined entries
+  ];
+
+  return [...staticPages, ...propertyUrls, ...agentUrls].filter(Boolean);
 }
+

@@ -134,8 +134,8 @@ export default function FutureBuyerInterest() {
     }
     lastSubmitTimeRef.current = now;
     
-    // Validation
-    if (!formData.name || !formData.email || !formData.phone || !formData.propertyType) {
+    // Validation - Required fields: name, email, phone, city, propertyType, status
+    if (!formData.name || !formData.email || !formData.phone || !formData.city || !formData.propertyType || !formData.status) {
       setError(t('requiredFields'));
       return;
     }
@@ -167,14 +167,14 @@ export default function FutureBuyerInterest() {
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         propertyType: formData.propertyType,
-        status: formData.status,
+        status: formData.status, // Required field
         minPrice: formData.minPrice ? parseFloat(formData.minPrice) : undefined,
         maxPrice: formData.maxPrice ? parseFloat(formData.maxPrice) : undefined,
         currency: 'USD', // Always USD
         minSize: formData.minSize ? parseFloat(formData.minSize) : undefined,
         maxSize: formData.maxSize ? parseFloat(formData.maxSize) : undefined,
         sizeUnit: formData.sizeUnit,
-        city: formData.city ? formData.city.trim() : undefined,
+        city: formData.city.trim(),
         bedrooms: formData.bedrooms ? parseInt(formData.bedrooms) : undefined,
         bathrooms: formData.bathrooms ? parseInt(formData.bathrooms) : undefined,
         amenities: formData.amenities,
@@ -351,7 +351,7 @@ export default function FutureBuyerInterest() {
                         <div className="col-md-4 mb-20">
                           <fieldset>
                             <label htmlFor="city" className={styles.formLabel}>
-                              <i className="icon-location" /> {t('city')}
+                              <i className="icon-location" /> {t('city')} <span className={styles.requiredStar}>*</span>
                             </label>
                             <div className={styles.inputWrapper}>
                               <DropdownSelect
@@ -383,7 +383,7 @@ export default function FutureBuyerInterest() {
                         <div className="col-md-4 mb-20">
                           <fieldset>
                             <label htmlFor="status" className={styles.formLabel}>
-                              <i className="icon-tag" /> {t('status')}
+                              <i className="icon-tag" /> {t('status')} <span className={styles.requiredStar}>*</span>
                             </label>
                             <div className={styles.inputWrapper}>
                               <DropdownSelect
