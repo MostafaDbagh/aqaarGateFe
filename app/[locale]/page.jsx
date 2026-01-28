@@ -7,36 +7,36 @@ export async function generateMetadata({ params }) {
   if (locale === 'ar') {
     return {
       title: 'عقار جيت AqaarGate - افضل المواقع العقارية في سوريا | سوق العقارات الإلكتروني في سورية',
-      description: 'افضل المواقع العقارية في سوريا - عقار جيت. سوق العقارات الإلكتروني في سورية، منصة عقارات في سوريا - عدد العروض أكثر من 1000 عقار. شقق للبيع في سوريا، شقة للبيع في دمشق، عقارات في اللاذقية، شاليه في طرطوس، عقارات في حلب ودمشق وحمص. بيع وإيجار عقارات سوريا. ابدأ البحث اليوم.',
-      keywords: ['افضل المواقع العقارية في سوريا', 'أفضل المواقع العقارية في سوريا', 'افضل موقع عقاري في سوريا', 'سوق العقارات الإلكتروني في سورية', 'عقارات في سوريا', 'شقق للبيع في سوريا', 'شقة للبيع في دمشق', 'شقة للاجار في دمشق', 'عقارات في دمشق', 'عقارات في اللاذقية', 'شقة للاجار في اللاذقية', 'عقارات في حلب', 'شاليه في طرطوس', 'عقارات في حمص', 'منصة عقارات في سورية', 'عقار جيت', 'aqaargate'],
+      description: 'منازل للبيع في سوريا، شراء عقار في سوريا، شقق للبيع في دمشق. سوق العقارات السورية - أراضي للبيع في سوريا، استثمار عقاري في سوريا، عقارات للمغتربين. منازل للإيجار في سوريا، فرص عقارية في سوريا، عقارات بأسعار معقولة في سوريا. عقار جيت - افضل المواقع العقارية في سوريا.',
+      keywords: ['منازل للبيع في سوريا', 'شراء عقار في سوريا', 'شقق للبيع في دمشق', 'سوق العقارات السورية', 'أراضي للبيع في سوريا', 'استثمار عقاري في سوريا', 'عقارات للمغتربين', 'منازل للإيجار في سوريا', 'فرص عقارية في سوريا', 'عقارات بأسعار معقولة في سوريا', 'عقارات سوريا', 'منصة عقارية سوريا', 'عقارات موثوقة', 'افضل المواقع العقارية في سوريا', 'عقار جيت', 'aqaargate'],
       openGraph: {
-        title: 'عقار جيت - افضل المواقع العقارية في سوريا | سوق العقارات الإلكتروني في سورية',
-        description: 'افضل المواقع العقارية في سوريا - عقار جيت. سوق العقارات الإلكتروني في سورية، عقارات في سوريا، شقق للبيع في دمشق واللاذقية. أكثر من 1000 عقار.',
+        title: 'عقار جيت - منازل للبيع في سوريا | شراء عقار | شقق للبيع في دمشق',
+        description: 'منازل للبيع في سوريا، شراء عقار في سوريا، شقق للبيع في دمشق. سوق العقارات السورية، أراضي للبيع في سوريا، عقارات للمغتربين. منازل للإيجار في سوريا، عقارات بأسعار معقولة في سوريا.',
         url: `${baseUrl}/ar`,
         locale: 'ar_SA',
       },
       twitter: {
         card: 'summary_large_image',
-        title: 'عقار جيت - افضل المواقع العقارية في سوريا',
-        description: 'افضل المواقع العقارية في سوريا - عقار جيت. سوق العقارات الإلكتروني في سورية، عقارات في سوريا. أكثر من 1000 عقار.',
+        title: 'عقار جيت - منازل للبيع في سوريا | شراء عقار في سوريا',
+        description: 'منازل للبيع في سوريا، شقق للبيع في دمشق. سوق العقارات السورية، عقارات للمغتربين، منازل للإيجار في سوريا، عقارات بأسعار معقولة في سوريا.',
       },
       alternates: { canonical: `${baseUrl}/ar` },
     };
   }
   return {
-    title: 'AqaarGate - Best Real Estate Sites in Syria | #1 Platform | Buy, Rent & Sell',
-    description: 'AqaarGate is one of the best real estate sites in Syria. The #1 real estate platform in Syria & Lattakia. 1000+ verified properties for sale and rent. Luxury homes, apartments, holiday homes, villas. Trusted worldwide. Start your search today!',
-    keywords: ['best real estate sites in Syria', 'best real estate sites in syria', 'real estate Syria', 'properties Syria', 'aqaargate'],
+    title: 'AqaarGate - Homes for Sale in Syria | Buy Property | Apartments for Sale in Damascus',
+    description: 'Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market - land for sale Syria, property investment Syria, expat property Syria. Houses for rent Syria, real estate opportunities in Syria, affordable properties in Syria. 1000+ verified properties.',
+    keywords: ['Homes for sale in Syria', 'Buy property in Syria', 'Apartments for sale in Damascus', 'Syrian property market', 'Land for sale Syria', 'Property investment Syria', 'Expat property Syria', 'Houses for rent Syria', 'Real estate opportunities in Syria', 'Affordable properties in Syria', 'Syria real estate', 'Syrian property platform', 'aqaargate'],
     openGraph: {
-      title: 'AqaarGate - Best Real Estate Sites in Syria | #1 Platform',
-      description: 'One of the best real estate sites in Syria. AqaarGate - #1 platform in Syria & Lattakia. 1000+ properties for sale and rent. Holiday homes, villas, apartments.',
+      title: 'AqaarGate - Homes for Sale in Syria | Buy Property | Apartments for Sale in Damascus',
+      description: 'Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market, land for sale Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
       url: `${baseUrl}/en`,
       locale: 'en_US',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'AqaarGate - Best Real Estate Sites in Syria',
-      description: 'One of the best real estate sites in Syria. #1 platform in Syria & Lattakia. 1000+ properties for sale and rent.',
+      title: 'AqaarGate - Homes for Sale in Syria | Buy Property in Syria',
+      description: 'Homes for sale in Syria, apartments for sale in Damascus. Syrian property market, property investment Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
     },
     alternates: { canonical: `${baseUrl}/en` },
   };
@@ -64,14 +64,22 @@ export default async function Home({ params }) {
             <p>عقارات في دمشق، عقارات في اللاذقية، عقارات في حلب، شاليه في طرطوس. عقارات في حمص، عقارات للبيع في حمص. منصة عقارات في سورية - عقار جيت.</p>
             <h2>منصة عقارات في سورية</h2>
             <p>منصة عقارات في سورية رقم ١. بيع وشراء بيوت في سورية، تأجير بيوت في سورية. عقارات سوريا واللاذقية ودمشق. مستقبل العقارات في دمشق وسوريا.</p>
+            <h2>عقارات سوريا - عقارات موثوقة للمغتربين</h2>
+            <p>عقارات سوريا موثوقة على عقار جيت. منصة عقارية سوريا للبيع والإيجار. شقق للبيع في دمشق، شراء عقار في سوريا، عقارات للمغتربين. عقارات موثوقة في دمشق واللاذقية وحلب وحمص.</p>
+            <h2>شقق للبيع في دمشق وشراء عقار في سوريا</h2>
+            <p>تبحث عن شقق للبيع في دمشق أو شراء عقار في سوريا؟ عقار جيت منصة عقارية سوريا - عقارات موثوقة للمغتربين. عقارات سوريا للبيع والإيجار.</p>
+            <h2>منازل للبيع في سوريا - سوق العقارات السورية</h2>
+            <p>منازل للبيع في سوريا، شراء عقار في سوريا، شقق للبيع في دمشق. سوق العقارات السورية على عقار جيت - أراضي للبيع في سوريا، استثمار عقاري في سوريا، عقارات للمغتربين. منازل للإيجار في سوريا، فرص عقارية في سوريا، عقارات بأسعار معقولة في سوريا.</p>
+            <h2>أراضي للبيع في سوريا - عقارات للمغتربين</h2>
+            <p>أراضي للبيع في سوريا، منازل للبيع في سوريا، منازل للإيجار في سوريا. عقارات للمغتربين - فرص عقارية في سوريا وعقارات بأسعار معقولة في سوريا. شقق للبيع في دمشق، استثمار عقاري في سوريا. سوق العقارات السورية - عقار جيت.</p>
+            <h2>فرص عقارية في سوريا - عقارات بأسعار معقولة</h2>
+            <p>فرص عقارية في سوريا على عقار جيت. عقارات بأسعار معقولة في سوريا - منازل للبيع في سوريا، شقق للبيع في دمشق، منازل للإيجار في سوريا. سوق العقارات السورية، أراضي للبيع في سوريا، استثمار عقاري في سوريا. عقارات للمغتربين موثوقة من المغتربين worldwide.</p>
           </>
         ) : (
           <>
-            <h1>AqaarGate - Best Real Estate Sites in Syria | #1 Platform | Buy, Rent & Sell</h1>
+            <h1>AqaarGate - Homes for Sale in Syria | Buy Property in Syria | Apartments for Sale in Damascus</h1>
             <p>
-              AqaarGate is one of the best real estate sites in Syria. The #1 real estate platform in Syria and Lattakia. Find 1000+ verified properties for sale and rent. 
-              Discover luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas, and commercial properties. 
-              Trusted by expats from Germany, Netherlands, EU, UAE, Saudi Arabia, Qatar, Kuwait. Start your property search today!
+              Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market on AqaarGate - land for sale Syria, property investment Syria, expat property Syria. Houses for rent Syria, real estate opportunities in Syria, affordable properties in Syria. 1000+ verified properties in Syria and Lattakia.
             </p>
             <h2>Best Real Estate Sites in Syria</h2>
             <p>
@@ -94,6 +102,31 @@ export default async function Home({ params }) {
               Looking for holiday homes in Syria or vacation rentals? AqaarGate offers premium syria holiday homes and 
               lattakia holiday homes for rent. Perfect for families and expats looking for syria vacation rentals or 
               lattakia vacation rentals. Experience the beauty of Syria with our carefully selected holiday homes.
+            </p>
+            <h2>Syria Real Estate - Buy Property in Syria</h2>
+            <p>
+              Syria real estate on AqaarGate - Syrian property platform. Buy property in Syria, apartments for sale Damascus. 
+              Trusted real estate for expats. 1000+ verified properties for sale and rent in Syria and Lattakia.
+            </p>
+            <h2>Apartments for Sale in Damascus - Syrian Property Platform</h2>
+            <p>
+              Apartments for sale in Damascus and buy property in Syria. AqaarGate is a Syrian property platform for Syria real estate. 
+              Trusted by expats worldwide. Find your property today.
+            </p>
+            <h2>Homes for Sale in Syria - Land for Sale Syria</h2>
+            <p>
+              Homes for sale in Syria, land for sale Syria. Syrian property market - property investment Syria, real estate opportunities in Syria. 
+              Buy property in Syria or find houses for rent Syria. Affordable properties in Syria for expats. Expat property Syria - AqaarGate.
+            </p>
+            <h2>Expat Property Syria - Houses for Rent Syria</h2>
+            <p>
+              Expat property Syria - homes for sale in Syria, houses for rent Syria. Real estate opportunities in Syria and affordable properties in Syria. 
+              Apartments for sale in Damascus, land for sale Syria. Property investment Syria for international buyers.
+            </p>
+            <h2>Real Estate Opportunities in Syria - Affordable Properties</h2>
+            <p>
+              Real estate opportunities in Syria on AqaarGate. Affordable properties in Syria - homes for sale in Syria, apartments for sale in Damascus, 
+              houses for rent Syria. Syrian property market, land for sale Syria, property investment Syria. Expat property Syria trusted by expats worldwide.
             </p>
           </>
         )}
