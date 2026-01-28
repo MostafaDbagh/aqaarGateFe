@@ -4,15 +4,13 @@ export default function InternationalSEO() {
 
   return (
     <>
-      {/* International SEO - Hreflang tags for different regions */}
+      {/* International SEO - Hreflang: only /en and /ar exist; regional variants point to them */}
       <link rel="alternate" hrefLang="en" href={`${baseUrl}/en`} />
       <link rel="alternate" hrefLang="ar" href={`${baseUrl}/ar`} />
-      <link rel="alternate" hrefLang="de" href={`${baseUrl}/de`} />
-      <link rel="alternate" hrefLang="nl" href={`${baseUrl}/nl`} />
-      <link rel="alternate" hrefLang="en-SY" href={`${baseUrl}/en-sy`} />
-      <link rel="alternate" hrefLang="ar-SY" href={`${baseUrl}/ar-sy`} />
-      <link rel="alternate" hrefLang="en-DE" href={`${baseUrl}/en-de`} />
-      <link rel="alternate" hrefLang="en-NL" href={`${baseUrl}/en-nl`} />
+      <link rel="alternate" hrefLang="en-SY" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-SY" href={`${baseUrl}/ar`} />
+      <link rel="alternate" hrefLang="en-DE" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="en-NL" href={`${baseUrl}/en`} />
       <link rel="alternate" hrefLang="en-AE" href={`${baseUrl}/en`} />
       <link rel="alternate" hrefLang="ar-AE" href={`${baseUrl}/ar`} />
       <link rel="alternate" hrefLang="en-SA" href={`${baseUrl}/en`} />
@@ -23,9 +21,9 @@ export default function InternationalSEO() {
       <link rel="alternate" hrefLang="ar-KW" href={`${baseUrl}/ar`} />
       <link rel="alternate" hrefLang="en-BH" href={`${baseUrl}/en`} />
       <link rel="alternate" hrefLang="ar-BH" href={`${baseUrl}/ar`} />
-      <link rel="alternate" hrefLang="en-OM" href={`${baseUrl}/en-om`} />
-      <link rel="alternate" hrefLang="ar-OM" href={`${baseUrl}/ar-om`} />
-      <link rel="alternate" hrefLang="x-default" href={`${baseUrl}`} />
+      <link rel="alternate" hrefLang="en-OM" href={`${baseUrl}/en`} />
+      <link rel="alternate" hrefLang="ar-OM" href={`${baseUrl}/ar`} />
+      <link rel="alternate" hrefLang="x-default" href={`${baseUrl}/en`} />
 
       {/* Geographic targeting meta tags for Syria */}
       <meta name="geo.region" content="SY" />

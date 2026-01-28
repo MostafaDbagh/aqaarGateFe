@@ -129,7 +129,27 @@ export const metadata = {
     'syria real estate for saudis',
     'syria real estate for qataris',
     'syria real estate for kuwaitis',
-    // Local search variations - Arabic keywords
+    // Local search variations - Arabic keywords (exact phrases for top search, ikar.sy-style)
+    'سوق العقارات الالكتروني في سورية',
+    'سوق العقارات الإلكتروني في سورية',
+    'منصة عقارات في سورية',
+    'بيع وشراء بيوت في سورية',
+    'تأجير بيوت في سورية',
+    'عقارات في سوريا',
+    'مستقبل العقارات في دمشق وسوريا',
+    'شقق للبيع في سوريا',
+    'عقارات في حلب',
+    'عقارات في دمشق',
+    'شقة للبيع في دمشق',
+    'شقة للاجار في دمشق',
+    'عقارات للاجار في دمشق',
+    'عقارات في اللاذقية',
+    'شقة للاجار في اللاذقية',
+    'شاليه في طرطوس',
+    'عقارات في حمص',
+    'عقارات للبيع في حمص',
+    'مكتب للاجار',
+    'عيادة للاجار',
     'عقارات سوريا',
     'عقارات اللاذقية',
     'شراء عقار في سوريا',
@@ -227,6 +247,32 @@ export const metadata = {
 import Providers from './Providers';
 import IntlProvider from './IntlProvider';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: 'AqaarGate',
+      alternateName: ['AqaarGate Real Estate', 'aqaargate', 'aqaargate.com', 'سوق العقارات الإلكتروني في سورية', 'عقار جيت'],
+      description: 'AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Buy, rent & sell properties, holiday homes, villas, apartments.',
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      inLanguage: ['en', 'ar'],
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      name: 'AqaarGate',
+      url: SITE_URL,
+      logo: `${SITE_URL}/images/og-image.png`,
+      description: 'AqaarGate Real Estate - Premium real estate platform in Syria and Lattakia.',
+    },
+  ],
+};
+
 export default function RootLayout({ children }) {
   // Root layout must have <html> and <body> for Next.js
   // The [locale]/layout.jsx will provide locale-specific <html> with lang/dir
@@ -234,6 +280,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Providers>
           <IntlProvider>
             {children}

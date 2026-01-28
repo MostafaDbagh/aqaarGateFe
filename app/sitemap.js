@@ -1,5 +1,6 @@
 // Sitemap Generator for AqaarGate Real Estate
-// Generates sitemap.xml with all public pages and dynamic content
+// Google Search Console friendly: canonical URLs only, locale-prefixed (localePrefix: 'always')
+// Max 50,000 URLs per sitemap (Google limit). Revalidate every 1h.
 
 const logger = {
   error: (...args) => {
@@ -8,6 +9,12 @@ const logger = {
     }
   },
 };
+
+/** Normalize base URL for sitemap/robots: no trailing slash, prefer https */
+function getBaseUrl() {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+  return url.replace(/\/+$/, '');
+}
 
 async function getProperties() {
   try {
@@ -122,8 +129,15 @@ async function getAgents() {
 
 export const revalidate = 3600;
 
+/** Safe lastModified: avoid invalid dates for GSC */
+function safeLastModified(date) {
+  const d = date ? new Date(date) : new Date();
+  return isNaN(d.getTime()) ? new Date() : d;
+}
+
+/** Only include URLs that are allowed by robots and are canonical (locale-prefixed). */
 export default async function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+  const baseUrl = getBaseUrl();
 
   const [propertiesResult, agentsResult] = await Promise.allSettled([
     getProperties(),
@@ -137,6 +151,8 @@ export default async function sitemap() {
     logger.error(`Sitemap generation: ${properties.length} properties, ${agents.length} agents`);
   }
 
+  const now = new Date();
+
   const propertyUrls = (properties || [])
     .filter((property) => {
       const hasId = property && (property._id || property.id);
@@ -145,12 +161,15 @@ export default async function sitemap() {
       }
       return hasId;
     })
-    .map((property) => ({
-      url: `${baseUrl}/property-detail/${property._id || property.id}`,
-      lastModified: property.updatedAt ? new Date(property.updatedAt) : new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
-    }));
+    .flatMap((property) => {
+      const id = String(property._id || property.id).trim();
+      if (!id) return [];
+      const lastModified = safeLastModified(property.updatedAt);
+      return [
+        { url: `${baseUrl}/en/property-detail/${id}`, lastModified, changeFrequency: 'daily', priority: 0.8 },
+        { url: `${baseUrl}/ar/property-detail/${id}`, lastModified, changeFrequency: 'daily', priority: 0.8 },
+      ];
+    });
 
   const agentUrls = (agents || [])
     .filter((agent) => {
@@ -160,250 +179,48 @@ export default async function sitemap() {
       }
       return hasId;
     })
-    .map((agent) => ({
-      url: `${baseUrl}/agents-details/${agent._id || agent.id}`,
-      lastModified: agent.updatedAt ? new Date(agent.updatedAt) : new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    }));
+    .flatMap((agent) => {
+      const id = String(agent._id || agent.id).trim();
+      if (!id) return [];
+      const lastModified = safeLastModified(agent.updatedAt);
+      return [
+        { url: `${baseUrl}/en/agents-details/${id}`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
+        { url: `${baseUrl}/ar/agents-details/${id}`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
+      ];
+    });
 
+  // Canonical static pages only (localePrefix: 'always' - no non-locale paths to avoid redirect/duplicate in GSC)
   const staticPages = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/en`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/ar`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/property-list`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/en/property-list`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/ar/property-list`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/agents`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/en/agents`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ar/agents`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/terms-and-conditions`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/en/terms-and-conditions`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ar/terms-and-conditions`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/privacy-policy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/en/privacy-policy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ar/privacy-policy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/about-us`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/en/about-us`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/ar/about-us`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/vision`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/en/vision`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/ar/vision`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/blog-grid`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/en/blog-grid`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/ar/blog-grid`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/property-rental-service`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/en/property-rental-service`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/ar/property-rental-service`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/future-buyer-interest`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/en/future-buyer-interest`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/ar/future-buyer-interest`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/en/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/ar/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/en/faq`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/ar/faq`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/career`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/en/career`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/ar/career`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
+    { url: baseUrl, lastModified: now, changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/en`, lastModified: now, changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/ar`, lastModified: now, changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/en/property-list`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/ar/property-list`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/en/agents`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/ar/agents`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/en/terms-and-conditions`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/ar/terms-and-conditions`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/en/privacy-policy`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/ar/privacy-policy`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/en/about-us`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/ar/about-us`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/en/vision`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/ar/vision`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/en/blog-grid`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/ar/blog-grid`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/en/property-rental-service`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/ar/property-rental-service`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/en/future-buyer-interest`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/ar/future-buyer-interest`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/en/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/ar/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/en/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/ar/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/en/career`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/ar/career`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
   ];
 
-  return [...staticPages, ...propertyUrls, ...agentUrls].filter(Boolean);
+  const all = [...staticPages, ...propertyUrls, ...agentUrls];
+  return all.filter((entry) => entry && entry.url && entry.url.startsWith('http'));
 }
 

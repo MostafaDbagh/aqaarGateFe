@@ -2,9 +2,9 @@ import React from "react";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-  const url = `${baseUrl}/property-detail/${id}`;
+  const url = `${baseUrl}/${locale}/property-detail/${id}`;
   
   // Enhanced metadata with more keywords
   const title = `Premium Property for Sale & Rent in Syria & Lattakia | Holiday Homes | AqaarGate`;

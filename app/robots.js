@@ -1,85 +1,73 @@
+// Robots.txt for AqaarGate - Google Search Console friendly
+// With localePrefix: 'always', private paths are under /en/... and /ar/...
+// Sitemap URL must be absolute. No crawlDelay for Google (it ignores it).
+
+function getBaseUrl() {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+  return url.replace(/\/+$/, '');
+}
+
 export default function robots() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-  
+  const baseUrl = getBaseUrl();
+
+  // Only disallow real private paths. Do NOT disallow legacy/non-existent paths
+  // (e.g. agency-grid, agency-list, property-filter-popup) or GSC shows "Blocked by robots" for URLs that then 404.
+  const disallowPaths = [
+    '/dashboard/',
+    '/add-property/',
+    '/my-profile/',
+    '/my-property/',
+    '/messages/',
+    '/my-favorites/',
+    '/my-package/',
+    '/my-save-search/',
+    '/review/',
+    '/admin/',
+    '/api/',
+    '/dev-tools/',
+    '/private/',
+    // Locale-prefixed private paths (actual URLs with localePrefix: 'always')
+    '/en/dashboard/',
+    '/ar/dashboard/',
+    '/en/add-property/',
+    '/ar/add-property/',
+    '/en/my-profile/',
+    '/ar/my-profile/',
+    '/en/my-property/',
+    '/ar/my-property/',
+    '/en/messages/',
+    '/ar/messages/',
+    '/en/my-favorites/',
+    '/ar/my-favorites/',
+    '/en/my-package/',
+    '/ar/my-package/',
+    '/en/review/',
+    '/ar/review/',
+    '/en/admin/',
+    '/ar/admin/',
+    '/en/notifications/',
+    '/ar/notifications/',
+  ];
+
   return {
     rules: [
       {
         userAgent: '*',
-        allow: [
-          '/',
-          '/property-list',
-          '/property-detail',
-          '/agents',
-          '/agents-details',
-          '/blog-grid',
-          '/contact',
-          '/faq',
-          '/about-us',
-          '/vision',
-          '/career',
-          '/terms-and-conditions',
-          '/privacy-policy',
-          '/property-rental-service',
-          '/future-buyer-interest',
-        ],
-        disallow: [
-          '/dashboard/',
-          '/add-property/',
-          '/my-profile/',
-          '/my-property/',
-          '/messages/',
-          '/my-favorites/',
-          '/my-package/',
-          '/my-save-search/',
-          '/review/',
-          '/admin/',
-          '/api/',
-          '/dev-tools/',
-          '/private/',
-          '/property-filter-popup',
-          '/property-filter-popup-left',
-          '/property-half-top-map',
-          '/agency-grid',
-          '/agency-list',
-          '/ar-bh',
-          '/ar-ae',
-          '/ar-kw',
-          '/favicon.ico',
-        ],
-        crawlDelay: 1,
+        allow: '/',
+        disallow: disallowPaths,
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: [
-          '/dashboard/',
-          '/add-property/',
-          '/my-profile/',
-          '/my-property/',
-          '/messages/',
-          '/my-favorites/',
-          '/my-package/',
-          '/my-save-search/',
-          '/review/',
-          '/dev-tools/',
-          '/api/',
-          '/admin/',
-          '/private/',
-          '/property-filter-popup',
-          '/property-filter-popup-left',
-          '/property-half-top-map',
-          '/agency-grid',
-          '/agency-list',
-          '/ar-bh',
-          '/ar-ae',
-          '/ar-kw',
-          '/favicon.ico',
-        ],
-        crawlDelay: 0,
+        disallow: disallowPaths,
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/',
+        disallow: disallowPaths,
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   };
 }
-
