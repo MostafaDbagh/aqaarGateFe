@@ -161,7 +161,12 @@ export const authAPI = {
 
   verifyOTP: async (email, otp, type = 'signup') => {
     try {
-      const response = await Axios.post('/auth/verify-otp', { email, otp, type });
+      // Always send OTP as string so backend comparison is consistent across retries
+      const response = await Axios.post('/auth/verify-otp', {
+        email,
+        otp: String(otp),
+        type
+      });
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
