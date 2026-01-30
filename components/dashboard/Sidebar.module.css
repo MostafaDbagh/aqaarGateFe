@@ -66,3 +66,21 @@
   font-size: 16px;
 }
 
+/* Add Property (WhatsApp) link for user - green style */
+.addPropertyWhatsAppLink {
+  color: #15803d !important;
+}
+
+.addPropertyWhatsAppLink:hover {
+  color: #16a34a !important;
+  background-color: #dcfce7;
+}
+
+.addPropertyWhatsAppLink svg path {
+  stroke: #15803d;
+}
+
+.addPropertyWhatsAppLink:hover svg path {
+  stroke: #16a34a;
+}
+

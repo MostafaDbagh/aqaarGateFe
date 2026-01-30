@@ -10,6 +10,7 @@ import { useAuthState } from "@/store/hooks/useAuth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
+import { getAddPropertyWhatsAppUrl } from "@/constants/contactWhatsApp";
 
 export default function Header1({ parentClass = "header" }) {
   // Use Redux for auth state
@@ -65,9 +66,9 @@ export default function Header1({ parentClass = "header" }) {
                   {isLoggedIn && (isAgent || isAdmin) && <NotificationBell />}
                   <DashboardNav />
                   
-                  {/* Add Property Button - Only for Agents */}
-                  {isLoggedIn && isAgent && (
-                    <div className="btn-add">
+                  {/* Add Property Button - Visible for guest, user, and agent. Agent: go to add-property page; guest/user: open WhatsApp */}
+                  <div className="btn-add">
+                    {isAgent ? (
                       <Link
                         className="tf-btn style-border pd-23"
                         href={`/add-property`}
@@ -75,8 +76,18 @@ export default function Header1({ parentClass = "header" }) {
                       >
                         {tCommon('addProperty')}
                       </Link>
-                    </div>
-                  )}
+                    ) : (
+                      <a
+                        className="tf-btn style-green-whatsapp pd-23"
+                        href={getAddPropertyWhatsAppUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ borderRadius: '12px' }}
+                      >
+                        {tCommon('addProperty')}
+                      </a>
+                    )}
+                  </div>
                   
                   {/* Make Me Agent Button - Only for Logged in Users (not agents, not admin) */}
                   {isLoggedIn && !isAgent && !isAdmin && (

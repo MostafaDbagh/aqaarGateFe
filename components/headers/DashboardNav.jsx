@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useAuthState } from "@/store/hooks/useAuth";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
+import { getAddPropertyWhatsAppUrl } from "@/constants/contactWhatsApp";
 import { 
   UserAvatarIcon, 
   DashboardIcon, 
@@ -363,8 +364,8 @@ export default function DashboardNav({ color = "" }) {
               </Link>
             )}
 
-            {/* Add Property - Only for logged in agents (disabled on mobile only) */}
-            {isAgentUser && (
+            {/* Add Property - Visible for all logged-in users. Agent: link to add-property; user: open WhatsApp */}
+            {isAgentUser ? (
               <Link 
                 className="dropdown-item dashboard-disabled-mobile" 
                 href="/add-property"
@@ -383,6 +384,28 @@ export default function DashboardNav({ color = "" }) {
                 <AddPropertyIcon />
                 {t('addProperty')}
               </Link>
+            ) : (
+              <a
+                className="dropdown-item dashboard-disabled-mobile add-property-whatsapp-item"
+                href={getAddPropertyWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                    e.preventDefault();
+                    window.open(getAddPropertyWhatsAppUrl(), '_blank');
+                  }
+                }}
+                style={{
+                  padding: '14px 12px',
+                  border: '1px solid #86efac',
+                  backgroundColor: '#dcfce7',
+                  color: '#15803d'
+                }}
+              >
+                <AddPropertyIcon />
+                {t('addProperty')}
+              </a>
             )}
           </>
         )}

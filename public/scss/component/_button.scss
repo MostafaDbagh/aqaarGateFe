@@ -156,6 +156,23 @@
             border-color: rgba(255, 255, 255, 0.1);
         }
     }
+    /* Add Property (WhatsApp) button for guest/user - green style */
+    &.style-green-whatsapp {
+        border: 1px solid #86efac;
+        color: #15803d;
+        background-color: #dcfce7;
+        &::after {
+            background-color: #16a34a;
+        }
+        &:hover {
+            color: var(--Text-white) !important;
+            border-color: #16a34a;
+            background-color: transparent;
+            svg path {
+                stroke: var(--Text-white);
+            }
+        }
+    }
     &.style-2 {
         background-color: var(--Text-white);
         color: var(--Primary);

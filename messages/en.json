@@ -151,7 +151,7 @@
       "shell_house": "Shell House",
       "بيت عالعضم": "Shell House"
     },
-    "addProperty": "Add property",
+    "addProperty": "Add Property",
     "makeMeAgent": "Make Me Agent",
     "noPropertiesFound": "No properties found.",
     "login": "Login",
@@ -415,7 +415,7 @@
     "messages": "Messages",
     "makeMeAgent": "Make me Agent",
     "myProperties": "My properties",
-    "addProperty": "Add property"
+    "addProperty": "Add Property"
   },
   "aboutUs": {
     "pageName": "About Us",
@@ -895,7 +895,7 @@
       "messages": "Messages",
       "notifications": "Notifications",
       "myProperties": "My properties",
-      "addProperty": "Add property",
+      "addProperty": "Add Property",
       "logout": "Logout",
       "deleteMyAccount": "Delete My Account"
     }

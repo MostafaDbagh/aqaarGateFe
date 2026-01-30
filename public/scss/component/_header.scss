@@ -58,14 +58,14 @@
         @include mixin.flex(center, space-between);
         position: relative;
         z-index: 999;
-        margin-right: 32px;
+        margin-right: 16px;
         max-height: 80px !important;
         padding-left: 32px !important;
     }
     .header-right {
         @include mixin.d-flex();
         align-items: center;
-        gap: 16px;
+        gap: 24px;
         .phone-number {
             @include mixin.d-flex();
             align-items: center;
@@ -129,7 +129,7 @@
             height: 42px;
         }
     }
-    .tf-btn {
+    .tf-btn:not(.style-green-whatsapp) {
         height: 44px;
         border-radius: 4px;
         &:hover,
@@ -143,13 +143,32 @@
             outline-offset: 2px;
         }
     }
+    .tf-btn.style-green-whatsapp {
+        height: 44px;
+        border-radius: 4px;
+        &:focus-visible {
+            outline: 2px solid #16a34a;
+            outline-offset: 2px;
+        }
+    }
     .btn-add {
-        .tf-btn {
+        a.tf-btn {
+            text-decoration: none;
+        }
+        .tf-btn:not(.style-green-whatsapp) {
             &:hover,
             &:focus {
                 background: #f1913D !important;
                 color: var(--White) !important;
                 border-color: #f1913D !important;
+            }
+        }
+        .tf-btn.style-green-whatsapp {
+            &:hover,
+            &:focus {
+                background: #16a34a !important;
+                color: var(--White) !important;
+                border-color: #16a34a !important;
             }
         }
         button {
