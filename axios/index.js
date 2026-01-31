@@ -31,41 +31,30 @@ Axios.interceptors.request.use(
     // Set baseURL dynamically based on environment
     config.baseURL = getBaseURL();
     
-    // Get current locale - check sessionStorage first (set by LanguageSwitcher), then pathname
+    // Get current locale: pathname (current page) > sessionStorage > localStorage (persisted)
     if (typeof window !== 'undefined') {
-      let locale = 'en'; // Default to 'en'
-      
-      // First, check sessionStorage (set immediately when language changes)
-      let storedLocale = sessionStorage.getItem('currentLocale');
-      
-      // If no stored locale, read from pathname and store it
-      if (!storedLocale || (storedLocale !== 'ar' && storedLocale !== 'en')) {
-        const pathname = window.location.pathname;
-        
-        // Check pathname - must check /ar/ FIRST before /en/ to avoid false matches
-        if (pathname.startsWith('/ar/') || pathname === '/ar') {
-          locale = 'ar';
-          sessionStorage.setItem('currentLocale', 'ar');
-        } else if (pathname.startsWith('/en/') || pathname === '/en') {
-          locale = 'en';
-          sessionStorage.setItem('currentLocale', 'en');
-        } else {
-          // No locale in pathname, default to 'en'
-          sessionStorage.setItem('currentLocale', 'en');
-        }
+      let locale = 'en';
+      const pathname = window.location.pathname;
+      const pathLocale = pathname.startsWith('/ar/') || pathname === '/ar' ? 'ar' :
+                        pathname.startsWith('/en/') || pathname === '/en' ? 'en' : null;
+
+      if (pathLocale) {
+        // Pathname has locale - use it and sync to storage
+        locale = pathLocale;
+        sessionStorage.setItem('currentLocale', pathLocale);
+        localStorage.setItem('locale', pathLocale);
       } else {
-        // Use stored locale
-        locale = storedLocale;
-        
-        // Verify it matches pathname (in case user navigated directly)
-        const pathname = window.location.pathname;
-        const pathLocale = pathname.startsWith('/ar/') || pathname === '/ar' ? 'ar' : 
-                          pathname.startsWith('/en/') || pathname === '/en' ? 'en' : null;
-        
-        // If pathname has a different locale, update sessionStorage
-        if (pathLocale && pathLocale !== locale) {
-          locale = pathLocale;
-          sessionStorage.setItem('currentLocale', pathLocale);
+        // No locale in path - use sessionStorage, then localStorage (persisted choice)
+        const storedSession = sessionStorage.getItem('currentLocale');
+        const storedLocal = localStorage.getItem('locale');
+        const storedLocale = storedSession || storedLocal;
+
+        if (storedLocale === 'ar' || storedLocale === 'en') {
+          locale = storedLocale;
+          sessionStorage.setItem('currentLocale', locale);
+        } else {
+          sessionStorage.setItem('currentLocale', 'en');
+          localStorage.setItem('locale', 'en');
         }
       }
       

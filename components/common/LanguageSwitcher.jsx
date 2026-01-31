@@ -22,6 +22,13 @@ export default function LanguageSwitcher() {
 
   const currentLanguage = languages.find(lang => lang.code === locale) || languages[0];
 
+  // Sync locale to localStorage on mount/navigation so it persists
+  useEffect(() => {
+    if (typeof window !== 'undefined' && locale && routing.locales.includes(locale)) {
+      localStorage.setItem('locale', locale);
+    }
+  }, [locale]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -47,9 +54,14 @@ export default function LanguageSwitcher() {
     // Close dropdown immediately
     setIsOpen(false);
     
-    // Store locale in sessionStorage for immediate access by axios interceptor
     if (typeof window !== 'undefined') {
+      // Persist in localStorage (survives browser close, used by client-side code)
+      localStorage.setItem('locale', newLocale);
+      // Session storage for axios interceptor
       sessionStorage.setItem('currentLocale', newLocale);
+      // Set cookie so middleware redirects to correct locale when visiting / or non-prefixed URLs
+      const maxAge = 60 * 60 * 24 * 365; // 1 year
+      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=${maxAge}; SameSite=Lax`;
     }
     
     // Invalidate all queries to force refetch with new language

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import GlobalStatusModal from '../modals/GlobalStatusModal';
 import Register from '../modals/Register';
 import { usePathname } from 'next/navigation';
-import { useSafeTranslations } from '@/hooks/useSafeTranslations';
+import { useFileTranslations } from '@/hooks/useFileTranslations';
 import Login from '../modals/Login';
 import ForgotPasswordFlow from '../modals/ForgotPasswordFlow';
 import OTPVerification from '../modals/OTPVerification';
@@ -26,8 +26,7 @@ export const GlobalModalProvider = ({ children }) => {
   // Extract locale from pathname
   const locale = pathname?.split('/')[1] || 'en';
   
-  // Use safe translations hook
-  const tRegistrationSuccess = useSafeTranslations('registrationSuccess');
+  const tRegistrationSuccess = useFileTranslations('registrationSuccess');
   
   const [modalState, setModalState] = useState({
     isOpen: false,

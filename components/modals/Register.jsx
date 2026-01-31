@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useSafeTranslations } from "@/hooks/useSafeTranslations";
+import { useFileTranslations } from "@/hooks/useFileTranslations";
 import { UserIcon, EmailIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -17,8 +17,8 @@ export default function Register({ isOpen, onClose }) {
   const locale = pathname?.split('/')[1] || 'en';
   const isRTL = locale === 'ar';
   
-  // Use safe translations hook that works even without provider
-  const t = useSafeTranslations('register');
+  // Use file-based translations (works without NextIntlClientProvider)
+  const t = useFileTranslations('register');
   const [formData, setFormData] = useState({
     username: "",
     email: "",

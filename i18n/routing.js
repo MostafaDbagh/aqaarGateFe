@@ -9,7 +9,16 @@ export const routing = defineRouting({
   defaultLocale: 'en',
 
   // The prefix is applied to all routes
-  localePrefix: 'always'
+  localePrefix: 'always',
+
+  // Persist locale in cookie for middleware (redirects when visiting /)
+  // maxAge: 1 year so language persists across browser sessions
+  localeCookie: {
+    name: 'NEXT_LOCALE',
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    sameSite: 'lax',
+    path: '/'
+  }
 });
 
 // Lightweight wrappers around Next.js' navigation APIs
