@@ -202,6 +202,9 @@
     "yearBuiltPlaceholder": "e.g., 2020",
     "floor": "Floor",
     "floorPlaceholder": "e.g., 3",
+    "howManyFloors": "How many floors?",
+    "howManyFloorsPlaceholder": "e.g., 3",
+    "howManyFloorsRequired": "Please enter how many floors (at least 1)",
     "bedrooms": "Bedrooms",
     "bathrooms": "Bathrooms",
     "furnished": "Furnished",
@@ -251,6 +254,7 @@
     "propertyTypes": {
       "Apartment": "Apartment",
       "Villa": "Villa",
+      "Building": "Building",
       "Office": "Office",
       "House": "House",
       "Land": "Land",

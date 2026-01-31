@@ -67,6 +67,7 @@ export default function AddProperty({ isAdminMode = false }) {
     garageSize: "",
     yearBuilt: "",
     floor: "",
+    numberOfFloors: "",
     address: "",
     country: "Syria",
     state: "Damascus",
@@ -251,9 +252,9 @@ export default function AddProperty({ isAdminMode = false }) {
     }
   }, [formData.propertyType, formData.status, isAdmin, isAdminMode]);
   
-  // Property types - Holiday Home only for admin
+  // Property types - Holiday Home only for admin; Building has numberOfFloors
   const getPropertyTypes = () => {
-    const baseTypes = ["Apartment", "Villa", "Office", "Land", "Commercial"];
+    const baseTypes = ["Apartment", "Villa", "Building", "Office", "Land", "Commercial"];
     if (isAdmin || isAdminMode) {
       return [...baseTypes, "Holiday Home"];
     }
@@ -444,17 +445,23 @@ export default function AddProperty({ isAdminMode = false }) {
     // notes_ar is optional - no validation needed
     
     // Numeric validations
-    // Only validate bedrooms if property type is not Land, Commercial, or Office
-    if (formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office") {
+    // Only validate bedrooms if property type is not Land, Commercial, Office, or Building
+    if (formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && formData.propertyType !== "Building") {
       if (!formData.bedrooms || isNaN(formData.bedrooms) || parseInt(formData.bedrooms) < 0) {
         newErrors.bedrooms = "Valid number of bedrooms is required";
       }
     }
-    // Only validate bathrooms if property type is not Land, Commercial, or Office
+    // Only validate bathrooms if property type is not Land, Commercial, Office, or Building
     // For Commercial and Office, bathrooms is optional
-    if (formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office") {
+    if (formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && formData.propertyType !== "Building") {
       if (!formData.bathrooms || isNaN(formData.bathrooms) || parseInt(formData.bathrooms) < 0) {
         newErrors.bathrooms = "Valid number of bathrooms is required";
+      }
+    }
+    // For Building type: require number of floors (min 1)
+    if (formData.propertyType === "Building") {
+      if (!formData.numberOfFloors || isNaN(formData.numberOfFloors) || parseInt(formData.numberOfFloors) < 1) {
+        newErrors.numberOfFloors = t('howManyFloorsRequired');
       }
     }
     if (!formData.size || isNaN(formData.size) || parseInt(formData.size) <= 0) {
@@ -579,13 +586,14 @@ export default function AddProperty({ isAdminMode = false }) {
         // Map state to city for backend compatibility (backend requires city field)
         city: formData.state || formData.city || "Aleppo",
         propertyPrice: parsedPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
-        bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office") ? 0 : parseInt(formData.bedrooms) || 0,
-        bathrooms: formData.propertyType === "Land" ? 0 : parseInt(formData.bathrooms) || 0,
+        bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office" || formData.propertyType === "Building") ? 0 : parseInt(formData.bedrooms) || 0,
+        bathrooms: (formData.propertyType === "Land" || formData.propertyType === "Building") ? 0 : parseInt(formData.bathrooms) || 0,
         size: parseInt(formData.size),
         sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
         landArea: formData.landArea ? parseInt(formData.landArea) : parseInt(formData.size),
         yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : null,
-        floor: formData.floor ? parseInt(formData.floor) : undefined,
+        floor: formData.propertyType !== "Building" && formData.floor ? parseInt(formData.floor) : undefined,
+        numberOfFloors: formData.propertyType === "Building" && formData.numberOfFloors ? parseInt(formData.numberOfFloors) : undefined,
         garageSize: formData.garages && formData.garageSize ? parseInt(formData.garageSize) : 0,
         approvalStatus: isAdminMode && user?.role === 'admin' ? "approved" : "pending",
         isSold: false,
@@ -651,6 +659,7 @@ export default function AddProperty({ isAdminMode = false }) {
         garageSize: "",
         yearBuilt: "",
         floor: "",
+        numberOfFloors: "",
         address: "",
         country: "Syria",
         state: "Damascus",
@@ -1204,27 +1213,54 @@ export default function AddProperty({ isAdminMode = false }) {
                 )}
               </fieldset>
               
-              <fieldset className="box-fieldset">
-                <label htmlFor="floor">
-                  {t('floor')}:
-                </label>
-                <input
-                  type="number"
-                  name="floor"
-                  className="form-control"
-                  value={formData.floor}
-                  onChange={handleInputChange}
-                  min="0"
-                  placeholder={t('floorPlaceholder')}
-                  style={{ MozAppearance: 'textfield' }}
-                  onWheel={(e) => e.target.blur()}
-                />
-              </fieldset>
+              {/* Hide floor (unit floor number) when Building - Building uses "How many floors?" instead */}
+              {formData.propertyType !== "Building" && (
+                <fieldset className="box-fieldset">
+                  <label htmlFor="floor">
+                    {t('floor')}:
+                  </label>
+                  <input
+                    type="number"
+                    name="floor"
+                    className="form-control"
+                    value={formData.floor}
+                    onChange={handleInputChange}
+                    min="0"
+                    placeholder={t('floorPlaceholder')}
+                    style={{ MozAppearance: 'textfield' }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </fieldset>
+              )}
             </div>
             
+            {/* How many floors? - Only for Building */}
+            {formData.propertyType === "Building" && (
+              <div className="box grid-layout-3 gap-30" style={{ marginBottom: '20px' }}>
+                <fieldset className="box-fieldset">
+                  <label htmlFor="numberOfFloors">
+                    {t('howManyFloors')}:<span style={{ color: '#dc3545' }}>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="numberOfFloors"
+                    id="numberOfFloors"
+                    className="form-control"
+                    value={formData.numberOfFloors}
+                    onChange={handleInputChange}
+                    min="1"
+                    placeholder={t('howManyFloorsPlaceholder')}
+                    style={{ MozAppearance: 'textfield' }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                  {errors.numberOfFloors && <span className="text-danger">{errors.numberOfFloors}</span>}
+                </fieldset>
+              </div>
+            )}
+
             <div className="box grid-layout-3 gap-30">
-              {/* Hide bedrooms for Land, Commercial, and Office */}
-              {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && (
+              {/* Hide bedrooms for Land, Commercial, Office, and Building */}
+              {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && formData.propertyType !== "Building" && (
                 <fieldset className="box-fieldset">
                   <label htmlFor="bedrooms">
                     {t('bedrooms')}:<span style={{ color: '#dc3545' }}>*</span>
@@ -1243,8 +1279,8 @@ export default function AddProperty({ isAdminMode = false }) {
                 </fieldset>
               )}
               
-              {/* Hide bathrooms for Land only. For Commercial and Office, bathrooms is optional */}
-              {formData.propertyType !== "Land" && (
+              {/* Hide bathrooms for Land and Building. For Commercial and Office, bathrooms is optional */}
+              {formData.propertyType !== "Land" && formData.propertyType !== "Building" && (
                 <fieldset className="box-fieldset">
                   <label htmlFor="bathrooms">
                     {t('bathrooms')}

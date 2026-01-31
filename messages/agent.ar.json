@@ -202,6 +202,9 @@
     "yearBuiltPlaceholder": "مثال: 2020",
     "floor": "الطابق",
     "floorPlaceholder": "مثال: 3",
+    "howManyFloors": "كم عدد الطوابق؟",
+    "howManyFloorsPlaceholder": "مثال: 3",
+    "howManyFloorsRequired": "يرجى إدخال عدد الطوابق (واحد على الأقل)",
     "bedrooms": "غرف النوم",
     "bathrooms": "الحمامات",
     "furnished": "مفروش",
@@ -251,6 +254,7 @@
     "propertyTypes": {
       "Apartment": "شقة",
       "Villa": "فيلا",
+      "Building": "بناء كامل",
       "Office": "مكتب",
       "House": "منزل",
       "Land": "أرض",

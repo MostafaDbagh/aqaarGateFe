@@ -90,11 +90,12 @@ export default function SearchForm({
   // Single source of truth for property types (English values for backend)
   const propertyTypesList = useMemo(() => [
     "Apartment",
+    "Villa/farms",
+    "Building",
+    "Office",
     "Commercial",
     "Land",
-    "Holiday Home",
-    "Villa/farms",
-    "Office"
+    "Holiday Home"
   ], []);
 
   // Map English city names to translation keys (reusable)
@@ -133,6 +134,8 @@ export default function SearchForm({
         return tCommon('holidayHome');
       } else if (type === "Villa/farms") {
         return locale === 'ar' ? "فيلا/مزرعة" : type;
+      } else if (type === "Building") {
+        return locale === 'ar' ? "بناء كامل" : type;
       } else if (type === "Apartment") {
         return locale === 'ar' ? "شقة" : type;
       } else if (type === "Commercial") {
@@ -189,6 +192,8 @@ export default function SearchForm({
         englishValue = "Holiday Home";
       } else if (displayValue === "فيلا/مزرعة" || displayValue === "Villa/farms") {
         englishValue = "Villa/farms";
+      } else if (displayValue === "بناء كامل" || displayValue === "Building") {
+        englishValue = "Building";
       } else if (displayValue === "شقة" || displayValue === "Apartment") {
         englishValue = "Apartment";
       } else if (displayValue === "تجاري" || displayValue === "Commercial") {
@@ -295,7 +300,7 @@ export default function SearchForm({
   // Check if property type should hide beds, baths, and furnished (show by default)
   const shouldHideResidentialOptions = () => {
     const propertyType = searchParams.propertyType || "";
-    const nonResidentialTypes = ["Commercial", "Land"];
+    const nonResidentialTypes = ["Commercial", "Land", "Building"];
     return nonResidentialTypes.includes(propertyType);
   };
 

@@ -41,13 +41,14 @@ export default function Categories({
 
   // Memoize categories with icons and formatting
   const categories = useMemo(() => {
-    const icons = ['icon-apartment1', 'icon-villa', 'icon-office1', 'icon-commercial', 'icon-land', 'icon-studio'];
+    const icons = ['icon-apartment1', 'icon-villa', 'icon-house', 'icon-office1', 'icon-commercial', 'icon-land', 'icon-studio'];
     
     // If no data yet, show placeholder categories with loading state
     if (categoriesData.length === 0 && isLoading) {
       return [
         { name: 'Apartment', displayName: 'Apartment', count: null, slug: 'apartment', icon: 'icon-apartment1' },
         { name: 'Villa/farms', displayName: 'Villa/farms', count: null, slug: 'villa-farms', icon: 'icon-villa' },
+        { name: 'Building', displayName: 'Building', count: null, slug: 'building', icon: 'icon-house' },
         { name: 'Office', displayName: 'Office', count: null, slug: 'office', icon: 'icon-office1' },
         { name: 'Commercial', displayName: 'Commercial', count: null, slug: 'commercial', icon: 'icon-commercial' },
         { name: 'Land', displayName: 'Land/Plot', count: null, slug: 'land', icon: 'icon-land' },

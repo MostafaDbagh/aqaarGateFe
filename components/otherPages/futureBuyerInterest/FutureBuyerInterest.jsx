@@ -231,7 +231,7 @@ export default function FutureBuyerInterest() {
     }
   };
   
-  const propertyTypes = ['Apartment', 'Villa', 'Land', 'Holiday Home', 'Office', 'Commercial'];
+  const propertyTypes = ['Apartment', 'Villa', 'Building', 'Land', 'Holiday Home', 'Office', 'Commercial'];
   const statusOptions = ['both', 'sale', 'rent'];
   const sizeUnitOptions = ['sqm', 'dunam', 'sqft', 'sqyd', 'feddan'];
   

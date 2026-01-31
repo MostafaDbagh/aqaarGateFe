@@ -79,7 +79,7 @@ export default function AdminFutureBuyers() {
     setExpandedBuyer(expandedBuyer === id ? null : id);
   };
 
-  const propertyTypes = ['Apartment', 'Villa', 'Land', 'Holiday Home', 'Office', 'Commercial'];
+  const propertyTypes = ['Apartment', 'Villa', 'Building', 'Land', 'Holiday Home', 'Office', 'Commercial'];
   const statusOptions = ['both', 'sale', 'rent'];
 
   if (loading && futureBuyers.length === 0) {

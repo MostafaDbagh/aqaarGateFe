@@ -41,7 +41,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     address_ar: '',
     neighborhood_ar: '',
     notes_ar: '',
-    floor: ''
+    floor: '',
+    numberOfFloors: ''
   });
   
   // Get user from localStorage to check if admin
@@ -155,7 +156,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         address_ar: property.address_ar || '',
         neighborhood_ar: property.neighborhood_ar || '',
         notes_ar: property.notes_ar || '',
-        floor: property.floor || ''
+        floor: property.floor || '',
+        numberOfFloors: property.numberOfFloors || ''
       });
     }
   }, [property]);
@@ -219,8 +221,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       const updateData = {
         ...formDataWithoutApprovalStatus,
         propertyPrice: exactPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
-        bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office") ? 0 : parseInt(formData.bedrooms) || 0,
-        bathrooms: formData.propertyType === "Land" ? 0 : parseInt(formData.bathrooms) || 0,
+        bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office" || formData.propertyType === "Building") ? 0 : parseInt(formData.bedrooms) || 0,
+        bathrooms: (formData.propertyType === "Land" || formData.propertyType === "Building") ? 0 : parseInt(formData.bathrooms) || 0,
         squareFootage: parseInt(formData.squareFootage) || 0,
         sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
         yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : null,
@@ -252,7 +254,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         ...(formData.address_ar ? { address_ar: formData.address_ar } : {}),
         ...(formData.neighborhood_ar ? { neighborhood_ar: formData.neighborhood_ar } : {}),
         ...(formData.notes_ar ? { notes_ar: formData.notes_ar } : {}),
-        ...(formData.floor ? { floor: parseInt(formData.floor) } : {})
+        ...(formData.propertyType !== "Building" && formData.floor ? { floor: parseInt(formData.floor) } : {}),
+        ...(formData.propertyType === "Building" && formData.numberOfFloors ? { numberOfFloors: parseInt(formData.numberOfFloors) } : {})
       };
       
       // Only include rentType if status is "rent"
@@ -470,10 +473,33 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
               </div>
             )}
 
+            {/* How many floors? - Only for Building */}
+            {formData.propertyType === "Building" && (
+              <div className={styles.gridTwoCols} style={{ marginBottom: '16px' }}>
+                <div>
+                  <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                    {t('howManyFloors')} <span style={{ color: 'red' }}>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="numberOfFloors"
+                    value={formData.numberOfFloors}
+                    onChange={handleInputChange}
+                    min="1"
+                    placeholder={t('howManyFloorsPlaceholder')}
+                    className={styles.input}
+                    style={{ direction: 'ltr', textAlign: 'left' }}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Property Details Row */}
             <div className={styles.gridTwoCols}>
-              {/* Hide bedrooms for Land, Commercial, and Office */}
-              {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && (
+              {/* Hide bedrooms for Land, Commercial, Office, and Building */}
+              {formData.propertyType !== "Land" && formData.propertyType !== "Commercial" && formData.propertyType !== "Office" && formData.propertyType !== "Building" && (
                 <div>
                   <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                     {t('bedrooms')}
@@ -492,8 +518,8 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 </div>
               )}
 
-              {/* Hide bathrooms for Land only. For Commercial and Office, bathrooms is optional */}
-              {formData.propertyType !== "Land" && (
+              {/* Hide bathrooms for Land and Building. For Commercial and Office, bathrooms is optional */}
+              {formData.propertyType !== "Land" && formData.propertyType !== "Building" && (
                 <div>
                   <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                     {t('bathrooms')}
@@ -589,23 +615,26 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 />
               </div>
 
-              <div>
-                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                  {t('floor')}
-                </label>
-                <input
-                  type="number"
-                  name="floor"
-                  value={formData.floor}
-                  onChange={handleInputChange}
-                  min="0"
-                  placeholder={t('floorPlaceholder')}
-                  className={styles.input}
-                  style={{ direction: 'ltr', textAlign: 'left' }}
-                  onFocus={handleInputFocus}
-                  onBlur={handleInputBlur}
-                />
-              </div>
+              {/* Hide floor (unit floor number) when Building - Building uses "How many floors?" instead */}
+              {formData.propertyType !== "Building" && (
+                <div>
+                  <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                    {t('floor')}
+                  </label>
+                  <input
+                    type="number"
+                    name="floor"
+                    value={formData.floor}
+                    onChange={handleInputChange}
+                    min="0"
+                    placeholder={t('floorPlaceholder')}
+                    className={styles.input}
+                    style={{ direction: 'ltr', textAlign: 'left' }}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Description */}
