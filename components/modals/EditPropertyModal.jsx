@@ -36,6 +36,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     agentNumber: '',
     agentWhatsapp: '',
     agentFacebook: '',
+    notes: '',
     // Arabic translation fields
     description_ar: '',
     address_ar: '',
@@ -151,6 +152,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         agentNumber: property.agentNumber || (currentIsAdmin ? (currentUser?.phone || '') : ''),
         agentWhatsapp: property.agentWhatsapp || (currentIsAdmin ? (currentUser?.phone || '') : ''),
         agentFacebook: property.agentFacebook || '',
+        notes: property.notes || '',
         // Arabic translation fields
         description_ar: property.description_ar || '',
         address_ar: property.address_ar || '',
@@ -249,6 +251,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
             ? { agentFacebook: formData.agentFacebook.trim() || null } 
             : {})
         } : {}),
+        notes: formData.notes ?? '',
         // Arabic translation fields
         ...(formData.description_ar ? { description_ar: formData.description_ar } : {}),
         ...(formData.address_ar ? { address_ar: formData.address_ar } : {}),
@@ -650,6 +653,24 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 className={`${styles.input} ${styles.textarea}`}
                 style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
                 placeholder={t('describeProperty')}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+              />
+            </div>
+
+            {/* Notes (English) */}
+            <div>
+              <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                {t('notes')}:
+              </label>
+              <textarea
+                name="notes"
+                value={formData.notes}
+                onChange={handleInputChange}
+                rows="4"
+                className={`${styles.input} ${styles.textarea}`}
+                style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
+                placeholder={t('notesPlaceholder')}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
               />
