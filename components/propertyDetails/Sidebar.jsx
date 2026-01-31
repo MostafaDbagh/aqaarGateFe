@@ -267,12 +267,16 @@ export default function Sidebar({ property }) {
               <ul className="contact">
                 <li>
                   <i className="icon-phone-1" />
-                  <span 
-                    dir="ltr" 
-                    className={`${styles.phoneNumber} ${locale === 'ar' ? styles.phoneNumberRtl : styles.phoneNumberLtr}`}
-                  >
-                    {agentNumber || t('phoneNotProvided')}
-                  </span>
+                  {agentNumber ? (
+                    <span 
+                      dir="ltr" 
+                      className={`${styles.phoneNumber} ${locale === 'ar' ? styles.phoneNumberRtl : styles.phoneNumberLtr}`}
+                    >
+                      {agentNumber}
+                    </span>
+                  ) : (
+                    <span dir="auto">{t('phoneNotProvided')}</span>
+                  )}
                 </li>
                 {agentEmail && agentEmail.trim() !== '' && agentEmail !== 'info@example.com' && (
                   <li>
