@@ -69,7 +69,7 @@ export default function PropertyOverview({ property }) {
           {(() => {
             const currencySymbols = {
               'USD': '$',
-              'SYP': 'SYP',
+              'SYP': 'SYP ',
               'TRY': '₺',
               'EUR': '€'
             };

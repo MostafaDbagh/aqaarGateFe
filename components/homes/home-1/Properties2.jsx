@@ -286,7 +286,7 @@ export default function Properties2() {
                             {(() => {
                               const currencySymbols = {
                                 'USD': '$',
-                                'SYP': 'SYP',
+                                'SYP': 'SYP ',
                                 'EUR': '€'
                               };
                               const currency = property?.currency || 'USD';

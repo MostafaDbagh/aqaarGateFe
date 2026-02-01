@@ -86,7 +86,12 @@ export default function ExtraInfo({ property }) {
           </li>
           <li className="flex">
             <p className="fw-6">{t('price')}</p>
-            <p>{formatPrice(property?.propertyPrice)}</p>
+            <p>
+              {formatPrice(
+                property?.propertyPrice,
+                property?.currency === 'SYP' ? 'SYP ' : '$'
+              )}
+            </p>
           </li>
           <li className="flex">
             <p className="fw-6">{t('size')}</p>

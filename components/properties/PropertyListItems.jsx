@@ -608,7 +608,7 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
                   {(() => {
                     const currencySymbols = {
                       'USD': '$',
-                      'SYP': 'SYP',
+                      'SYP': 'SYP ',
                       'TRY': '₺',
                       'EUR': '€'
                     };
