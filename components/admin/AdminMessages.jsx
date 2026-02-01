@@ -564,11 +564,7 @@ export default function AdminMessages() {
                         </td>
                         <td>
                           <div className={adminStyles.messageIdCell}>
-                            <strong>{message.subject}</strong>
-                            <br />
-                            <small className={`text-muted ${adminStyles.messageContentText}`}>
-                              {message.message}
-                            </small>
+                            <strong>Contact Agent</strong>
                           </div>
                         </td>
                         <td>

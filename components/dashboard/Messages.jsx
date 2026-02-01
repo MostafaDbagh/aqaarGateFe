@@ -518,16 +518,7 @@ export default function Messages() {
                         </td>
                         <td>
                           <div style={{ maxWidth: '200px' }}>
-                            <strong>{message.subject}</strong>
-                            <br />
-                            <small className="text-muted" style={{ 
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden'
-                            }}>
-                              {message.message}
-                            </small>
+                            <strong>{tCommon('contactAgent')}</strong>
                           </div>
                         </td>
                         <td>
