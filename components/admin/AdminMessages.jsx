@@ -483,7 +483,7 @@ export default function AdminMessages() {
                       <th>Status</th>
                       <th>Sender</th>
                       <th>Subject</th>
-                      <th>Property</th>
+                      <th>Price</th>
                       <th>Property ID</th>
                       <th>Type</th>
                       <th>Date</th>
@@ -502,23 +502,26 @@ export default function AdminMessages() {
                           <div>
                             <strong>{message.senderName ?? '—'}</strong>
                             <br />
-                            <small className="text-muted">{message.senderEmail?.trim() || '—'}</small>
+                            <small className="text-muted">{message.senderEmail && String(message.senderEmail).trim() ? String(message.senderEmail).trim() : '—'}</small>
+                            {message.senderPhone?.trim() && (
+                              <>
+                                <br />
+                                <small className="text-muted">{message.senderPhone.trim()}</small>
+                              </>
+                            )}
                           </div>
                         </td>
                         <td>
-                          <div className={adminStyles.messageIdCell}>
+                          <div className={adminStyles.messageIdCell} style={{ maxWidth: '280px', minWidth: '200px' }}>
                             <strong>Contact Agent</strong>
+                            <div className={adminStyles.messageBodyCell} style={{ maxHeight: '180px', marginTop: '6px' }} title={message.message ?? ''}>
+                              {message.message?.trim() || '—'}
+                            </div>
                           </div>
                         </td>
                         <td>
                           {message.propertyId ? (
-                            <div className={adminStyles.messageContentCell}>
-                              <strong>{message.propertyId.propertyKeyword}</strong>
-                              <br />
-                              <small className="text-muted">
-                                ${message.propertyId.propertyPrice?.toLocaleString()}
-                              </small>
-                            </div>
+                            <strong>${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}</strong>
                           ) : (
                             <span className="text-muted">Property not found</span>
                           )}
@@ -619,7 +622,10 @@ export default function AdminMessages() {
                 </div>
                 <div className="modal-body">
                   <div className="mb-3">
-                    <strong>From:</strong> {replyModal.message.senderName ?? '—'} ({replyModal.message.senderEmail?.trim() || '—'})
+                    <strong>From:</strong> {replyModal.message.senderName ?? '—'} ({replyModal.message.senderEmail && String(replyModal.message.senderEmail).trim() ? String(replyModal.message.senderEmail).trim() : '—'})
+                    {replyModal.message.senderPhone?.trim() && (
+                      <><br /><small className="text-muted">{replyModal.message.senderPhone.trim()}</small></>
+                    )}
                   </div>
                   <div className="mb-3">
                     <strong>Subject:</strong> {replyModal.message.subject}
@@ -680,7 +686,10 @@ export default function AdminMessages() {
                 </div>
                 <div className="modal-body">
                   <div className="mb-3">
-                    <strong>From:</strong> {(deleteModal.message.senderEmail?.trim() || deleteModal.message.senderName) ?? '—'}
+                    <strong>From:</strong> {(deleteModal.message.senderEmail && String(deleteModal.message.senderEmail).trim()) ? String(deleteModal.message.senderEmail).trim() : (deleteModal.message.senderName ?? '—')}
+                    {deleteModal.message.senderPhone?.trim() && (
+                      <><br /><small className="text-muted">{deleteModal.message.senderPhone.trim()}</small></>
+                    )}
                   </div>
                   <div className="mb-3">
                     <strong>Subject:</strong> {deleteModal.message.subject}

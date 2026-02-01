@@ -13,6 +13,7 @@ export default function Sidebar({ property }) {
   const [isMoreInfoModalOpen, setIsMoreInfoModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     senderName: '',
+    senderPhone: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -220,13 +221,14 @@ export default function Sidebar({ property }) {
           property.agentId || property.agent,
         senderName: formData.senderName,
         senderEmail: 'user@example.com', // Default email since we don't have email field
+        senderPhone: formData.senderPhone?.trim() || undefined,
         subject: `Contact Agent - ${property.propertyKeyword}`,
         message: formData.message,
         messageType: 'inquiry'
       });
 
       setSubmitMessage(t('messageSentSuccess'));
-      setFormData({ senderName: '', message: '' });
+      setFormData({ senderName: '', senderPhone: '', message: '' });
     } catch (error) {
       const apiMessage = error?.response?.data?.message || error?.response?.data?.error || error?.message || error?.toString() || 'Unknown error';
       setSubmitMessage(`${t('failedToSendMessage')} ${apiMessage}`);
@@ -239,7 +241,7 @@ export default function Sidebar({ property }) {
     <>
       <div className="tf-sidebar sticky-sidebar">
         <form
-          className="form-contact-seller mb-30"
+          className={`form-contact-seller mb-30 ${styles.contactForm}`}
           onSubmit={handleSubmit}
         >
           <h4 className="heading-title mb-30">{t('contactAgent')}</h4>
@@ -330,7 +332,20 @@ export default function Sidebar({ property }) {
               id="name1"
               value={formData.senderName}
               onChange={handleInputChange}
+              onInvalid={(e) => e.target.setCustomValidity(t('pleaseFillOutThisField'))}
+              onInput={(e) => e.target.setCustomValidity('')}
               required
+            />
+          </fieldset>
+          <fieldset className="mb-12">
+            <input
+              type="tel"
+              className="form-control"
+              placeholder={t('phoneOptional')}
+              name="senderPhone"
+              id="phone1"
+              value={formData.senderPhone}
+              onChange={handleInputChange}
             />
           </fieldset>
           <fieldset className="mb-30">
@@ -342,6 +357,8 @@ export default function Sidebar({ property }) {
               id="message1"
               value={formData.message}
               onChange={handleInputChange}
+              onInvalid={(e) => e.target.setCustomValidity(t('pleaseFillOutThisField'))}
+              onInput={(e) => e.target.setCustomValidity('')}
               required
             />
           </fieldset>

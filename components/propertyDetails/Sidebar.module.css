@@ -65,15 +65,22 @@
 }
 
 .submitMessageSuccess {
-  background-color: #fef7f1;
-  color: #f1913d;
-  border: 1px solid rgba(241, 145, 61, 0.15);
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .submitMessageError {
   background-color: #fee2e2;
   color: #991b1b;
   border: 1px solid #fecaca;
+}
+
+/* RTL: align contact form inputs right for Arabic */
+:global([dir="rtl"]) .contactForm :global(input.form-control),
+:global([dir="rtl"]) .contactForm :global(textarea.form-control) {
+  text-align: right;
+  direction: rtl;
 }
 
 /* Submit button */

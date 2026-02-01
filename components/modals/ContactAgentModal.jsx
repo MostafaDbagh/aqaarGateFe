@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useCreateMessage } from "@/apis/hooks";
 import CopyIcon from "../common/CopyIcon";
-import styles from "./ContactAgentModal.module.css"
+import styles from "./ContactAgentModal.module.css";
 
 export default function ContactAgentModal({ 
   isOpen, 
@@ -10,13 +11,16 @@ export default function ContactAgentModal({
   property, 
   agent 
 }) {
+  const t = useTranslations("propertyDetail");
   const [formData, setFormData] = useState({
     senderName: '',
     senderEmail: '',
+    senderPhone: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [submitMessageType, setSubmitMessageType] = useState(null); // 'success' | 'error'
 
   const createMessageMutation = useCreateMessage();
 
@@ -39,6 +43,7 @@ export default function ContactAgentModal({
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage('');
+    setSubmitMessageType(null);
 
     try {
       await createMessageMutation.mutateAsync({
@@ -46,16 +51,19 @@ export default function ContactAgentModal({
         agentId: property.agentId || property.agent,
         senderName: formData.senderName,
         senderEmail: formData.senderEmail,
+        senderPhone: formData.senderPhone?.trim() || undefined,
         subject: `Contact Agent - ${property.propertyKeyword}`,
         message: formData.message,
         messageType: 'inquiry'
       });
 
-      setSubmitMessage('Message sent successfully!');
-      setFormData({ senderName: '', senderEmail: '', message: '' });
+      setSubmitMessage(t('messageSentSuccess'));
+      setSubmitMessageType('success');
+      setFormData({ senderName: '', senderEmail: '', senderPhone: '', message: '' });
       setTimeout(() => { onClose(); }, 2000);
     } catch (error) {
-      setSubmitMessage(`Failed to send message: ${error.message || 'Unknown error'}`);
+      setSubmitMessage(`${t('failedToSendMessage')} ${error.message || ''}`);
+      setSubmitMessageType('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -77,7 +85,7 @@ export default function ContactAgentModal({
         {/* Header */}
         <div className={styles.modalHeader}>
           <h3 className={styles.modalTitle}>
-            Contact Agent
+            {t('contactAgent')}
           </h3>
         </div>
 
@@ -85,7 +93,7 @@ export default function ContactAgentModal({
         <div className={styles.agentInfo}>
           <div className={styles.agentDetails}>
             <h4 className={styles.agentTitle}>
-              Property Agent
+              {t('propertyAgent')}
             </h4>
             {agentEmail && (
               <div className={styles.agentContact}>
@@ -104,14 +112,16 @@ export default function ContactAgentModal({
           {/* Full Name */}
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>
-              Full Name *
+              {t('fullName')} *
             </label>
             <input
               type="text"
               name="senderName"
               value={formData.senderName}
               onChange={handleInputChange}
-              placeholder="Full Name"
+              placeholder={t('fullName')}
+              onInvalid={(e) => e.target.setCustomValidity(t('pleaseFillOutThisField'))}
+              onInput={(e) => e.target.setCustomValidity('')}
               required
               className={styles.input}
             />
@@ -120,14 +130,29 @@ export default function ContactAgentModal({
           {/* Email */}
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>
-              Email (optional)
+              {t('emailOptional')}
             </label>
             <input
               type="email"
               name="senderEmail"
               value={formData.senderEmail}
               onChange={handleInputChange}
-              placeholder="Email Address (Optional)"
+              placeholder={t('emailPlaceholder')}
+              className={styles.input}
+            />
+          </div>
+
+          {/* Phone (optional) */}
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>
+              {t('phoneOptional')}
+            </label>
+            <input
+              type="tel"
+              name="senderPhone"
+              value={formData.senderPhone}
+              onChange={handleInputChange}
+              placeholder={t('phoneOptional')}
               className={styles.input}
             />
           </div>
@@ -135,13 +160,15 @@ export default function ContactAgentModal({
           {/* Message */}
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>
-              Message *
+              {t('messageLabel')} *
             </label>
             <textarea
               name="message"
               value={formData.message}
               onChange={handleInputChange}
-              placeholder={`Hello, I'm interested in ${property?.propertyKeyword || 'this property'}`}
+              placeholder={t('interestedInProperty', { property: property?.propertyKeyword || t('thisProperty') })}
+              onInvalid={(e) => e.target.setCustomValidity(t('pleaseFillOutThisField'))}
+              onInput={(e) => e.target.setCustomValidity('')}
               rows={5}
               required
               className={`${styles.input} ${styles.textarea}`}
@@ -151,15 +178,19 @@ export default function ContactAgentModal({
           {/* Submit */}
           <div className={styles.actions}>
             <button type="button" onClick={onClose} className={styles.btnSecondary}>
-              Cancel
+              {t('cancel')}
             </button>
             <button type="submit" disabled={isSubmitting} className={styles.btnPrimary}>
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? t('sending') : t('sendMessage')}
             </button>
           </div>
 
           {submitMessage && (
-            <div className={styles.submitMessage}>
+            <div
+              className={`${styles.submitMessage} ${
+                submitMessageType === 'success' ? styles.submitMessageSuccess : submitMessageType === 'error' ? styles.submitMessageError : ''
+              }`}
+            >
               {submitMessage}
             </div>
           )}

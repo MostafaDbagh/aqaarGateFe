@@ -495,7 +495,7 @@ export default function Messages() {
                       <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('status')}</th>
                       <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('sender')}</th>
                       <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('subject')}</th>
-                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('property')}</th>
+                      <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('price')}</th>
                       <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('propertyId')}</th>
                       <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('type')}</th>
                       <th style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('date')}</th>
@@ -514,23 +514,41 @@ export default function Messages() {
                           <div>
                             <strong>{message.senderName ?? '—'}</strong>
                             <br />
-                            <small className="text-muted">{message.senderEmail?.trim() || '—'}</small>
+                            <small className="text-muted">{message.senderEmail && String(message.senderEmail).trim() ? String(message.senderEmail).trim() : '—'}</small>
+                            {message.senderPhone?.trim() && (
+                              <>
+                                <br />
+                                <small className="text-muted">{message.senderPhone.trim()}</small>
+                              </>
+                            )}
                           </div>
                         </td>
                         <td>
-                          <div style={{ maxWidth: '200px' }}>
+                          <div style={{ maxWidth: '280px', minWidth: '200px' }}>
                             <strong>{tCommon('contactAgent')}</strong>
+                            <div
+                              style={{
+                                marginTop: '6px',
+                                maxHeight: '180px',
+                                overflowY: 'auto',
+                                wordBreak: 'break-word',
+                                whiteSpace: 'pre-wrap',
+                                fontSize: '12px',
+                                fontWeight: 400,
+                                color: '#374151',
+                                lineHeight: 1.5,
+                                letterSpacing: '0.01em',
+                                textAlign: isRTL ? 'right' : 'left'
+                              }}
+                              title={message.message ?? ''}
+                            >
+                              {message.message?.trim() || '—'}
+                            </div>
                           </div>
                         </td>
                         <td>
                           {message.propertyId ? (
-                            <div style={{ maxWidth: '150px' }}>
-                              <strong>{message.propertyId.propertyKeyword}</strong>
-                              <br />
-                              <small className="text-muted">
-                                ${message.propertyId.propertyPrice?.toLocaleString()}
-                              </small>
-                            </div>
+                            <strong>${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}</strong>
                           ) : (
                             <span className="text-muted">{t('propertyNotFound')}</span>
                           )}
@@ -707,7 +725,10 @@ export default function Messages() {
                 </div>
                 <div className="modal-body" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                   <div className="mb-3">
-                    <strong>{t('from')}:</strong> {replyModal.message.senderName ?? '—'} ({replyModal.message.senderEmail?.trim() || '—'})
+                    <strong>{t('from')}:</strong> {replyModal.message.senderName ?? '—'} ({replyModal.message.senderEmail && String(replyModal.message.senderEmail).trim() ? String(replyModal.message.senderEmail).trim() : '—'})
+                    {replyModal.message.senderPhone?.trim() && (
+                      <><br /><small className="text-muted">{replyModal.message.senderPhone.trim()}</small></>
+                    )}
                   </div>
                   <div className="mb-3">
                     <strong>{t('subject')}:</strong> {replyModal.message.subject}
@@ -769,7 +790,10 @@ export default function Messages() {
                 </div>
                 <div className="modal-body" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                   <div className="mb-3">
-                    <strong>{t('from')}:</strong> {(deleteModal.message.senderEmail?.trim() || deleteModal.message.senderName) ?? '—'}
+                    <strong>{t('from')}:</strong> {(deleteModal.message.senderEmail && String(deleteModal.message.senderEmail).trim()) ? String(deleteModal.message.senderEmail).trim() : (deleteModal.message.senderName ?? '—')}
+                    {deleteModal.message.senderPhone?.trim() && (
+                      <><br /><small className="text-muted">{deleteModal.message.senderPhone.trim()}</small></>
+                    )}
                   </div>
                   <div className="mb-3">
                     <strong>{t('subject')}:</strong> {deleteModal.message.subject}
