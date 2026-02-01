@@ -29,13 +29,33 @@ export const getStatusBadge = (status, t = null) => {
   }
 };
 
+/** Currency code to display symbol (with space after for consistency) */
+const CURRENCY_SYMBOLS = {
+  USD: '$ ',
+  SYP: 'SYP ',
+  EUR: '€ ',
+  TRY: '₺ '
+};
+
 /**
- * Format price with currency symbol and commas
+ * Format price with currency code - dynamic symbol and space before number
  * @param {number} price - Price value
- * @param {string} currency - Currency symbol (default: '$')
+ * @param {string} currencyCode - Currency code (USD, SYP, EUR, TRY). Default 'USD'
+ * @returns {string} Formatted price string e.g. "$ 850,000,000" or "SYP 850,000,000"
+ */
+export const formatPriceWithCurrency = (price, currencyCode = 'USD') => {
+  if (price === null || price === undefined) return 'N/A';
+  const symbol = CURRENCY_SYMBOLS[currencyCode] || (currencyCode + ' ');
+  return `${symbol}${Number(price).toLocaleString('en-US', { maximumFractionDigits: 0, minimumFractionDigits: 0 })}`;
+};
+
+/**
+ * Format price with currency symbol and commas (legacy - prefers formatPriceWithCurrency)
+ * @param {number} price - Price value
+ * @param {string} currency - Currency symbol (default: '$ ')
  * @returns {string} Formatted price string
  */
-export const formatPrice = (price, currency = '$') => {
+export const formatPrice = (price, currency = '$ ') => {
   if (!price && price !== 0) return 'N/A';
   return `${currency}${price.toLocaleString()}`;
 };

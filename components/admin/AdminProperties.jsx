@@ -6,6 +6,7 @@ import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import styles from "./AdminProperties.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 import { UserIcon } from "@/components/icons";
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -258,7 +259,7 @@ export default function AdminProperties() {
                     </span>
                   </td>
                   <td>
-                    {property.propertyPrice} {property.currency || "USD"}
+                    {formatPriceWithCurrency(property.propertyPrice, property.currency)}
                   </td>
                   <td>{property.city}, {property.country}</td>
                   <td>

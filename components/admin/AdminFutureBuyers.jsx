@@ -4,6 +4,7 @@ import { futureBuyerAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { useRouter } from "next/navigation";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 import styles from "./AdminFutureBuyers.module.css";
 
 export default function AdminFutureBuyers() {
@@ -242,7 +243,7 @@ export default function AdminFutureBuyers() {
                                     <strong>Type:</strong> {match.listing.propertyType}
                                   </div>
                                   <div>
-                                    <strong>Price:</strong> {match.listing.propertyPrice} {match.listing.currency}
+                                    <strong>Price:</strong> {formatPriceWithCurrency(match.listing.propertyPrice, match.listing.currency)}
                                   </div>
                                   <div>
                                     <strong>Size:</strong> {match.listing.size} {match.listing.sizeUnit || 'sqm'}

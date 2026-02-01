@@ -11,6 +11,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import styles from "./Properties.module.css";
 import { translateCity } from "@/constants/cityTranslations";
 import LocationTooltip from "@/components/common/LocationTooltip";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Properties({ listings, isLoading, isError }) {
   const t = useTranslations();
@@ -660,17 +661,7 @@ export default function Properties({ listings, isLoading, isError }) {
           <div className="price-section" style={{ width: '100%', textAlign: 'center', padding: '12px 0', borderTop: '1px solid #e5e7eb' }}>
             <h5 className="price" style={{ fontSize: '18px', fontWeight: '600', color: '#374151', margin: 0 }}>
               {(() => {
-                const currencySymbols = {
-                  'USD': '$',
-                  'SYP': 'SYP',
-                  'TRY': '₺',
-                  'EUR': '€'
-                };
-                const currency = listing?.currency || 'USD';
-                const symbol = currencySymbols[currency] || currency;
-                const price = listing?.propertyPrice?.toLocaleString() || '0';
-                const basePrice = `${symbol} ${price}`;
-                
+                const basePrice = formatPriceWithCurrency(listing?.propertyPrice, listing?.currency);
                 // Add rent period for rental properties
                 const statusToCheck = listing?.statusOriginal || listing?.status || '';
                 const statusLower = statusToCheck.toLowerCase().trim();

@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import styles from "./Properties2.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Properties2() {
   const t = useTranslations('homeSections');
@@ -284,16 +285,7 @@ export default function Properties2() {
                         <div className={styles.priceDetailsSection}>
                           <div className={styles.price}>
                             {(() => {
-                              const currencySymbols = {
-                                'USD': '$',
-                                'SYP': 'SYP ',
-                                'EUR': '€'
-                              };
-                              const currency = property?.currency || 'USD';
-                              const symbol = currencySymbols[currency] || currency;
-                              const price = property?.propertyPrice?.toLocaleString() || '0';
-                              const basePrice = `${symbol}${price}`;
-                              
+                              const basePrice = formatPriceWithCurrency(property?.propertyPrice, property?.currency);
                               // Add rent period for rental properties (especially holiday homes)
                               const statusToCheck = property?.statusOriginal || property?.status || '';
                               const statusLower = statusToCheck.toLowerCase().trim();

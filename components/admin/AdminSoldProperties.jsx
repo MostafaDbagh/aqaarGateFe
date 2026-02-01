@@ -5,6 +5,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
 import styles from "./AdminSoldProperties.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function AdminSoldProperties() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
@@ -193,7 +194,7 @@ export default function AdminSoldProperties() {
                     </div>
                   </td>
                   <td>
-                    {property.propertyPrice} {property.currency || "USD"}
+                    {formatPriceWithCurrency(property.propertyPrice, property.currency)}
                   </td>
                   <td>
                     {editingChargesId === property._id ? (
@@ -225,7 +226,7 @@ export default function AdminSoldProperties() {
                     ) : (
                       <div className={styles.chargesDisplay}>
                         <span className={styles.chargesAmount}>
-                          {property.soldCharges || 0} {property.currency || "USD"}
+                          {formatPriceWithCurrency(property.soldCharges ?? 0, property.currency)}
                         </span>
                         <button
                           className={`${styles.btn} ${styles.btnEdit}`}

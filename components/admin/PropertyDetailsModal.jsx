@@ -5,6 +5,7 @@ import { listingAPI } from "@/apis";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useTranslations, useLocale } from 'next-intl';
 import styles from "./PropertyDetailsModal.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onApprove, onReject, onDelete }) {
   const tCommon = useTranslations('common');
@@ -303,7 +304,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                     <div className={styles.infoRow}>
                       <span className={styles.infoLabel}>Price:</span>
                       <span className={styles.infoValue}>
-                        {property.propertyPrice ? `${property.propertyPrice} ${property.currency || 'USD'}` : 'N/A'}
+                        {property.propertyPrice != null ? formatPriceWithCurrency(property.propertyPrice, property.currency) : 'N/A'}
                       </span>
                     </div>
                     {property.rentType && (

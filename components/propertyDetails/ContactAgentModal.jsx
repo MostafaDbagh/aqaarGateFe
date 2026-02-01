@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useCreateMessage } from "@/apis/hooks";
-import { getPropertyTitle } from "@/utlis/propertyHelpers";
+import { getPropertyTitle, formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 import styles from "./ContactAgentModal.module.css";
 
 export default function ContactAgentModal({ isOpen, onClose, property }) {
@@ -86,7 +86,7 @@ export default function ContactAgentModal({ isOpen, onClose, property }) {
           <h2 className={styles.modalTitle}>More About This Property</h2>
           {property && (
             <p className={styles.propertyInfo}>
-              {property.propertyKeyword} {property.propertyType} - ${property.propertyPrice?.toLocaleString()}
+              {property.propertyKeyword} {property.propertyType} - {formatPriceWithCurrency(property.propertyPrice, property?.currency)}
             </p>
           )}
         </div>

@@ -5,6 +5,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
 import styles from "./AdminDeletedProperties.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function AdminDeletedProperties() {
   const { showSuccessModal, showWarningModal } = useGlobalModal();
@@ -166,7 +167,7 @@ export default function AdminDeletedProperties() {
                     </div>
                   </td>
                   <td>
-                    {property.propertyPrice} {property.currency || "USD"}
+                    {formatPriceWithCurrency(property.propertyPrice, property.currency)}
                   </td>
                   <td>{property.city}, {property.country}</td>
                   <td>

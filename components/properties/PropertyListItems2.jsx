@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import FavoriteButton from "../common/FavoriteButton";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function PropertyListItems2() {
   return (
@@ -81,7 +82,7 @@ export default function PropertyListItems2() {
               </li>
             </ul>
             <div className="bot flex justify-between items-center">
-              <h5 className="price">${property.price.toLocaleString()}</h5>
+              <h5 className="price">{formatPriceWithCurrency(property.price, property.currency || "USD")}</h5>
               <div className="wrap-btn flex">
                 <Link
                   href={`/property-detail/${property.id}`}

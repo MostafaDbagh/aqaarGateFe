@@ -4,6 +4,7 @@ import Link from "next/link";
 import Slider from "rc-slider";
 import React, { useState } from "react";
 import DropdownSelect from "../common/DropdownSelect";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Sidebar() {
   const [priceRange, setPriceRange] = useState([100, 700]);
@@ -156,7 +157,7 @@ export default function Sidebar() {
                   </li>
                 </ul>
                 <div className="price text-1 lh-20 fw-6">
-                  ${property.price.toLocaleString()}
+                  {formatPriceWithCurrency(property.price ?? property.propertyPrice, property?.currency ?? "USD")}
                 </div>
               </div>
             </li>

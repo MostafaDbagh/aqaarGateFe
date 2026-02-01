@@ -13,6 +13,7 @@ import logger from "@/utlis/logger";
 import styles from "./Favorites.module.css";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Favorites() {
   const t = useTranslations('agent.favorites');
@@ -295,7 +296,7 @@ export default function Favorites() {
                                   {t('added')}: {formatDate(favorite.createdAt || favorite.addedAt)}
                                 </div>
                                 <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                                  ${property.propertyPrice?.toLocaleString() || 'N/A'}
+                                  {formatPriceWithCurrency(property?.propertyPrice, property?.currency)}
                                 </div>
                               </div>
                             </div>

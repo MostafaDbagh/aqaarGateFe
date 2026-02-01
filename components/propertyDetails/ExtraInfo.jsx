@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslations, useLocale } from 'next-intl';
-import { formatPrice, formatStatus } from "@/utlis/propertyHelpers";
+import { formatPriceWithCurrency, formatStatus } from "@/utlis/propertyHelpers";
 import { CopyIcon, CheckIcon } from "@/components/icons";
 import logger from "@/utlis/logger";
 
@@ -87,10 +87,7 @@ export default function ExtraInfo({ property }) {
           <li className="flex">
             <p className="fw-6">{t('price')}</p>
             <p>
-              {formatPrice(
-                property?.propertyPrice,
-                property?.currency === 'SYP' ? 'SYP ' : '$'
-              )}
+              {formatPriceWithCurrency(property?.propertyPrice, property?.currency)}
             </p>
           </li>
           <li className="flex">

@@ -10,6 +10,7 @@ import "./PropertyImageFix.css";
 import styles from "./PropertyListItems.module.css";
 import { translateCity } from "@/constants/cityTranslations";
 import LocationTooltip from "../common/LocationTooltip";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function PropertyListItems({ listings = [], isAISearch = false, hasActiveSearch = false }) {
   const t = useTranslations();
@@ -606,22 +607,7 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
               <div>
                 <h5 className="price">
                   {(() => {
-                    const currencySymbols = {
-                      'USD': '$',
-                      'SYP': 'SYP ',
-                      'TRY': '₺',
-                      'EUR': '€'
-                    };
-                    const currency = property?.currency || 'USD';
-                    const symbol = currencySymbols[currency] || currency;
-                    // IMPORTANT: Display exact price as stored in database - no rounding or modification
-                    const exactPrice = property.propertyPrice;
-                    if (exactPrice === null || exactPrice === undefined) {
-                      return `${symbol}0`;
-                    }
-                    // Use toLocaleString only for formatting, not for rounding
-                    const basePrice = `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
-                    
+                    const basePrice = formatPriceWithCurrency(property.propertyPrice, property?.currency);
                     // Add rent period for rental properties
                     const statusToCheck = property?.statusOriginal || property?.status || '';
                     const statusLower = statusToCheck.toLowerCase().trim();

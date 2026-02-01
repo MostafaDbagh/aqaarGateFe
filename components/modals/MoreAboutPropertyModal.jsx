@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useCreateMessage } from "@/apis/hooks";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function MoreAboutPropertyModal({ 
   isOpen, 
@@ -144,7 +145,7 @@ export default function MoreAboutPropertyModal({
             margin: 0,
             fontWeight: '500'
           }}>
-            {property.propertyKeyword} - ${property.propertyPrice?.toLocaleString()}
+            {property.propertyKeyword} - {formatPriceWithCurrency(property.propertyPrice, property?.currency)}
           </p>
         </div>
 

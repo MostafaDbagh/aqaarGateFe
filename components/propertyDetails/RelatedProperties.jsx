@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useSearchListings } from "@/apis/hooks";
-import { getPropertyTitle } from "@/utlis/propertyHelpers";
+import { getPropertyTitle, formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import styles from "./RelatedProperties.module.css";
 
@@ -370,7 +370,7 @@ export default function RelatedProperties({ currentProperty }) {
 
                       <div className={styles.cardFooter}>
                         <h4 className={styles.price}>
-                          ${property.propertyPrice?.toLocaleString()}
+                          {formatPriceWithCurrency(property.propertyPrice, property?.currency)}
                         </h4>
                         <Link href={`/property-detail/${property._id}`} className={styles.detailsBtn}>
                           {t('details')}

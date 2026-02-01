@@ -9,6 +9,7 @@ import Toast from "../common/Toast";
 import { CopyIcon, CheckIcon } from "@/components/icons";
 import styles from "../dashboard/Messages.module.css";
 import adminStyles from "./AdminMessages.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 /**
  * AdminMessages Component
@@ -522,9 +523,9 @@ export default function AdminMessages() {
                         <td>
                           {message.propertyId ? (
                             <strong>
-                              {message.propertyId.currency === 'SYP'
-                                ? `SYP ${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}`
-                                : `$${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}`}
+                              {message.propertyId
+                                ? formatPriceWithCurrency(message.propertyId.propertyPrice ?? 0, message.propertyId.currency)
+                                : '—'}
                             </strong>
                           ) : (
                             <span className="text-muted">Property not found</span>

@@ -10,6 +10,7 @@ import { usePropertyActions } from "@/hooks/usePropertyActions";
 import LocationLoader from "../common/LocationLoader";
 import logger from "@/utlis/logger";
 import styles from "./Listings.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 const extractListings = (payload) => {
   if (!payload) return [];
@@ -722,16 +723,7 @@ export default function Listings({ agentId }) {
                   <div className={styles.priceSection + " price-section"}>
                     <h5 className={styles.priceText + " price"}>
                       {(() => {
-                        const currencySymbols = {
-                          'USD': '$',
-                          'SYP': 'SYP',
-                          'EUR': '€'
-                        };
-                        const currency = property?.currency || 'USD';
-                        const symbol = currencySymbols[currency] || currency;
-                        const exactPrice = property.propertyPrice || 0;
-                        const basePrice = `${symbol} ${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
-                        
+                        const basePrice = formatPriceWithCurrency(property.propertyPrice ?? 0, property?.currency);
                         // Add rent period for rental properties
                         const statusToCheck = property?.statusOriginal || property?.status || '';
                         const statusLower = statusToCheck.toLowerCase().trim();

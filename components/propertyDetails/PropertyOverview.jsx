@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslations, useLocale } from 'next-intl';
-import { getStatusBadge } from "@/utlis/propertyHelpers";
+import { getStatusBadge, formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import MoreAboutPropertyModal from "../modals/MoreAboutPropertyModal";
 import ContactAgentModal from "../modals/ContactAgentModal";
@@ -66,23 +66,7 @@ export default function PropertyOverview({ property }) {
           </span>
         </div>
         <div className="price text-5 fw-6 text-color-heading">
-          {(() => {
-            const currencySymbols = {
-              'USD': '$',
-              'SYP': 'SYP ',
-              'TRY': '₺',
-              'EUR': '€'
-            };
-            const currency = property?.currency || 'USD';
-            const symbol = currencySymbols[currency] || currency;
-            // IMPORTANT: Display exact price as stored in database - no rounding or modification
-            const exactPrice = property?.propertyPrice;
-            if (exactPrice === null || exactPrice === undefined) {
-              return `${symbol}0`;
-            }
-            // Use toLocaleString only for formatting, not for rounding
-            return `${symbol}${exactPrice.toLocaleString('en-US', { maximumFractionDigits: 0, useGrouping: true })}`;
-          })()}
+          {formatPriceWithCurrency(property?.propertyPrice, property?.currency)}
           {property?.status?.toLowerCase() === 'for rent' && (
             <>
               {" "}

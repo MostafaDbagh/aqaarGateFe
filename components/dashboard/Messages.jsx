@@ -9,6 +9,7 @@ import { useMessagesByAgent, useMessageMutations } from "@/apis/hooks";
 import Toast from "../common/Toast";
 import { CopyIcon, CheckIcon } from "@/components/icons";
 import styles from "./Messages.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Messages() {
   const t = useTranslations('agent.messages');
@@ -549,9 +550,9 @@ export default function Messages() {
                         <td>
                           {message.propertyId ? (
                             <strong>
-                              {message.propertyId.currency === 'SYP'
-                                ? `SYP ${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}`
-                                : `$${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}`}
+                              {message.propertyId
+                                ? formatPriceWithCurrency(message.propertyId.propertyPrice ?? 0, message.propertyId.currency)
+                                : '—'}
                             </strong>
                           ) : (
                             <span className="text-muted">{t('propertyNotFound')}</span>

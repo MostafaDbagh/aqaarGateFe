@@ -10,6 +10,7 @@ import logger from "@/utlis/logger";
 import styles from "./Dashboard.module.css";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Dashboard() {
   const t = useTranslations('agent.dashboard');
@@ -690,7 +691,7 @@ export default function Dashboard() {
                                   </Link>
                                 </div>
                                 <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left', marginTop: '4px' }}>
-                                    ${listing.propertyPrice?.toLocaleString()}
+                                    {formatPriceWithCurrency(listing?.propertyPrice, listing?.currency)}
                                 </div>
                               </div>
                             </div>
@@ -840,7 +841,7 @@ export default function Dashboard() {
                                 </Link>
                               </div>
                               <div className={styles.topPropertyPrice} style={{ marginTop: '6px', marginBottom: '8px' }}>
-                                ${listing.propertyPrice?.toLocaleString()}
+                                {formatPriceWithCurrency(listing?.propertyPrice, listing?.currency)}
                               </div>
                               <div style={{ marginTop: '8px', marginBottom: '8px' }}>
                                 <Link 

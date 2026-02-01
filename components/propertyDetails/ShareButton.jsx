@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
 import logger from "@/utlis/logger";
 import styles from "./ShareButton.module.css";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function ShareButton({ property }) {
   const t = useTranslations('propertyDetail');
@@ -23,7 +24,7 @@ export default function ShareButton({ property }) {
   // Get share text
   const getShareText = () => {
     const propertyTitle = property?.propertyKeyword || property?.propertyTitle || 'Property';
-    const price = property?.propertyPrice ? `$${property.propertyPrice.toLocaleString()}` : '';
+    const price = property?.propertyPrice != null ? formatPriceWithCurrency(property.propertyPrice, property?.currency) : '';
     return `${propertyTitle} ${price ? `- ${price}` : ''}`;
   };
 

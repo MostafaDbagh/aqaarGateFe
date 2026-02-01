@@ -15,6 +15,7 @@ import logger from "@/utlis/logger";
 import styles from "./Property.module.css";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export default function Property() {
   const t = useTranslations('agent.property');
@@ -678,7 +679,7 @@ export default function Property() {
                                 {locale === 'ar' && listing.address_ar ? listing.address_ar : listing.address}
                               </div>
                               <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                                ${listing.propertyPrice?.toLocaleString()}
+                                {formatPriceWithCurrency(listing?.propertyPrice, listing?.currency)}
                                 {((listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') && listing.rentType) && ` / ${listing.rentType}`}
                               </div>
                               
