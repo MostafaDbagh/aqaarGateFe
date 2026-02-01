@@ -18,6 +18,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     propertyKeyword: '',
     address: '',
     propertyPrice: '',
+    currency: 'USD',
     status: 'sale',
     rentType: 'monthly',
     approvalStatus: 'pending',
@@ -134,6 +135,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         propertyKeyword: property.propertyKeyword || '',
         address: property.address || '',
         propertyPrice: property.propertyPrice || '',
+        currency: property.currency || 'USD',
         status: normalizedStatus,
         rentType: normalizedRentType,
         approvalStatus: property.approvalStatus || 'pending',
@@ -223,6 +225,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       const updateData = {
         ...formDataWithoutApprovalStatus,
         propertyPrice: exactPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
+        currency: formData.currency || 'USD',
         bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office" || formData.propertyType === "Building") ? 0 : parseInt(formData.bedrooms) || 0,
         bathrooms: (formData.propertyType === "Land" || formData.propertyType === "Building") ? 0 : parseInt(formData.bathrooms) || 0,
         squareFootage: parseInt(formData.squareFootage) || 0,
@@ -415,7 +418,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 onBlur={handleInputBlur}
               />
             </div>
-            {/* Price and Status Row */}
+            {/* Price, Currency and Status Row */}
             <div className={styles.gridTwoCols}>
               <div>
                 <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
@@ -436,6 +439,25 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 />
               </div>
 
+              <div>
+                <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                  {t('currency')}
+                </label>
+                <select
+                  name="currency"
+                  value={formData.currency || 'USD'}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  style={{ direction: locale === 'ar' ? 'rtl' : 'ltr', textAlign: locale === 'ar' ? 'right' : 'left' }}
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                >
+                  <option value="USD">USD</option>
+                  <option value="SYP">SYP</option>
+                </select>
+              </div>
+            </div>
+            <div className={styles.gridTwoCols}>
               <div>
                 <label className={styles.formLabel} style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
                   {t('propertyStatus')}

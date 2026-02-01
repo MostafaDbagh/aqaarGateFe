@@ -216,6 +216,7 @@
     "price": "Price",
     "pricePlaceholder": "Example: 250000",
     "currency": "Currency",
+    "currencyAvailable": "Now available: USD, SYP",
     "arabicTranslationTitle": "Arabic Translation (الترجمة العربية)",
     "descriptionAr": "Description (الوصف)",
     "descriptionArPlaceholder": "أدخل وصف العقار بالعربية",

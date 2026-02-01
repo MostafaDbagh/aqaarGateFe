@@ -1397,14 +1397,17 @@ export default function AddProperty({ isAdminMode = false }) {
                   <label htmlFor="currency">
                     {t('currency')}:<span style={{ color: '#dc3545' }}>*</span>
                   </label>
-                  <input
-                    type="text"
+                  <small className="d-block text-muted mb-1">{t('currencyAvailable')}</small>
+                  <select
                     name="currency"
-                    className={`form-control ${styles.disabledInput}`}
-                    value="USD"
-                    disabled
-                    readOnly
-                  />
+                    id="currency"
+                    className="form-control"
+                    value={formData.currency}
+                    onChange={handleInputChange}
+                  >
+                    <option value="USD">USD</option>
+                    <option value="SYP">SYP</option>
+                  </select>
                   {errors.currency && <span className="text-danger">{errors.currency}</span>}
                 </fieldset>
               </div>

@@ -521,7 +521,11 @@ export default function AdminMessages() {
                         </td>
                         <td>
                           {message.propertyId ? (
-                            <strong>${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}</strong>
+                            <strong>
+                              {message.propertyId.currency === 'SYP'
+                                ? `SYP ${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}`
+                                : `$${message.propertyId.propertyPrice?.toLocaleString() ?? '—'}`}
+                            </strong>
                           ) : (
                             <span className="text-muted">Property not found</span>
                           )}
