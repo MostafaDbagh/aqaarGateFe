@@ -62,10 +62,11 @@ export default function Messages() {
     }
   );
 
-  const messages = messagesData?.data || [];
-  const pagination = messagesData?.pagination || {};
-  const stats = messagesData?.stats || {};
-  const filterOptions = messagesData?.filterOptions || { properties: [] };
+  const messages = Array.isArray(messagesData?.data) ? messagesData.data : [];
+  const pagination = messagesData?.pagination ?? {};
+  const stats = messagesData?.stats ?? {};
+  const filterOptions = messagesData?.filterOptions ?? {};
+  const properties = Array.isArray(filterOptions.properties) ? filterOptions.properties : [];
 
   // Message mutations
   const {
@@ -433,13 +434,13 @@ export default function Messages() {
               <div className="col-md-3">
                 <label className="form-label" style={{ textAlign: isRTL ? 'right' : 'left' }}>{t('property')}</label>
                 <DropdownSelect
-                  options={[t('all'), ...filterOptions.properties.map(p => p.propertyKeyword)]}
-                  value={propertyFilter === 'all' ? t('all') : filterOptions.properties.find(p => p._id === propertyFilter)?.propertyKeyword || t('all')}
+                  options={[t('all'), ...properties.map(p => p?.propertyKeyword).filter(Boolean)]}
+                  value={propertyFilter === 'all' ? t('all') : properties.find(p => p?._id === propertyFilter)?.propertyKeyword || t('all')}
                   onChange={(value) => {
                     if (value === t('all')) {
                       handleFilterChange('property', 'all');
                     } else {
-                      const property = filterOptions.properties.find(p => p.propertyKeyword === value);
+                      const property = properties.find(p => p?.propertyKeyword === value);
                       handleFilterChange('property', property?._id || 'all');
                     }
                   }}
@@ -470,9 +471,9 @@ export default function Messages() {
           <div className="card-header">
             <h3 className="mb-0" style={{ textAlign: isRTL ? 'right' : 'left' }}>
               {t('title')}
-              {pagination.totalMessages > 0 && (
+              {(pagination.totalMessages ?? 0) > 0 && (
                 <span className="text-muted ms-2">
-                  ({pagination.totalMessages} {t('total')} - {t('showing')} {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalMessages)})
+                  ({(pagination.totalMessages ?? 0)} {t('total')} - {t('showing')} {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalMessages ?? 0)})
                 </span>
               )}
             </h3>
@@ -511,9 +512,9 @@ export default function Messages() {
                         </td>
                         <td>
                           <div>
-                            <strong>{message.senderName}</strong>
+                            <strong>{message.senderName ?? '—'}</strong>
                             <br />
-                            <small className="text-muted">{message.senderEmail}</small>
+                            <small className="text-muted">{message.senderEmail?.trim() || '—'}</small>
                           </div>
                         </td>
                         <td>
@@ -682,7 +683,7 @@ export default function Messages() {
         </div>
 
         {/* Pagination */}
-        {pagination.totalPages > 1 && (
+        {(pagination.totalPages ?? 1) > 1 && (
           <div className="d-flex justify-content-center mt-4">
             <ul className="wg-pagination">
               {generatePaginationItems()}
@@ -706,7 +707,7 @@ export default function Messages() {
                 </div>
                 <div className="modal-body" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                   <div className="mb-3">
-                    <strong>{t('from')}:</strong> {replyModal.message.senderName} ({replyModal.message.senderEmail})
+                    <strong>{t('from')}:</strong> {replyModal.message.senderName ?? '—'} ({replyModal.message.senderEmail?.trim() || '—'})
                   </div>
                   <div className="mb-3">
                     <strong>{t('subject')}:</strong> {replyModal.message.subject}
@@ -768,7 +769,7 @@ export default function Messages() {
                 </div>
                 <div className="modal-body" style={{ textAlign: isRTL ? 'right' : 'left' }}>
                   <div className="mb-3">
-                    <strong>{t('from')}:</strong> {deleteModal.message.senderEmail}
+                    <strong>{t('from')}:</strong> {(deleteModal.message.senderEmail?.trim() || deleteModal.message.senderName) ?? '—'}
                   </div>
                   <div className="mb-3">
                     <strong>{t('subject')}:</strong> {deleteModal.message.subject}

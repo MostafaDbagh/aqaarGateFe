@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DropdownSelect from "../common/DropdownSelect";
 import LocationLoader from "../common/LocationLoader";
 import { useMessagesByAgent, useMessageMutations } from "@/apis/hooks";
-import { listingAPI } from "@/apis/listing";
 import Toast from "../common/Toast";
 import { CopyIcon, CheckIcon } from "@/components/icons";
 import styles from "../dashboard/Messages.module.css";
@@ -75,8 +74,7 @@ export default function AdminMessages() {
     };
   }, []);
 
-  // Fetch messages with current filters and pagination
-  // Filter: only messages for properties where agent = 'admin@aqaargate.com'
+  // Fetch messages with current filters and pagination (BE already filters by admin's agentId)
   const { data: messagesData, isLoading, isError, refetch } = useMessagesByAgent(
     user?._id,
     {
@@ -89,67 +87,12 @@ export default function AdminMessages() {
     }
   );
 
-  // Filter messages to only show those for admin properties
-  // Use useMemo to prevent unnecessary re-renders
-  const allMessages = useMemo(() => messagesData?.data || [], [messagesData?.data]);
-  
-  // Filter messages for admin properties only (agent = 'admin@aqaargate.com')
-  const [adminMessages, setAdminMessages] = useState([]);
-  const [filtering, setFiltering] = useState(false);
-  const lastProcessedDataRef = useRef(null);
-
-  useEffect(() => {
-    // Skip if data hasn't changed
-    const currentData = messagesData?.data;
-    if (lastProcessedDataRef.current === currentData) {
-      return;
-    }
-
-    const filterAdminMessages = async () => {
-      if (!allMessages || allMessages.length === 0) {
-        setAdminMessages([]);
-        setFiltering(false);
-        lastProcessedDataRef.current = currentData;
-        return;
-      }
-
-      try {
-        setFiltering(true);
-        // Fetch property details for each message to check agent
-        const filteredMessages = [];
-        
-        for (const message of allMessages) {
-          if (message.propertyId?._id) {
-            try {
-              const property = await listingAPI.getListingById(message.propertyId._id);
-              // Check if property agent matches admin email
-              if (property?.agent === 'admin@aqaargate.com' || property?.agentEmail === 'admin@aqaargate.com') {
-                filteredMessages.push(message);
-              }
-            } catch (err) {
-              // If property fetch fails, skip this message
-            }
-          }
-        }
-        
-        setAdminMessages(filteredMessages);
-        lastProcessedDataRef.current = currentData;
-      } catch (error) {
-        setAdminMessages(allMessages); // Fallback to all messages
-        lastProcessedDataRef.current = currentData;
-      } finally {
-        setFiltering(false);
-      }
-    };
-
-    filterAdminMessages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messagesData?.data]);
-
-  const messages = adminMessages;
-  const pagination = messagesData?.pagination || {};
-  const stats = messagesData?.stats || {};
-  const filterOptions = messagesData?.filterOptions || { properties: [] };
+  // Use API data directly so count and rows always match (no client-side filter)
+  const messages = useMemo(() => (Array.isArray(messagesData?.data) ? messagesData.data : []), [messagesData?.data]);
+  const pagination = messagesData?.pagination ?? {};
+  const stats = messagesData?.stats ?? {};
+  const filterOptions = messagesData?.filterOptions ?? {};
+  const properties = Array.isArray(filterOptions.properties) ? filterOptions.properties : [];
 
   // Message mutations
   const {
@@ -378,7 +321,7 @@ export default function AdminMessages() {
     return items;
   };
 
-  if (isLoading || filtering) {
+  if (isLoading) {
     return (
       <div className="main-content w-100">
         <div className="main-content-inner">
@@ -388,7 +331,7 @@ export default function AdminMessages() {
           <div className={adminStyles.loaderContainer}>
             <LocationLoader 
               size="large" 
-              message={isLoading ? "Loading admin messages..." : "Filtering admin messages..."}
+              message="Loading admin messages..."
             />
           </div>
         </div>
@@ -480,13 +423,13 @@ export default function AdminMessages() {
               <div className="col-md-3">
                 <label className="form-label">Property</label>
                 <DropdownSelect
-                  options={["All", ...filterOptions.properties.map(p => p.propertyKeyword)]}
-                  value={propertyFilter === 'all' ? 'All' : filterOptions.properties.find(p => p._id === propertyFilter)?.propertyKeyword || 'All'}
+                  options={["All", ...properties.map(p => p?.propertyKeyword).filter(Boolean)]}
+                  value={propertyFilter === 'all' ? 'All' : properties.find(p => p?._id === propertyFilter)?.propertyKeyword || 'All'}
                   onChange={(value) => {
                     if (value === 'All') {
                       handleFilterChange('property', 'all');
                     } else {
-                      const property = filterOptions.properties.find(p => p.propertyKeyword === value);
+                      const property = properties.find(p => p?.propertyKeyword === value);
                       handleFilterChange('property', property?._id || 'all');
                     }
                   }}
@@ -516,9 +459,9 @@ export default function AdminMessages() {
           <div className="card-header">
             <h3 className="mb-0">
               Admin Property Messages
-              {pagination.totalMessages > 0 && (
+              {(pagination.totalMessages ?? 0) > 0 && (
                 <span className="text-muted ms-2">
-                  ({pagination.totalMessages} total - Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalMessages)})
+                  ({(pagination.totalMessages ?? 0)} total - Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalMessages ?? 0)})
                 </span>
               )}
             </h3>
@@ -557,9 +500,9 @@ export default function AdminMessages() {
                         </td>
                         <td>
                           <div>
-                            <strong>{message.senderName}</strong>
+                            <strong>{message.senderName ?? '—'}</strong>
                             <br />
-                            <small className="text-muted">{message.senderEmail}</small>
+                            <small className="text-muted">{message.senderEmail?.trim() || '—'}</small>
                           </div>
                         </td>
                         <td>
@@ -652,7 +595,7 @@ export default function AdminMessages() {
         </div>
 
         {/* Pagination */}
-        {pagination.totalPages > 1 && (
+        {(pagination.totalPages ?? 1) > 1 && (
           <div className="d-flex justify-content-center mt-4">
             <ul className="wg-pagination">
               {generatePaginationItems()}
@@ -676,7 +619,7 @@ export default function AdminMessages() {
                 </div>
                 <div className="modal-body">
                   <div className="mb-3">
-                    <strong>From:</strong> {replyModal.message.senderName} ({replyModal.message.senderEmail})
+                    <strong>From:</strong> {replyModal.message.senderName ?? '—'} ({replyModal.message.senderEmail?.trim() || '—'})
                   </div>
                   <div className="mb-3">
                     <strong>Subject:</strong> {replyModal.message.subject}
@@ -737,7 +680,7 @@ export default function AdminMessages() {
                 </div>
                 <div className="modal-body">
                   <div className="mb-3">
-                    <strong>From:</strong> {deleteModal.message.senderEmail}
+                    <strong>From:</strong> {(deleteModal.message.senderEmail?.trim() || deleteModal.message.senderName) ?? '—'}
                   </div>
                   <div className="mb-3">
                     <strong>Subject:</strong> {deleteModal.message.subject}

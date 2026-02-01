@@ -18,15 +18,28 @@ export const messageAPI = {
   // Get messages for a specific agent with filtering and pagination
   getMessagesByAgent: async (agentId, params = {}) => {
     try {
+      if (!agentId) {
+        return { success: true, data: [], pagination: {}, stats: {}, filterOptions: { properties: [] } };
+      }
       const token = localStorage.getItem('token');
-      const response = await Axios.get(`/message/agent/${agentId}`, {
+      const response = await Axios.get(`/message/agent/${encodeURIComponent(agentId)}`, {
         params,
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json'
         }
       });
-      return response.data;
+      const data = response?.data;
+      if (!data || typeof data !== 'object') {
+        return { success: true, data: [], pagination: {}, stats: {}, filterOptions: { properties: [] } };
+      }
+      return {
+        success: data.success !== false,
+        data: Array.isArray(data.data) ? data.data : [],
+        pagination: data.pagination ?? {},
+        stats: data.stats ?? {},
+        filterOptions: { properties: Array.isArray(data.filterOptions?.properties) ? data.filterOptions.properties : [] }
+      };
     } catch (error) {
       throw error.response?.data || error.message;
     }
