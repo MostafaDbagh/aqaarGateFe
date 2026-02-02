@@ -1,0 +1,48 @@
+/* Mobile Add Property CTA - fixed bottom-left, small green, mobile only */
+.ctaWrap {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .ctaWrap {
+    display: flex;
+    position: fixed;
+    bottom:25%;
+    right: 16px;
+    z-index: 97;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ctaBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 8px 14px;
+    height: 32px;
+    min-height: 32px;
+    border-radius: 8px;
+    background: #16a34a;
+    color: white;
+    border: 1px solid #15803d;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35);
+    opacity: 0.8;
+  }
+
+  .ctaBtn:hover {
+    background: #15803d;
+    color: white;
+    border-color: #166534;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.45);
+    transform: translateY(-1px);
+  }
+
+  .ctaBtn:active {
+    transform: translateY(0);
+  }
+}

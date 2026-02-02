@@ -267,8 +267,13 @@
 }
 
 /* Remove left and right padding from header container elements only */
+#header-main,
 .header {
   max-height: 80px !important;
+
+  @media (max-width: 1093px) {
+    max-height: 150px !important;
+  }
   
   .tf-container,
   .tf-container.xl {
@@ -291,6 +296,12 @@
   .header-inner-wrap {
     max-height: 80px !important;
     padding-left: 32px !important;
+
+    @media (max-width: 1093px) {
+      max-height: none !important;
+      padding-left: 16px !important;
+      padding-bottom: 16px !important;
+    }
   }
 }
 
@@ -337,6 +348,12 @@ html[dir="rtl"] .wrap-pagination .wg-pagination,
 
 /* Property List Page - Responsive Cards */
 .tf-grid-layout {
+  @media (max-width: 768px) {
+    .box-house {
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+  }
   .box-house.property-image-fix {
     width: 100% !important;
     max-width: 100% !important;

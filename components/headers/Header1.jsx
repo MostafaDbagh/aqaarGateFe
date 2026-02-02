@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Nav from "./Nav";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import DashboardNav from "./DashboardNav";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
@@ -117,7 +117,30 @@ export default function Header1({ parentClass = "header" }) {
                     <i className="icon-menu" />
                   </div>
                 </div>
+                {/* Add Property CTA - mobile only, for guest/user only (not agent, not admin) */}
+                {!isAgent && !isAdmin && (
+                  <div className="header-add-row">
+                    <a
+                      className="header-add-row-btn"
+                      href={getAddPropertyWhatsAppUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {tCommon('addProperty')}
+                    </a>
+                    {isLoggedIn && (
+                      <button
+                        type="button"
+                        className="header-add-row-btn header-add-row-btn-gradient"
+                        onClick={makeAgent}
+                      >
+                        🎯 {tCommon('makeMeAgent')}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
+            
             </div>
           </div>
         </div>
