@@ -1,10 +1,4 @@
-import Breadcumb from "@/components/common/Breadcumb";
-import Cta from "@/components/common/Cta";
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -27,9 +21,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function NotFoundPage({ params }) {
-  const { locale } = await params;
-  
+export default async function NotFoundPage() {
   // Explicitly call notFound() to render the not-found.jsx file
   // This ensures that when users navigate to /en/404 or /ar/404,
   // they see the proper localized 404 page

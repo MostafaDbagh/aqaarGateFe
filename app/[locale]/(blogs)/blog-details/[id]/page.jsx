@@ -1,5 +1,4 @@
 import BlogDetailClient from "@/components/blogs/BlogDetailClient";
-import { getTranslations } from 'next-intl/server';
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
@@ -56,7 +55,5 @@ export async function generateMetadata({ params }) {
 
 export default async function page({ params }) {
   const { id } = await params;
-  const t = await getTranslations('blog');
-
   return <BlogDetailClient id={id} />;
 }

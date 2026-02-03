@@ -63,9 +63,9 @@ export default function DashboardNav({ color = "" }) {
     e.preventDefault();
     e.stopPropagation();
     
-    // If not logged in, open register modal instead of dropdown
+    // If not logged in, open login modal instead of dropdown
     if (!isLoggedIn) {
-      showRegisterModal();
+      showLoginModal();
     } else {
       // If logged in, toggle dropdown
       setIsDDOpen((pre) => !pre);

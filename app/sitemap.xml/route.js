@@ -108,7 +108,6 @@ export async function GET() {
   const blogs = blogsResult.status === 'fulfilled' ? blogsResult.value : [];
 
   const now = new Date().toISOString();
-  const entries = [];
 
   const propertyUrls = (properties || [])
     .filter((p) => p && (p._id || p.id))
