@@ -6,10 +6,15 @@ import Header1 from "@/components/headers/Header1";
 import { getTranslations } from 'next-intl/server';
 import React from "react";
 
-export const metadata = {
-  title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
-  description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides. Expert insights for property buyers and sellers in Syria.",
-  keywords: [
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const url = `${baseUrl}/${locale}/blog-grid`;
+  return {
+    title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
+    description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides. Expert insights for property buyers and sellers in Syria.",
+    keywords: [
     'syria real estate blog',
     'lattakia real estate blog',
     'syria property news',
@@ -34,7 +39,7 @@ export const metadata = {
   openGraph: {
     title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/blog-grid`,
+    url,
     images: [
       {
         url: '/images/section/blog-bg.jpg',
@@ -50,10 +55,10 @@ export const metadata = {
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
     images: ['/images/section/blog-bg.jpg'],
   },
-  alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/blog-grid`,
-  },
-};
+  alternates: { canonical: url },
+  };
+}
+
 export default async function page() {
   const t = await getTranslations('blog');
   

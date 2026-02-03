@@ -11,7 +11,7 @@ export default function Attachments() {
           <a href="#" target="_blank" className="attachments-item">
             <div className="box-icon w-60">
               <Image
-                alt="file"
+                alt="Property attachment document"
                 src="/images/items/download-1.png"
                 width={80}
                 height={80}
@@ -25,7 +25,7 @@ export default function Attachments() {
           <a href="#" target="_blank" className="attachments-item">
             <div className="box-icon w-60">
               <Image
-                alt="file"
+                alt="Property attachment document"
                 src="/images/items/download-2.png"
                 width={80}
                 height={80}

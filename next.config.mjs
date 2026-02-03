@@ -13,32 +13,13 @@ const nextConfig = {
         ignoreBuildErrors: false,
     },
     // Fix for webpack bundling issues
-    webpack: (config, { isServer, webpack }) => {
+    webpack: (config, { isServer }) => {
       if (!isServer) {
         config.resolve.fallback = {
           ...config.resolve.fallback,
           fs: false,
         };
       }
-      
-      // Fix for @formatjs vendor chunk issues
-      // Ensure @formatjs modules are bundled correctly
-      if (config.optimization && config.optimization.splitChunks) {
-        const originalCacheGroups = config.optimization.splitChunks.cacheGroups || {};
-        
-        // Create a dedicated cache group for @formatjs to ensure it's bundled correctly
-        config.optimization.splitChunks.cacheGroups = {
-          ...originalCacheGroups,
-          formatjs: {
-            test: /[\\/]node_modules[\\/]@formatjs[\\/]/,
-            name: 'vendor-chunks/@formatjs',
-            chunks: 'all',
-            priority: 20,
-            enforce: true,
-          },
-        };
-      }
-      
       return config;
     },
     images: {

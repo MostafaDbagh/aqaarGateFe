@@ -6,28 +6,35 @@ import Vision from "@/components/otherPages/vision/Vision";
 
 import React from "react";
 
-export const metadata = {
-  title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
-  description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern European and Gulf standards. Simple, clear, and private property search experience.",
-  keywords: [
-    'syria real estate vision',
-    'syria property platform',
-    'modern syria real estate',
-    'syria property search',
-    'privacy property search',
-    'syria real estate innovation'
-  ],
-  openGraph: {
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const url = `${baseUrl}/${locale}/vision`;
+  return {
     title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
-    description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/vision`,
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
-    description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
-  },
-};
+    description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern European and Gulf standards. Simple, clear, and private property search experience.",
+    keywords: [
+      'syria real estate vision',
+      'syria property platform',
+      'modern syria real estate',
+      'syria property search',
+      'privacy property search',
+      'syria real estate innovation'
+    ],
+    openGraph: {
+      title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
+      description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
+      url,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
+      description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
+    },
+    alternates: { canonical: url },
+  };
+}
 
 export default function page() {
   return (

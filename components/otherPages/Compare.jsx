@@ -17,7 +17,7 @@ export default function Compare() {
                       <Image
                         className="lazyload"
                         data-src="/images/section/compare-1.jpg"
-                        alt="img-compare"
+                        alt="Property for comparison"
                         width={220}
                         height={220}
                         src="/images/section/compare-1.jpg"
@@ -48,7 +48,7 @@ export default function Compare() {
                       <Image
                         className="lazyload"
                         data-src="/images/section/compare-2.jpg"
-                        alt="img-compare"
+                        alt="Property for comparison"
                         width={220}
                         height={220}
                         src="/images/section/compare-2.jpg"
@@ -79,7 +79,7 @@ export default function Compare() {
                       <Image
                         className="lazyload"
                         data-src="/images/section/compare-3.jpg"
-                        alt="img-compare"
+                        alt="Property for comparison"
                         width={220}
                         height={220}
                         src="/images/section/compare-3.jpg"

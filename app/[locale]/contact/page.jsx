@@ -6,10 +6,15 @@ import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import React from "react";
 
-export const metadata = {
-  title: "Contact AqaarGate Real Estate - Syria & Lattakia Property Experts",
-  description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you find your dream home or investment property.",
-  keywords: [
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const url = `${baseUrl}/${locale}/contact`;
+  return {
+    title: "Contact AqaarGate Real Estate - Syria & Lattakia Property Experts",
+    description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you find your dream home or investment property.",
+    keywords: [
     'contact syria real estate agent',
     'contact lattakia real estate agent',
     'syria real estate consultation',
@@ -38,7 +43,7 @@ export const metadata = {
   openGraph: {
     title: "Contact AqaarGate Real Estate - Syria & Lattakia Property Experts",
     description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties in Syria and Lattakia. Our experienced agents are here to help you.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/contact`,
+    url,
     images: [
       {
         url: '/images/section/contact-bg.jpg',
@@ -54,10 +59,10 @@ export const metadata = {
     description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties.",
     images: ['/images/section/contact-bg.jpg'],
   },
-  alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/contact`,
-  },
-};
+  alternates: { canonical: url },
+  };
+}
+
 export default function page() {
   return (
     <>

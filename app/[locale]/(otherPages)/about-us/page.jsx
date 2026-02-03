@@ -6,30 +6,37 @@ import About from "@/components/otherPages/about/About";
 
 import React from "react";
 
-export const metadata = {
-  title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
-  description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria. Highlighting Syria's vibrant cities — Damascus, Aleppo, Latakia, Homs, Tartous, and others — blending modern architecture with ancient heritage.",
-  keywords: [
-    'about AqaarGate',
-    'syria real estate team',
-    'young syrians',
-    'syria property showcase',
-    'syria cities real estate',
-    'damascus aleppo latakia real estate',
-    'syria heritage architecture',
-    'syria real estate development'
-  ],
-  openGraph: {
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const url = `${baseUrl}/${locale}/about-us`;
+  return {
     title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
-    description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/about-us`,
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
-    description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
-  },
-};
+    description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria. Highlighting Syria's vibrant cities — Damascus, Aleppo, Latakia, Homs, Tartous, and others — blending modern architecture with ancient heritage.",
+    keywords: [
+      'about AqaarGate',
+      'syria real estate team',
+      'young syrians',
+      'syria property showcase',
+      'syria cities real estate',
+      'damascus aleppo latakia real estate',
+      'syria heritage architecture',
+      'syria real estate development'
+    ],
+    openGraph: {
+      title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
+      description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
+      url,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
+      description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
+    },
+    alternates: { canonical: url },
+  };
+}
 
 export default function page() {
   return (

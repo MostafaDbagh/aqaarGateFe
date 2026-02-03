@@ -37,7 +37,7 @@ export default function FloorPlan() {
             <div className="faq-body">
               <div className="box-img">
                 <Image
-                  alt="img-floor"
+                  alt="Property floor plan"
                   src="/images/section/floor.jpg"
                   width={712}
                   height={501}
@@ -76,7 +76,7 @@ export default function FloorPlan() {
             <div className="faq-body">
               <div className="box-img">
                 <Image
-                  alt="img-floor"
+                  alt="Property floor plan"
                   src="/images/section/floor.jpg"
                   width={712}
                   height={501}

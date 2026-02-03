@@ -10,6 +10,35 @@ import React from "react";
 
 export const dynamic = "force-dynamic";
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.aqaargate.com";
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const url = `${baseUrl}/${locale}/career`;
+  return {
+    title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
+    description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia. We're looking for talented individuals to help showcase Syria's property market.",
+    keywords: [
+      "careers aqaargate",
+      "syria real estate jobs",
+      "lattakia real estate careers",
+      "property jobs syria",
+      "real estate careers syria",
+    ],
+    openGraph: {
+      title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
+      description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia.",
+      url,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
+      description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia.",
+    },
+    alternates: { canonical: url },
+  };
+}
+
 async function fetchCareers() {
   try {
     const apiUrl =

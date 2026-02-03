@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from 'next/navigation';
-import { useLocale } from 'next-intl';
 
 /**
  * BrandSEO Component
@@ -14,19 +13,16 @@ import { useLocale } from 'next-intl';
  */
 export default function BrandSEO() {
   const pathname = usePathname();
-  const locale = useLocale();
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
   
-  // Get clean pathname (remove locale prefix)
+  // Canonical URL: full current page URL including locale (e.g. /en/faq, /ar/career)
+  const canonicalUrl = `${baseUrl.replace(/\/+$/, '')}${pathname === '/' ? '' : pathname}`;
+  
+  // Generate alternate language URLs (clean path without locale for hreflang)
   const cleanPathname = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/') || '/';
-  
-  // Generate canonical URL
-  const canonicalUrl = `${baseUrl}${cleanPathname === '/' ? '' : cleanPathname}`;
-  
-  // Generate alternate language URLs
   const alternateUrls = {
-    en: `${baseUrl}${cleanPathname === '/' ? '/en' : `/en${cleanPathname}`}`,
-    ar: `${baseUrl}${cleanPathname === '/' ? '/ar' : `/ar${cleanPathname}`}`,
+    en: `${baseUrl.replace(/\/+$/, '')}${cleanPathname === '/' ? '/en' : `/en${cleanPathname}`}`,
+    ar: `${baseUrl.replace(/\/+$/, '')}${cleanPathname === '/' ? '/ar' : `/ar${cleanPathname}`}`,
   };
 
   return (
