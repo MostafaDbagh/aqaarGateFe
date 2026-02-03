@@ -395,7 +395,9 @@ export default function Hero({
                       >
                         {t('searchButton')} <i className="icon-MagnifyingGlass fw-6" />
                       </a>
-                      <AISearchButton onSearchResults={handleAISearchResults} />
+                      <div className={styles.aiSearchWrap}>
+                        <AISearchButton onSearchResults={handleAISearchResults} />
+                      </div>
                   </div>
                 </div>
                 <SearchForm

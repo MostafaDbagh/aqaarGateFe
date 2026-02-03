@@ -60,6 +60,11 @@
     align-items: center !important;
     justify-content: center !important;
   }
+  
+  .heroBackground .aiSearchWrap > * {
+    height: 50px !important;
+    min-height: 50px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -99,6 +104,62 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+  }
+  
+  .heroBackground .aiSearchWrap > * {
+    height: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* At 440px and below: filter + search in row 1, AI Search full width in row 2 */
+.aiSearchWrap {
+  flex-shrink: 0;
+}
+
+/* Desktop: no margin on Search button */
+.heroBackground :global(.box-item.wrap-btn .tf-btn.bg-color-primary.pd-3) {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 440px) {
+  .heroBackground :global(.box-item.wrap-btn) {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  
+  .heroBackground :global(.box-item.wrap-btn .tf-btn.bg-color-primary.pd-3) {
+    margin-top: 8px !important;
+  }
+  
+  .heroBackground :global(.box-item.wrap-btn .btn-filter) {
+    flex-shrink: 0 !important;
+    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .heroBackground :global(.box-item.wrap-btn .tf-btn) {
+    flex: 1 !important;
+    min-width: 0 !important;
+    height: 50px !important;
+  }
+  
+  .heroBackground .aiSearchWrap {
+    width: 100% !important;
+    flex-basis: 100% !important;
+    order: 3;
+  }
+  
+  /* AI button: full width but preserve original appearance (height, padding, gradient) */
+  .heroBackground .aiSearchWrap > * {
+    width: 100% !important;
+    min-height: 50px !important;
+    height: 50px !important;
+    justify-content: center !important;
+    padding: 12px 24px !important;
+    border-radius: 12px !important;
   }
 }
 
