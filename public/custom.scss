@@ -400,3 +400,40 @@ html[dir="rtl"] .wrap-pagination .wg-pagination,
     }
   }
 }
+
+/* Home page - cards fill full width (Today's Listings, Most Recent) */
+.section-listing .tf-layout-mobile-md.lg-col-3,
+.section-listing .tf-layout-mobile-md.md-col-2 {
+  width: 100% !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  
+  & > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  /* Margin only on mobile + tablet, NOT desktop */
+  @media (max-width: 991px) {
+    & > div {
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+  }
+  
+  .box-house {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+

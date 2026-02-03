@@ -274,7 +274,7 @@ export default function Properties({ listings, isLoading, isError }) {
             
             <div className="tf-layout-mobile-md md-col-2 lg-col-3 gap-15">
               {listingsArray.map((listing, i) => (
-                <div key={i}style={{margin:'16px auto'}}>
+                <div key={i} className={styles.cardWrapper}>
       <div className="box-house">
         <div className="image-wrap" style={{
           width: '100%',
