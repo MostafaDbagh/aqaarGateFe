@@ -359,6 +359,7 @@
     "faq": "الأسئلة الشائعة",
     "blog": "المدونة",
     "futureInterestBuyer": "مشتري مستقبلي",
+    "query": "استفسار",
     "forRegisteredUsersOnly": "للمستخدمين المسجلين فقط"
   },
   "footer": {
@@ -532,6 +533,7 @@
     "title": "نود أن نسمع منك",
     "subtitle": "نود أن نسمع منك لضمان تقديم خدمة جيدة ومرضية.",
     "name": "الاسم:",
+    "requiredField": "(مطلوب)",
     "namePlaceholder": "اسمك",
     "email": "البريد الإلكتروني:",
     "emailPlaceholder": "البريد الإلكتروني",
@@ -542,6 +544,12 @@
     "location": "الموقع",
     "rent": "إيجار",
     "sale": "بيع",
+    "job": "وظيفة",
+    "futureBuyer": "مشتري مستقبلي",
+    "rentalService": "خدمة الإيجار",
+    "becomeAgent": "كن وكيلاً",
+    "complain": "شكوى",
+    "query": "استفسار",
     "yourMessage": "رسالتك:",
     "messagePlaceholder": "الرسالة",
     "contactExperts": "اتصل بخبرائنا",
@@ -551,6 +559,7 @@
       "officeAddress": "عنوان المكتب",
       "officeLocation": "شارع بغداد، اللاذقية، سوريا",
       "phoneNumberLabel": "رقم الهاتف",
+      "whatsappNumberLabel": "رقم واتساب",
       "emailAddressLabel": "عنوان البريد الإلكتروني",
       "whatsapp": "واتساب"
     }

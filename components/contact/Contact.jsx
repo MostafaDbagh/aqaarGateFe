@@ -15,7 +15,8 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [error, setError] = useState('');
-  const [selectedInterest, setSelectedInterest] = useState(t('selectOption'));
+  const interestOptionKeys = ['selectOption', 'rent', 'sale', 'job', 'futureBuyer', 'rentalService', 'becomeAgent', 'complain', 'query', 'location'];
+  const [selectedInterest, setSelectedInterest] = useState('selectOption');
   const formRef = useRef(null);
   const lastSubmitTimeRef = useRef(0);
   
@@ -39,28 +40,37 @@ export default function Contact() {
     const phone = formData.get('phone')?.trim();
     const message = formData.get('message')?.trim();
     
-    // Get selected interest from state
-    const interest = selectedInterest && selectedInterest !== t('selectOption') 
-      ? selectedInterest 
+    // Get selected interest from state (translate key for backend)
+    const interest = selectedInterest && selectedInterest !== 'selectOption' 
+      ? t(selectedInterest) 
       : 'General Inquiry';
     
-    // Validation
-    if (!name || !email || !phone || !message) {
+    // Validation - Name, Phone, Interest, Message are required (Email is optional)
+    if (!name || !phone || !message) {
       const errorMsg = locale === 'ar' 
         ? 'يرجى ملء جميع الحقول المطلوبة'
         : 'Please fill in all required fields';
       setError(errorMsg);
       return;
     }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (selectedInterest === 'selectOption') {
       const errorMsg = locale === 'ar' 
-        ? 'يرجى إدخال عنوان بريد إلكتروني صحيح'
-        : 'Please enter a valid email address';
+        ? 'يرجى اختيار ما يهمك'
+        : 'Please select what you are interested in';
       setError(errorMsg);
       return;
+    }
+    
+    // Email validation - only if provided
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        const errorMsg = locale === 'ar' 
+          ? 'يرجى إدخال عنوان بريد إلكتروني صحيح'
+          : 'Please enter a valid email address';
+        setError(errorMsg);
+        return;
+      }
     }
     
     setIsSubmitting(true);
@@ -68,7 +78,7 @@ export default function Contact() {
     try {
       const result = await contactAPI.createContact({
         name,
-        email,
+        email: email || undefined,
         phone,
         interest,
         message
@@ -82,7 +92,7 @@ export default function Contact() {
         );
         // Reset form
         formRef.current?.reset();
-        setSelectedInterest(t('selectOption'));
+        setSelectedInterest('selectOption');
       } else {
         throw new Error(result.message || 'Failed to send message');
       }
@@ -140,7 +150,7 @@ export default function Contact() {
                 </div>
                 <div className="cols">
                   <fieldset>
-                    <label htmlFor="name">{t('name')}</label>
+                    <label htmlFor="name">{t('name')} <span className={styles.required}>*</span></label>
                     <input
                       type="text"
                       className="form-control"
@@ -158,13 +168,12 @@ export default function Contact() {
                       placeholder={t('emailPlaceholder')}
                       name="email"
                       id="email-contact"
-                      required
                     />
                   </fieldset>
                 </div>
                 <div className="cols">
                   <fieldset className="phone">
-                    <label htmlFor="phone">{t('phoneNumber')}</label>
+                    <label htmlFor="phone">{t('phoneNumber')} <span className={styles.required}>*</span></label>
                     <input
                       type="text"
                       className="form-control"
@@ -176,11 +185,12 @@ export default function Contact() {
                   </fieldset>
                   <div className="select">
                     <label className="text-1 fw-6 mb-12">
-                      {t('interestedIn')}
+                      {t('interestedIn')} <span className={styles.required}>*</span>
                     </label>
 
                     <DropdownSelect
-                      options={[t('selectOption'), t('location'), t('rent'), t('sale')]}
+                      options={interestOptionKeys}
+                      translateOption={(key) => t(key)}
                       addtionalParentClass=""
                       selectedValue={selectedInterest}
                       onChange={(value) => setSelectedInterest(value)}
@@ -188,7 +198,7 @@ export default function Contact() {
                   </div>
                 </div>
                 <fieldset>
-                  <label htmlFor="message">{t('yourMessage')}</label>
+                  <label htmlFor="message">{t('yourMessage')} <span className={styles.required}>*</span></label>
                   <textarea
                     name="message"
                     cols={30}

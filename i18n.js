@@ -4,6 +4,14 @@ import { routing } from './i18n/routing';
 // Global timeZone configuration
 export const timeZone = 'UTC';
 
+// Fallback when translation is missing - show key in readable format instead of "namespace.key"
+function getMessageFallback({ namespace, key }) {
+  const path = [namespace, key].filter((part) => part != null).join('.');
+  // Return the key part in readable format (e.g., "futureBuyer" -> "Future Buyer")
+  const readableKey = (key || '').replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim();
+  return readableKey || path;
+}
+
 export default getRequestConfig(async ({ requestLocale }) => {
   // This typically corresponds to the `[locale]` segment
   let locale;
@@ -44,7 +52,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     return {
       locale,
       messages: mergedMessages,
-      timeZone: timeZone
+      timeZone: timeZone,
+      getMessageFallback
     };
   } catch (error) {
     // Fallback to default locale messages if import fails
@@ -64,7 +73,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     return {
       locale: routing.defaultLocale,
       messages: mergedDefaultMessages,
-      timeZone: timeZone
+      timeZone: timeZone,
+      getMessageFallback
     };
   }
 });

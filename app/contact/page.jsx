@@ -1,4 +1,3 @@
-import Brands from "@/components/common/Brands";
 import Cta from "@/components/common/Cta";
 import About from "@/components/contact/About";
 import Contact from "@/components/contact/Contact";
@@ -66,7 +65,6 @@ export default function page() {
         <div className="main-content">
           <Contact />
           <About />
-          <Brands />
           <Cta />
         </div>
         <Footer1 />

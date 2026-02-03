@@ -3,6 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { timeZone } from '@/i18n';
+import IntlErrorHandlingProvider from '@/components/providers/IntlErrorHandlingProvider';
 import ClientLayout from '../ClientLayout';
 import Providers from '../Providers';
 import StructuredData from '@/components/seo/StructuredData';
@@ -48,7 +49,7 @@ export default async function LocaleLayout({ children, params }) {
                 `,
               }}
             />
-            <NextIntlClientProvider messages={fallbackMessages} timeZone={timeZone}>
+            <NextIntlClientProvider locale={routing.defaultLocale} messages={fallbackMessages} timeZone={timeZone}>
               <Providers>
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   Error loading messages. Please refresh the page.
@@ -57,7 +58,7 @@ export default async function LocaleLayout({ children, params }) {
             </NextIntlClientProvider>
           </>
         );
-      } catch (error) {
+      } catch (_error) {
         // If even default messages fail, return minimal layout
         return (
           <Providers>
@@ -105,7 +106,8 @@ export default async function LocaleLayout({ children, params }) {
           `,
         }}
       />
-      <NextIntlClientProvider messages={messages} timeZone={timeZone}>
+      <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
+        <IntlErrorHandlingProvider locale={locale} messages={messages}>
         <Providers>
           <StructuredData />
           <KeywordOptimization />
@@ -115,6 +117,7 @@ export default async function LocaleLayout({ children, params }) {
           <BrandSEO />
           <ClientLayout>{children}</ClientLayout>
         </Providers>
+        </IntlErrorHandlingProvider>
       </NextIntlClientProvider>
     </>
   );

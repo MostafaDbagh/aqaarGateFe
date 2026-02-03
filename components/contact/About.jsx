@@ -68,6 +68,30 @@ export default function About() {
                 </li>
                 <li>
                   <div className="icon">
+                    <img
+                      src="/icons/whatsapp-contact.svg"
+                      alt="WhatsApp"
+                      width={50}
+                      height={50}
+                      style={{ width: '50px', height: '50px' }}
+                    />
+                  </div>
+                  <div className="content">
+                    <div className="sub">{t("whatsappNumberLabel")}</div>
+                    <a
+                      href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="phone"
+                      style={{ textDecoration: 'none' }}
+                      dir="ltr"
+                    >
+                      +971586057772
+                    </a>
+                  </div>
+                </li>
+                <li>
+                  <div className="icon">
                     <svg width={50}
                       height={50}
                       viewBox="0 0 50 50"
@@ -106,7 +130,7 @@ export default function About() {
                   </div>
                   <div className="content">
                     <div className="sub">{t("phoneNumberLabel")}</div>
-                    <div className="phone">+963995278383</div>
+                    <div className="phone" dir="ltr">+963995278383</div>
                   </div>
                 </li>
                 <li>
@@ -181,40 +205,11 @@ export default function About() {
                   </div>
                   <div className="content">
                     <div className="sub">{t("emailAddressLabel")}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <a href="mailto:contact@aqaargate.com">contact@aqaargate.com</a>
-                      <CopyIcon text="contact@aqaargate.com" />
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div className="icon">
-                    <img 
-                      src="/icons/whatsapp-contact.svg" 
-                      alt="WhatsApp" 
-                      width={50}
-                      height={50}
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </div>
-                  <div className="content">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-                      <a 
-                        href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`whatsapp-link ${styles.whatsappLink}`}
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-                      >
-                        <img 
-                          src="/icons/whatsapp-contact.svg" 
-                          alt="WhatsApp" 
-                          width={20}
-                          height={20}
-                          style={{ width: '20px', height: '20px', display: 'inline-block' }}
-                        />
-                        <span>+971586057772</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', }}>
+                      <a  style={{ fontSize: '30px !important' }} href="mailto:contact@aqaargate.com">
+                        contact@aqaargate.com
                       </a>
+                      <CopyIcon text="contact@aqaargate.com" />
                     </div>
                   </div>
                 </li>

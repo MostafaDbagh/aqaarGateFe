@@ -2012,6 +2012,8 @@ html[dir="rtl"] .checkbox-item,
   padding: 66.5px 0;
   .list-info {
     li {
+      font-size: 30px;
+      font-weight: 600;
       @include mixin.d-flex();
       align-items: center;
       gap: 41px;

@@ -364,6 +364,7 @@
     "faq": "FAQ's",
     "blog": "Blog",
     "futureInterestBuyer": "Future Buyer",
+    "query": "Query",
     "forRegisteredUsersOnly": "For registered users only"
   },
   "footer": {
@@ -537,6 +538,7 @@
     "title": "We Would Love to Hear From You",
     "subtitle": "We would like to hear from you to ensure we provide a good and satisfactory service.",
     "name": "Name:",
+    "requiredField": "(required)",
     "namePlaceholder": "Your name",
     "email": "Email:",
     "emailPlaceholder": "Email",
@@ -547,6 +549,12 @@
     "location": "Location",
     "rent": "Rent",
     "sale": "Sale",
+    "job": "Job",
+    "futureBuyer": "Future Buyer",
+    "rentalService": "Rental Service",
+    "becomeAgent": "Become an Agent",
+    "complain": "Complain",
+    "query": "Query",
     "yourMessage": "Your Message:",
     "messagePlaceholder": "Message",
     "contactExperts": "Contact our experts",
@@ -556,6 +564,7 @@
       "officeAddress": "Office address",
       "officeLocation": "Baghdad street, Latakia, Syria",
       "phoneNumberLabel": "Phone number",
+      "whatsappNumberLabel": "WhatsApp number",
       "emailAddressLabel": "Email address",
       "whatsapp": "WhatsApp"
     }
