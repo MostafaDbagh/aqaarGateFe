@@ -877,6 +877,10 @@
   },
   "blog": {
     "pageName": "Blog Grid",
+    "loading": "Loading...",
+    "notFound": "Blog post not found",
+    "backToBlog": "Back to Blog",
+    "by": "By",
     "comingSoon": "Blogs Coming Soon",
     "subtitle": "We're working hard to bring you amazing content about real estate, property tips, and market insights. Stay tuned for exciting articles coming your way!",
     "features": {
