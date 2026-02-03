@@ -15,6 +15,7 @@ import AdminReviews from "./AdminReviews";
 import AdminMessages from "./AdminMessages";
 import AdminCreateAdmin from "./AdminCreateAdmin";
 import AdminFutureBuyers from "./AdminFutureBuyers";
+import AdminCareers from "./AdminCareers";
 
 export const TABS = {
   OVERVIEW: 'overview',
@@ -31,7 +32,8 @@ export const TABS = {
   REVIEWS: 'reviews',
   MESSAGES: 'messages',
   CREATE_ADMIN: 'create-admin',
-  FUTURE_BUYERS: 'future-buyers'
+  FUTURE_BUYERS: 'future-buyers',
+  CAREERS: 'careers'
 };
 
 export const AdminTabContext = createContext(null);
@@ -83,6 +85,8 @@ export default function AdminDashboardMain() {
         tabToSet = TABS.CREATE_ADMIN;
       } else if (normalizedPath.includes('/admin/future-buyers')) {
         tabToSet = TABS.FUTURE_BUYERS;
+      } else if (normalizedPath.includes('/admin/careers')) {
+        tabToSet = TABS.CAREERS;
       } else if (normalizedPath.includes('/admin/overview')) {
         tabToSet = TABS.OVERVIEW;
       }
@@ -128,6 +132,8 @@ export default function AdminDashboardMain() {
         return <AdminCreateAdmin />;
       case TABS.FUTURE_BUYERS:
         return <AdminFutureBuyers />;
+      case TABS.CAREERS:
+        return <AdminCareers />;
       default:
         return <AdminDashboard />;
     }

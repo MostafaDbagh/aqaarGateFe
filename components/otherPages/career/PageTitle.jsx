@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from 'next-intl';
 
 export default function PageTitle() {
   const t = useTranslations('career.pageTitle');
-  
-  // State to track the active item
-  const [activeItem, setActiveItem] = useState(t('forSale'));
 
-  // Array of items to render
-  const items = [t('forSale'), t('forRent')];
   return (
     <>
       <style jsx>{`
@@ -20,13 +14,16 @@ export default function PageTitle() {
           background-position: center;
           background-repeat: no-repeat;
           background-attachment: fixed;
-          min-height: 100vh;
+          min-height: 35vh;
           position: relative;
+          display: flex;
+          align-items: center;
         }
         
         .page-title.career .tf-container {
           position: relative;
           z-index: 2;
+          width: 100%;
         }
         
         .page-title.career .title {
@@ -52,39 +49,6 @@ export default function PageTitle() {
                 <p className="h6 fw-4">
                   {t('subtitle')}
                 </p>
-              </div>
-              <div className="wg-filter">
-                <div className="form-title">
-                  <div className="tf-dropdown-sort" data-bs-toggle="dropdown">
-                    <div className="btn-select">
-                      <span className="text-sort-value">{activeItem}</span>
-                      <i className="icon-CaretDown" />
-                    </div>
-                    <div className="dropdown-menu">
-                      {items.map((item) => (
-                        <div
-                          key={item}
-                          className={`select-item ${
-                            activeItem === item ? "active" : ""
-                          }`}
-                          onClick={() => setActiveItem(item)} // Set the active item on click
-                        >
-                          <span className="text-value-item">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <form>
-                    <fieldset>
-                      <input type="text" placeholder={t('searchPlaceholder')} />
-                    </fieldset>
-                  </form>
-                  <div className="wrap-btn">
-                    <a href="#" className="tf-btn bg-color-primary fw-7 pd-3">
-                      {t('searchButton')} <i className="icon-MagnifyingGlass fw-6" />
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

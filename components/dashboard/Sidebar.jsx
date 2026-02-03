@@ -350,6 +350,31 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Careers */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.CAREERS ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.CAREERS);
+                        router.replace('/en/admin/careers');
+                      } else {
+                        router.push('/en/admin/careers');
+                      }
+                    }}
+                  >
+                    <i className="icon-bag" />
+                    <span>Careers</span>
+                  </button>
+                </li>
+
                 {/* Reviews */}
                 <li
                   className={`nav-menu-item ${

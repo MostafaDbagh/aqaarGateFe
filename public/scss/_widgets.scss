@@ -2811,14 +2811,18 @@ html[dir="rtl"] .checkbox-item,
   }
 }
 
+.section-career.tf-spacing-1 {
+  padding-top: 0;
+}
+
 .career-item {
   @include mixin.d-flex();
+  flex-direction: column;
+  align-items: flex-start;
   padding: 29px;
-  justify-content: space-between;
   border-radius: 16px;
   border: 1px solid var(--Line);
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 16px;
   .name {
     margin-bottom: 10px;
   }

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale } from 'next-intl';
-import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI, notificationAPI } from './index';
+import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI, notificationAPI, careerAPI, adminAPI } from './index';
 
 // Authentication hooks
 export const useAuth = () => {
@@ -593,6 +593,78 @@ export const useUnreadCount = () => {
     refetchInterval: 1 * 60 * 1000, // Refetch every minute
     retry: 2,
   });
+};
+
+// Career hooks (public)
+export const useCareers = (params = {}) => {
+  return useQuery({
+    queryKey: ['careers', params],
+    queryFn: () => careerAPI.getAllCareers(params),
+    staleTime: 0, // Always consider stale - refetch on mount
+    gcTime: 0, // Don't cache - avoid serving stale empty data
+    refetchOnMount: 'always',
+    retry: 2,
+  });
+};
+
+export const useCareer = (id) => {
+  return useQuery({
+    queryKey: ['career', id],
+    queryFn: () => careerAPI.getCareerById(id),
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+    retry: 2,
+  });
+};
+
+// Admin career hooks
+export const useAdminCareers = (filters = {}) => {
+  return useQuery({
+    queryKey: ['admin', 'careers', filters],
+    queryFn: () => adminAPI.getAllCareers(filters),
+    staleTime: 1 * 60 * 1000, // 1 minute
+    retry: 2,
+  });
+};
+
+export const useCareerMutations = () => {
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: adminAPI.createCareer,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin', 'careers']);
+      queryClient.invalidateQueries(['careers']);
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => adminAPI.updateCareer(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin', 'careers']);
+      queryClient.invalidateQueries(['careers']);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: adminAPI.deleteCareer,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin', 'careers']);
+      queryClient.invalidateQueries(['careers']);
+    },
+  });
+
+  return {
+    createCareer: createMutation.mutate,
+    updateCareer: updateMutation.mutate,
+    deleteCareer: deleteMutation.mutate,
+    isCreating: createMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+    createError: createMutation.error,
+    updateError: updateMutation.error,
+    deleteError: deleteMutation.error,
+  };
 };
 
 export const useNotificationMutations = () => {

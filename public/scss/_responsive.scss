@@ -2140,7 +2140,11 @@
     padding: 30px 15px;
   }
   .section-career {
+    &.tf-spacing-1 {
+      padding-top: 0;
+    }
     .tf-grid-layout-2 {
+      grid-template-columns: 1fr;
       gap: 15px;
     }
   }

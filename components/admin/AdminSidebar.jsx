@@ -13,7 +13,8 @@ export default function AdminSidebar() {
     { href: "/en/admin/properties", label: "Properties", icon: "icon-home" },
     { href: "/en/admin/agents", label: "Agents", icon: "icon-user" },
     { href: "/en/admin/rental-services", label: "Rental Services", icon: "icon-home" },
-    { href: "/en/admin/contacts", label: "Contact Us", icon: "icon-mail" }
+    { href: "/en/admin/contacts", label: "Contact Us", icon: "icon-mail" },
+    { href: "/en/admin/careers", label: "Careers", icon: "icon-bag" }
   ];
 
   const isActive = (href) => {

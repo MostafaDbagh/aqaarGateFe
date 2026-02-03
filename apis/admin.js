@@ -305,6 +305,61 @@ export const adminAPI = {
     } catch (error) {
       throw error.response?.data || error.message;
     }
+  },
+
+  // Careers
+  getAllCareers: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.status) params.append('status', filters.status);
+      if (filters.search) params.append('search', filters.search);
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = `/admin/careers${queryString ? `?${queryString}` : ''}`;
+      const response = await Axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createCareer: async (careerData) => {
+    try {
+      const response = await Axios.post('/admin/careers', careerData);
+      return response.data;
+    } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.message) {
+        throw new Error(errorData.message);
+      }
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateCareer: async (id, careerData) => {
+    try {
+      const response = await Axios.put(`/admin/careers/${id}`, careerData);
+      return response.data;
+    } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.message) {
+        throw new Error(errorData.message);
+      }
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deleteCareer: async (id) => {
+    try {
+      const response = await Axios.delete(`/admin/careers/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
   }
 };
 
