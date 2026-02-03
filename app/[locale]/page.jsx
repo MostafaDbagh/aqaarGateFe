@@ -1,3 +1,4 @@
+import { setRequestLocale } from 'next-intl/server';
 import HomePageClient from '../HomePageClient';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
@@ -44,6 +45,7 @@ export async function generateMetadata({ params }) {
 
 export default async function Home({ params }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   return (
     <>
       {/* SEO Content - Visible to Google Crawler (Server-Side Rendered) */}

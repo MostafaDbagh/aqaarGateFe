@@ -1,5 +1,4 @@
 import React from "react";
-import { notFound } from "next/navigation";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 import { fetchProperty } from "@/lib/fetchProperty";
 
@@ -21,8 +20,12 @@ export async function generateMetadata({ params }) {
     ? `Explore ${property.propertyKeyword || 'this premium property'} in ${property.city || 'Syria'}. ${property.propertyType || 'Property'} for ${property.status === 'rent' ? 'rent' : 'sale'}. ${property.description ? property.description.substring(0, 120) + '...' : 'Find your dream property with AqaarGate Real Estate.'}`
     : "Explore detailed information, photos, amenities, and location for premium properties in Syria and Lattakia. Find houses, apartments, holiday homes (بيوت عطلات) for sale and rent (بيع وتأجير). Perfect for expats from Germany, Netherlands, EU countries, and Arab Gulf.";
 
-  const ogImage = property?.images?.[0]
-    ? property.images[0].startsWith('http') ? property.images[0] : `${baseUrl}${property.images[0]}`
+  const firstImage = property?.images?.[0];
+  const imageUrl = typeof firstImage === 'string'
+    ? firstImage
+    : firstImage?.url || firstImage?.src || '';
+  const ogImage = imageUrl
+    ? (imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`)
     : `${baseUrl}/images/section/hero-bg.jpg`;
 
   const ogImageAlt = property?.propertyKeyword || "Premium Property in Syria and Lattakia";
@@ -79,13 +82,6 @@ export async function generateMetadata({ params }) {
 export default async function page({ params }) {
   const { id } = await params;
 
-  // Fetch property server-side to check if it exists
-  const property = await fetchProperty(id);
-
-  // If property doesn't exist, return 404
-  if (!property) {
-    notFound();
-  }
-
+  // Always render - let PropertyDetailClient fetch and handle 404 client-side
   return <PropertyDetailClient id={id} />;
 }
