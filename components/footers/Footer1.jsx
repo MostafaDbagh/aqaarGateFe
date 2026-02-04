@@ -209,7 +209,7 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
             <p>
               {t('copyright')} {new Date().getFullYear()}{" "}
               <span className="fw-7">AqaarGate - REAL ESTATE</span> . {t('designedBy')}{" "}
-              <a href="#" className={styles.developerName}>Mostafa Dbagh</a>
+              <a href="https://www.linkedin.com/in/mostafa-dbagh-528983180/" target="_blank" rel="noopener noreferrer" className={styles.developerName}>Mostafa Dbagh</a>
             </p>
             <div className="wrap-social">
               <div className="text-3  fw-6 text_white">{t('followUs')}</div>

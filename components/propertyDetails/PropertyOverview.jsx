@@ -302,14 +302,14 @@ export default function PropertyOverview({ property }) {
 
         </div>
         <div className="wrap-box">
-          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && (
+          {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.garages && (
             <div className="box-icon">
               <div className="icons">
                 <i className="icon-Garage-1" />
               </div>
               <div className="content">
                 <div className="text-4 text-color-default">{tDetail('garages')}</div>
-                <div className="text-1 text-color-heading">{property?.garages ? tDetail('yes') : tDetail('no')}</div>
+                <div className="text-1 text-color-heading">{property.garageSize ? `${property.garageSize} ${getSizeUnitLabel(property?.sizeUnit)}` : tDetail('yes')}</div>
               </div>
             </div>
           )}
