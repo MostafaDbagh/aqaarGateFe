@@ -4,6 +4,20 @@ const withNextIntl = createNextIntlPlugin('./i18n.js');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Fix vendor-chunks resolution (prevents MODULE_NOT_FOUND for bundled server deps)
+    // Note: next-intl must NOT be externalized - it needs to be bundled so webpack
+    // can resolve its "next/navigation" import correctly (Node ESM fails on that)
+    serverExternalPackages: [
+      '@formatjs/intl-messageformat',
+      '@formatjs/intl-localematcher',
+      'mime-db',
+      'mime-types',
+      'form-data',
+      'axios',
+      'photoswipe',
+    ],
+    // Transpile next-intl so its imports (e.g. next/navigation) resolve correctly
+    transpilePackages: ['next-intl'],
     eslint: {
         // Disable ESLint during builds to avoid circular structure warnings
         ignoreDuringBuilds: true,

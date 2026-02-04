@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { listingAPI } from '@/apis/listing';
 import DropdownSelect from '../common/DropdownSelect';
 import { amenitiesList } from '@/constants/amenities';
@@ -7,6 +8,7 @@ import { keywordTags } from '@/constants/keywordTags';
 import { normalizeRentType } from '@/constants/rentTypes';
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
+import { validateFileUpload } from '@/utils/security';
 import styles from './EditPropertyModal.module.css';
 
 const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
@@ -59,6 +61,11 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
   const isAdmin = user?.role === 'admin';
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // Images state: existing from property, to delete, and new to add
+  const [existingImages, setExistingImages] = useState([]);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [newImagePreviews, setNewImagePreviews] = useState([]);
 
   // Suggested keyword tags
 
@@ -131,6 +138,13 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
       };
       setOriginalContactInfo(originalContact);
       
+      // Initialize images state
+      const imgs = property.images || [];
+      setExistingImages(Array.isArray(imgs) ? imgs : []);
+      setImagesToDelete([]);
+      setNewImages([]);
+      setNewImagePreviews([]);
+      
       setFormData({
         propertyKeyword: property.propertyKeyword || '',
         address: property.address || '',
@@ -202,6 +216,54 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
     }
   };
 
+  // Get image URL from object or string
+  const getImageUrl = (img) => {
+    if (!img) return '';
+    if (typeof img === 'string') return img;
+    return img?.url || img?.src || '';
+  };
+
+  // Delete existing image (mark for removal on save) - use publicId or url as identifier
+  const handleDeleteExistingImage = (img) => {
+    const id = img?.publicId || getImageUrl(img);
+    if (!id) return;
+    setImagesToDelete(prev => [...prev, id]);
+  };
+
+  // Add new images
+  const handleAddImages = (e) => {
+    const files = Array.from(e.target.files || []);
+    const totalCount = existingImages.length - imagesToDelete.length + newImages.length + files.length;
+    if (totalCount > 15) {
+      setError(t('maxImages') || 'Maximum 15 images allowed');
+      return;
+    }
+    const validFiles = [];
+    for (const file of files) {
+      const validation = validateFileUpload(file, {
+        maxSize: 5 * 1024 * 1024,
+        allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+        maxFiles: 15
+      });
+      if (validation.valid) validFiles.push(file);
+    }
+    setNewImages(prev => [...prev, ...validFiles]);
+    setNewImagePreviews(prev => [...prev, ...validFiles.map(f => URL.createObjectURL(f))]);
+    setError('');
+    e.target.value = '';
+  };
+
+  // Remove new image (before upload)
+  const handleRemoveNewImage = (index) => {
+    setNewImages(prev => prev.filter((_, i) => i !== index));
+    setNewImagePreviews(prev => {
+      const next = [...prev];
+      URL.revokeObjectURL(next[index]);
+      next.splice(index, 1);
+      return next;
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -269,8 +331,16 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         updateData.rentType = formData.rentType;
       }
       
-      // Only include approvalStatus if user is admin (check user role from localStorage or context)
-      // For now, we'll let backend handle this - it will preserve existing approvalStatus for non-admin users
+      // Update images first if there are changes
+      const hasImageChanges = imagesToDelete.length > 0 || newImages.length > 0;
+      if (hasImageChanges) {
+        const imageFormData = new FormData();
+        imageFormData.append('imagesToDelete', JSON.stringify(imagesToDelete));
+        newImages.forEach((file) => {
+          imageFormData.append('images', file);
+        });
+        await listingAPI.updateListingImages(property._id, imageFormData);
+      }
 
       await listingAPI.updateListing(property._id, updateData);
       
@@ -329,6 +399,78 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                 {error}
               </div>
             )}
+
+            {/* Images Section - Manage existing and add new */}
+            <div className={styles.imagesSection} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+              <h3 className={styles.imagesSectionTitle}>{t('manageImages')}</h3>
+              <div className={styles.imagesGrid}>
+                {existingImages
+                  .filter(img => {
+                    const id = img?.publicId || getImageUrl(img);
+                    return id && !imagesToDelete.includes(id);
+                  })
+                  .map((img, idx) => {
+                    const url = getImageUrl(img);
+                    if (!url) return null;
+                    return (
+                      <div key={img?.publicId || url || `img-${idx}`} className={styles.imageItem}>
+                        <Image
+                          src={url}
+                          alt={`Property ${idx + 1}`}
+                          width={120}
+                          height={90}
+                          className={styles.imageThumb}
+                          unoptimized={url.startsWith('http') && !url.includes('res.cloudinary.com')}
+                        />
+                        <button
+                          type="button"
+                          className={styles.imageDeleteBtn}
+                          onClick={() => handleDeleteExistingImage(img)}
+                          title={t('deleteImage')}
+                          aria-label={t('deleteImage')}
+                        >
+                          <i className="icon-trashcan1" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                {newImagePreviews.map((preview, idx) => (
+                  <div key={`new-${idx}`} className={styles.imageItem}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={preview}
+                      alt={`New ${idx + 1}`}
+                      width={120}
+                      height={90}
+                      className={styles.imageThumb}
+                    />
+                    <button
+                      type="button"
+                      className={styles.imageDeleteBtn}
+                      onClick={() => handleRemoveNewImage(idx)}
+                      title={t('deleteImage')}
+                      aria-label={t('deleteImage')}
+                    >
+                      <i className="icon-trashcan1" />
+                    </button>
+                  </div>
+                ))}
+                {(existingImages.length - imagesToDelete.length + newImages.length) < 15 && (
+                  <label className={styles.imageAddBtn}>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      multiple
+                      onChange={handleAddImages}
+                      style={{ display: 'none' }}
+                    />
+                    <span className={styles.imageAddIcon}>+</span>
+                    <span className={styles.imageAddText}>{t('addMoreImages')}</span>
+                    <span className={styles.imageAddHint}>({t('upTo15Photos')})</span>
+                  </label>
+                )}
+              </div>
+            </div>
 
             <div className={styles.gridGap28} style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
             {/* Property Title */}

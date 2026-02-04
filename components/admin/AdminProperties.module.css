@@ -182,6 +182,16 @@
   background-color: #2563eb;
 }
 
+.btnEdit {
+  background-color: #f59e0b;
+  color: white;
+  margin-right: 8px;
+}
+
+.btnEdit:hover {
+  background-color: #d97706;
+}
+
 .btnApprove {
   background-color: #10b981;
   color: white;

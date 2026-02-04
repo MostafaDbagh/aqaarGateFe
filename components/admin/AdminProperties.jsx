@@ -5,6 +5,7 @@ import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
 import ConfirmationModal from "../modals/ConfirmationModal";
+import EditPropertyModal from "../modals/EditPropertyModal";
 import styles from "./AdminProperties.module.css";
 import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 import { UserIcon } from "@/components/icons";
@@ -33,6 +34,8 @@ export default function AdminProperties() {
     propertyId: null,
     loading: false
   });
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   useEffect(() => {
     fetchProperties();
@@ -124,6 +127,20 @@ export default function AdminProperties() {
   const handleViewDetails = (propertyId) => {
     setSelectedPropertyId(propertyId);
     setIsDetailsModalOpen(true);
+  };
+
+  const handleEditProperty = (property) => {
+    setSelectedProperty(property);
+    setEditModalOpen(true);
+  };
+
+  const handleEditSuccess = () => {
+    setEditModalOpen(false);
+    setSelectedProperty(null);
+    fetchProperties();
+    queryClient.invalidateQueries(['my-listings']);
+    queryClient.invalidateQueries(['listings']);
+    queryClient.invalidateQueries(['listing']);
   };
 
   const handleCloseDetailsModal = () => {
@@ -271,6 +288,13 @@ export default function AdminProperties() {
                       >
                         View Details
                       </button>
+                      <button
+                        className={`${styles.btn} ${styles.btnEdit}`}
+                        onClick={() => handleEditProperty(property)}
+                        title="Edit property"
+                      >
+                        Edit
+                      </button>
                       {property.approvalStatus === "pending" && (
                         <>
                           <button
@@ -331,6 +355,16 @@ export default function AdminProperties() {
             Next
           </button>
         </div>
+      )}
+
+      {/* Edit Property Modal */}
+      {editModalOpen && selectedProperty && (
+        <EditPropertyModal
+          isOpen={editModalOpen}
+          onClose={() => { setEditModalOpen(false); setSelectedProperty(null); }}
+          property={selectedProperty}
+          onSuccess={handleEditSuccess}
+        />
       )}
 
       {/* Property Details Modal */}

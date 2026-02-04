@@ -7,6 +7,10 @@ import { useTranslations, useLocale } from 'next-intl';
 import styles from "./PropertyDetailsModal.module.css";
 import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
+// Ultimate fallback when property-1.jpg also 404s - prevents infinite onError loop
+const FALLBACK_IMAGE = '/images/section/property-1.jpg';
+const ULTIMATE_FALLBACK = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+
 export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onApprove, onReject, onDelete }) {
   const tCommon = useTranslations('common');
   const locale = useLocale();
@@ -146,14 +150,14 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
 
     // Fallback to default image if no images found
     if (uniqueUrls.length === 0) {
-      uniqueUrls.push('/images/section/property-1.jpg');
+      uniqueUrls.push(FALLBACK_IMAGE);
     }
 
     return uniqueUrls;
   };
 
   const images = extractImageUrls(property);
-  const mainImage = images[selectedImageIndex] || images[0] || '/images/section/property-1.jpg';
+  const mainImage = images[selectedImageIndex] || images[0] || FALLBACK_IMAGE;
   
   // Debug logging
   useEffect(() => {
@@ -202,7 +206,8 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                         className={styles.mainImage}
                         unoptimized
                         onError={(e) => {
-                          e.target.src = '/images/section/property-1.jpg';
+                          const img = e.target;
+                          img.src = (img.src && img.src.includes('property-1')) ? ULTIMATE_FALLBACK : FALLBACK_IMAGE;
                         }}
                       />
                       {images.length > 1 && (
@@ -243,7 +248,8 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                               className={styles.thumbnailImage}
                               unoptimized
                               onError={(e) => {
-                                e.target.src = '/images/section/property-1.jpg';
+                                const img = e.target;
+                                img.src = (img.src && img.src.includes('property-1')) ? ULTIMATE_FALLBACK : FALLBACK_IMAGE;
                               }}
                             />
                           </div>
@@ -255,12 +261,13 @@ export default function PropertyDetailsModal({ isOpen, onClose, propertyId, onAp
                   <div className={styles.noImagesContainer}>
                     <p className={styles.noImagesText}>No images available for this property</p>
                     <Image
-                      src="/images/section/property-1.jpg"
+                      src={FALLBACK_IMAGE}
                       alt="No image available"
                       width={800}
                       height={500}
                       className={styles.mainImage}
                       unoptimized
+                      onError={(e) => { e.target.src = ULTIMATE_FALLBACK; }}
                     />
                   </div>
                 )}

@@ -130,6 +130,21 @@ export const listingAPI = {
     }
   },
 
+  // Update listing images (add new and/or delete existing)
+  updateListingImages: async (id, formData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await Axios.post(`/listing/update/${id}/images`, formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   // Delete listing (soft delete with reason)
   deleteListing: async (id, deletedReason = '') => {
     try {
