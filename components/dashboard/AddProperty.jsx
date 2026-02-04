@@ -353,8 +353,8 @@ export default function AddProperty({ isAdminMode = false }) {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     
-    if (files.length + images.length > 10) {
-      setToast({ type: "error", message: "Maximum 10 images allowed" });
+    if (files.length + images.length > 15) {
+      setToast({ type: "error", message: "Maximum 15 images allowed" });
       return;
     }
 
@@ -364,7 +364,7 @@ export default function AddProperty({ isAdminMode = false }) {
       const validation = validateFileUpload(file, {
         maxSize: 5 * 1024 * 1024, // 5MB
         allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
-        maxFiles: 10
+        maxFiles: 15
       });
       
       if (!validation.valid) {
