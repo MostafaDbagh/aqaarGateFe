@@ -90,77 +90,83 @@ const nextConfig = {
     poweredByHeader: false,
     output: 'standalone',
     async redirects() {
+      // Use /en/ prefix for final destinations to avoid redirect chains (next-intl adds locale)
+      const to = (path) => (path.startsWith('/') ? path : `/${path}`);
       return [
-        // Blog redirects
-        { source: '/blog-list', destination: '/blog-grid', permanent: true },
-        { source: '/blog', destination: '/blog-grid', permanent: true },
-        { source: '/blogs', destination: '/blog-grid', permanent: true },
-        
+        // Legacy/non-existent paths (fix 404s) - redirect to relevant pages
+        { source: '/agency-grid', destination: to('en/agents'), permanent: true },
+        { source: '/agency-list', destination: to('en/agents'), permanent: true },
+        { source: '/property-filter-popup', destination: to('en/property-list'), permanent: true },
+        { source: '/property-details', destination: to('en/property-list'), permanent: true },
+        { source: '/blog-detail', destination: to('en/blog-grid'), permanent: true },
+        { source: '/contacts', destination: to('en/contact'), permanent: true },
+        { source: '/rental-services', destination: to('en/property-rental-service'), permanent: true },
+
+        // Blog redirects (direct to locale to avoid chains)
+        { source: '/blog-list', destination: to('en/blog-grid'), permanent: true },
+        { source: '/blog', destination: to('en/blog-grid'), permanent: true },
+        { source: '/blogs', destination: to('en/blog-grid'), permanent: true },
+
         // Property listing redirects
-        { source: '/properties', destination: '/property-list', permanent: true },
-        { source: '/listings', destination: '/property-list', permanent: true },
-        { source: '/listing', destination: '/property-list', permanent: true },
-        
-        // Property detail redirects
-        { source: '/property/:id', destination: '/property-detail/:id', permanent: true },
-        { source: '/properties/:id', destination: '/property-detail/:id', permanent: true },
-        { source: '/listing/:id', destination: '/property-detail/:id', permanent: true },
-        
+        { source: '/properties', destination: to('en/property-list'), permanent: true },
+        { source: '/listings', destination: to('en/property-list'), permanent: true },
+        { source: '/listing', destination: to('en/property-list'), permanent: true },
+
+        // Property detail redirects (direct to locale)
+        { source: '/property/:id', destination: to('en/property-detail/:id'), permanent: true },
+        { source: '/properties/:id', destination: to('en/property-detail/:id'), permanent: true },
+        { source: '/listing/:id', destination: to('en/property-detail/:id'), permanent: true },
+
         // Agent redirects
-        { source: '/agent/:id', destination: '/agents-details/:id', permanent: true },
-        { source: '/agent-details/:id', destination: '/agents-details/:id', permanent: true },
-        
+        { source: '/agent/:id', destination: to('en/agents-details/:id'), permanent: true },
+        { source: '/agent-details/:id', destination: to('en/agents-details/:id'), permanent: true },
+
         // About redirects
-        { source: '/about', destination: '/about-us', permanent: true },
-        
+        { source: '/about', destination: to('en/about-us'), permanent: true },
+
         // Contact redirects
-        { source: '/contact-us', destination: '/contact', permanent: true },
-        { source: '/contacts', destination: '/contact', permanent: true },
-        
+        { source: '/contact-us', destination: to('en/contact'), permanent: true },
+
         // Terms redirects
-        { source: '/terms', destination: '/terms-and-conditions', permanent: true },
-        { source: '/terms-of-use', destination: '/terms-and-conditions', permanent: true },
-        
+        { source: '/terms', destination: to('en/terms-and-conditions'), permanent: true },
+        { source: '/terms-of-use', destination: to('en/terms-and-conditions'), permanent: true },
+
         // Privacy redirects
-        { source: '/privacy', destination: '/privacy-policy', permanent: true },
-        
+        { source: '/privacy', destination: to('en/privacy-policy'), permanent: true },
+
         // FAQ redirects
-        { source: '/faqs', destination: '/faq', permanent: true },
-        { source: '/frequently-asked-questions', destination: '/faq', permanent: true },
-        
+        { source: '/faqs', destination: to('en/faq'), permanent: true },
+        { source: '/frequently-asked-questions', destination: to('en/faq'), permanent: true },
+
         // Career redirects
-        { source: '/careers', destination: '/career', permanent: true },
-        { source: '/jobs', destination: '/career', permanent: true },
-        
+        { source: '/careers', destination: to('en/career'), permanent: true },
+        { source: '/jobs', destination: to('en/career'), permanent: true },
+
         // Rental service redirects
-        { source: '/rental-service', destination: '/property-rental-service', permanent: true },
-        { source: '/rental-services', destination: '/property-rental-service', permanent: true },
-        { source: '/rentals', destination: '/property-rental-service', permanent: true },
-        
-        // Dashboard redirects
-        { source: '/dashboard/my-properties', destination: '/my-property', permanent: true },
-        { source: '/dashboard/favorites', destination: '/my-favorites', permanent: true },
-        { source: '/dashboard/messages', destination: '/messages', permanent: true },
-        { source: '/dashboard/profile', destination: '/my-profile', permanent: true },
-        { source: '/dashboard/reviews', destination: '/review', permanent: true },
-        { source: '/dashboard/package', destination: '/my-package', permanent: true },
-        { source: '/dashboard/add-property', destination: '/add-property', permanent: true },
-        
+        { source: '/rental-service', destination: to('en/property-rental-service'), permanent: true },
+        { source: '/rentals', destination: to('en/property-rental-service'), permanent: true },
+
+        // Dashboard redirects (private - keep as-is for auth flow)
+        { source: '/dashboard/my-properties', destination: to('en/my-property'), permanent: true },
+        { source: '/dashboard/favorites', destination: to('en/my-favorites'), permanent: true },
+        { source: '/dashboard/messages', destination: to('en/messages'), permanent: true },
+        { source: '/dashboard/profile', destination: to('en/my-profile'), permanent: true },
+        { source: '/dashboard/reviews', destination: to('en/review'), permanent: true },
+        { source: '/dashboard/package', destination: to('en/my-package'), permanent: true },
+        { source: '/dashboard/add-property', destination: to('en/add-property'), permanent: true },
+
         // Admin redirects
-        { source: '/admin/dashboard', destination: '/admin/overview', permanent: true },
-        { source: '/admin', destination: '/admin/overview', permanent: true },
-        
+        { source: '/admin/dashboard', destination: to('en/admin/overview'), permanent: true },
+        { source: '/admin', destination: to('en/admin/overview'), permanent: true },
+
         // Invalid locale codes - redirect to Arabic locale
-        { source: '/ar-bh', destination: '/ar', permanent: true },
-        { source: '/ar-ae', destination: '/ar', permanent: true },
-        { source: '/ar-kw', destination: '/ar', permanent: true },
-        
+        { source: '/ar-bh', destination: to('ar'), permanent: true },
+        { source: '/ar-ae', destination: to('ar'), permanent: true },
+        { source: '/ar-kw', destination: to('ar'), permanent: true },
+
         // Non-existent pages - redirect to home
-        { source: '/compare', destination: '/', permanent: true },
-        { source: '/home-loan-process', destination: '/', permanent: true },
-        
-        // 404 page redirect - removed to allow 404 page to work properly
-        // { source: '/404', destination: '/', permanent: false },
+        { source: '/compare', destination: to('en'), permanent: true },
+        { source: '/home-loan-process', destination: to('en'), permanent: true },
       ];
     },
     async headers() {

@@ -49,21 +49,23 @@ export default function robots() {
     '/ar/notifications/',
   ];
 
+  // Explicit Allow for key public paths (prevents accidental blocking; most specific rule wins)
+  const allowPaths = ['/en/', '/ar/', '/en', '/ar', '/'];
   return {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: allowPaths,
         disallow: disallowPaths,
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: allowPaths,
         disallow: disallowPaths,
       },
       {
         userAgent: 'Googlebot-Image',
-        allow: '/',
+        allow: allowPaths,
         disallow: disallowPaths,
       },
     ],
