@@ -140,6 +140,13 @@ export default function StructuredData() {
           }
         }
       ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
     }
   };
 
@@ -158,13 +165,6 @@ export default function StructuredData() {
         "urlTemplate": `${baseUrl}/property-list?search={search_term_string}`
       },
       "query-input": "required name=search_term_string"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "150",
-      "bestRating": "5",
-      "worstRating": "1"
     }
   };
 
