@@ -581,8 +581,10 @@
     "noSyrianCitiesAvailable": "No Syrian Cities Available",
     "noSyrianCitiesAvailableText": "There are currently no properties available to show Syrian cities.",
     "noPropertiesAvailable": "No properties available at the moment",
+    "viewAllProperties": "View All Properties",
     "holidayHomesListings": "Holiday Homes Listings",
-    "holidayHomesListingsSubtitle": "Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties."
+    "holidayHomesListingsSubtitle": "Discover your perfect holiday retreat from our curated collection of vacation homes and rental properties.",
+    "viewAllHolidayHomes": "View All Holiday Homes"
   },
   "seoContent": {
     "mainTitle": "AqaarGate - #1 Real Estate Platform in Syria & Lattakia | Buy, Rent & Sell Properties",

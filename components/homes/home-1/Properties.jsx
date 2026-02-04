@@ -695,6 +695,27 @@ export default function Properties({ listings, isLoading, isError }) {
     </div>
   ))}
 </div>
+            <div className="text-center" style={{ marginTop: '32px' }}>
+              <Link
+                href={`/${locale}/property-list`}
+                className="tf-button style-1"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 24px',
+                  backgroundColor: '#F97316',
+                  color: 'white',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'background-color 0.2s ease'
+                }}
+              >
+                {tHomeSections('viewAllProperties')}
+                <i className="icon-arrow-right-2" style={{ fontSize: '14px' }} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

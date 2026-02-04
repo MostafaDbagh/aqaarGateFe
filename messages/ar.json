@@ -576,8 +576,10 @@
     "noSyrianCitiesAvailable": "لا توجد مدن سورية متاحة",
     "noSyrianCitiesAvailableText": "لا توجد حالياً عقارات متاحة لعرض المدن السورية.",
     "noPropertiesAvailable": "لا توجد عقارات متاحة حالياً",
+    "viewAllProperties": "عرض جميع العقارات",
     "holidayHomesListings": "قوائم بيوت العطلات",
-    "holidayHomesListingsSubtitle": "اكتشف ملاذك المثالي للعطلات من مجموعتنا المختارة من بيوت العطلات والعقارات للإيجار."
+    "holidayHomesListingsSubtitle": "اكتشف ملاذك المثالي للعطلات من مجموعتنا المختارة من بيوت العطلات والعقارات للإيجار.",
+    "viewAllHolidayHomes": "عرض جميع بيوت العطلات"
   },
   "seoContent": {
     "mainTitle": "عقار جيت AqaarGate - منصة العقارات #1 في سوريا واللاذقية | شراء، بيع وإيجار العقارات",
