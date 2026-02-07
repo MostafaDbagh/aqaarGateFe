@@ -139,18 +139,12 @@ export default function Hero({
   const exampleQueries = isRTL ? [
     "شقة غرفتين في حلب",
     "فيلا للايجار في دمشق",
-    "مكتب مع موقف سيارات في اللاذقية",
-    "شقة مفروشة قرب الجامعة",
-    "منزل مع حديقة للإيجار",
     "شقة بغرفة نوم واحدة في دمشق",
     "فيلا للبيع في اللاذقية"
   ] : [
     "apartment with 2 bedrooms in Aleppo",
     "villa for rent in Damascus",
-    "office with parking in Latakia",
-    "furnished apartment near university",
-    "house with garden for rent",
-    "1 bedroom apartment in Damascus",
+    "one bedroom apartment in Damascus",
     "villa for sale in Latakia"
   ];
 
