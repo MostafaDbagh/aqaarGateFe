@@ -63,13 +63,8 @@ export default function DashboardNav({ color = "" }) {
     e.preventDefault();
     e.stopPropagation();
     
-    // If not logged in, open login modal instead of dropdown
-    if (!isLoggedIn) {
-      showLoginModal();
-    } else {
-      // If logged in, toggle dropdown
-      setIsDDOpen((pre) => !pre);
-    }
+    // Toggle dropdown (for both guest and logged-in)
+    setIsDDOpen((pre) => !pre);
   };
 
   const handleLogout = async (e) => {
@@ -89,7 +84,7 @@ export default function DashboardNav({ color = "" }) {
   return (
     <div
       ref={dropdownRef}
-      className={`box-user tf-action-btns dashboard-nav-user ${isDDOpen && isLoggedIn ? "active" : ""} `}
+      className={`box-user tf-action-btns dashboard-nav-user ${isDDOpen ? "active" : ""} `}
       onClick={handleUserIconClick}
     >
       <div className="user dashboard-nav-user-inner" 
@@ -101,7 +96,7 @@ export default function DashboardNav({ color = "" }) {
         {isLoggedIn && <i className="icon-CaretDown" />}
       </div>
       <div 
-        className={`menu-user ${isLoggedIn ? 'dashboard-nav-menu' : 'dashboard-nav-menu-hidden'}`}
+        className={`menu-user ${isDDOpen ? 'dashboard-nav-menu' : 'dashboard-nav-menu-hidden'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* ADMIN MENU ITEMS */}
@@ -410,33 +405,42 @@ export default function DashboardNav({ color = "" }) {
           </>
         )}
 
-        {/* Login/Register - Only for non-logged in users */}
+        {/* Login/Register - Only for non-logged in users (dropdown below icon, no overlay) */}
         {!isLoggedIn && (
-          <div 
-            className="dropdown-item"
-            style={{
-              padding: '14px 12px',
-              border: '1px solid #d1d5db'
-            }}
-          >
-            <UserAvatarIcon stroke="#A8ABAE" />
-            <div className="d-flex wrap-login" style={{ gap: '4px' }}>
-              <a 
-                href="#" 
-                onClick={(e) => { e.preventDefault(); showLoginModal(); }}
-                style={{ color: 'var(--Primary)', textDecoration: 'none', fontWeight: '500' }}
-              >
-                {t('login')}
-              </a>
-              <span style={{ color: 'var(--Note)' }}>/</span>
-              <a 
-                href="#" 
-                onClick={(e) => { e.preventDefault(); showRegisterModal(); }}
-                style={{ color: 'var(--Primary)', textDecoration: 'none', fontWeight: '500' }}
+          <div className="auth-choice-dropdown" style={{ padding: 0, border: 'none' }}>
+            <button
+              type="button"
+              className="dropdown-item auth-choice-login-btn"
+              onClick={(e) => { e.preventDefault(); setIsDDOpen(false); showLoginModal(); }}
+              style={{
+                width: '100%',
+                padding: '14px 24px',
+                background: '#1f2937',
+                color: 'white',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '16px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                marginBottom: '12px',
+                textAlign: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              {t('login')}
+            </button>
+            <p style={{ textAlign: 'center', fontSize: '15px', color: '#4b5563', margin: '0 0 8px' }}>
+              {t('dontHaveAccount')}{' '}
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); setIsDDOpen(false); showRegisterModal(); }}
+                style={{ color: '#F97316', textDecoration: 'underline', fontWeight: 500 }}
               >
                 {t('register')}
               </a>
-            </div>
+            </p>
           </div>
         )}
 

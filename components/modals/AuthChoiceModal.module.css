@@ -1,0 +1,97 @@
+/* Auth Choice Modal - Login or Register */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999999;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 420px;
+  width: 100%;
+  max-height: 98vh;
+  overflow-y: auto;
+  padding: 24px 20px 20px;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+[dir="rtl"] .closeButton {
+  right: auto;
+  left: 16px;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 14px 24px;
+  background: #1f2937;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-bottom: 20px;
+
+
+}
+
+.loginButton:hover {
+  opacity: 0.9;
+}
+
+.prompt {
+  text-align: center;
+  font-size: 15px;
+  color: #4b5563;
+  margin: 0;
+}
+
+.registerLink {
+  color: #F97316;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.registerLink:hover {
+  color: #ea580c;
+}

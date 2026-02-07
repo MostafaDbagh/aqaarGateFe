@@ -43,6 +43,13 @@
   padding: 10px 20px;
 }
 
+.auth-choice-login-btn {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
 /* Favorite Button Styles */
 .favorite-button {
   position: relative;

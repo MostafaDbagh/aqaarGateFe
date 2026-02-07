@@ -58,7 +58,7 @@
         @include mixin.flex(center, space-between);
         position: relative;
         z-index: 999;
-        margin-right: 16px;
+        margin-right: 32px;
         max-height: 80px !important;
         padding-left: 32px !important;
     }
@@ -458,7 +458,7 @@
     background-color: var(--White);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     top: calc(100% + 25px);
-    left: 0;
+    left: -100px;
     border: none;
     opacity: 0;
     visibility: hidden;
