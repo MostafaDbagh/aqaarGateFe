@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useAuthState } from "@/store/hooks/useAuth";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
@@ -24,6 +24,8 @@ export default function DashboardNav({ color = "" }) {
   const dropdownRef = useRef(null);
   const t = useTranslations('dashboardNav');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
   
   // Use Redux for auth state
   const { 
@@ -431,7 +433,7 @@ export default function DashboardNav({ color = "" }) {
             >
               {t('login')}
             </button>
-            <p style={{ textAlign: 'center', fontSize: '15px', color: '#4b5563', margin: '0 0 8px' }}>
+            <p dir={isRTL ? 'rtl' : 'ltr'} style={{ textAlign: 'center', fontSize: '15px', color: '#4b5563', margin: '0 0 8px' }}>
               {t('dontHaveAccount')}{' '}
               <a
                 href="#"
