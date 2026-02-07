@@ -345,11 +345,19 @@
   },
   "hero": {
     "title": "Find your Dream Home in Syria",
-    "subtitle": "Discover the latest verified properties for sale and rent across Syria.",
+    "subtitle": "Discover the latest verified properties for sale and rent across Syria. By using ",
+    "subtitleHighlight": "NLP and AI",
+    "forAll": "All",
     "forSale": "For sale",
     "forRent": "For rent",
     "searchPlaceholder": "Search by Keywords tags like ...",
-    "searchButton": "Search"
+    "aiSearchPlaceholder": "Describe your dream property... (e.g., 2 bedroom apartment in Damascus)",
+    "exampleQueriesTitle": "Example queries:",
+    "searchButton": "Search",
+    "matchesFound": "{{count}} match your search",
+    "matchesFoundLabel": "match your search",
+    "noMatchesTryTraditional": "No listings match your search. Try traditional search with filters.",
+    "openSearchForm": "Open search form"
   },
   "navigation": {
     "home": "Home",
@@ -1114,6 +1122,9 @@
   },
   "searchForm": {
     "advancedSearch": "Advanced Search",
+    "searchButton": "Search",
+    "keyword": "Keywords",
+    "keywordPlaceholder": "Search by keywords, tags...",
     "propertyId": "Property ID",
     "propertyIdPlaceholder": "Enter Property ID",
     "city": "City",

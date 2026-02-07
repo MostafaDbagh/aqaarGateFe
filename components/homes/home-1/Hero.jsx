@@ -1,10 +1,10 @@
 "use client";
 import SearchForm from "@/components/common/SearchForm";
-import AISearchButton from "./AISearchButton";
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslations, useLocale } from 'next-intl';
-import { translateKeywordWithT } from "@/utils/translateKeywords";
-import { keywordTags } from "@/constants/keywordTags";
+import { useRouter } from "next/navigation";
+import { useAISearch } from "@/apis/hooks";
+import { useDebounce } from "@/hooks/useDebounce";
 import styles from "./Hero.module.css";
 
 export default function Hero({
@@ -13,396 +13,282 @@ export default function Hero({
   setTriggerSearch,
 }) {
   const t = useTranslations('hero');
-  const tCommon = useTranslations('common');
   const locale = useLocale();
-  const [activeItem, setActiveItem] = useState(t('forSale'));
-  const [showKeywordDropdown, setShowKeywordDropdown] = useState(false);
-  const [filteredKeywords, setFilteredKeywords] = useState([]);
-  const searchInputRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const router = useRouter();
   const isRTL = locale === 'ar';
+  const hasNavigatedRef = useRef(false);
 
-  // Get all property keywords - use centralized keywordTags from constants
-  const getAllKeywords = () => {
-    // Use keywordTags from constants to ensure consistency with AddProperty
-    return keywordTags;
-  };
+  const [aiQuery, setAiQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
+  const [previewDismissed, setPreviewDismissed] = useState(false);
+  const [searchFormOpen, setSearchFormOpen] = useState(false);
+  const status = searchParams?.status ?? '';
+  const debouncedAiQuery = useDebounce(aiQuery, 500);
+  const searchQuery = submittedQuery || debouncedAiQuery;
 
-  // Translate keyword using the utility function
-  const translateKeyword = (keyword) => {
-    return translateKeywordWithT(keyword, tCommon);
-  };
+  const {
+    data: aiSearchResponse,
+    isLoading: aiSearchLoading,
+    isError: aiSearchError,
+  } = useAISearch(searchQuery, {
+    page: 1,
+    limit: 12,
+    enabled: searchQuery.trim().length > 0,
+  });
 
-  // Helper function to split keywords using a safe delimiter
-  const splitKeywords = (keywordString) => {
-    if (!keywordString) return [];
-    // Use a delimiter that won't appear in keywords: |||
-    return keywordString
-      .split('|||')
-      .map(k => k.trim())
-      .filter(k => k);
-  };
+  const listings = aiSearchResponse?.data || [];
+  const extractedParams = aiSearchResponse?.extractedParams || {};
+  const pagination = aiSearchResponse?.pagination || {};
 
-  // Helper function to join keywords using a safe delimiter
-  const joinKeywords = (keywords) => {
-    return keywords.filter(k => k && k.trim()).join('|||');
-  };
-
-  // Filter keywords based on search value and exclude already added keywords
-  useEffect(() => {
-    const searchValue = searchParams?.keyword || '';
-    const allKeywords = getAllKeywords();
-    
-    // Get already added keywords using safe delimiter
-    const addedKeywords = splitKeywords(searchValue)
-      .map(k => k.toLowerCase());
-    
-    // Filter out already added keywords - this is the main filter
-    let filtered = allKeywords.filter(keyword => 
-      !addedKeywords.some(added => added === keyword.toLowerCase())
+  const hasMeaningfulParams = useCallback((params) => {
+    if (!params) return false;
+    const {
+      propertyType, bedrooms, bathrooms, sizeMin, sizeMax,
+      priceMin, priceMax, status, city, neighborhood,
+      furnished, garages, viewType, rentType, amenities = [],
+    } = params;
+    return !!(
+      propertyType || status || city || viewType || rentType ||
+      (furnished !== null && furnished !== undefined) ||
+      (garages !== null && garages !== undefined) ||
+      (Array.isArray(amenities) && amenities.length > 0) ||
+      (bedrooms !== null && bedrooms !== undefined) ||
+      (bathrooms !== null && bathrooms !== undefined) ||
+      (sizeMin !== null && sizeMin !== undefined) ||
+      (sizeMax !== null && sizeMax !== undefined) ||
+      (priceMin !== null && priceMin !== undefined) ||
+      (priceMax !== null && priceMax !== undefined) ||
+      (neighborhood && city)
     );
-    
-    // Don't filter by search value - we want to show all available keywords
-    // The searchValue here contains selected keywords, not a search query
-    
-    setFilteredKeywords(filtered);
-  }, [searchParams?.keyword, tCommon]);
-
-  // Handle click outside to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Check if click is inside the keywords container or dropdown
-      const isClickInContainer = searchInputRef.current?.contains(event.target);
-      const isClickInDropdown = dropdownRef.current?.contains(event.target);
-      const isClickInTag = event.target.closest(`.${styles.keywordTag}`);
-      const isClickInRemoveButton = event.target.closest(`.${styles.removeTag}`);
-      const isClickInKeywordItem = event.target.closest(`.${styles.keywordItem}`);
-      
-      // Close if click is outside both container and dropdown
-      if (!isClickInContainer && !isClickInDropdown && !isClickInTag && !isClickInRemoveButton && !isClickInKeywordItem) {
-        setShowKeywordDropdown(false);
-      }
-    };
-
-    if (showKeywordDropdown) {
-      // Use a small delay to allow onClick handlers to run first
-      const timeoutId = setTimeout(() => {
-        document.addEventListener('click', handleClickOutside, false);
-      }, 100);
-
-      return () => {
-        clearTimeout(timeoutId);
-        document.removeEventListener('click', handleClickOutside, false);
-      };
-    }
-  }, [showKeywordDropdown]);
-
-  // Handle keyword selection
-  const handleKeywordSelect = (keyword, event) => {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    if (!keyword || !keyword.trim()) return;
-    
-    const currentKeyword = searchParams?.keyword || '';
-    const keywords = splitKeywords(currentKeyword);
-    
-    // Check if keyword already exists (case-insensitive)
-    const keywordExists = keywords.some(k => 
-      k.toLowerCase().trim() === keyword.toLowerCase().trim()
-    );
-    
-    if (!keywordExists) {
-      // Add new keyword to the list
-      const newKeywords = joinKeywords([...keywords, keyword.trim()]);
-      
-      // Update search params with new keywords
-      if (onSearchChange) {
-        onSearchChange({ keyword: newKeywords });
-      }
-      
-      // Keep dropdown open after selecting a keyword (don't close it)
-    } else {
-      // If keyword already exists, keep dropdown open
-    }
-  };
-
-  const statusOptions = [
-    { label: t('forSale'), value: "sale" },
-    { label: t('forRent'), value: "rent" },
-  ];
-  const handleChange = (key, value) => {
-    if (onSearchChange) {
-      onSearchChange({ [key]: value });
-    }
-  };
-
-  // Memoized callback for AI search results
-  const handleAISearchResults = useCallback((results) => {
-    // Store AI search results and navigate to property list
-    if (results && results.listings) {
-      // Store in sessionStorage to pass to property list page
-      sessionStorage.setItem('aiSearchResults', JSON.stringify(results));
-      // Navigate to property list page
-      window.location.href = '/property-list';
-    }
   }, []);
+
+  const meaningful = hasMeaningfulParams(extractedParams) && !aiSearchError;
+  const effectiveListings = meaningful ? listings : [];
+
+  useEffect(() => {
+    if (submittedQuery.trim().length > 0 && !aiSearchLoading && !hasNavigatedRef.current) {
+      hasNavigatedRef.current = true;
+      const q = submittedQuery.trim();
+      setSubmittedQuery("");
+      setAiQuery("");
+      if (effectiveListings.length > 0) {
+        const results = {
+          listings: effectiveListings,
+          data: effectiveListings,
+          extractedParams,
+          pagination: meaningful ? pagination : { total: effectiveListings.length, page: 1, limit: 12, totalPages: 1, hasNextPage: false, hasPrevPage: false },
+          query: q,
+        };
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('aiSearchResults', JSON.stringify(results));
+        }
+        router.push('/property-list');
+      } else {
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('aiSearchResults');
+        }
+        const params = new URLSearchParams({ keyword: q });
+        if (status) params.set('status', status);
+        router.push(`/property-list?${params.toString()}`);
+      }
+    }
+  }, [submittedQuery, aiSearchLoading, effectiveListings, meaningful, extractedParams, pagination, router, status]);
+
+  useEffect(() => {
+    if (submittedQuery === "") hasNavigatedRef.current = false;
+  }, [submittedQuery]);
+
+  useEffect(() => {
+    if (aiQuery.length === 0) setPreviewDismissed(false);
+  }, [aiQuery]);
+
+  const handleAISubmit = (e) => {
+    e?.preventDefault();
+    const q = aiQuery.trim();
+    if (q) {
+      setSubmittedQuery(q);
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('aiSearchResults');
+    }
+    setTriggerSearch(true);
+  };
+
+  const handleStatusChange = (value) => {
+    onSearchChange?.({ status: value });
+    setTriggerSearch?.(true);
+  };
+
+  const handleExampleClick = (example) => {
+    setAiQuery(example);
+  };
+
+  const handleOpenSearchForm = () => {
+    setAiQuery("");
+    setPreviewDismissed(true);
+    document.querySelector('.searchFormToggler')?.click();
+  };
+
+  const handleFilterClick = () => {
+    setAiQuery("");
+  };
+
+  const exampleQueries = isRTL ? [
+    "شقة غرفتين في حلب",
+    "فيلا للايجار في دمشق",
+    "مكتب مع موقف سيارات في اللاذقية",
+    "شقة مفروشة قرب الجامعة",
+    "منزل مع حديقة للإيجار",
+    "شقة بغرفة نوم واحدة في دمشق",
+    "فيلا للبيع في اللاذقية"
+  ] : [
+    "apartment with 2 bedrooms in Aleppo",
+    "villa for rent in Damascus",
+    "office with parking in Latakia",
+    "furnished apartment near university",
+    "house with garden for rent",
+    "1 bedroom apartment in Damascus",
+    "villa for sale in Latakia"
+  ];
 
   return (
     <>
       <div className={`page-title home01 ${styles.heroBackground}`}>
       <div className="tf-container ">
-        <div className="row justify-center relative">
-          <div className="col-lg-8 ">
+        <div className={`row justify-center relative ${styles.heroRow}`}>
+          <div className={`col-lg-8 ${styles.heroCol}`}>
             <div className="content-inner">
               <div className="heading-title">
                 <h1 className="title">{t('title')}</h1>
                 <p className="h6 fw-4">
                   {t('subtitle')}
+                  <span className={styles.subtitleHighlight}>{t('subtitleHighlight')}</span>
+                  .
                 </p>
               </div>
               <div className="wg-filter">
-                <div className="form-title">
-                  <div className="tf-dropdown-sort " data-bs-toggle="dropdown">
-                    <div className="btn-select">
-                      <span className="text-sort-value">{activeItem}</span>
-                      <i className="icon-CaretDown" />
+                <div className={styles.statusButtons}>
+                  <button
+                    type="button"
+                    className={`${styles.statusBtn} ${(!status || status === 'all') ? styles.statusBtnActive : ''}`}
+                    onClick={() => handleStatusChange('')}
+                  >
+                    {t('forAll')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.statusBtn} ${status === 'rent' ? styles.statusBtnActive : ''}`}
+                    onClick={() => handleStatusChange('rent')}
+                  >
+                    {t('forRent')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.statusBtn} ${status === 'sale' ? styles.statusBtnActive : ''}`}
+                    onClick={() => handleStatusChange('sale')}
+                  >
+                    {t('forSale')}
+                  </button>
+                </div>
+                <div className={styles.chatInputWrapper}>
+                  <div className={styles.chatInputRow} dir={isRTL ? 'rtl' : 'ltr'}>
+                  <form onSubmit={handleAISubmit} className={styles.chatInputForm}>
+                    <input
+                      type="text"
+                      className={styles.chatInput}
+                      placeholder={t('aiSearchPlaceholder') || t('searchPlaceholder')}
+                      value={aiQuery}
+                      onChange={(e) => setAiQuery(e.target.value)}
+                      dir={isRTL ? 'rtl' : 'ltr'}
+                      disabled={submittedQuery && aiSearchLoading}
+                    />
+                    <div className={`box-item wrap-btn ${styles.chatInputActions}`}>
+                      <button
+                        type="submit"
+                        className={styles.sendBtn}
+                        disabled={!aiQuery.trim() || (submittedQuery && aiSearchLoading)}
+                        aria-label={isRTL ? "إرسال" : "Send"}
+                      >
+                        {(submittedQuery && aiSearchLoading) ? (
+                          <span className={styles.spinner} />
+                        ) : (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
+                      </button>
+                      <div className="btn-filter show-form searchFormToggler" title={isRTL ? 'فلتر' : 'Filter'} onClick={handleFilterClick}>
+                        <div className="icons">
+                          <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M21 4H14" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M10 4H3" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M21 12H12" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M8 12H3" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M21 20H16" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M12 20H3" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M14 2V6" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M8 10V14" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M16 18V22" stroke="#F1913D" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
-                    <div className="dropdown-menu">
-                      {statusOptions.map((item) => (
-                        <div
-                          key={item.value}
-                          className={`select-item ${
-                            activeItem === item.value ? "active" : ""
-                          }`}
-                          onClick={() => {
-                            setActiveItem(item.label);
-                            handleChange("status", item.value);
-                          }}
+                  </form>
+                </div>
+                {debouncedAiQuery.length > 0 && !submittedQuery && !previewDismissed && (
+                  <div className={styles.searchPreviewBox} dir={isRTL ? 'rtl' : 'ltr'}>
+                    {aiSearchLoading ? (
+                      <div className={styles.searchPreviewLoading}>
+                        <span className={styles.spinner} />
+                        <span>{isRTL ? 'جاري البحث...' : 'Searching...'}</span>
+                      </div>
+                    ) : !aiSearchError && (listings.length > 0 || (pagination?.total ?? 0) > 0) ? (
+                      <div className={styles.searchPreviewMatch}>
+                        <span className={styles.searchPreviewQuery}>{debouncedAiQuery}</span>
+                        <span className={styles.searchPreviewCountNum}>{pagination?.total ?? listings.length}</span>
+                        <span className={styles.searchPreviewCountLabel}>{t('matchesFoundLabel')}</span>
+                      </div>
+                    ) : (
+                      <div className={styles.searchPreviewNoMatch}>
+                        <span className={styles.searchPreviewNoMatchText}>{t('noMatchesTryTraditional')}</span>
+                        <button
+                          type="button"
+                          className={styles.searchPreviewOpenFormBtn}
+                          onClick={handleOpenSearchForm}
                         >
-                          <span className="text-value-item">{item.label}</span>
+                          {t('openSearchForm')}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+                </div>
+                {aiQuery.length === 0 && !searchFormOpen && (
+                  <div className={styles.exampleQueries}>
+                    <div className={styles.exampleQueriesTitle}>
+                      {t('exampleQueriesTitle')}
+                    </div>
+                    <div className={styles.exampleQueriesList}>
+                      {exampleQueries.map((example, index) => (
+                        <div
+                          key={index}
+                          className={styles.exampleQuery}
+                          onClick={() => handleExampleClick(example)}
+                        >
+                          {example}
                         </div>
                       ))}
                     </div>
                   </div>
-                  
-                  <div style={{ position: 'relative', width: '100%', flex: 1 }}>
-                    <form onSubmit={(e) => e.preventDefault()} style={{ width: '100%' }}>
-                      <fieldset style={{ width: '100%', margin: 0, padding: 0, border: 'none' }}>
-                        {/* Keywords Input Container - Only displays selected tags */}
-                        <div 
-                          ref={searchInputRef}
-                          className={styles.keywordsInputContainer}
-                          onClick={(e) => {
-                            // Don't close if clicking on tags or remove buttons
-                            if (e.target.closest(`.${styles.keywordTag}`) || 
-                                e.target.closest(`.${styles.removeTag}`)) {
-                              return;
-                            }
-                            
-                            e.preventDefault();
-                            e.stopPropagation();
-                            
-                            // Always open dropdown when clicking on container
-                            setShowKeywordDropdown(true);
-                          }}
-                        >
-                          {/* Display selected keywords as tags */}
-                          {(() => {
-                            const keywordString = searchParams?.keyword || '';
-                            const keywords = splitKeywords(keywordString);
-                            
-                            return keywords.map((keyword, index) => (
-                              <span key={`selected-${keyword}-${index}`} className={styles.keywordTag}>
-                                {translateKeyword(keyword)}
-                                <button
-                                  type="button"
-                                  className={styles.removeTag}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    const updatedKeywords = keywords
-                                      .filter(k => k !== keyword);
-                                    onSearchChange({ keyword: joinKeywords(updatedKeywords) });
-                                  }}
-                                  aria-label={locale === 'ar' ? 'إزالة' : 'Remove'}
-                                >
-                                  ×
-                                </button>
-                              </span>
-                            ));
-                          })()}
-                          
-                          {/* Placeholder when no keywords selected */}
-                          {(() => {
-                            const keywordString = searchParams?.keyword || '';
-                            const hasKeywords = splitKeywords(keywordString).length > 0;
-                            
-                            if (!hasKeywords) {
-                              return (
-                                <span className={styles.placeholderText}>
-                                  {t('searchPlaceholder')}
-                                </span>
-                              );
-                            }
-                            return null;
-                          })()}
-                        </div>
-                      </fieldset>
-                    </form>
-                    
-                    {/* Keywords Dropdown - Separate from input container */}
-                    {showKeywordDropdown && filteredKeywords.length > 0 && (
-                      <div 
-                        ref={dropdownRef}
-                        className={styles.keywordsDropdown}
-                        style={{ 
-                          direction: isRTL ? 'rtl' : 'ltr',
-                          textAlign: isRTL ? 'right' : 'left'
-                        }}
-                      >
-                        {/* Close button in top right */}
-                        <button
-                          type="button"
-                          className={styles.closeDropdownButton}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setShowKeywordDropdown(false);
-                          }}
-                          aria-label={locale === 'ar' ? 'إغلاق' : 'Close'}
-                          title={locale === 'ar' ? 'إغلاق' : 'Close'}
-                        >
-                          ×
-                        </button>
-                        <div className={styles.keywordsList}>
-                          {filteredKeywords.map((keyword, index) => {
-                            const keywordString = searchParams?.keyword || '';
-                            const selectedKeywords = splitKeywords(keywordString)
-                              .map(k => k.toLowerCase());
-                            const isSelected = selectedKeywords.includes(keyword.toLowerCase());
-                            
-                            return (
-                              <button
-                                key={`available-${keyword}-${index}`}
-                                type="button"
-                                className={`${styles.keywordItem} ${isSelected ? styles.selected : ''}`}
-                                onMouseDown={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  handleKeywordSelect(keyword, e);
-                                }}
-                              >
-                                {translateKeyword(keyword)}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="box-item wrap-btn">
-                    <div className="btn-filter show-form searchFormToggler">
-                      <div className="icons">
-                        <svg width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true">
-                          <path
-                            d="M21 4H14"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M10 4H3"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M21 12H12"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M8 12H3"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M21 20H16"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M12 20H3"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M14 2V6"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M8 10V14"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M16 18V22"
-                            stroke="#F1913D"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                      <a
-                        href="#"
-                        className="tf-btn bg-color-primary pd-3"
-                        onClick={() => {
-                          // Clear AI search results when normal search is triggered
-                          if (typeof window !== 'undefined') {
-                            sessionStorage.removeItem('aiSearchResults');
-                          }
-                          setTriggerSearch(true);
-                        }}
-                      >
-                        {t('searchButton')} <i className="icon-MagnifyingGlass fw-6" />
-                      </a>
-                      <div className={styles.aiSearchWrap}>
-                        <AISearchButton onSearchResults={handleAISearchResults} />
-                      </div>
-                  </div>
-                </div>
+                )}
                 <SearchForm
                   searchParams={searchParams}
                   onSearchChange={onSearchChange}
+                  onSearch={handleSearchClick}
+                  onOpenChange={setSearchFormOpen}
                 />
               </div>
             </div>

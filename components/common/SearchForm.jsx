@@ -6,6 +6,8 @@ import DropdownSelect from "./DropdownSelect";
 import DropdownTagSelect from "./DropdownTagSelect";
 import { provinceOptions } from "@/constants/provinces";
 import { amenitiesList } from "@/constants/amenities";
+// import { keywordTags } from "@/constants/keywordTags";
+// import { translateKeyword } from "@/utils/translateKeywords";
 import logger from "@/utlis/logger";
 import styles from "./SearchForm.module.css";
 import "./SearchForm.css";
@@ -14,6 +16,8 @@ export default function SearchForm({
   parentClass = "wd-search-form",
   searchParams = {},
   onSearchChange,
+  onSearch,
+  onOpenChange,
 }) {
   const t = useTranslations('searchForm');
   const tCommon = useTranslations('common');
@@ -240,6 +244,8 @@ export default function SearchForm({
       event.preventDefault();
       event.stopPropagation();
       searchFormRef.current.classList.toggle("show");
+      const isOpen = searchFormRef.current.classList.contains("show");
+      onOpenChange?.(isOpen);
     };
 
     const handleClickOutside = (event) => {
@@ -249,6 +255,7 @@ export default function SearchForm({
           !searchFormToggler?.contains(event.target)) {
         logger.debug("Closing SearchForm - clicked outside");
         searchFormRef.current.classList.remove("show");
+        onOpenChange?.(false);
       }
     };
 
@@ -260,12 +267,12 @@ export default function SearchForm({
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      if (searchFormToggler) {
-        searchFormToggler.removeEventListener("click", handleToggle);
+if (searchFormToggler) {
+      searchFormToggler.removeEventListener("click", handleToggle);
       }
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [onOpenChange]);
 
   const handleChange = (key, value) => {
     if (onSearchChange) {
@@ -282,6 +289,33 @@ export default function SearchForm({
     }
     handleChange("amenities", Array.from(newAmenities));
   };
+
+  // Keywords multichoice - commented for now, will add later
+  // const selectedKeywords = useMemo(() => {
+  //   const kw = searchParams.keyword || "";
+  //   if (!kw.trim()) return [];
+  //   return kw.split(",").map((s) => s.trim()).filter((s) =>
+  //     keywordTags.some((kt) => kt.toLowerCase() === s.toLowerCase())
+  //   ).map((s) => {
+  //     const match = keywordTags.find((kt) => kt.toLowerCase() === s.toLowerCase());
+  //     return match || s;
+  //   });
+  // }, [searchParams.keyword]);
+
+  // const handleKeywordToggle = (tag) => {
+  //   const isSelected = selectedKeywords.some(
+  //     (s) => s.toLowerCase() === tag.toLowerCase()
+  //   );
+  //   let newKeywords;
+  //   if (isSelected) {
+  //     newKeywords = selectedKeywords.filter(
+  //       (s) => s.toLowerCase() !== tag.toLowerCase()
+  //     );
+  //   } else {
+  //     newKeywords = [...selectedKeywords, tag];
+  //   }
+  //   handleChange("keyword", newKeywords.join(", "));
+  // };
 
   const handleNumericInputChange = (key, value) => {
     if (value === "") {
@@ -312,10 +346,59 @@ export default function SearchForm({
         <div className="search-form-header mb-32">
           <h4 className="advanced-search-title">{t('advancedSearch')}</h4>
         </div>
-        
-        {/* Property Type - First Input */}
-        <div className="group-input mb-30 col-4">
-        <div className={`box-input ${styles.formRowItem}`}>
+
+        {/* Keyword Search - multichoice with input display - commented for now, will add later */}
+        {/* <div className={`group-input mb-30 ${styles.keywordSection}`}>
+          <div className={`box-input ${styles.formRowItem}`}>
+            <label className={`mb-2 ${styles.formLabel}`}>
+              {t('keyword')}
+            </label>
+            <div className={styles.keywordInputContainer}>
+              {selectedKeywords.length > 0 ? (
+                selectedKeywords.map((tag) => {
+                  const displayTag = locale === 'ar' ? translateKeyword(tag, 'ar') : tag;
+                  return (
+                    <span key={tag} className={styles.keywordChip}>
+                      {displayTag}
+                      <button
+                        type="button"
+                        className={styles.keywordChipRemove}
+                        onClick={() => handleKeywordToggle(tag)}
+                        aria-label={locale === 'ar' ? 'إزالة' : 'Remove'}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })
+              ) : (
+                <span className={styles.keywordPlaceholder}>{t('keywordPlaceholder')}</span>
+              )}
+            </div>
+            <div className={styles.keywordExampleTags}>
+              {keywordTags.map((tag) => {
+                const displayTag = locale === 'ar' ? translateKeyword(tag, 'ar') : tag;
+                const isSelected = selectedKeywords.some(
+                  (s) => s.toLowerCase() === tag.toLowerCase()
+                );
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    className={`${styles.keywordTag} ${isSelected ? styles.keywordTagSelected : ''}`}
+                    onClick={() => handleKeywordToggle(tag)}
+                  >
+                    {displayTag}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div> */}
+
+        {/* Property ID - separate row, half width */}
+        <div className="group-input mb-30">
+          <div className={`box-input ${styles.propertyIdHalfWidth}`}>
             <label className={`mb-2 ${styles.formLabel}`} htmlFor="propertyId">
               {t('propertyId')}
             </label>
@@ -328,7 +411,6 @@ export default function SearchForm({
               onChange={(e) => handleChange("propertyId", e.target.value)}
             />
           </div>
-   
         </div>
         
                 {/* Syria Cities and Property ID Row */}
@@ -550,6 +632,22 @@ export default function SearchForm({
           ))}
         </div>
       </div>
+
+      {onSearch && (
+        <div className={`mt-32 ${styles.searchSubmitWrap}`}>
+          <button
+            type="button"
+            className={styles.searchSubmitBtn}
+            onClick={() => {
+              onSearch();
+              searchFormRef.current?.classList.remove("show");
+            }}
+          >
+            <i className="icon-MagnifyingGlass fw-6" />
+            <span>{t('searchButton')}</span>
+          </button>
+        </div>
+      )}
     </div>
     </>
   );
