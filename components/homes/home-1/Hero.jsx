@@ -137,15 +137,17 @@ export default function Hero({
   };
 
   const exampleQueries = isRTL ? [
-    "شقة غرفتين في حلب",
-    "فيلا للايجار في دمشق",
-    "شقة بغرفة نوم واحدة في دمشق",
-    "فيلا للبيع في اللاذقية"
+
+
+    "شقة غرفتين في اللاذقية",
+    "فيلا للبيع في حمص",
+    "ارض للبيع في دمشق",
+    "  شقة  في حماة "
   ] : [
-    "apartment with 2 bedrooms in Aleppo",
-    "villa for rent in Damascus",
-    "one bedroom apartment in Damascus",
-    "villa for sale in Latakia"
+    "apartment with 2 bedrooms in latakia",
+    "land for sale in damascus",
+    "apartment in hama",
+    "villa for sale in homs"
   ];
 
   return (

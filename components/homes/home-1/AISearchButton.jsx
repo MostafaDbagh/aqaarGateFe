@@ -304,13 +304,11 @@ export default function AISearchButton({ onSearchResults }) {
   };
 
   const exampleQueries = isRTL ? [
-    "شقة غرفتين في حلب",
-    "فيلا للايجار في دمشق",
-    "مكتب مع موقف سيارات في اللاذقية"
+    "شقة غرفتين في اللاذقية",
+    "فيلا للبيع في حمص",
   ] : [
-    "apartment with 2 bedrooms in Aleppo",
-    "villa for rent in Damascus",
-    "office with parking in Latakia"
+    "apartment with 2 bedrooms in latakia",
+    "villa for sale in homs",
   ];
 
   if (!isOpen) {
