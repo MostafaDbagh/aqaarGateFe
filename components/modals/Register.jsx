@@ -6,7 +6,6 @@ import { useFileTranslations } from "@/hooks/useFileTranslations";
 import { UserIcon, EmailIcon, LockIcon, EyeIcon, EyeOffIcon } from "@/components/icons";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
-import { countryCodes, DEFAULT_COUNTRY_CODE } from "@/constants/countryCodes";
 import styles from "./Register.module.css";
 
 export default function Register({ isOpen, onClose }) {
@@ -25,10 +24,6 @@ export default function Register({ isOpen, onClose }) {
     password: "",
     confirmPassword: "",
     role: "user",
-    phone: "",
-    countryCode: DEFAULT_COUNTRY_CODE,
-    company: "",
-    job: "",
     agreeToTerms: false
   });
   const [fieldErrors, setFieldErrors] = useState({});
@@ -48,10 +43,6 @@ export default function Register({ isOpen, onClose }) {
       password: "",
       confirmPassword: "",
       role: "user",
-      phone: "",
-      countryCode: DEFAULT_COUNTRY_CODE,
-      company: "",
-      job: "",
       agreeToTerms: false
     });
     setFieldErrors({});
@@ -89,64 +80,12 @@ export default function Register({ isOpen, onClose }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    // If switching from agent to user, clear agent-specific fields
-    if (name === "role" && value === "user") {
-      setFormData(prev => ({
-        ...prev,
-        role: "user",
-        phone: "",
-        company: "",
-        job: "",
-        countryCode: DEFAULT_COUNTRY_CODE
-      }));
-      setFieldErrors(prev => ({
-        ...prev,
-        phone: "",
-        company: "",
-        job: ""
-      }));
-    } else if (name === "phone" && formData.role === "agent") {
-      // Prevent phone number from starting with 0
-      let phoneValue = value;
-      if (phoneValue && phoneValue.trim().startsWith('0')) {
-        phoneValue = phoneValue.replace(/^0+/, ''); // Remove leading zeros
-        setFieldErrors(prev => ({
-          ...prev,
-          phone: t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning"
-        }));
-      } else {
-        // Clear error if valid
-        setFieldErrors(prev => ({
-          ...prev,
-          phone: prev.phone === (t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning") ? "" : prev.phone
-        }));
-      }
-      setFormData(prev => ({
-        ...prev,
-        [name]: phoneValue
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      }));
-    }
-    
-    // Clear field error when user types (except for leading zero error)
-    if (name !== "phone" || formData.role !== "agent" || !value.trim().startsWith('0')) {
-      setFieldErrors(prev => ({
-        ...prev,
-        [name]: name === "phone" && formData.role === "agent" && value.trim().startsWith('0') 
-          ? prev[name] 
-          : ""
-      }));
-    }
-    
-    // Clear general error when user starts typing
-    if (error) {
-      setError('');
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    setFieldErrors(prev => ({ ...prev, [name]: "" }));
+    if (error) setError('');
   };
 
   const togglePasswordVisibility = () => {
@@ -180,38 +119,6 @@ export default function Register({ isOpen, onClose }) {
       case "confirmPassword":
         if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
           error = t('errors.passwordsNotMatch');
-        }
-        break;
-      case "phone":
-        if (formData.role === "agent") {
-          if (!formData.phone || formData.phone.trim() === "") {
-            error = t('errors.phoneRequired');
-          } else {
-            // Remove all non-digit characters for validation
-            const digitsOnly = formData.phone.replace(/\D/g, '');
-            // Check if phone starts with 0
-            if (digitsOnly.startsWith('0')) {
-              error = t('errors.phoneNoLeadingZero') || "Type your number without 0 in beginning";
-            } else if (digitsOnly.length < 9) {
-              error = t('errors.phoneMinLength') || "Phone number must be at least 9 digits";
-            } else if (digitsOnly.length > 15) {
-              error = t('errors.phoneMaxLength') || "Phone number must be at most 15 digits";
-            }
-          }
-        }
-        break;
-      case "company":
-        if (formData.role === "agent") {
-          if (!formData.company || formData.company.trim() === "") {
-            error = t('errors.companyRequired');
-          }
-        }
-        break;
-      case "job":
-        if (formData.role === "agent") {
-          if (!formData.job || formData.job.trim() === "") {
-            error = t('errors.jobRequired');
-          }
         }
         break;
     }
@@ -251,47 +158,15 @@ export default function Register({ isOpen, onClose }) {
     }
   };
 
-  // Check if phone number is valid (for agent role)
-  const isPhoneValid = () => {
-    if (formData.role !== "agent") {
-      return true; // Phone not required for regular users
-    }
-    if (!formData.phone || formData.phone.trim() === "") {
-      return false;
-    }
-    // Remove all non-digit characters for validation
-    const digitsOnly = formData.phone.replace(/\D/g, '');
-    // Check if phone starts with 0
-    if (digitsOnly.startsWith('0')) {
-      return false;
-    }
-    return digitsOnly.length >= 9 && digitsOnly.length <= 15;
-  };
-
-  const isFormValid = () => {
-    const baseValid = formData.username &&
-           formData.email &&
-           formData.password &&
-           formData.confirmPassword &&
-           formData.password === formData.confirmPassword &&
-           formData.password.length >= 6 &&
-           formData.agreeToTerms &&
-           Object.values(fieldErrors).every(error => !error);
-    
-    // If agent, also require phone, company, and job, and phone must be valid
-    if (formData.role === "agent") {
-      return baseValid &&
-             isPhoneValid() &&
-             formData.phone &&
-             formData.phone.trim() !== "" &&
-             formData.company &&
-             formData.company.trim() !== "" &&
-             formData.job &&
-             formData.job.trim() !== "";
-    }
-    
-    return baseValid;
-  };
+  const isFormValid = () =>
+    formData.username &&
+    formData.email &&
+    formData.password &&
+    formData.confirmPassword &&
+    formData.password === formData.confirmPassword &&
+    formData.password.length >= 6 &&
+    formData.agreeToTerms &&
+    Object.values(fieldErrors).every(err => !err);
 
   const handleSwitchToLogin = (e) => {
     e.preventDefault();
@@ -309,7 +184,7 @@ export default function Register({ isOpen, onClose }) {
     event.stopPropagation();
     closeModal();
     router.push(href);
-  }, [closeModal, hideAllModals, router]);
+  }, [closeModal, router]);
 
 
   const handleOverlayClick = (e) => {
@@ -390,115 +265,6 @@ export default function Register({ isOpen, onClose }) {
               )}
             </div>
             
-            <div className={styles.formGroup}>
-              <label htmlFor="role" className={styles.label}>{t('registerAs')}</label>
-              <select
-                className={styles.roleSelect}
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                required
-              >
-                <option value="user">{t('roleUser')}</option>
-                <option value="agent">{t('roleAgent')}</option>
-              </select>
-            </div>
-
-            {/* Agent-specific fields */}
-            {formData.role === "agent" && (
-              <>
-                <div className={styles.formGroup}>
-                  <label htmlFor="phone" className={styles.label}>
-                    {t('phoneNumber')} <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.phoneInputContainer}>
-                    <select
-                      id="countryCode"
-                      name="countryCode"
-                      value={formData.countryCode}
-                      onChange={handleChange}
-                      className={styles.countryCodeSelect}
-                    >
-                      {countryCodes.map((country, index) => (
-                        <option key={`${country.code}-${country.country}-${index}`} value={country.code}>
-                          {country.flag} {country.code}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      onBlur={() => validateField("phone")}
-                      placeholder={t('phonePlaceholder')}
-                      className={styles.phoneInput}
-                      dir={isRTL ? 'rtl' : 'ltr'}
-                      style={isRTL ? { textAlign: 'right' } : { textAlign: 'left' }}
-                      required
-                    />
-                  </div>
-                  {fieldErrors.phone && (
-                    <span className={styles.errorSpan}>
-                      {fieldErrors.phone}
-                    </span>
-                  )}
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="company" className={styles.label}>
-                    {t('companyName')} <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.inputWithIcon}>
-                    <UserIcon className={styles.inputIcon} />
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      onBlur={() => validateField("company")}
-                      placeholder={t('companyPlaceholder')}
-                      className={styles.formInput}
-                      required
-                    />
-                  </div>
-                  {fieldErrors.company && (
-                    <span className={styles.errorSpan}>
-                      {fieldErrors.company}
-                    </span>
-                  )}
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="job" className={styles.label}>
-                    {t('jobTitle')} <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.inputWithIcon}>
-                    <UserIcon className={styles.inputIcon} />
-                    <input
-                      type="text"
-                      id="job"
-                      name="job"
-                      value={formData.job}
-                      onChange={handleChange}
-                      onBlur={() => validateField("job")}
-                      placeholder={t('jobPlaceholder')}
-                      className={styles.formInput}
-                      required
-                    />
-                  </div>
-                  {fieldErrors.job && (
-                    <span className={styles.errorSpan}>
-                      {fieldErrors.job}
-                    </span>
-                  )}
-                </div>
-              </>
-            )}
-
             <div className={styles.formGroup}>
               <label htmlFor="pass2" className={styles.label}>{t('password')}</label>
               <div className={styles.inputWithIcon}>
