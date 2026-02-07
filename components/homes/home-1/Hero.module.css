@@ -1,3 +1,330 @@
+/* Subtitle highlight - NLP and AI with background */
+.subtitleHighlight {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+/* For Sale / For Rent Buttons - match reference image exactly */
+.statusButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 24px;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+.statusBtn {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 121px;
+  height: 50px;
+  background: #fff;
+  color: #2b2b2b;
+  padding: 0 13px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: visible;
+}
+
+.statusBtn::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 8.5px solid transparent;
+  border-right: 8.5px solid transparent;
+  border-top: 10px solid #F97316;
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.statusBtn:hover {
+  background: #f9fafb;
+}
+
+.statusBtnActive,
+.statusBtnActive:hover {
+  background: #F97316;
+  color: #fff !important;
+  box-shadow: none;
+  font-weight: 600;
+}
+
+.statusBtnActive::after {
+  opacity: 1;
+  visibility: visible;
+  border-top-color: #F97316;
+}
+
+[dir="rtl"] .statusBtn::after,
+[dir="rtl"] .statusBtnActive::after {
+  left: auto;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+/* ChatGPT-style input bar */
+.chatInputRow {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  gap: 0 !important;
+}
+
+.chatInputForm {
+  display: flex !important;
+  flex: 1 !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  background: #fff !important;
+  border-radius: 24px !important;
+  border: none !important;
+  padding: 8px 24px !important;
+  min-height: 52px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  width: 100% !important;
+}
+
+.chatInput {
+  flex: 1 !important;
+  border: none !important;
+  outline: none !important;
+  font-size: 16px !important;
+  padding: 10px 12px !important;
+  background: transparent !important;
+  min-width: 0 !important;
+}
+
+.chatInputRow[dir="rtl"] .chatInput {
+  text-align: right !important;
+}
+
+.chatInput::placeholder {
+  color: #9ca3af !important;
+}
+
+.chatInputActions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin-top: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.sendBtn {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border-radius: 20px !important;
+  background: #000 !important;
+  border: none !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  transition: opacity 0.2s, transform 0.1s !important;
+}
+
+.sendBtn:hover:not(:disabled) {
+  opacity: 0.9 !important;
+}
+
+.sendBtn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+.sendBtn:active:not(:disabled) {
+  transform: scale(0.95) !important;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Wrapper for input + preview - prevents scroll when preview appears */
+.chatInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Search preview box - absolute so it doesn't trigger layout shift/scroll */
+.searchPreviewBox {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 2px solid rgba(249, 115, 22, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.searchPreviewLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.searchPreviewLoading .spinner {
+  border-color: rgba(0, 0, 0, 0.15);
+  border-top-color: #000;
+}
+
+.searchPreviewMatch {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.searchPreviewQuery {
+  font-size: 15px;
+  color: #4b5563;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchPreviewCountNum {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.searchPreviewCountLabel {
+  font-size: 15px;
+  color: #6b7280;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.searchPreviewNoMatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.searchPreviewNoMatchText {
+  font-size: 15px;
+  color: #6b7280;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.searchPreviewOpenFormBtn {
+  font-size: 15px;
+  font-weight: 600;
+  color: #F97316;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.searchPreviewOpenFormBtn:hover {
+  background: rgba(249, 115, 22, 0.1);
+  color: #ea580c;
+}
+
+/* Ensure pointer is not clipped by parent overflow */
+.heroBackground,
+.heroBackground :global(.content-inner),
+.heroBackground :global(.wg-filter) {
+  overflow: visible !important;
+}
+
+.heroBackground :global(.wg-filter) {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.chatInputRow :global(.btn-filter) {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  border-radius: 20px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f3f4f6 !important;
+  border: none !important;
+}
+
+/* Hero row/col - 80% width */
+.heroRow {
+  width: 100%;
+}
+
+.heroCol {
+  flex: 0 0 80% !important;
+  max-width: 80% !important;
+}
+
+@media (max-width: 768px) {
+  .heroCol {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 /* Hero Background Styles */
 .heroBackground {
   background-image: url('/images/cities/hero.jpg') !important;
@@ -23,144 +350,85 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .heroBackground :global(.form-title) {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    align-items: center;
-    gap: 10px;
+  .chatInputForm {
+    padding: 6px 10px !important;
+    min-height: 48px !important;
   }
-  
-  .heroBackground :global(.box-item.wrap-btn) {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center;
-    gap: 8px;
-    width: 100% !important;
-    margin-top: 0 !important;
-    flex-shrink: 0 !important;
+
+  .chatInput {
+    font-size: 15px !important;
+    padding: 8px 10px !important;
   }
-  
-  .heroBackground :global(.box-item.wrap-btn .btn-filter) {
-    flex-shrink: 0 !important;
-    width: 50px !important;
-    min-width: 50px !important;
-    max-width: 50px !important;
-    height: 50px !important;
+
+  .chatInputActions {
+    gap: 12px !important;
   }
-  
-  .heroBackground :global(.box-item.wrap-btn .tf-btn) {
-    flex: 1 !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    white-space: nowrap !important;
-    height: 50px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  
-  .heroBackground .aiSearchWrap > * {
-    height: 50px !important;
-    min-height: 50px !important;
+
+  .sendBtn,
+  .chatInputRow :global(.btn-filter) {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .heroBackground :global(.form-title) {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .heroBackground :global(.box-item.wrap-btn) {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center;
-    gap: 6px;
-    width: 100% !important;
-    margin-top: 0 !important;
-    flex-shrink: 0 !important;
-  }
-  
-  .heroBackground :global(.box-item.wrap-btn .btn-filter) {
-    flex-shrink: 0 !important;
-    width: 44px !important;
-    min-width: 44px !important;
-    max-width: 44px !important;
-    height: 44px !important;
-  }
-  
-  .heroBackground :global(.box-item.wrap-btn .tf-btn) {
-    flex: 1 !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    white-space: nowrap !important;
-    height: 44px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  
-  .heroBackground .aiSearchWrap > * {
-    height: 44px !important;
+  .chatInputForm {
+    padding: 6px 8px !important;
     min-height: 44px !important;
   }
+
+  .chatInput {
+    font-size: 14px !important;
+  }
+
+  .sendBtn,
+  .chatInputRow :global(.btn-filter) {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+  }
 }
 
-/* At 440px and below: filter + search in row 1, AI Search full width in row 2 */
-.aiSearchWrap {
-  flex-shrink: 0;
+/* Example queries below input */
+.exampleQueries {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Desktop: no margin on Search button */
-.heroBackground :global(.box-item.wrap-btn .tf-btn.bg-color-primary.pd-3) {
-  margin-top: 0 !important;
+.exampleQueriesTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
 }
 
-@media (max-width: 440px) {
-  .heroBackground :global(.box-item.wrap-btn) {
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-  }
-  
-  .heroBackground :global(.box-item.wrap-btn .tf-btn.bg-color-primary.pd-3) {
-    margin-top: 8px !important;
-  }
-  
-  .heroBackground :global(.box-item.wrap-btn .btn-filter) {
-    flex-shrink: 0 !important;
-    width: 50px !important;
-    min-width: 50px !important;
-    max-width: 50px !important;
-    height: 50px !important;
-  }
-  
-  .heroBackground :global(.box-item.wrap-btn .tf-btn) {
-    flex: 1 !important;
-    min-width: 0 !important;
-    height: 50px !important;
-  }
-  
-  .heroBackground .aiSearchWrap {
-    width: 100% !important;
-    flex-basis: 100% !important;
-    order: 3;
-  }
-  
-  /* AI button: full width but preserve original appearance (height, padding, gradient) */
-  .heroBackground .aiSearchWrap > * {
-    width: 100% !important;
-    min-height: 50px !important;
-    height: 50px !important;
-    justify-content: center !important;
-    padding: 12px 24px !important;
-    border-radius: 12px !important;
-  }
+.exampleQueriesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.exampleQuery {
+  font-size: 14px;
+  color: #1f2937;
+  cursor: pointer;
+  padding: 10px 16px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.exampleQuery:hover {
+  background: #f9fafb;
+  border-color: #F97316;
+  color: #F97316;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
 }
 
 /* Keywords Dropdown Styles */

@@ -340,11 +340,20 @@
   },
   "hero": {
     "title": "ابحث عن منزل أحلامك في سوريا",
-    "subtitle": "اكتشف أحدث العقارات الموثوقة للبيع والإيجار في جميع أنحاء سوريا",
+    "subtitle": "اكتشف أحدث العقارات الموثوقة للبيع والإيجار في جميع أنحاء سوريا. باستخدام ",
+    "subtitleHighlight": "NLP و AI",
+    "forAll": "الكل",
     "forSale": "للبيع",
     "forRent": "للإيجار",
     "searchPlaceholder": "البحث عن طريق علامات الكلمات المفتاحية مثل ...",
-    "searchButton": "بحث"
+    "aiSearchPlaceholder": "صف العقار الذي تحلم به... (مثال: شقة غرفتين في دمشق)",
+    "exampleQueriesTitle": "أمثلة على الاستعلامات:",
+    "searchButton": "بحث",
+    "matchesFound": "{{count}} تطابق بحثك",
+    "matchesFoundLabel": "تطابق بحثك",
+    "matchesFound_one": "{{count}} تطابق بحثك",
+    "noMatchesTryTraditional": "لا توجد عقارات تطابق بحثك. جرب البحث التقليدي باستخدام الفلاتر.",
+    "openSearchForm": "افتح نموذج البحث"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -1168,6 +1177,9 @@
   },
   "searchForm": {
     "advancedSearch": "بحث متقدم",
+    "searchButton": "بحث",
+    "keyword": "الكلمات المفتاحية",
+    "keywordPlaceholder": "ابحث بالكلمات والوسوم...",
     "propertyId": "رقم العقار",
     "propertyIdPlaceholder": "أدخل رقم العقار",
     "city": "المدينة",
