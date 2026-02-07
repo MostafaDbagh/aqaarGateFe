@@ -179,11 +179,9 @@ export default function AISearchBox({ onResults, className = "" }) {
   const exampleQueries = isRTL ? [
     "شقة غرفتين في حلب",
     "فيلا للايجار في دمشق",
-    "مكتب مع موقف سيارات في اللاذقية"
   ] : [
     "apartment with 2 bedrooms in Aleppo",
     "villa for rent in Damascus",
-    "office with parking in Latakia"
   ];
 
   return (

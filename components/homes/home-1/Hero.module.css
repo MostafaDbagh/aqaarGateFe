@@ -81,6 +81,74 @@
   transform: translateX(50%);
 }
 
+/* Status buttons - responsive for mobile */
+@media (max-width: 786px) {
+  .statusButtons {
+    width: 100%;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: nowrap;
+  }
+  .statusBtn {
+    width: 90px;
+    min-width: 90px;
+    flex: 0 0 90px;
+    height: 36px;
+    font-size: 12px;
+    padding: 0 8px;
+    border-radius: 10px;
+  }
+  .statusBtn::after {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 6px;
+    bottom: -5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statusButtons {
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+  .statusBtn {
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    font-size: 11px;
+    padding: 0 6px;
+    border-radius: 8px;
+  }
+  .statusBtn::after {
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 5px;
+    bottom: -5px;
+  }
+}
+
+/* Very narrow screens (width < 360px) */
+@media (max-width: 360px) {
+  .statusButtons {
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  .statusBtn {
+    flex: 1;
+    min-width: 0;
+    height: 28px;
+    font-size: 10px;
+    padding: 0 4px;
+    border-radius: 6px;
+  }
+  .statusBtn::after {
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 4px;
+    bottom: -5px;
+  }
+}
+
 /* ChatGPT-style input bar */
 .chatInputRow {
   display: flex !important;
@@ -130,7 +198,6 @@
   align-items: center !important;
   gap: 16px !important;
   margin-top: 0 !important;
-  flex-shrink: 0 !important;
 }
 
 .sendBtn {
@@ -325,6 +392,13 @@
   }
 }
 
+@media (max-width: 786px) {
+  .heroBackground :global(.content-inner) {
+    width: 93vw !important;
+    max-width: 93vw !important;
+  }
+}
+
 /* Hero Background Styles */
 .heroBackground {
   background-image: url('/images/cities/hero.jpg') !important;
@@ -349,6 +423,8 @@
 }
 
 /* Responsive Styles */
+
+
 @media (max-width: 768px) {
   .chatInputForm {
     padding: 6px 10px !important;
@@ -358,6 +434,7 @@
   .chatInput {
     font-size: 15px !important;
     padding: 8px 10px !important;
+    min-width: 77% !important;
   }
 
   .chatInputActions {
