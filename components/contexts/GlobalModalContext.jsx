@@ -5,6 +5,7 @@ import Register from '../modals/Register';
 import { usePathname } from 'next/navigation';
 import { useFileTranslations } from '@/hooks/useFileTranslations';
 import Login from '../modals/Login';
+import AuthChoiceModal from '../modals/AuthChoiceModal';
 import ForgotPasswordFlow from '../modals/ForgotPasswordFlow';
 import OTPVerification from '../modals/OTPVerification';
 import MakeMeAgentModal from '../modals/MakeMeAgentModal';
@@ -42,6 +43,10 @@ export const GlobalModalProvider = ({ children }) => {
   });
   
   const [loginModalState, setLoginModalState] = useState({
+    isOpen: false
+  });
+  
+  const [authChoiceModalState, setAuthChoiceModalState] = useState({
     isOpen: false
   });
   
@@ -112,6 +117,18 @@ export const GlobalModalProvider = ({ children }) => {
     });
   };
 
+  const showAuthChoiceModal = () => {
+    setAuthChoiceModalState({
+      isOpen: true
+    });
+  };
+
+  const closeAuthChoiceModal = () => {
+    setAuthChoiceModalState({
+      isOpen: false
+    });
+  };
+
   const showForgotPasswordModal = () => {
     setForgotPasswordModalState({
       isOpen: true
@@ -158,6 +175,7 @@ export const GlobalModalProvider = ({ children }) => {
     setModalState(prev => ({ ...prev, isOpen: false }));
     setRegisterModalState({ isOpen: false });
     setLoginModalState({ isOpen: false });
+    setAuthChoiceModalState({ isOpen: false });
     setForgotPasswordModalState({ isOpen: false });
     setOtpModalState({
       isOpen: false,
@@ -204,6 +222,9 @@ export const GlobalModalProvider = ({ children }) => {
     showLoginModal,
     closeLoginModal,
     loginModalState,
+    showAuthChoiceModal,
+    closeAuthChoiceModal,
+    authChoiceModalState,
     showForgotPasswordModal,
     closeForgotPasswordModal,
     forgotPasswordModalState,
@@ -236,6 +257,10 @@ export const GlobalModalProvider = ({ children }) => {
       <Login
         isOpen={loginModalState.isOpen}
         onClose={closeLoginModal}
+      />
+      <AuthChoiceModal
+        isOpen={authChoiceModalState.isOpen}
+        onClose={closeAuthChoiceModal}
       />
       <ForgotPasswordFlow
         isOpen={forgotPasswordModalState.isOpen}

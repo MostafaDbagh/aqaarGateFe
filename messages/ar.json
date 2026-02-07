@@ -222,6 +222,11 @@
       "otpFailed": "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى."
     }
   },
+  "authChoice": {
+    "login": "تسجيل الدخول",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "register": "التسجيل"
+  },
   "login": {
     "title": "مرحباً بعودتك",
     "subtitle": "قم بتسجيل الدخول إلى حسابك للمتابعة",
@@ -406,6 +411,7 @@
   "dashboardNav": {
     "login": "تسجيل الدخول",
     "register": "التسجيل",
+    "dontHaveAccount": "ليس لديك حساب؟",
     "logout": "تسجيل الخروج",
     "adminDashboard": "لوحة تحكم المدير",
     "properties": "العقارات",

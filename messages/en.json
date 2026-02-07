@@ -227,6 +227,11 @@
       "otpFailed": "Failed to send OTP. Please try again."
     }
   },
+  "authChoice": {
+    "login": "Login",
+    "dontHaveAccount": "Don't you have an account?",
+    "register": "Register"
+  },
   "login": {
     "title": "Welcome Back",
     "subtitle": "Sign in to your account to continue",
@@ -408,8 +413,9 @@
     }
   },
   "dashboardNav": {
-    "login": "login",
-    "register": "register",
+    "login": "Login",
+    "register": "Register",
+    "dontHaveAccount": "Don't you have an account?",
     "logout": "Logout",
     "adminDashboard": "Admin Dashboard",
     "properties": "Properties",
