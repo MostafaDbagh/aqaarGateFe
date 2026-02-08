@@ -13,6 +13,9 @@ export default function robots() {
   // Only disallow real private paths. Do NOT disallow legacy/non-existent paths
   // (e.g. agency-grid, agency-list, property-filter-popup) or GSC shows "Blocked by robots" for URLs that then 404.
   const disallowPaths = [
+    '/favicon.ico',
+    '/_next/',
+    '/api/',
     '/dashboard/',
     '/add-property/',
     '/my-profile/',
@@ -23,7 +26,6 @@ export default function robots() {
     '/my-save-search/',
     '/review/',
     '/admin/',
-    '/api/',
     '/dev-tools/',
     '/private/',
     // Locale-prefixed private paths (actual URLs with localePrefix: 'always')
