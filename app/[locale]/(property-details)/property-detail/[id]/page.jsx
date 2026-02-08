@@ -47,7 +47,14 @@ export async function generateMetadata({ params }) {
       'syria property listings',
       'lattakia property listings'
     ],
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${baseUrl}/en/property-detail/${id}`,
+        ar: `${baseUrl}/ar/property-detail/${id}`,
+        'x-default': `${baseUrl}/en/property-detail/${id}`,
+      },
+    },
     openGraph: {
       title,
       description,

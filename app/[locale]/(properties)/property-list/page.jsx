@@ -64,7 +64,14 @@ export async function generateMetadata({ params }) {
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Holiday homes (بيوت عطلات), villas, apartments. Advanced search filters.",
       images: ['/images/section/property-grid-bg.jpg'],
     },
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${baseUrl}/en/property-list`,
+        ar: `${baseUrl}/ar/property-list`,
+        'x-default': `${baseUrl}/en/property-list`,
+      },
+    },
   };
 }
 

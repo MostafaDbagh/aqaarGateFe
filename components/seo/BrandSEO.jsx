@@ -15,9 +15,6 @@ export default function BrandSEO() {
   const pathname = usePathname();
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
   
-  // Canonical URL: full current page URL including locale (e.g. /en/faq, /ar/career)
-  const canonicalUrl = `${baseUrl.replace(/\/+$/, '')}${pathname === '/' ? '' : pathname}`;
-  
   // Generate alternate language URLs (clean path without locale for hreflang)
   const cleanPathname = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/') || '/';
   const alternateUrls = {
@@ -33,8 +30,7 @@ export default function BrandSEO() {
       <meta name="brand" content="AqaarGate" />
       <meta name="company" content="AqaarGate Real Estate" />
       
-      {/* Canonical URL */}
-      <link rel="canonical" href={canonicalUrl} />
+      {/* Note: Canonical is set via generateMetadata in each page - avoid duplicate to prevent "Google chose different canonical" */}
       
       {/* Hreflang tags for multi-language support */}
       <link rel="alternate" hrefLang="en" href={alternateUrls.en} />

@@ -21,7 +21,10 @@ export async function generateMetadata({ params }) {
         title: 'عقار جيت - منازل للبيع في سوريا | شراء عقار في سوريا',
         description: 'منازل للبيع في سوريا، شقق للبيع في دمشق. سوق العقارات السورية، عقارات للمغتربين، منازل للإيجار في سوريا، عقارات بأسعار معقولة في سوريا.',
       },
-      alternates: { canonical: `${baseUrl}/ar` },
+      alternates: {
+        canonical: `${baseUrl}/ar`,
+        languages: { en: `${baseUrl}/en`, ar: `${baseUrl}/ar`, 'x-default': `${baseUrl}/en` },
+      },
     };
   }
   return {
@@ -39,7 +42,10 @@ export async function generateMetadata({ params }) {
       title: 'AqaarGate - Homes for Sale in Syria | Buy Property in Syria',
       description: 'Homes for sale in Syria, apartments for sale in Damascus. Syrian property market, property investment Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
     },
-    alternates: { canonical: `${baseUrl}/en` },
+    alternates: {
+      canonical: `${baseUrl}/en`,
+      languages: { en: `${baseUrl}/en`, ar: `${baseUrl}/ar`, 'x-default': `${baseUrl}/en` },
+    },
   };
 }
 

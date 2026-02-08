@@ -146,7 +146,7 @@ export async function GET() {
     });
 
   const staticPages = [
-    { url: baseUrl, lastmod: now, changefreq: 'daily', priority: '1' },
+    // Only include locale-prefixed URLs (root / redirects to /en or /ar via next-intl - avoid duplicate/redirect issues)
     { url: `${baseUrl}/en`, lastmod: now, changefreq: 'daily', priority: '1' },
     { url: `${baseUrl}/ar`, lastmod: now, changefreq: 'daily', priority: '1' },
     { url: `${baseUrl}/en/property-list`, lastmod: now, changefreq: 'daily', priority: '0.9' },
