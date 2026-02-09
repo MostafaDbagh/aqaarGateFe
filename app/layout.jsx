@@ -330,6 +330,7 @@ export const metadata = {
 // With localePrefix: 'always', all routes go through [locale]/layout.jsx
 // The nested layout will override the lang/dir attributes via its own <html> tag
 // But Next.js still requires root layout to have <html>/<body>
+import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Providers from './Providers';
 import IntlProvider from './IntlProvider';
@@ -371,6 +372,7 @@ export default function RootLayout({ children }) {
             {children}
           </IntlProvider>
         </Providers>
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
