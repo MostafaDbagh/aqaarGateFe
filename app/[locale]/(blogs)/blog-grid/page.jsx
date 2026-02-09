@@ -42,7 +42,7 @@ export async function generateMetadata({ params }) {
     url,
     images: [
       {
-        url: `${baseUrl}/images/logo/new-logo.png`,
+        url: `${baseUrl}/${locale}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'Syria Real Estate Blog',
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }) {
     card: 'summary_large_image',
     title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
-    images: [`${baseUrl}/images/logo/new-logo.png`],
+    images: [`${baseUrl}/${locale}/opengraph-image`],
   },
   alternates: { canonical: url },
   };

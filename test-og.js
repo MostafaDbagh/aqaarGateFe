@@ -21,7 +21,7 @@ const PAGES = [
   '/en/property-detail/698857b8980fb449f097d8a3',
 ];
 
-const OG_LOGO = 'new-logo.png';
+const OG_LOGO = 'opengraph-image';
 const BASE = process.env.BASE_URL || 'http://localhost:3004';
 
 async function fetchPage(path) {

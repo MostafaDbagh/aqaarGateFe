@@ -40,7 +40,7 @@ export const metadata = {
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/contact`,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'AqaarGate - Contact',
@@ -51,7 +51,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Contact Us - Get in Touch with AqaarGate Real Estate",
     description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties.",
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`],
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/contact`,

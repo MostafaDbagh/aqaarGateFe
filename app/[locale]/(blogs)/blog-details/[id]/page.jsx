@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
     const data = blog?.data || blog;
     const title = data?.seo?.metaTitle || data?.title || 'Blog Post';
     const description = data?.seo?.metaDescription || data?.excerpt || data?.content?.substring(0, 160) || 'Syria and Lattakia real estate blog.';
-    const ogImage = `${baseUrl}/images/logo/new-logo.png`;
+    const ogImage = `${baseUrl}/${locale}/opengraph-image`;
 
     return {
       title: `${title} | AqaarGate`,

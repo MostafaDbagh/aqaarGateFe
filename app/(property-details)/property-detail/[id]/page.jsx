@@ -6,7 +6,7 @@ import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
-const OG_LOGO = '/images/logo/new-logo.png';
+const OG_LOGO = '/en/opengraph-image';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;

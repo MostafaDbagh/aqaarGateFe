@@ -29,13 +29,13 @@ export async function generateMetadata({ params }) {
       title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
       description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia.",
       url,
-      images: [{ url: `${baseUrl}/images/logo/new-logo.png`, width: 1200, height: 630, alt: 'AqaarGate - Careers' }],
+      images: [{ url: `${baseUrl}/${locale}/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate - Careers' }],
     },
     twitter: {
       card: "summary_large_image",
       title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
       description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia.",
-      images: [`${baseUrl}/images/logo/new-logo.png`],
+      images: [`${baseUrl}/${locale}/opengraph-image`],
     },
     alternates: { canonical: url },
   };

@@ -40,7 +40,7 @@ export const metadata = {
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/agents`,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'AqaarGate - Agents',
@@ -51,7 +51,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Real Estate Agents - Meet Our Expert Property Professionals",
     description: "Meet our team of experienced real estate agents and property professionals. Get personalized guidance for all your property needs.",
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`],
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/agents`,

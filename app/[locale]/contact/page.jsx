@@ -45,7 +45,7 @@ export async function generateMetadata({ params }) {
     url,
     images: [
       {
-        url: `${baseUrl}/images/logo/new-logo.png`,
+        url: `${baseUrl}/${locale}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'AqaarGate - Contact',
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }) {
     card: 'summary_large_image',
     title: "Contact Us - Get in Touch with AqaarGate Real Estate",
     description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties.",
-    images: [`${baseUrl}/images/logo/new-logo.png`],
+    images: [`${baseUrl}/${locale}/opengraph-image`],
   },
   alternates: { canonical: url },
   };

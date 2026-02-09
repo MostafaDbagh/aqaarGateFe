@@ -6,7 +6,6 @@ import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
-const OG_LOGO = '/images/logo/new-logo.png';
 
 export async function generateMetadata({ params }) {
   const { id, locale } = await params;
@@ -47,7 +46,7 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
-  const ogImage = `${baseUrl}${OG_LOGO}`;
+  const ogImage = `${baseUrl}/${locale}/opengraph-image`;
   const ogImageAlt = property?.propertyKeyword || `${typeStr} in ${property?.city || 'Syria'} - AqaarGate`;
 
   return {

@@ -110,14 +110,14 @@ export async function generateMetadata({ params }) {
       url,
       siteName: "AqaarGate Real Estate",
       locale: "en_US",
-      images: [{ url: `${baseUrl}/images/logo/new-logo.png`, width: 1200, height: 630, alt: "AqaarGate - Real Estate Agent" }],
+      images: [{ url: `${baseUrl}/en/opengraph-image`, width: 1200, height: 630, alt: "AqaarGate - Real Estate Agent" }],
       type: "profile",
     },
     twitter: {
       card: "summary",
       title,
       description,
-      images: [`${baseUrl}/images/logo/new-logo.png`],
+      images: [`${baseUrl}/en/opengraph-image`],
     },
   };
 }

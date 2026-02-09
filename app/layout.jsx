@@ -296,7 +296,7 @@ export const metadata = {
     description: 'AqaarGate is one of the best real estate sites in Syria. The #1 platform in Syria & Lattakia. 1000+ verified properties for sale and rent. Luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas. Trusted worldwide.',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'AqaarGate Real Estate - Premium Properties in Syria',
@@ -308,7 +308,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'AqaarGate - Best Real Estate Sites in Syria | #1 Platform',
     description: 'One of the best real estate sites in Syria. AqaarGate - #1 platform in Syria & Lattakia. 1000+ properties for sale and rent. Holiday homes, villas, apartments. Trusted worldwide.',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`],
     creator: '@AqaarGate',
     site: '@AqaarGate',
   },

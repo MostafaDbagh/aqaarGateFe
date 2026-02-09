@@ -46,7 +46,7 @@ export async function generateMetadata({ params }) {
     url,
     images: [
       {
-        url: `${baseUrl}/images/logo/new-logo.png`,
+        url: `${baseUrl}/${locale}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'AqaarGate - Agents',
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }) {
     card: 'summary_large_image',
     title: "Real Estate Agents - Meet Our Expert Property Professionals",
     description: "Meet our team of experienced real estate agents and property professionals. Get personalized guidance for all your property needs.",
-    images: [`${baseUrl}/images/logo/new-logo.png`],
+    images: [`${baseUrl}/${locale}/opengraph-image`],
   },
   alternates: { canonical: url },
   };

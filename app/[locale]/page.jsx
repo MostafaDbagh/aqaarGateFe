@@ -41,13 +41,13 @@ export async function generateMetadata({ params }) {
         description: 'منازل للبيع في سوريا، شراء عقار في سوريا، شقق للبيع في دمشق. سوق العقارات السورية، أراضي للبيع في سوريا، عقارات للمغتربين. منازل للإيجار في سوريا، عقارات بأسعار معقولة في سوريا.',
         url: `${baseUrl}/ar`,
         locale: 'ar_SA',
-        images: [{ url: `${baseUrl}/images/logo/new-logo.png`, width: 1200, height: 630, alt: 'AqaarGate' }],
+        images: [{ url: `${baseUrl}/ar/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate' }],
       },
       twitter: {
         card: 'summary_large_image',
         title: 'عقار جيت - منازل للبيع في سوريا | شراء عقار في سوريا',
         description: 'منازل للبيع في سوريا، شقق للبيع في دمشق. سوق العقارات السورية، عقارات للمغتربين، منازل للإيجار في سوريا، عقارات بأسعار معقولة في سوريا.',
-        images: [`${baseUrl}/images/logo/new-logo.png`],
+        images: [`${baseUrl}/ar/opengraph-image`],
       },
       alternates: {
         canonical: `${baseUrl}/ar`,
@@ -81,13 +81,13 @@ export async function generateMetadata({ params }) {
       description: 'Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market, land for sale Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
       url: `${baseUrl}/en`,
       locale: 'en_US',
-      images: [{ url: `${baseUrl}/images/logo/new-logo.png`, width: 1200, height: 630, alt: 'AqaarGate' }],
+      images: [{ url: `${baseUrl}/en/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate' }],
     },
     twitter: {
       card: 'summary_large_image',
       title: 'AqaarGate - Homes for Sale in Syria | Buy Property in Syria',
       description: 'Homes for sale in Syria, apartments for sale in Damascus. Syrian property market, property investment Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
-      images: [`${baseUrl}/images/logo/new-logo.png`],
+      images: [`${baseUrl}/en/opengraph-image`],
     },
     alternates: {
       canonical: `${baseUrl}/en`,
