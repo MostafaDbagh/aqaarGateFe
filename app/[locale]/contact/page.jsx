@@ -45,10 +45,10 @@ export async function generateMetadata({ params }) {
     url,
     images: [
       {
-        url: '/images/section/contact-bg.jpg',
+        url: `${baseUrl}/images/logo/new-logo.png`,
         width: 1200,
         height: 630,
-        alt: 'Contact AqaarGate Real Estate',
+        alt: 'AqaarGate - Contact',
       },
     ],
   },
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }) {
     card: 'summary_large_image',
     title: "Contact Us - Get in Touch with AqaarGate Real Estate",
     description: "Contact AqaarGate Real Estate for expert guidance on buying, selling, or renting properties.",
-    images: ['/images/section/contact-bg.jpg'],
+    images: [`${baseUrl}/images/logo/new-logo.png`],
   },
   alternates: { canonical: url },
   };

@@ -23,8 +23,7 @@ export async function generateMetadata({ params }) {
     const data = blog?.data || blog;
     const title = data?.seo?.metaTitle || data?.title || 'Blog Post';
     const description = data?.seo?.metaDescription || data?.excerpt || data?.content?.substring(0, 160) || 'Syria and Lattakia real estate blog.';
-    const imageSrc = data?.imageSrc || '/images/section/blog-bg.jpg';
-    const imageUrl = imageSrc.startsWith('http') ? imageSrc : `${baseUrl}${imageSrc.startsWith('/') ? '' : '/'}${imageSrc}`;
+    const ogImage = `${baseUrl}/images/logo/new-logo.png`;
 
     return {
       title: `${title} | AqaarGate`,
@@ -36,13 +35,13 @@ export async function generateMetadata({ params }) {
         description,
         url,
         type: 'article',
-        images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
+        images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
       },
       twitter: {
         card: 'summary_large_image',
         title: `${title} | AqaarGate`,
         description,
-        images: [imageUrl],
+        images: [ogImage],
       },
     };
   } catch {

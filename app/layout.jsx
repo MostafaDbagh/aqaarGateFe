@@ -296,7 +296,7 @@ export const metadata = {
     description: 'AqaarGate is one of the best real estate sites in Syria. The #1 platform in Syria & Lattakia. 1000+ verified properties for sale and rent. Luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas. Trusted worldwide.',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`,
         width: 1200,
         height: 630,
         alt: 'AqaarGate Real Estate - Premium Properties in Syria',
@@ -308,7 +308,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'AqaarGate - Best Real Estate Sites in Syria | #1 Platform',
     description: 'One of the best real estate sites in Syria. AqaarGate - #1 platform in Syria & Lattakia. 1000+ properties for sale and rent. Holiday homes, villas, apartments. Trusted worldwide.',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/og-image.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
     creator: '@AqaarGate',
     site: '@AqaarGate',
   },
@@ -339,6 +339,9 @@ import IntlProvider from './IntlProvider';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
 
+// Note: Organization/LocalBusiness with @id #organization is defined in StructuredData.jsx
+// to avoid duplicate/conflicting definitions. Organization type does NOT support aggregateRating
+// in Google's rich results; LocalBusiness does. Root layout only defines WebSite.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -351,14 +354,6 @@ const jsonLd = {
       description: 'AqaarGate is one of the best real estate sites in Syria. The #1 real estate platform in Syria & Lattakia. Buy, rent & sell properties, holiday homes, villas, apartments.',
       publisher: { '@id': `${SITE_URL}/#organization` },
       inLanguage: ['en', 'ar'],
-    },
-    {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}/#organization`,
-      name: 'AqaarGate',
-      url: SITE_URL,
-      logo: `${SITE_URL}/images/og-image.png`,
-      description: 'AqaarGate Real Estate - Premium real estate platform in Syria and Lattakia.',
     },
   ],
 };

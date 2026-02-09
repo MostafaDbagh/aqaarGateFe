@@ -110,16 +110,14 @@ export async function generateMetadata({ params }) {
       url,
       siteName: "AqaarGate Real Estate",
       locale: "en_US",
-      images: agent?.avatar 
-        ? [{ url: agent.avatar, width: 400, height: 400, alt: agent.fullName || agent.username || "Agent" }]
-        : [{ url: "/images/section/agent-details.jpg", width: 400, height: 400, alt: "Real Estate Agent" }],
+      images: [{ url: `${baseUrl}/images/logo/new-logo.png`, width: 1200, height: 630, alt: "AqaarGate - Real Estate Agent" }],
       type: "profile",
     },
     twitter: {
       card: "summary",
       title,
       description,
-      images: agent?.avatar ? [agent.avatar] : ["/images/section/agent-details.jpg"],
+      images: [`${baseUrl}/images/logo/new-logo.png`],
     },
   };
 }

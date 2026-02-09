@@ -3,7 +3,8 @@ export default function StructuredData() {
   
   const organizationSchema = {
     "@context": "https://schema.org",
-    "@type": "RealEstateAgent",
+    "@type": "LocalBusiness",
+    "@id": `${baseUrl}/#organization`,
     "name": "AqaarGate Real Estate",
     "alternateName": "AqaarGate",
     "legalName": "AqaarGate Real Estate",
@@ -153,6 +154,7 @@ export default function StructuredData() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${baseUrl}/#website`,
     "name": "AqaarGate Real Estate",
     "alternateName": "AqaarGate",
     "url": baseUrl,
@@ -164,7 +166,11 @@ export default function StructuredData() {
         "@type": "EntryPoint",
         "urlTemplate": `${baseUrl}/property-list?search={search_term_string}`
       },
-      "query-input": "required name=search_term_string"
+      "query-input": {
+        "@type": "PropertyValueSpecification",
+        "valueRequired": true,
+        "valueName": "search_term_string"
+      }
     }
   };
 

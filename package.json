@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
+    "test:og": "node test-og.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

@@ -46,10 +46,10 @@ export async function generateMetadata({ params }) {
     url,
     images: [
       {
-        url: '/images/section/agents-bg.jpg',
+        url: `${baseUrl}/images/logo/new-logo.png`,
         width: 1200,
         height: 630,
-        alt: 'Real Estate Agents',
+        alt: 'AqaarGate - Agents',
       },
     ],
   },
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }) {
     card: 'summary_large_image',
     title: "Real Estate Agents - Meet Our Expert Property Professionals",
     description: "Meet our team of experienced real estate agents and property professionals. Get personalized guidance for all your property needs.",
-    images: ['/images/section/agents-bg.jpg'],
+    images: [`${baseUrl}/images/logo/new-logo.png`],
   },
   alternates: { canonical: url },
   };

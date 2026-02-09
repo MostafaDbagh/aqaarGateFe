@@ -55,14 +55,14 @@ export async function generateMetadata({ params }) {
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home (بيوت عطلات), villa. Advanced search filters. Trusted by expats worldwide.",
       url,
       images: [
-        { url: '/images/section/property-grid-bg.jpg', width: 1200, height: 630, alt: 'Property Listings' },
+        { url: `${baseUrl}/images/logo/new-logo.png`, width: 1200, height: 630, alt: 'AqaarGate - Property Listings' },
       ],
     },
     twitter: {
       card: 'summary_large_image',
       title: "#1 Property Listings in Syria - 1000+ Properties for Sale & Rent",
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Holiday homes (بيوت عطلات), villas, apartments. Advanced search filters.",
-      images: ['/images/section/property-grid-bg.jpg'],
+      images: [`${baseUrl}/images/logo/new-logo.png`],
     },
     alternates: {
       canonical: url,

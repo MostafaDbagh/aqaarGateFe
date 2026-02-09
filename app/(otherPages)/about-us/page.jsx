@@ -23,11 +23,13 @@ export const metadata = {
     title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
     description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/about-us`,
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`, width: 1200, height: 630, alt: 'AqaarGate - About Us' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
     description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
   },
 };
 

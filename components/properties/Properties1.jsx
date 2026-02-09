@@ -47,12 +47,6 @@ function Properties1Content({ defaultGrid = false }) {
                 hasPrevPage: false
               }
             };
-            console.log('🚀 Synchronously initializing AI search from sessionStorage:', {
-              listingsCount: listings.length,
-              query: normalizedResults.query,
-              pagination: normalizedResults.pagination,
-              firstListing: listings[0] ? { id: listings[0]._id || listings[0].propertyId, type: listings[0].propertyType } : null
-            });
             return {
               initialUseAISearch: true,
               initialAiSearchResults: normalizedResults
@@ -133,16 +127,12 @@ function Properties1Content({ defaultGrid = false }) {
     if (typeof window !== 'undefined' && !aiSearchInitialized) {
       // If we already initialized synchronously, just mark as initialized
       if (initialAiSearchResults) {
-        console.log('✅ AI search already initialized synchronously, marking as initialized');
         setAiSearchInitialized(true);
         return;
       }
       
       // Otherwise, try to load from sessionStorage (fallback)
       const storedResults = sessionStorage.getItem('aiSearchResults');
-      console.log('🔍 Checking sessionStorage for AI search results (useEffect fallback)...', {
-        hasStoredResults: !!storedResults
-      });
       
       if (storedResults) {
         try {
@@ -156,11 +146,6 @@ function Properties1Content({ defaultGrid = false }) {
               data: listings,
               query: parsed.query || ""
             };
-            
-            console.log('✅ Loading AI search results from sessionStorage (useEffect):', {
-              listingsCount: listings.length,
-              query: normalizedResults.query
-            });
             
             setAiSearchResults(normalizedResults);
             setUseAISearch(true);
@@ -178,7 +163,6 @@ function Properties1Content({ defaultGrid = false }) {
           setAiSearchInitialized(true);
         }
       } else {
-        console.log('ℹ️ No AI search results in sessionStorage');
         setAiSearchInitialized(true);
       }
     }
@@ -388,24 +372,6 @@ function Properties1Content({ defaultGrid = false }) {
     return listings;
   }, [listings]);
   
-  // Debug logging - CRITICAL for troubleshooting (only log once per state change)
-  useEffect(() => {
-    if (!isHydrated) return;
-    
-    // Only log when key values change, not on every render
-    const debugInfo = {
-      useAISearch,
-      currentPage,
-      listingsCount: listings.length,
-      paginatedCount: paginatedListings.length,
-      hasAiSearchResults: !!aiSearchResults,
-      hasAiSearchPageResponse: !!aiSearchPageResponse?.data,
-      totalFromPagination: pagination?.total
-    };
-    
-    console.log('🔍 Search State:', debugInfo);
-  }, [useAISearch, currentPage, listings.length, paginatedListings.length, isHydrated, pagination?.total]);
-  
   // Combine loading states
   // Show loading if: normal search is loading, OR AI search page > 1 is loading, OR not hydrated yet and no initial data
   const isSearchLoading = useAISearch 
@@ -431,7 +397,6 @@ function Properties1Content({ defaultGrid = false }) {
     if (aiSearchFromStorageRef.current && useAISearch) {
       // Don't clear AI search if it was loaded from sessionStorage
       // Only clear if user explicitly triggers handleSearchChange or handleClearAllSearch
-      console.log('🔒 AI search from sessionStorage is protected - not checking for filter changes');
       return;
     }
     
@@ -445,7 +410,6 @@ function Properties1Content({ defaultGrid = false }) {
       });
       
       if (hasManualFilters) {
-        console.log('🔄 Manual filters detected, switching from AI search to normal search');
         setUseAISearch(false);
         setAiSearchResults(null);
         if (typeof window !== 'undefined') {

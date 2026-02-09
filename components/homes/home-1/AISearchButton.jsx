@@ -89,18 +89,6 @@ export default function AISearchButton({ onSearchResults }) {
     hasPrevPage: false
   };
   
-  // Debug logging
-  useEffect(() => {
-    if (aiSearchResponse && effectiveListings.length > 0) {
-      console.log('🔍 AI Search Response received:', {
-        hasData: !!aiSearchResponse.data,
-        listingsCount: effectiveListings.length,
-        hasPagination: !!effectivePagination,
-        paginationTotal: effectivePagination.total
-      });
-    }
-  }, [aiSearchResponse, effectiveListings.length, effectivePagination]);
-  
   // Auto-close modal and navigate when results are ready (after submit)
   useEffect(() => {
     if (isOpen && effectiveListings.length > 0 && debouncedQuery.trim().length > 0 && !isLoading) {
@@ -117,12 +105,6 @@ export default function AISearchButton({ onSearchResults }) {
           pagination: effectivePagination,
           query: debouncedQuery || query
         };
-        
-        console.log('💾 Storing AI search results (from useEffect):', {
-          listingsCount: results.listings.length,
-          hasPagination: !!results.pagination,
-          query: results.query
-        });
         
         // Store in sessionStorage
         if (typeof window !== 'undefined') {
@@ -225,12 +207,6 @@ export default function AISearchButton({ onSearchResults }) {
           query: debouncedQuery || query
         };
         
-        console.log('💾 Storing AI search results:', {
-          listingsCount: results.listings.length,
-          hasPagination: !!results.pagination,
-          query: results.query
-        });
-        
         // Store in sessionStorage
         if (typeof window !== 'undefined') {
           sessionStorage.setItem('aiSearchResults', JSON.stringify(results));
@@ -276,12 +252,6 @@ export default function AISearchButton({ onSearchResults }) {
         },
         query: debouncedQuery || query
       };
-      
-      console.log('💾 Storing AI search results (from results box click):', {
-        listingsCount: results.listings.length,
-        hasPagination: !!results.pagination,
-        query: results.query
-      });
       
       // Store in sessionStorage
       if (typeof window !== 'undefined') {

@@ -1,9 +1,12 @@
 import React from "react";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 import { fetchProperty } from "@/lib/fetchProperty";
+import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
+
+const OG_LOGO = '/images/logo/new-logo.png';
 
 export async function generateMetadata({ params }) {
   const { id, locale } = await params;
@@ -12,25 +15,43 @@ export async function generateMetadata({ params }) {
 
   const property = await fetchProperty(id);
 
+  const priceStr = property?.propertyPrice != null
+    ? formatPriceWithCurrency(property.propertyPrice, property?.currency || 'USD')
+    : '';
+  const locationParts = [property?.neighborhood, property?.city, property?.state, property?.address].filter(Boolean);
+  const locationStr = locationParts.length > 0 ? locationParts.join(', ') : (property?.city || 'Syria');
+  const statusStr = property?.status?.toLowerCase() === 'rent' ? 'Rent' : 'Sale';
+  const typeStr = property?.propertyType || 'Property';
+  const keywordStr = property?.propertyKeyword || typeStr;
+
   const title = property
-    ? `${property.propertyKeyword || 'Premium Property'} for ${property.status === 'rent' ? 'Rent' : 'Sale'} in ${property.city || 'Syria'} | AqaarGate`
-    : `Premium Property for Sale & Rent in Syria & Lattakia | Holiday Homes | AqaarGate`;
+    ? (() => {
+        const t = `${keywordStr} for ${statusStr} in ${property.city || 'Syria'}${priceStr ? ` - ${priceStr}` : ''} | AqaarGate`;
+        return t.length > 80 ? t.substring(0, 77) + '...' : t;
+      })()
+    : "Premium Property | Syria & Lattakia | AqaarGate";
 
   const description = property
-    ? `Explore ${property.propertyKeyword || 'this premium property'} in ${property.city || 'Syria'}. ${property.propertyType || 'Property'} for ${property.status === 'rent' ? 'rent' : 'sale'}. ${property.description ? property.description.substring(0, 120) + '...' : 'Find your dream property with AqaarGate Real Estate.'}`
-    : "Explore detailed information, photos, amenities, and location for premium properties in Syria and Lattakia. Find houses, apartments, holiday homes (بيوت عطلات) for sale and rent (بيع وتأجير). Perfect for expats from Germany, Netherlands, EU countries, and Arab Gulf.";
+    ? (() => {
+        const parts = [
+          keywordStr,
+          statusStr.toLowerCase(),
+          locationStr,
+          priceStr && `${priceStr}`,
+          property?.bedrooms && `${property.bedrooms} bed`,
+          property?.bathrooms && `${property.bathrooms} bath`,
+          property?.size && `${property.size} m²`
+        ].filter(Boolean);
+        const desc = parts.join(' • ');
+        return desc.length > 80 ? desc.substring(0, 77) + '...' : desc;
+      })()
+    : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
-  const firstImage = property?.images?.[0];
-  const imageUrl = typeof firstImage === 'string'
-    ? firstImage
-    : firstImage?.url || firstImage?.src || '';
-  const ogImage = imageUrl
-    ? (imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`)
-    : `${baseUrl}/images/section/hero-bg.jpg`;
-
-  const ogImageAlt = property?.propertyKeyword || "Premium Property in Syria and Lattakia";
+  const ogImage = `${baseUrl}${OG_LOGO}`;
+  const ogImageAlt = property?.propertyKeyword || `${typeStr} in ${property?.city || 'Syria'} - AqaarGate`;
 
   return {
+    metadataBase: new URL(baseUrl),
     title,
     description,
     keywords: [
@@ -61,10 +82,10 @@ export async function generateMetadata({ params }) {
       url,
       siteName: "AqaarGate Real Estate",
       locale: locale === 'ar' ? 'ar_SA' : 'en_US',
+      type: "website",
       images: [
         { url: ogImage, width: 1200, height: 630, alt: ogImageAlt },
       ],
-      type: "article",
     },
     twitter: {
       card: "summary_large_image",

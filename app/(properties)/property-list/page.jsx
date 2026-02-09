@@ -49,10 +49,10 @@ export const metadata = {
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,
     images: [
       {
-        url: '/images/section/property-grid-bg.jpg',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`,
         width: 1200,
         height: 630,
-        alt: 'Property Listings',
+        alt: 'AqaarGate - Property Listings',
       },
     ],
   },
@@ -60,7 +60,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Property Listings - Browse All Properties for Sale and Rent",
     description: "Browse our comprehensive collection of properties for sale and rent. Find your perfect home with advanced search filters.",
-    images: ['/images/section/property-grid-bg.jpg'],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,

@@ -35,10 +35,10 @@ export const metadata = {
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/faq`,
     images: [
       {
-        url: '/images/section/faq-bg.jpg',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`,
         width: 1200,
         height: 630,
-        alt: 'Syria Real Estate FAQ',
+        alt: 'AqaarGate - FAQ',
       },
     ],
   },
@@ -46,7 +46,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Syria Real Estate FAQ - Common Questions About Property in Lattakia",
     description: "Find answers to frequently asked questions about buying, selling, and renting properties in Syria and Lattakia.",
-    images: ['/images/section/faq-bg.jpg'],
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/new-logo.png`],
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/faq`,
