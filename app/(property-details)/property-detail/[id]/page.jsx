@@ -2,15 +2,16 @@ import React from "react";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 import { fetchProperty } from "@/lib/fetchProperty";
 import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
-import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
-
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const OG_IMAGE = { url: `${BASE_URL}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
+const OG_IMAGE_URL = `${BASE_URL}/images/logo/og.png`;
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-  const url = `${baseUrl}/property-detail/${id}`;
+  const url = `${BASE_URL}/property-detail/${id}`;
 
   const property = await fetchProperty(id);
 
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }) {
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
   return {
-    metadataBase: new URL(baseUrl),
+    metadataBase: new URL(BASE_URL),
     title,
     description,
     keywords: [
@@ -72,13 +73,13 @@ export async function generateMetadata({ params }) {
       siteName: "AqaarGate Real Estate",
       locale: "en_US",
       type: "website",
-      images: getDefaultOgImages(baseUrl, 'en'),
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: getDefaultOgImageUrls(baseUrl, 'en'),
+      images: [OG_IMAGE_URL],
     },
     robots: {
       index: true,

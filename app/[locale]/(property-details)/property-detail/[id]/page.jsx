@@ -2,16 +2,18 @@ import React from "react";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 import { fetchProperty } from "@/lib/fetchProperty";
 import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
-import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const OG_IMAGE = { url: `${BASE_URL}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
+const OG_IMAGE_URL = `${BASE_URL}/images/logo/og.png`;
+
 
 export async function generateMetadata({ params }) {
   const { id, locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-  const url = `${baseUrl}/${locale}/property-detail/${id}`;
+  const url = `${BASE_URL}/${locale}/property-detail/${id}`;
 
   const property = await fetchProperty(id);
 
@@ -47,11 +49,8 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
-  const ogImages = getDefaultOgImages(baseUrl, locale);
-  const ogImageUrls = getDefaultOgImageUrls(baseUrl, locale);
-
   return {
-    metadataBase: new URL(baseUrl),
+    metadataBase: new URL(BASE_URL),
     title,
     description,
     keywords: [
@@ -71,9 +70,9 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: url,
       languages: {
-        en: `${baseUrl}/en/property-detail/${id}`,
-        ar: `${baseUrl}/ar/property-detail/${id}`,
-        'x-default': `${baseUrl}/en/property-detail/${id}`,
+        en: `${BASE_URL}/en/property-detail/${id}`,
+        ar: `${BASE_URL}/ar/property-detail/${id}`,
+        'x-default': `${BASE_URL}/en/property-detail/${id}`,
       },
     },
     openGraph: {
@@ -83,13 +82,13 @@ export async function generateMetadata({ params }) {
       siteName: "AqaarGate Real Estate",
       locale: locale === 'ar' ? 'ar_SA' : 'en_US',
       type: "website",
-      images: ogImages,
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ogImageUrls,
+      images: [OG_IMAGE_URL],
     },
     robots: {
       index: true,

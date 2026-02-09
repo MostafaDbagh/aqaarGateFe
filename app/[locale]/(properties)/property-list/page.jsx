@@ -3,10 +3,11 @@ import Cta from "@/components/common/Cta";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Properties1 from "@/components/properties/Properties1";
-import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const OG_IMAGE = { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
+const OG_IMAGE_URL = `${baseUrl}/images/logo/og.png`;
 
 const keywords = [
   'syria property listings',
@@ -54,13 +55,13 @@ export async function generateMetadata({ params }) {
       title: "#1 Property Listings in Syria & Lattakia - 1000+ Properties for Sale & Rent",
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home (بيوت عطلات), villa. Advanced search filters. Trusted by expats worldwide.",
       url,
-      images: getDefaultOgImages(baseUrl, locale),
+      images: [OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title: "#1 Property Listings in Syria - 1000+ Properties for Sale & Rent",
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Holiday homes (بيوت عطلات), villas, apartments. Advanced search filters.",
-      images: getDefaultOgImageUrls(baseUrl, locale),
+      images: [OG_IMAGE_URL],
     },
     alternates: {
       canonical: url,

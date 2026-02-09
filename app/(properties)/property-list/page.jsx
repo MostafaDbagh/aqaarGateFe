@@ -3,10 +3,11 @@ import Cta from "@/components/common/Cta";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Properties1 from "@/components/properties/Properties1";
-import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const OG_IMAGE = { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
+const OG_IMAGE_URL = `${baseUrl}/images/logo/og.png`;
 
 export const metadata = {
   title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
@@ -49,13 +50,13 @@ export const metadata = {
     title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
     description: "Browse our comprehensive collection of properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, or holiday home with advanced search filters.",
     url: `${baseUrl}/en/property-list`,
-    images: getDefaultOgImages(baseUrl, 'en'),
+    images: [OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: "Property Listings - Browse All Properties for Sale and Rent",
     description: "Browse our comprehensive collection of properties for sale and rent. Find your perfect home with advanced search filters.",
-    images: getDefaultOgImageUrls(baseUrl, 'en'),
+    images: [OG_IMAGE_URL],
   },
   alternates: {
     canonical: `${baseUrl}/en/property-list`,
