@@ -1,3 +1,5 @@
+import { translateKeywordForSearch } from '../utils/translateKeywords';
+
 export function cleanParams(params) {
   const cleaned = {};
 
@@ -23,9 +25,15 @@ export function cleanParams(params) {
     }
 
     // Convert keyword delimiter from ||| to comma for API compatibility
-    // This allows keywords with commas (like "2,400 shares") to work correctly
+    // Translate Arabic keywords to English (backend stores English propertyKeyword)
     if (key === "keyword" && typeof value === "string") {
-      cleaned[key] = value.replace(/\|\|\|/g, ', ');
+      let val = value.replace(/\|\|\|/g, ', ');
+      val = translateKeywordForSearch(val);
+      cleaned[key] = val;
+    } else if ((key === "cities" || key === "city") && typeof value === "string") {
+      // Translate Arabic city names to English for API
+      let val = translateKeywordForSearch(value);
+      cleaned[key] = val;
     } else {
       cleaned[key] = value;
     }

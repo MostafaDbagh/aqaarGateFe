@@ -1,7 +1,106 @@
 /**
  * Translation utility for property keywords
- * Translates common property keywords from English to Arabic
+ * - English → Arabic: for display when locale is ar
+ * - Arabic → English: for API search (backend stores English keywords)
  */
+
+// Arabic → English: reverse map for API search (user types Arabic, backend expects English)
+const arabicToEnglishKeywords = {
+  // Property types
+  'شقة': 'Apartment',
+  'شقة سكنية': 'Apartment',
+  'فيلا': 'Villa',
+  'فيلا/مزرعة': 'Villa',
+  'منزل': 'House',
+  'أرض': 'Land',
+  'مبنى': 'Building',
+  'مكتب': 'Office',
+  'تجاري': 'Commercial',
+  'تجاري (محلات)': 'Commercial',
+  'محل': 'Shop',
+  'بيت عطلة': 'Holiday Home',
+  'استوديو': 'Studio',
+  'بنتهاوس': 'Penthouse',
+  'دوبلكس': 'Duplex',
+  'ديلوكس': 'Duplex',
+  // Features
+  'مفروش': 'Furnished',
+  'غير مفروش': 'Unfurnished',
+  'واسع': 'Spacious',
+  'مريح': 'Cozy',
+  'مجدّد': 'Renovated',
+  'جديد': 'New',
+  'حديث': 'Modern',
+  'فاخر': 'Luxury',
+  'مسبح': 'Pool',
+  'حديقة': 'Garden',
+  'موقف سيارات': 'Parking',
+  'مصعد': 'Elevator',
+  'شرفة': 'Balcony',
+  'بلكونة': 'Balcony',
+  'تراس': 'Terrace',
+  'كراج': 'Garage',
+  'أمن': 'Security',
+  'هادئ': 'Quiet',
+  'عائلي': 'Family',
+  'استثماري': 'Investment',
+  'سكني': 'Residential',
+  'قطعة': 'Plot',
+  'قطعة أرض': 'Plot',
+  // Location
+  'وسط المدينة': 'City Center',
+  'قريب من الشاطئ': 'Near Beach',
+  'إطلالة بحرية': 'Sea View',
+  'إطلالة على البحر': 'Sea View',
+  'إطلالة جبلية': 'Mountain View',
+  'إطلالة على الجبل': 'Mountain View',
+  'إطلالة مفتوحة': 'Open View',
+  'إطلالة': 'View',
+  'مواجه للبحر': 'Beachfront',
+  'على الشاطئ': 'Beachfront',
+  'موقع ممتاز': 'Prime Location',
+  'أفضل سعر': 'Best Price',
+  'قابل للتفاوض': 'Negotiable',
+  'عاجل': 'Urgent',
+  'متاح': 'Available',
+  // Status
+  'للبيع': 'sale',
+  'للإيجار': 'rent',
+  'بيع': 'sale',
+  'إيجار': 'rent',
+  // Cities
+  'حلب': 'Aleppo',
+  'دمشق': 'Damascus',
+  'اللاذقية': 'Latakia',
+  'حمص': 'Homs',
+  'حماة': 'Hama',
+  'طرطوس': 'Tartus',
+  'إدلب': 'Idlib',
+  'دير الزور': 'Deir ez-Zur',
+  'درعا': 'Daraa',
+  'السويداء': 'As-Suwayda',
+  'الرقة': 'Raqqah',
+  // Finishing
+  'اكساء حجري': 'Stone finishing',
+  'تشطيب حجري': 'Stone finishing',
+  'اكساء عادي': 'Standard finishing',
+  'تشطيب عادي': 'Standard finishing',
+  'تشطيب دوبلكس': 'Doublex finishing',
+  'اكساء ديلوكس': 'Doublex finishing',
+  'اكساء سوبر ديلوكس': 'Super doublex finishing',
+  'سند أخضر': 'Green Title Deed',
+  'طابو أخضر': 'Green Title Deed',
+  'قشرة جاهزة': 'Shell house',
+  'قبلي(جنوبي)': 'South-facing house',
+  'جنوبي': 'South-facing',
+  'شمالي': 'North-facing',
+  'شرقي': 'East-facing',
+  'غربي': 'West-facing',
+  'مهوي': 'Well-ventilated',
+  'مشمس': 'Bright',
+  'مبنى حديث': 'Modern building',
+  'مبنى قديم': 'Old building',
+};
 
 const keywordTranslations = {
   en: {
@@ -71,6 +170,48 @@ const keywordTranslations = {
     'sale': 'للبيع',
     'rent': 'للإيجار',
   }
+};
+
+/**
+ * Detect if string contains Arabic characters
+ * @param {string} str - String to check
+ * @returns {boolean}
+ */
+const hasArabicChars = (str) => /[\u0600-\u06FF]/.test(str || '');
+
+/**
+ * Translate Arabic keyword to English for API search.
+ * Backend stores propertyKeyword in English; Arabic search fails without this.
+ * @param {string} keyword - User input (may be Arabic or English)
+ * @returns {string} English keyword for API, or original if no translation
+ */
+export const translateKeywordForSearch = (keyword) => {
+  if (!keyword || typeof keyword !== 'string') return keyword;
+  const trimmed = keyword.trim();
+  if (!trimmed) return keyword;
+
+  // Exact match first
+  const exact = arabicToEnglishKeywords[trimmed];
+  if (exact) return exact;
+
+  // Try trimmed without extra spaces (ar.json has " شقة سكنية" with leading space)
+  const normalized = trimmed.replace(/\s+/g, ' ').trim();
+  const exactNorm = arabicToEnglishKeywords[normalized];
+  if (exactNorm) return exactNorm;
+
+  // Only process if contains Arabic
+  if (!hasArabicChars(trimmed)) return keyword;
+
+  // Multi-word or comma-separated: try each token
+  const tokens = trimmed.split(/[\s,،]+/).map((t) => t.trim()).filter(Boolean);
+  const translated = tokens
+    .map((t) => arabicToEnglishKeywords[t] || arabicToEnglishKeywords[t.replace(/[،,]/g, '')])
+    .filter(Boolean);
+  if (translated.length > 0) {
+    return translated.join(', ');
+  }
+
+  return keyword;
 };
 
 /**

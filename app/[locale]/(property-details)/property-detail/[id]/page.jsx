@@ -46,7 +46,9 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
-  const ogImage = `${baseUrl}/${locale}/opengraph-image`;
+  const ogImageStatic = `${baseUrl}/images/cities/hero.jpg`;
+  const ogImageFallback = `${baseUrl}/images/logo/og.png`;
+  const ogImageDynamic = `${baseUrl}/${locale}/opengraph-image`;
   const ogImageAlt = property?.propertyKeyword || `${typeStr} in ${property?.city || 'Syria'} - AqaarGate`;
 
   return {
@@ -83,14 +85,16 @@ export async function generateMetadata({ params }) {
       locale: locale === 'ar' ? 'ar_SA' : 'en_US',
       type: "website",
       images: [
-        { url: ogImage, width: 1200, height: 630, alt: ogImageAlt },
+        { url: ogImageStatic, width: 1200, height: 630, alt: ogImageAlt },
+        { url: ogImageFallback, width: 612, height: 408, alt: ogImageAlt },
+        { url: ogImageDynamic, width: 1200, height: 630, alt: ogImageAlt },
       ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage],
+      images: [ogImageStatic, ogImageFallback, ogImageDynamic],
     },
     robots: {
       index: true,
