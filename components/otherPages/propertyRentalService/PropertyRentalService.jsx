@@ -66,6 +66,9 @@ export default function PropertyRentalService() {
   // Check if user is guest or agent (not allowed to submit)
   const isGuestOrAgent = !isLoggedIn || userRole === 'guest' || userRole === 'agent';
   const canSubmit = isLoggedIn && (userRole === 'user' || userRole === 'admin');
+  const isRTL = locale === 'ar';
+  const inputDir = isRTL ? 'rtl' : 'ltr';
+  const inputStyle = { textAlign: isRTL ? 'right' : 'left' };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -369,6 +372,8 @@ export default function PropertyRentalService() {
                                   value={formData.ownerName}
                                   onChange={handleInputChange}
                                   required
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -389,6 +394,8 @@ export default function PropertyRentalService() {
                                   value={formData.ownerEmail}
                                   onChange={handleInputChange}
                                   required
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -409,6 +416,8 @@ export default function PropertyRentalService() {
                                   value={formData.ownerPhone}
                                   onChange={handleInputChange}
                                   required
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -459,6 +468,8 @@ export default function PropertyRentalService() {
                                   onChange={handleInputChange}
                                   required
                                   min="1"
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -480,6 +491,8 @@ export default function PropertyRentalService() {
                                   onChange={handleInputChange}
                                   required
                                   min="0"
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -501,6 +514,8 @@ export default function PropertyRentalService() {
                                   onChange={handleInputChange}
                                   required
                                   min="0"
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -521,6 +536,8 @@ export default function PropertyRentalService() {
                                   value={formData.location}
                                   onChange={handleInputChange}
                                   required
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -541,6 +558,8 @@ export default function PropertyRentalService() {
                                   value={formData.features}
                                   onChange={handleInputChange}
                                   required
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>
@@ -560,6 +579,8 @@ export default function PropertyRentalService() {
                                   placeholder={t('additionalDetailsPlaceholder')}
                                   value={formData.additionalDetails}
                                   onChange={handleInputChange}
+                                  dir={inputDir}
+                                  style={inputStyle}
                                 />
                               </div>
                             </fieldset>

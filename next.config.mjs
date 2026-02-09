@@ -27,12 +27,16 @@ const nextConfig = {
         ignoreBuildErrors: false,
     },
     // Fix for webpack bundling issues
-    webpack: (config, { isServer }) => {
+    webpack: (config, { isServer, dev }) => {
       if (!isServer) {
         config.resolve.fallback = {
           ...config.resolve.fallback,
           fs: false,
         };
+      }
+      // Disable source maps in dev to avoid "Failed to get source map" for webpack.js (Next.js 15 chunk naming)
+      if (dev) {
+        config.devtool = false;
       }
       return config;
     },

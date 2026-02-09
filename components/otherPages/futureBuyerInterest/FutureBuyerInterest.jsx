@@ -6,7 +6,7 @@ import { futureBuyerAPI } from "@/apis";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { translateApiMessage } from "@/utils/translateApiMessages";
 import { syrianProvinces } from "@/constants/provinces";
-import { amenitiesList } from "@/constants/amenities";
+import { amenitiesList, amenityToTranslationKey } from "@/constants/amenities";
 import { useAuthState } from "@/store/hooks/useAuth";
 import styles from "./FutureBuyerInterest.module.css";
 
@@ -170,7 +170,7 @@ export default function FutureBuyerInterest() {
         status: formData.status, // Required field
         minPrice: formData.minPrice ? parseFloat(formData.minPrice) : undefined,
         maxPrice: formData.maxPrice ? parseFloat(formData.maxPrice) : undefined,
-        currency: 'USD', // Always USD
+        currency: formData.currency,
         minSize: formData.minSize ? parseFloat(formData.minSize) : undefined,
         maxSize: formData.maxSize ? parseFloat(formData.maxSize) : undefined,
         sizeUnit: formData.sizeUnit,
@@ -234,6 +234,14 @@ export default function FutureBuyerInterest() {
   const propertyTypes = ['Apartment', 'Villa', 'Building', 'Land', 'Holiday Home', 'Office', 'Commercial'];
   const statusOptions = ['both', 'sale', 'rent'];
   const sizeUnitOptions = ['sqm', 'dunam', 'sqft', 'sqyd', 'feddan'];
+  const currencyOptions = ['USD', 'SYP'];
+  const tAmenities = useTranslations('amenities');
+  const tFutureBuyer = useTranslations('futureBuyer');
+  const isRTL = locale === 'ar';
+  const inputDir = isRTL ? 'rtl' : 'ltr';
+  const translateCity = (val) => (val ? tFutureBuyer(`cities.${val}`) : val);
+  const translatePropertyType = (val) => (val ? tFutureBuyer(`propertyTypes.${val}`) : val);
+  const translateStatus = (val) => (val ? tFutureBuyer(`statusOptions.${val}`) : val);
   
   return (
     <section className="section-future-buyer-interest tf-spacing-1">
@@ -304,6 +312,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 required
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -323,6 +333,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 required
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -342,6 +354,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.phone}
                                 onChange={handleInputChange}
                                 required
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -360,6 +374,7 @@ export default function FutureBuyerInterest() {
                                 selectedValue={formData.city}
                                 onChange={(value) => handleDropdownChange('city', value)}
                                 addtionalParentClass="form-select-wrapper"
+                                translateOption={translateCity}
                               />
                             </div>
                           </fieldset>
@@ -376,6 +391,7 @@ export default function FutureBuyerInterest() {
                                 selectedValue={formData.propertyType}
                                 onChange={(value) => handleDropdownChange('propertyType', value)}
                                 addtionalParentClass="form-select-wrapper"
+                                translateOption={translatePropertyType}
                               />
                             </div>
                           </fieldset>
@@ -392,6 +408,7 @@ export default function FutureBuyerInterest() {
                                 selectedValue={formData.status}
                                 onChange={(value) => handleDropdownChange('status', value)}
                                 addtionalParentClass="form-select-wrapper"
+                                translateOption={translateStatus}
                               />
                             </div>
                           </fieldset>
@@ -412,6 +429,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.minPrice}
                                 onChange={handleInputChange}
                                 min="0"
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -431,6 +450,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.maxPrice}
                                 onChange={handleInputChange}
                                 min="0"
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -441,12 +462,12 @@ export default function FutureBuyerInterest() {
                               <i className="icon-wallet" /> {t('currency')}
                             </label>
                             <div className={styles.inputWrapper}>
-                              <input
-                                type="text"
-                                className={`tf-input style-2 ${styles.formInput}`}
-                                value="USD"
-                                disabled
-                                style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+                              <DropdownSelect
+                                name="currency"
+                                options={currencyOptions}
+                                selectedValue={formData.currency}
+                                onChange={(value) => handleDropdownChange('currency', value)}
+                                addtionalParentClass="form-select-wrapper"
                               />
                             </div>
                           </fieldset>
@@ -468,6 +489,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.minSize}
                                 onChange={handleInputChange}
                                 min="0"
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -487,6 +510,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.maxSize}
                                 onChange={handleInputChange}
                                 min="0"
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -524,6 +549,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.bedrooms}
                                 onChange={handleInputChange}
                                 min="0"
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -543,6 +570,8 @@ export default function FutureBuyerInterest() {
                                 value={formData.bathrooms}
                                 onChange={handleInputChange}
                                 min="0"
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>
@@ -555,18 +584,22 @@ export default function FutureBuyerInterest() {
                               <i className="icon-star" /> {t('amenities')}
                             </label>
                             <div className={styles.amenitiesGrid}>
-                              {amenitiesList.map((amenity) => (
-                                <div key={amenity} className={styles.amenityCheckbox}>
-                                  <label>
-                                    <input
-                                      type="checkbox"
-                                      checked={formData.amenities.includes(amenity)}
-                                      onChange={(e) => handleAmenityChange(amenity, e.target.checked)}
-                                    />
-                                    <span>{amenity}</span>
-                                  </label>
-                                </div>
-                              ))}
+                              {amenitiesList.map((amenity) => {
+                                const key = amenityToTranslationKey[amenity];
+                                const label = key ? tAmenities(key) : amenity;
+                                return (
+                                  <div key={amenity} className={styles.amenityCheckbox}>
+                                    <label>
+                                      <input
+                                        type="checkbox"
+                                        checked={formData.amenities.includes(amenity)}
+                                        onChange={(e) => handleAmenityChange(amenity, e.target.checked)}
+                                      />
+                                      <span>{label}</span>
+                                    </label>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </fieldset>
                         </div>
@@ -586,6 +619,8 @@ export default function FutureBuyerInterest() {
                                 id="notes"
                                 value={formData.notes}
                                 onChange={handleInputChange}
+                                dir={inputDir}
+                                style={{ textAlign: isRTL ? 'right' : 'left' }}
                               />
                             </div>
                           </fieldset>

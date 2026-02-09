@@ -664,7 +664,7 @@
     "emailAddress": "Email Address",
     "emailPlaceholder": "your.email@example.com",
     "phoneNumber": "Phone Number",
-    "phonePlaceholder": "+963 999 123 456",
+    "phonePlaceholder": "Enter your phone number",
     "propertyType": "Property Type",
     "selectPropertyType": "Select property type",
     "apartment": "Apartment",
@@ -747,7 +747,34 @@
     "successMessage": "Your request has been submitted successfully! Found {count} matching properties. We will contact you soon.",
     "errorMessage": "Failed to submit request",
     "maxLimitReached": "Maximum limit reached. You can only submit 3 future buyer interest requests.",
-    "maxRentalLimitReached": "Maximum limit reached. You can only submit 5 rental service requests."
+    "maxRentalLimitReached": "Maximum limit reached. You can only submit 5 rental service requests.",
+    "cities": {
+      "Aleppo": "Aleppo",
+      "As-Suwayda": "As-Suwayda",
+      "Damascus": "Damascus",
+      "Daraa": "Daraa",
+      "Deir ez-Zur": "Deir ez-Zur",
+      "Hama": "Hama",
+      "Homs": "Homs",
+      "Idlib": "Idlib",
+      "Latakia": "Latakia",
+      "Raqqah": "Raqqah",
+      "Tartus": "Tartus"
+    },
+    "propertyTypes": {
+      "Apartment": "Apartment",
+      "Villa": "Villa",
+      "Building": "Building",
+      "Land": "Land",
+      "Holiday Home": "Holiday Home",
+      "Office": "Office",
+      "Commercial": "Commercial"
+    },
+    "statusOptions": {
+      "both": "Both",
+      "sale": "For Sale",
+      "rent": "For Rent"
+    }
   },
   "cta": {
     "title": "Find a Local Real Estate Agent Today",

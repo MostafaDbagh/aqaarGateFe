@@ -662,7 +662,7 @@
     "emailAddress": "عنوان البريد الإلكتروني",
     "emailPlaceholder": "بريدك@example.com",
     "phoneNumber": "رقم الهاتف",
-    "phonePlaceholder": "+963 999 123 456",
+    "phonePlaceholder": "أدخل رقم هاتفك",
     "propertyType": "نوع العقار",
     "selectPropertyType": "اختر نوع العقار",
     "apartment": "شقة",
@@ -746,7 +746,34 @@
     "successMessage": "تم إرسال طلبك بنجاح! تم العثور على {count} عقار متطابق. سنتواصل معك قريباً.",
     "errorMessage": "فشل إرسال الطلب",
     "maxLimitReached": "تم الوصول إلى الحد الأقصى. يمكنك إرسال 3 طلبات فقط للاهتمام المستقبلي.",
-    "maxRentalLimitReached": "تم الوصول إلى الحد الأقصى. يمكنك إرسال 5 طلبات فقط لخدمة الإيجار."
+    "maxRentalLimitReached": "تم الوصول إلى الحد الأقصى. يمكنك إرسال 5 طلبات فقط لخدمة الإيجار.",
+    "cities": {
+      "Aleppo": "حلب",
+      "As-Suwayda": "السويداء",
+      "Damascus": "دمشق",
+      "Daraa": "درعا",
+      "Deir ez-Zur": "دير الزور",
+      "Hama": "حماة",
+      "Homs": "حمص",
+      "Idlib": "إدلب",
+      "Latakia": "اللاذقية",
+      "Raqqah": "الرقة",
+      "Tartus": "طرطوس"
+    },
+    "propertyTypes": {
+      "Apartment": "شقة",
+      "Villa": "فيلا",
+      "Building": "مبنى",
+      "Land": "أرض",
+      "Holiday Home": "بيت عطلة",
+      "Office": "مكتب",
+      "Commercial": "تجاري"
+    },
+    "statusOptions": {
+      "both": "كلاهما",
+      "sale": "للبيع",
+      "rent": "للإيجار"
+    }
   },
   "cta": {
     "title": "ابحث عن وكيل عقاري محلي اليوم",
