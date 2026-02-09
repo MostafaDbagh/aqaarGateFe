@@ -46,10 +46,39 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
-  const ogImageStatic = `${baseUrl}/images/cities/hero.jpg`;
-  const ogImageFallback = `${baseUrl}/images/logo/og.png`;
+  // Resolve first property image as absolute URL for og:image (WhatsApp needs 300x200 min)
+  const getFirstPropertyImage = (p) => {
+    const push = (val) => {
+      if (!val) return null;
+      const v = typeof val === 'string' ? val : val?.url || val?.secure_url || val?.path || val?.src;
+      if (!v || typeof v !== 'string') return null;
+      const raw = v.trim();
+      if (/^https?:\/\//i.test(raw)) return raw;
+      if (raw.startsWith('//')) return `https:${raw}`;
+      if (raw.startsWith('/')) return `${baseUrl}${raw}`;
+      return null;
+    };
+    if (Array.isArray(p?.images)?.[0]) return push(p.images[0]);
+    if (Array.isArray(p?.galleryImages)?.[0]) return push(p.galleryImages[0]);
+    if (Array.isArray(p?.imageNames)?.[0]) return push(p.imageNames[0]);
+    if (p?.coverImage) return push(p.coverImage);
+    if (p?.featuredImage) return push(p.featuredImage);
+    if (p?.mainImage) return push(p.mainImage);
+    return null;
+  };
+  const propertyImage = getFirstPropertyImage(property);
+  // hero.jpg is 612x408 - meets WhatsApp min 300x200
+  const ogImageFallback = `${baseUrl}/images/cities/hero.jpg`;
+  const ogImageLogo = `${baseUrl}/images/logo/og.png`;
   const ogImageDynamic = `${baseUrl}/${locale}/opengraph-image`;
   const ogImageAlt = property?.propertyKeyword || `${typeStr} in ${property?.city || 'Syria'} - AqaarGate`;
+
+  const ogImages = [
+    ...(propertyImage ? [{ url: propertyImage, width: 1200, height: 630, alt: ogImageAlt }] : []),
+    { url: ogImageFallback, width: 612, height: 408, alt: ogImageAlt },
+    { url: ogImageLogo, width: 180, height: 180, alt: ogImageAlt },
+    { url: ogImageDynamic, width: 1200, height: 630, alt: ogImageAlt },
+  ];
 
   return {
     metadataBase: new URL(baseUrl),
@@ -84,17 +113,13 @@ export async function generateMetadata({ params }) {
       siteName: "AqaarGate Real Estate",
       locale: locale === 'ar' ? 'ar_SA' : 'en_US',
       type: "website",
-      images: [
-        { url: ogImageStatic, width: 1200, height: 630, alt: ogImageAlt },
-        { url: ogImageFallback, width: 612, height: 408, alt: ogImageAlt },
-        { url: ogImageDynamic, width: 1200, height: 630, alt: ogImageAlt },
-      ],
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImageStatic, ogImageFallback, ogImageDynamic],
+      images: ogImages.map((img) => img.url),
     },
     robots: {
       index: true,
