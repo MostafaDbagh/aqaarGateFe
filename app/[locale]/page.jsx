@@ -42,16 +42,16 @@ export async function generateMetadata({ params }) {
         url: `${baseUrl}/ar`,
         locale: 'ar_SA',
         images: [
-          { url: `${baseUrl}/images/logo/og.png`, width: 1200, height: 630, alt: 'AqaarGate' },
           { url: `${baseUrl}/images/cities/hero.jpg`, width: 612, height: 408, alt: 'AqaarGate' },
           { url: `${baseUrl}/ar/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate' },
+          { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate' },
         ],
       },
       twitter: {
         card: 'summary_large_image',
         title: 'عقار جيت - منازل للبيع في سوريا | شراء عقار في سوريا',
         description: 'منازل للبيع في سوريا، شقق للبيع في دمشق. سوق العقارات السورية، عقارات للمغتربين، منازل للإيجار في سوريا، عقارات بأسعار معقولة في سوريا.',
-        images: [`${baseUrl}/images/logo/og.png`, `${baseUrl}/images/cities/hero.jpg`, `${baseUrl}/ar/opengraph-image`],
+        images: [`${baseUrl}/images/cities/hero.jpg`, `${baseUrl}/ar/opengraph-image`, `${baseUrl}/images/logo/og.png`],
       },
       alternates: {
         canonical: `${baseUrl}/ar`,
@@ -86,16 +86,16 @@ export async function generateMetadata({ params }) {
       url: `${baseUrl}/en`,
       locale: 'en_US',
       images: [
-        { url: `${baseUrl}/images/logo/og.png`, width: 1200, height: 630, alt: 'AqaarGate' },
         { url: `${baseUrl}/images/cities/hero.jpg`, width: 612, height: 408, alt: 'AqaarGate' },
         { url: `${baseUrl}/en/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate' },
+        { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate' },
       ],
     },
     twitter: {
       card: 'summary_large_image',
       title: 'AqaarGate - Homes for Sale in Syria | Buy Property in Syria',
       description: 'Homes for sale in Syria, apartments for sale in Damascus. Syrian property market, property investment Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
-      images: [`${baseUrl}/images/logo/og.png`, `${baseUrl}/images/cities/hero.jpg`, `${baseUrl}/en/opengraph-image`],
+      images: [`${baseUrl}/images/cities/hero.jpg`, `${baseUrl}/en/opengraph-image`, `${baseUrl}/images/logo/og.png`],
     },
     alternates: {
       canonical: `${baseUrl}/en`,

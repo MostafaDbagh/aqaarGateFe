@@ -2,11 +2,10 @@ import React from "react";
 import PropertyDetailClient from "@/components/PropertyDetailClient";
 import { fetchProperty } from "@/lib/fetchProperty";
 import { formatPriceWithCurrency } from "@/utlis/propertyHelpers";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
-
-const OG_LOGO = '/en/opengraph-image';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -47,9 +46,6 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
-  const ogImage = `${baseUrl}${OG_LOGO}`;
-  const ogImageAlt = property?.propertyKeyword || `${typeStr} in ${property?.city || 'Syria'} - AqaarGate`;
-
   return {
     metadataBase: new URL(baseUrl),
     title,
@@ -76,15 +72,13 @@ export async function generateMetadata({ params }) {
       siteName: "AqaarGate Real Estate",
       locale: "en_US",
       type: "website",
-      images: [
-        { url: ogImage, width: 1200, height: 630, alt: ogImageAlt },
-      ],
+      images: getDefaultOgImages(baseUrl, 'en'),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage],
+      images: getDefaultOgImageUrls(baseUrl, 'en'),
     },
     robots: {
       index: true,

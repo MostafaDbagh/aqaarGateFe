@@ -1,10 +1,12 @@
 import Breadcumb from "@/components/common/Breadcumb";
 import Cta from "@/components/common/Cta";
-
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Properties1 from "@/components/properties/Properties1";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
 
 export const metadata = {
   title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
@@ -46,24 +48,17 @@ export const metadata = {
   openGraph: {
     title: "Syria & Lattakia Property Listings - Browse Properties for Sale & Rent",
     description: "Browse our comprehensive collection of properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, or holiday home with advanced search filters.",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,
-    images: [
-      {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`,
-        width: 1200,
-        height: 630,
-        alt: 'AqaarGate - Property Listings',
-      },
-    ],
+    url: `${baseUrl}/en/property-list`,
+    images: getDefaultOgImages(baseUrl, 'en'),
   },
   twitter: {
     card: 'summary_large_image',
     title: "Property Listings - Browse All Properties for Sale and Rent",
     description: "Browse our comprehensive collection of properties for sale and rent. Find your perfect home with advanced search filters.",
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`],
+    images: getDefaultOgImageUrls(baseUrl, 'en'),
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/property-list`,
+    canonical: `${baseUrl}/en/property-list`,
   },
 };
 export default function page() {
