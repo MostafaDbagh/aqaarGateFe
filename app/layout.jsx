@@ -6,7 +6,9 @@ export const metadata = {
   },
   description: 'AqaarGate is one of the best real estate sites in Syria. The #1 real estate platform in Syria & Lattakia. Find luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas for sale and rent. Trusted by expats from Germany, Netherlands, EU, UAE, Saudi Arabia, Qatar, Kuwait. Browse 1000+ verified properties. Start your search today!',
   keywords: [
-    // Arabic - منصة عقارات في سورية
+    // Arabic - موقع عقاري، عقارات في سورية
+    'موقع عقاري',
+    'موقع عقارات',
     'منصة عقارات في سورية',
     'منصة عقارات في سوريا',
     'عقارات سورية',
@@ -344,7 +346,7 @@ const jsonLd = {
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
       name: 'AqaarGate',
-      alternateName: ['AqaarGate Real Estate', 'aqaargate', 'aqaargate.com', 'best real estate sites in Syria', 'سوق العقارات الإلكتروني في سورية', 'عقار جيت'],
+      alternateName: ['AqaarGate Real Estate', 'aqaargate', 'aqaargate.com', 'best real estate sites in Syria', 'موقع عقاري', 'موقع عقارات', 'عقارات في سورية', 'عقارات في سوريا', 'سوق العقارات الإلكتروني في سورية', 'عقار جيت'],
       description: 'AqaarGate is one of the best real estate sites in Syria. The #1 real estate platform in Syria & Lattakia. Buy, rent & sell properties, holiday homes, villas, apartments.',
       publisher: { '@id': `${SITE_URL}/#organization` },
       inLanguage: ['en', 'ar'],

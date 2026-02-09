@@ -6,7 +6,7 @@ export default function StructuredData() {
     "@type": "LocalBusiness",
     "@id": `${baseUrl}/#organization`,
     "name": "AqaarGate Real Estate",
-    "alternateName": "AqaarGate",
+    "alternateName": ["AqaarGate", "عقار جيت", "عقارات في سورية"],
     "legalName": "AqaarGate Real Estate",
     "description": "AqaarGate - Premium real estate services for buying, selling, and renting properties in Syria and Lattakia. Expert guidance for international property buyers.",
     "url": baseUrl,
@@ -22,8 +22,9 @@ export default function StructuredData() {
       "@type": "ContactPoint",
       "telephone": "+1-555-0123",
       "contactType": "customer service",
-      "availableLanguage": "English"
+      "availableLanguage": ["English", "Arabic"]
     },
+    "inLanguage": ["en", "ar"],
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "123 Baghdad Street",
@@ -156,7 +157,7 @@ export default function StructuredData() {
     "@type": "WebSite",
     "@id": `${baseUrl}/#website`,
     "name": "AqaarGate Real Estate",
-    "alternateName": "AqaarGate",
+    "alternateName": ["AqaarGate", "عقار جيت", "عقارات في سورية"],
     "url": baseUrl,
     "description": "AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Find 1000+ verified properties for sale and rent. Buy, sell, and rent properties in Syria. Holiday homes (بيوت عطلات), villas, apartments.",
     "keywords": "aqaargate, aqaargate.com, #1 real estate syria, real estate syria, properties syria, lattakia properties, syria holiday homes, بيوت عطلات سوريا, aqaargate real estate",
