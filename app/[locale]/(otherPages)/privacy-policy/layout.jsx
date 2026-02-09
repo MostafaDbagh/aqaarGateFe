@@ -1,3 +1,5 @@
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
+
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
 
 export async function generateMetadata({ params }) {
@@ -24,6 +26,13 @@ export async function generateMetadata({ params }) {
         ? 'سياسة الخصوصية و حماية البيانات'
         : 'Learn how we protect your data.',
       url,
+      images: getDefaultOgImages(baseUrl, locale),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: isAr ? 'سياسة الخصوصية - AqaarGate' : 'Privacy Policy - AqaarGate',
+      description: isAr ? 'سياسة الخصوصية و حماية البيانات' : 'Learn how we protect your data.',
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: { canonical: url },
     robots: { index: true, follow: true },

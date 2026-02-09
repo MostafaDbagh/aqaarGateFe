@@ -3,6 +3,7 @@ import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Cta from "@/components/otherPages/faq/Cta";
 import Faqs from "@/components/otherPages/faq/Faqs";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import { getTranslations } from 'next-intl/server';
 import React from "react";
 
@@ -38,15 +39,13 @@ export async function generateMetadata({ params }) {
       title: "Syria Real Estate FAQ - Common Questions About Property in Lattakia",
       description: "Find answers to frequently asked questions about buying, selling, and renting properties in Syria and Lattakia. Expert guidance on real estate transactions.",
       url,
-      images: [
-        { url: `${baseUrl}/${locale}/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate - FAQ' },
-      ],
+      images: getDefaultOgImages(baseUrl, locale),
     },
     twitter: {
       card: 'summary_large_image',
       title: "Syria Real Estate FAQ - Common Questions About Property in Lattakia",
       description: "Find answers to frequently asked questions about buying, selling, and renting properties in Syria and Lattakia.",
-      images: [`${baseUrl}/${locale}/opengraph-image`],
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: { canonical: url },
   };

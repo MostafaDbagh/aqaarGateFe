@@ -3,7 +3,7 @@ import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Cta from "@/components/common/Cta";
 import About from "@/components/otherPages/about/About";
-
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
@@ -28,13 +28,13 @@ export async function generateMetadata({ params }) {
       title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
       description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
       url,
-      images: [{ url: `${baseUrl}/${locale}/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate - About Us' }],
+      images: getDefaultOgImages(baseUrl, locale),
     },
     twitter: {
       card: 'summary_large_image',
       title: "About Us - AqaarGate | Ambitious Young Syrians Showcasing Syria's Real Estate",
       description: "A group of ambitious young Syrians showcasing the beauty, diversity, and real estate potential of Syria.",
-      images: [`${baseUrl}/${locale}/opengraph-image`],
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: { canonical: url },
   };

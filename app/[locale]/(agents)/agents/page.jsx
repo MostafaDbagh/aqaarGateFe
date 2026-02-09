@@ -3,6 +3,7 @@ import Breadcumb from "@/components/common/Breadcumb";
 import Cta from "@/components/common/Cta";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import { getTranslations } from 'next-intl/server';
 import React from "react";
 
@@ -44,20 +45,13 @@ export async function generateMetadata({ params }) {
     title: "Syria & Lattakia Real Estate Agents - Expert Property Professionals",
     description: "Meet our team of experienced real estate agents and property professionals in Syria and Lattakia. Get personalized guidance for all your property needs.",
     url,
-    images: [
-      {
-        url: `${baseUrl}/${locale}/opengraph-image`,
-        width: 1200,
-        height: 630,
-        alt: 'AqaarGate - Agents',
-      },
-    ],
+    images: getDefaultOgImages(baseUrl, locale),
   },
   twitter: {
     card: 'summary_large_image',
     title: "Real Estate Agents - Meet Our Expert Property Professionals",
     description: "Meet our team of experienced real estate agents and property professionals. Get personalized guidance for all your property needs.",
-    images: [`${baseUrl}/${locale}/opengraph-image`],
+    images: getDefaultOgImageUrls(baseUrl, locale),
   },
   alternates: { canonical: url },
   };

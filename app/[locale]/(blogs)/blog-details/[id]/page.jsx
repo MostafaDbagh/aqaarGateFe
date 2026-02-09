@@ -1,4 +1,5 @@
 import BlogDetailClient from "@/components/blogs/BlogDetailClient";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
@@ -23,7 +24,6 @@ export async function generateMetadata({ params }) {
     const data = blog?.data || blog;
     const title = data?.seo?.metaTitle || data?.title || 'Blog Post';
     const description = data?.seo?.metaDescription || data?.excerpt || data?.content?.substring(0, 160) || 'Syria and Lattakia real estate blog.';
-    const ogImage = `${baseUrl}/${locale}/opengraph-image`;
 
     return {
       title: `${title} | AqaarGate`,
@@ -35,13 +35,13 @@ export async function generateMetadata({ params }) {
         description,
         url,
         type: 'article',
-        images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+        images: getDefaultOgImages(baseUrl, locale),
       },
       twitter: {
         card: 'summary_large_image',
         title: `${title} | AqaarGate`,
         description,
-        images: [ogImage],
+        images: getDefaultOgImageUrls(baseUrl, locale),
       },
     };
   } catch {

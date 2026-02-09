@@ -3,7 +3,7 @@ import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Cta from "@/components/common/Cta";
 import Vision from "@/components/otherPages/vision/Vision";
-
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
@@ -26,11 +26,13 @@ export async function generateMetadata({ params }) {
       title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
       description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
       url,
+      images: getDefaultOgImages(baseUrl, locale),
     },
     twitter: {
       card: 'summary_large_image',
       title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
       description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: { canonical: url },
   };

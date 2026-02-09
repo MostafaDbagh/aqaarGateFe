@@ -5,7 +5,7 @@ import Benefits from "@/components/otherPages/career/Benefits";
 import Jobs from "@/components/otherPages/career/Jobs";
 import PageTitle from "@/components/otherPages/career/PageTitle";
 import Reviews from "@/components/otherPages/career/Reviews";
-
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 export const dynamic = "force-dynamic";
@@ -29,13 +29,13 @@ export async function generateMetadata({ params }) {
       title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
       description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia.",
       url,
-      images: [{ url: `${baseUrl}/${locale}/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate - Careers' }],
+      images: getDefaultOgImages(baseUrl, locale),
     },
     twitter: {
       card: "summary_large_image",
       title: "Careers at AqaarGate - Real Estate Jobs in Syria & Lattakia",
       description: "Join AqaarGate's team. Explore career opportunities in real estate in Syria and Lattakia.",
-      images: [`${baseUrl}/${locale}/opengraph-image`],
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: { canonical: url },
   };

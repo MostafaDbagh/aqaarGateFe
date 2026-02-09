@@ -3,6 +3,7 @@ import Breadcumb from "@/components/common/Breadcumb";
 import Cta from "@/components/common/Cta";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import { getTranslations } from 'next-intl/server';
 import React from "react";
 
@@ -40,20 +41,13 @@ export async function generateMetadata({ params }) {
     title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
     url,
-    images: [
-      {
-        url: `${baseUrl}/${locale}/opengraph-image`,
-        width: 1200,
-        height: 630,
-        alt: 'Syria Real Estate Blog',
-      },
-    ],
+    images: getDefaultOgImages(baseUrl, locale),
   },
   twitter: {
     card: 'summary_large_image',
     title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
-    images: [`${baseUrl}/${locale}/opengraph-image`],
+    images: getDefaultOgImageUrls(baseUrl, locale),
   },
   alternates: { canonical: url },
   };

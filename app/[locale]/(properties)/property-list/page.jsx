@@ -1,9 +1,9 @@
 import Breadcumb from "@/components/common/Breadcumb";
 import Cta from "@/components/common/Cta";
-
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import Properties1 from "@/components/properties/Properties1";
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
 import React from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
@@ -54,17 +54,13 @@ export async function generateMetadata({ params }) {
       title: "#1 Property Listings in Syria & Lattakia - 1000+ Properties for Sale & Rent",
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home (بيوت عطلات), villa. Advanced search filters. Trusted by expats worldwide.",
       url,
-      images: [
-        { url: `${baseUrl}/images/logo/og.png`, width: 1200, height: 630, alt: 'AqaarGate - Property Listings' },
-        { url: `${baseUrl}/images/cities/hero.jpg`, width: 612, height: 408, alt: 'AqaarGate - Property Listings' },
-        { url: `${baseUrl}/${locale}/opengraph-image`, width: 1200, height: 630, alt: 'AqaarGate - Property Listings' },
-      ],
+      images: getDefaultOgImages(baseUrl, locale),
     },
     twitter: {
       card: 'summary_large_image',
       title: "#1 Property Listings in Syria - 1000+ Properties for Sale & Rent",
       description: "Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Holiday homes (بيوت عطلات), villas, apartments. Advanced search filters.",
-      images: [`${baseUrl}/images/logo/og.png`, `${baseUrl}/images/cities/hero.jpg`, `${baseUrl}/${locale}/opengraph-image`],
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: {
       canonical: url,
