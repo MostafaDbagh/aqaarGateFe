@@ -8,7 +8,9 @@
 const arabicToEnglishKeywords = {
   // Property types
   'شقة': 'Apartment',
+  'شقق': 'Apartment',
   'شقة سكنية': 'Apartment',
+  'شقق سكنية': 'Apartment',
   'فيلا': 'Villa',
   'فيلا/مزرعة': 'Villa',
   'منزل': 'House',
@@ -80,6 +82,9 @@ const arabicToEnglishKeywords = {
   'درعا': 'Daraa',
   'السويداء': 'As-Suwayda',
   'الرقة': 'Raqqah',
+  // Country (keyword search - not city filter)
+  'سوريا': 'Syria',
+  'سورية': 'Syria',
   // Finishing
   'اكساء حجري': 'Stone finishing',
   'تشطيب حجري': 'Stone finishing',
@@ -208,7 +213,7 @@ export const translateKeywordForSearch = (keyword) => {
     .map((t) => arabicToEnglishKeywords[t] || arabicToEnglishKeywords[t.replace(/[،,]/g, '')])
     .filter(Boolean);
   if (translated.length > 0) {
-    return translated.join(', ');
+    return translated.join(' ');
   }
 
   return keyword;

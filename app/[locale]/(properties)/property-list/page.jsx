@@ -10,6 +10,8 @@ const OG_IMAGE = { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180
 const OG_IMAGE_URL = `${baseUrl}/images/logo/og.png`;
 
 const keywordsEn = [
+  'properties for sale in syria',
+  'properties for sale in Syria',
   'syria property listings',
   'lattakia property listings',
   'syria properties for sale',

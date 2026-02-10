@@ -7,9 +7,11 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
   if (locale === 'ar') {
     return {
-      title: 'موقع عقاري - عقارات في سورية | عقار جيت AqaarGate - افضل موقع عقارات في سوريا',
-      description: 'موقع عقاري وموقع عقارات - عقار جيت. عقارات في سورية، منازل للبيع في سوريا، شقق للبيع في دمشق، عقارات اللاذقية. سوق العقارات الإلكتروني في سورية - أكثر من 1000 عقار للبيع والإيجار.',
+      title: 'عقارات للبيع في سوريا | موقع عقاري - عقار جيت AqaarGate | افضل موقع عقارات في سوريا',
+      description: 'عقارات للبيع في سوريا - موقع عقاري وموقع عقارات عقار جيت. عقارات في سورية، منازل للبيع في سوريا، شقق للبيع في دمشق، عقارات اللاذقية. سوق العقارات الإلكتروني في سورية - أكثر من 1000 عقار للبيع والإيجار.',
       keywords: [
+        'عقارات للبيع في سوريا',
+        'عقارات للبيع',
         'موقع عقاري',
         'موقع عقارات',
         'عقارات في سورية',
@@ -53,8 +55,8 @@ export async function generateMetadata({ params }) {
         'مستقبل العقارات في سوريا',
       ],
       openGraph: {
-        title: 'موقع عقاري - عقارات في سورية | عقار جيت - افضل موقع عقارات في سوريا',
-        description: 'موقع عقاري وموقع عقارات - عقار جيت. عقارات في سورية، منازل للبيع في سوريا، شقق للبيع في دمشق، عقارات اللاذقية. سوق العقارات الإلكتروني في سورية - أكثر من 1000 عقار.',
+        title: 'عقارات للبيع في سوريا | موقع عقاري - عقار جيت - افضل موقع عقارات في سوريا',
+        description: 'عقارات للبيع في سوريا - موقع عقاري عقار جيت. عقارات في سورية، منازل للبيع في سوريا، شقق للبيع في دمشق، عقارات اللاذقية. سوق العقارات الإلكتروني في سورية - أكثر من 1000 عقار.',
         url: `${baseUrl}/ar`,
         locale: 'ar_SA',
         images: [
@@ -74,9 +76,11 @@ export async function generateMetadata({ params }) {
     };
   }
   return {
-    title: 'AqaarGate - Homes for Sale in Syria | Buy Property | Apartments for Sale in Damascus',
-    description: 'Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market - land for sale Syria, property investment Syria, expat property Syria. Houses for rent Syria, real estate opportunities in Syria, affordable properties in Syria. 1000+ verified properties.',
+    title: 'Properties for Sale in Syria | AqaarGate - Homes for Sale | Buy Property | Apartments for Sale in Damascus',
+    description: 'Properties for sale in Syria - AqaarGate. Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market - land for sale Syria, property investment Syria, expat property Syria. Houses for rent Syria. 1000+ verified properties.',
     keywords: [
+      'properties for sale in syria',
+      'properties for sale in Syria',
       'Homes for sale in Syria',
       'Buy property in Syria',
       'Apartments for sale in Damascus',
@@ -95,8 +99,8 @@ export async function generateMetadata({ params }) {
       'aqaargate',
     ],
     openGraph: {
-      title: 'AqaarGate - Homes for Sale in Syria | Buy Property | Apartments for Sale in Damascus',
-      description: 'Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market, land for sale Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
+      title: 'Properties for Sale in Syria | AqaarGate - Homes for Sale | Buy Property | Apartments for Sale in Damascus',
+      description: 'Properties for sale in Syria - AqaarGate. Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market, land for sale Syria, expat property Syria. Houses for rent Syria.',
       url: `${baseUrl}/en`,
       locale: 'en_US',
       images: [
