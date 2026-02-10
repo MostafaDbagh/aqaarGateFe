@@ -122,8 +122,6 @@ export default async function Home({ params }) {
   return (
     <>
       <HomePageClient />
-      {/* SEO Content - Visible at bottom for indexing (display:none can hurt Arabic/SEO) */}
-    
     </>
   );
 }
