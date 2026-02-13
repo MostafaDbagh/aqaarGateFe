@@ -7,8 +7,12 @@ export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-const OG_IMAGE = { url: `${BASE_URL}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
+// Absolute URLs required for WhatsApp/Facebook link preview (same for en and ar)
 const OG_IMAGE_URL = `${BASE_URL}/images/logo/og.png`;
+const OG_IMAGES = [
+  { url: OG_IMAGE_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' },
+  { url: OG_IMAGE_URL, width: 400, height: 400, alt: 'AqaarGate' },
+];
 
 
 export async function generateMetadata({ params }) {
@@ -49,6 +53,9 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
+  const enUrl = `${BASE_URL}/en/property-detail/${id}`;
+  const arUrl = `${BASE_URL}/ar/property-detail/${id}`;
+
   return {
     metadataBase: new URL(BASE_URL),
     title,
@@ -70,9 +77,9 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: url,
       languages: {
-        en: `${BASE_URL}/en/property-detail/${id}`,
-        ar: `${BASE_URL}/ar/property-detail/${id}`,
-        'x-default': `${BASE_URL}/en/property-detail/${id}`,
+        en: enUrl,
+        ar: arUrl,
+        'x-default': enUrl,
       },
     },
     openGraph: {
@@ -81,8 +88,9 @@ export async function generateMetadata({ params }) {
       url,
       siteName: "AqaarGate Real Estate",
       locale: locale === 'ar' ? 'ar_SA' : 'en_US',
+      alternateLocale: locale === 'ar' ? 'en_US' : 'ar_SA',
       type: "website",
-      images: [OG_IMAGE],
+      images: OG_IMAGES,
     },
     twitter: {
       card: "summary_large_image",
