@@ -13,13 +13,14 @@ import logger from "@/utlis/logger";
 import styles from "./AddProperty.module.css";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { sanitizeInput, validateFileUpload } from "@/utils/security";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordWithT } from '@/utils/translateKeywords';
 import { userAPI } from '@/apis/user';
 
 export default function AddProperty({ isAdminMode = false }) {
   const t = useTranslations('agent.addProperty');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
   const router = useRouter();
   const { showSuccessModal, showLoginModal } = useGlobalModal();
   const [user, setUser] = useState(null);
@@ -421,27 +422,14 @@ export default function AddProperty({ isAdminMode = false }) {
     
     // Required fields
     if (!formData.propertyType) newErrors.propertyType = "Property type is required";
-    // Property keyword is optional - no validation needed
-    if (!formData.propertyDesc) newErrors.propertyDesc = "Property description is required";
+    // Property keyword, description, address, neighborhood are optional
     if (!formData.propertyPrice || isNaN(formData.propertyPrice) || parseFloat(formData.propertyPrice) <= 0) {
       newErrors.propertyPrice = "Valid price is required";
     }
     if (!formData.status) newErrors.status = "Property status (sale/rent) is required";
-    if (!formData.address) newErrors.address = "Address is required";
     if (!formData.country) newErrors.country = "Country is required";
     if (!formData.state) newErrors.state = "State is required";
-    if (!formData.neighborhood) newErrors.neighborhood = "Neighborhood is required";
-    
-    // Arabic translation fields - REQUIRED (except notes_ar which is optional)
-    if (!formData.description_ar || formData.description_ar.trim() === '') {
-      newErrors.description_ar = "Arabic description is required";
-    }
-    if (!formData.address_ar || formData.address_ar.trim() === '') {
-      newErrors.address_ar = "Arabic address is required";
-    }
-    if (!formData.neighborhood_ar || formData.neighborhood_ar.trim() === '') {
-      newErrors.neighborhood_ar = "Arabic neighborhood is required";
-    }
+    // Arabic translation fields - optional (same as English description, address, neighborhood)
     // notes_ar is optional - no validation needed
     
     // Numeric validations
@@ -932,7 +920,7 @@ export default function AddProperty({ isAdminMode = false }) {
               </fieldset>
               
               <fieldset className="box box-fieldset">
-                <label htmlFor="propertyDesc">{t('description')}:<span style={{ color: '#dc3545' }}>*</span></label>
+                <label htmlFor="propertyDesc">{t('description')}</label>
                 <textarea
                   name="propertyDesc"
                   className="textarea"
@@ -946,7 +934,7 @@ export default function AddProperty({ isAdminMode = false }) {
               <div className="box grid-layout-3 gap-30">
                 <fieldset className="box-fieldset">
                   <label htmlFor="address">
-                    {t('fullAddress')}:<span style={{ color: '#dc3545' }}>*</span>
+                    {t('fullAddress')}
                   </label>
                   <input
                     type="text"
@@ -992,7 +980,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 
                 <fieldset className="box-fieldset">
                   <label htmlFor="neighborhood">
-                    {t('neighborhood')}:<span style={{ color: '#dc3545' }}>*</span>
+                    {t('neighborhood')}
                   </label>
                   <input
                     type="text"
@@ -1358,7 +1346,7 @@ export default function AddProperty({ isAdminMode = false }) {
             
             <fieldset className="box-fieldset" style={{ gridColumn: '1 / -1' }}>
               <label htmlFor="notes">
-                {t('notes')}:
+                {t('notes')} ({locale === 'ar' ? 'بالانكليزية' : 'English'}):
               </label>
               <textarea
                 style={{ fontSize: '18px', lineHeight: '22.4px', fontWeight: '500',color: '#374151' }}
@@ -1366,7 +1354,7 @@ export default function AddProperty({ isAdminMode = false }) {
                 id="notes"
                 className="form-control"
                 rows="4"
-                placeholder={t('notesPlaceholder')}
+                placeholder={locale === 'ar' ? 'أي ملاحظات حول العقار بالانكليزية' : 'Any notes about the property (in English)'}
                 value={formData.notes}
                 onChange={handleInputChange}
               />
@@ -1565,11 +1553,11 @@ export default function AddProperty({ isAdminMode = false }) {
 
           {/* Arabic Translation Section */}
           <div className="widget-box-2 mb-20">
-            <h3 className="title">Arabic Translation (الترجمة العربية) <span style={{ color: '#dc3545' }}>*</span></h3>
+            <h3 className="title">Arabic Translation (الترجمة العربية)</h3>
             <div className="box-info-property">
               <fieldset className="box box-fieldset">
                 <label htmlFor="description_ar">
-                  Description (الوصف):<span style={{ color: '#dc3545' }}>*</span>
+                  Description (الوصف)
                 </label>
                 <textarea
                   name="description_ar"
@@ -1578,7 +1566,6 @@ export default function AddProperty({ isAdminMode = false }) {
                   value={formData.description_ar}
                   onChange={handleInputChange}
                   dir="rtl"
-                  required
                 />
                 {errors.description_ar && (
                   <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
@@ -1589,7 +1576,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box box-fieldset">
                 <label htmlFor="address_ar">
-                  Full Address (العنوان الكامل):<span style={{ color: '#dc3545' }}>*</span>
+                  Full Address (العنوان الكامل)
                 </label>
                 <input
                   type="text"
@@ -1599,7 +1586,6 @@ export default function AddProperty({ isAdminMode = false }) {
                   value={formData.address_ar}
                   onChange={handleInputChange}
                   dir="rtl"
-                  required
                 />
                 {errors.address_ar && (
                   <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>
@@ -1610,7 +1596,7 @@ export default function AddProperty({ isAdminMode = false }) {
               
               <fieldset className="box box-fieldset">
                 <label htmlFor="neighborhood_ar">
-                  Neighborhood (الحي):<span style={{ color: '#dc3545' }}>*</span>
+                  Neighborhood (الحي)
                 </label>
                 <input
                   type="text"
@@ -1620,7 +1606,6 @@ export default function AddProperty({ isAdminMode = false }) {
                   value={formData.neighborhood_ar}
                   onChange={handleInputChange}
                   dir="rtl"
-                  required
                 />
                 {errors.neighborhood_ar && (
                   <span className="text-danger" style={{ fontSize: '14px', display: 'block', marginTop: '5px' }}>

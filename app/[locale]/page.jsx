@@ -2,11 +2,17 @@ import { setRequestLocale } from 'next-intl/server';
 import HomePageClient from '../HomePageClient';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const OG_IMAGE_URL = `${baseUrl}/images/logo/og.png`;
+const OG_IMAGES = [
+  { url: OG_IMAGE_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' },
+  { url: OG_IMAGE_URL, width: 400, height: 400, alt: 'AqaarGate' },
+];
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   if (locale === 'ar') {
     return {
+      metadataBase: new URL(baseUrl),
       title: 'عقارات للبيع في سوريا | موقع عقاري - عقار جيت AqaarGate | افضل موقع عقارات في سوريا',
       description: 'عقارات للبيع في سوريا - موقع عقاري وموقع عقارات عقار جيت. عقارات في سورية، منازل للبيع في سوريا، شقق للبيع في دمشق، عقارات اللاذقية. سوق العقارات الإلكتروني في سورية - أكثر من 1000 عقار للبيع والإيجار.',
       keywords: [
@@ -58,16 +64,17 @@ export async function generateMetadata({ params }) {
         title: 'عقارات للبيع في سوريا | موقع عقاري - عقار جيت - افضل موقع عقارات في سوريا',
         description: 'عقارات للبيع في سوريا - موقع عقاري عقار جيت. عقارات في سورية، منازل للبيع في سوريا، شقق للبيع في دمشق، عقارات اللاذقية. سوق العقارات الإلكتروني في سورية - أكثر من 1000 عقار.',
         url: `${baseUrl}/ar`,
+        siteName: 'AqaarGate',
         locale: 'ar_SA',
-        images: [
-          { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate' },
-        ],
+        alternateLocale: 'en_US',
+        type: 'website',
+        images: OG_IMAGES,
       },
       twitter: {
         card: 'summary_large_image',
         title: 'موقع عقاري - عقارات في سورية | عقار جيت',
         description: 'موقع عقاري وموقع عقارات. عقارات في سورية، شقق للبيع في دمشق، عقارات اللاذقية. أكثر من 1000 عقار للبيع والإيجار.',
-        images: [`${baseUrl}/images/logo/og.png`],
+        images: [OG_IMAGE_URL],
       },
       alternates: {
         canonical: `${baseUrl}/ar`,
@@ -76,6 +83,7 @@ export async function generateMetadata({ params }) {
     };
   }
   return {
+    metadataBase: new URL(baseUrl),
     title: 'Properties for Sale in Syria | AqaarGate - Homes for Sale | Buy Property | Apartments for Sale in Damascus',
     description: 'Properties for sale in Syria - AqaarGate. Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market - land for sale Syria, property investment Syria, expat property Syria. Houses for rent Syria. 1000+ verified properties.',
     keywords: [
@@ -102,16 +110,17 @@ export async function generateMetadata({ params }) {
       title: 'Properties for Sale in Syria | AqaarGate - Homes for Sale | Buy Property | Apartments for Sale in Damascus',
       description: 'Properties for sale in Syria - AqaarGate. Homes for sale in Syria, buy property in Syria, apartments for sale in Damascus. Syrian property market, land for sale Syria, expat property Syria. Houses for rent Syria.',
       url: `${baseUrl}/en`,
+      siteName: 'AqaarGate',
       locale: 'en_US',
-      images: [
-        { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate' },
-      ],
+      alternateLocale: 'ar_SA',
+      type: 'website',
+      images: OG_IMAGES,
     },
     twitter: {
       card: 'summary_large_image',
       title: 'AqaarGate - Homes for Sale in Syria | Buy Property in Syria',
       description: 'Homes for sale in Syria, apartments for sale in Damascus. Syrian property market, property investment Syria, expat property Syria. Houses for rent Syria, affordable properties in Syria.',
-      images: [`${baseUrl}/images/logo/og.png`],
+      images: [OG_IMAGE_URL],
     },
     alternates: {
       canonical: `${baseUrl}/en`,
