@@ -11,6 +11,9 @@ import OTPVerification from '../modals/OTPVerification';
 import MakeMeAgentModal from '../modals/MakeMeAgentModal';
 import logger from '@/utlis/logger';
 
+const OTP_PENDING_KEY = 'aqaar_otp_pending';
+const OTP_PENDING_MAX_AGE_MS = 10 * 60 * 1000; // 10 minutes
+
 const GlobalModalContext = createContext();
 
 export const useGlobalModal = () => {
@@ -64,6 +67,44 @@ export const GlobalModalProvider = ({ children }) => {
   const [makeMeAgentModalState, setMakeMeAgentModalState] = useState({
     isOpen: false
   });
+
+  // Restore OTP modal after page reload (e.g. user left to open Gmail and browser reloaded)
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(OTP_PENDING_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      const { email, userData, type, ts } = data;
+      if (!email || !ts) return;
+      if (Date.now() - ts > OTP_PENDING_MAX_AGE_MS) {
+        sessionStorage.removeItem(OTP_PENDING_KEY);
+        localStorage.removeItem(OTP_PENDING_KEY);
+        return;
+      }
+      setOtpModalState({
+        isOpen: true,
+        userData: userData || null,
+        email,
+        type: type || 'signup'
+      });
+    } catch (_) {}
+  }, []);
+
+  // When OTP modal is open but storage was cleared (e.g. verify succeeded), close the modal
+  useEffect(() => {
+    if (!otpModalState.isOpen) return;
+    const check = () => {
+      try {
+        const hasSession = sessionStorage.getItem(OTP_PENDING_KEY);
+        const hasLocal = localStorage.getItem(OTP_PENDING_KEY);
+        if (!hasSession && !hasLocal) {
+          setOtpModalState((prev) => (prev.isOpen ? { ...prev, isOpen: false, userData: null, email: '', type: 'signup' } : prev));
+        }
+      } catch (_) {}
+    };
+    const id = setInterval(check, 150);
+    return () => clearInterval(id);
+  }, [otpModalState.isOpen]);
 
   const showSuccessModal = (title, message, userEmail = '', showLoginButton = false) => {
     setModalState({
@@ -141,23 +182,39 @@ export const GlobalModalProvider = ({ children }) => {
     });
   };
 
-  const showOTPModal = (userData, email, type = 'signup') => {
+  const showOTPModal = useCallback((userData, email, type = 'signup') => {
     setOtpModalState({
       isOpen: true,
       userData,
       email,
       type
     });
-  };
+    try {
+      sessionStorage.setItem(OTP_PENDING_KEY, JSON.stringify({
+        email,
+        userData,
+        type,
+        ts: Date.now()
+      }));
+    } catch (e) {
+      logger.warn('OTP persist failed', e);
+    }
+  }, []);
 
-  const closeOTPModal = () => {
-    setOtpModalState({
+  // Clear both storages so restore never re-opens; then close with functional update
+  const closeOTPModal = useCallback(() => {
+    try {
+      sessionStorage.removeItem(OTP_PENDING_KEY);
+      localStorage.removeItem(OTP_PENDING_KEY);
+    } catch (_) {}
+    setOtpModalState((prev) => ({
+      ...prev,
       isOpen: false,
       userData: null,
       email: '',
       type: 'signup'
-    });
-  };
+    }));
+  }, []);
 
   const showMakeMeAgentModal = () => {
     setMakeMeAgentModalState({
@@ -171,20 +228,25 @@ export const GlobalModalProvider = ({ children }) => {
     });
   };
 
-  const hideAllModals = () => {
+  const hideAllModals = useCallback(() => {
     setModalState(prev => ({ ...prev, isOpen: false }));
     setRegisterModalState({ isOpen: false });
     setLoginModalState({ isOpen: false });
     setAuthChoiceModalState({ isOpen: false });
     setForgotPasswordModalState({ isOpen: false });
-    setOtpModalState({
+    try {
+      sessionStorage.removeItem(OTP_PENDING_KEY);
+      localStorage.removeItem(OTP_PENDING_KEY);
+    } catch (_) {}
+    setOtpModalState((prev) => ({
+      ...prev,
       isOpen: false,
       userData: null,
       email: '',
       type: 'signup'
-    });
+    }));
     setMakeMeAgentModalState({ isOpen: false });
-  };
+  }, []);
 
   // Unified modal show function
   const showModal = (modalType) => {
@@ -275,7 +337,6 @@ export const GlobalModalProvider = ({ children }) => {
         onClose={closeOTPModal}
         onSuccess={(result) => {
           closeOTPModal();
-          // Show success modal or redirect as needed
           showSuccessModal(tRegistrationSuccess('title'), tRegistrationSuccess('message'));
         }}
         userData={otpModalState.userData}

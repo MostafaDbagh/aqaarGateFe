@@ -186,7 +186,7 @@ export default function Listings({ agentId }) {
     
     // Validate page number
     if (page < 1 || page > maxPages) {
-      console.warn(`Invalid page number: ${page}. Valid range: 1-${maxPages}`);
+      logger.warn(`Invalid page number: ${page}. Valid range: 1-${maxPages}`);
       return;
     }
     

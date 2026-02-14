@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { flushSync } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useSafeTranslations } from "@/hooks/useSafeTranslations";
 import { authAPI } from "@/apis/auth";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import styles from "./OTPVerification.module.css";
+
+const OTP_PENDING_KEY = "aqaar_otp_pending";
 
 export default function OTPVerification({
   isOpen,
@@ -74,32 +77,55 @@ export default function OTPVerification({
     authAPI
       .verifyOTP(email, otpString, type)
       .then((res) => {
-        if (!res.success) {
+        const verified = res?.success === true || res?.data?.success === true;
+        if (!verified) {
           setError(t("invalidOTP"));
           submittedOtpRef.current = "";
           return;
         }
         setError("");
+        try {
+          sessionStorage.removeItem(OTP_PENDING_KEY);
+          localStorage.removeItem(OTP_PENDING_KEY);
+        } catch (_) {}
         if (type === "signup") {
-          return authAPI.signup(userData).then((signupRes) => {
-            if (signupRes?.success) {
-              showSuccessModal(
-                tRegistrationSuccess("title"),
-                tRegistrationSuccess("message"),
-                userData?.email,
-                true
-              );
-              onClose();
-            } else {
+          if (!userData) {
+            setError(t("verificationFailed"));
+            return;
+          }
+          flushSync(() => {
+            onClose();
+          });
+          return authAPI.signup(userData).then(
+            (signupRes) => {
+              const ok = signupRes?.success === true || (signupRes?.user != null);
+              if (ok) {
+                showSuccessModal(
+                  tRegistrationSuccess("title"),
+                  tRegistrationSuccess("message"),
+                  userData?.email,
+                  true
+                );
+              } else {
+                showWarningModal(
+                  "Registration Failed",
+                  signupRes?.message || "Registration failed. Please try again.",
+                  userData?.email
+                );
+              }
+            },
+            (err) => {
               showWarningModal(
                 "Registration Failed",
-                signupRes?.message || "Registration failed. Please try again.",
+                err?.message || err?.response?.data?.message || "Registration failed. Please try again.",
                 userData?.email
               );
             }
-          });
+          );
         }
-        if (type === "forgot_password") onSuccess(otpString);
+        if (type === "forgot_password") {
+          onSuccess(otpString);
+        }
       })
       .catch((err) => {
         submittedOtpRef.current = "";
