@@ -7,19 +7,46 @@ export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-// Absolute URLs required for WhatsApp/Facebook link preview (same for en and ar)
-const OG_IMAGE_URL = `${BASE_URL}/images/logo/og.png`;
-const OG_IMAGES = [
-  { url: OG_IMAGE_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' },
-  { url: OG_IMAGE_URL, width: 400, height: 400, alt: 'AqaarGate' },
-];
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
+// Absolute URLs required for WhatsApp/Facebook (they do not resolve relative paths)
+const OG_LOGO_URL = `${BASE_URL}/images/logo/og.png`;
 
+function getAbsoluteImageUrl(value) {
+  if (!value) return null;
+  const raw = typeof value === 'string' ? value : (value?.url || value?.secure_url || value?.path || value?.src);
+  if (!raw || typeof raw !== 'string') return null;
+  const s = raw.trim();
+  if (/^https?:\/\//i.test(s) || s.startsWith('//')) return s.startsWith('//') ? `https:${s}` : s;
+  if (s.startsWith('/')) return `${API_BASE.replace(/\/api\/?$/, '')}${s}`;
+  return null;
+}
+
+function getFirstPropertyImageUrl(property) {
+  if (Array.isArray(property?.images) && property.images.length > 0) {
+    const u = getAbsoluteImageUrl(property.images[0]);
+    if (u) return u;
+  }
+  for (const key of ['coverImage', 'featuredImage', 'mainImage']) {
+    const u = getAbsoluteImageUrl(property?.[key]);
+    if (u) return u;
+  }
+  if (Array.isArray(property?.galleryImages) && property.galleryImages.length > 0) {
+    const u = getAbsoluteImageUrl(property.galleryImages[0]);
+    if (u) return u;
+  }
+  return null;
+}
 
 export async function generateMetadata({ params }) {
   const { id, locale } = await params;
   const url = `${BASE_URL}/${locale}/property-detail/${id}`;
 
-  const property = await fetchProperty(id);
+  let property = null;
+  try {
+    property = await fetchProperty(id);
+  } catch {
+    property = null;
+  }
 
   const priceStr = property?.propertyPrice != null
     ? formatPriceWithCurrency(property.propertyPrice, property?.currency || 'USD')
@@ -56,6 +83,14 @@ export async function generateMetadata({ params }) {
   const enUrl = `${BASE_URL}/en/property-detail/${id}`;
   const arUrl = `${BASE_URL}/ar/property-detail/${id}`;
 
+  const propertyImageUrl = property ? getFirstPropertyImageUrl(property) : null;
+  const ogImages = [];
+  if (propertyImageUrl) {
+    ogImages.push({ url: propertyImageUrl, width: 1200, height: 630, alt: title });
+  }
+  ogImages.push({ url: OG_LOGO_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' });
+  ogImages.push({ url: OG_LOGO_URL, width: 400, height: 400, alt: 'AqaarGate' });
+
   return {
     metadataBase: new URL(BASE_URL),
     title,
@@ -90,13 +125,13 @@ export async function generateMetadata({ params }) {
       locale: locale === 'ar' ? 'ar_SA' : 'en_US',
       alternateLocale: locale === 'ar' ? 'en_US' : 'ar_SA',
       type: "website",
-      images: OG_IMAGES,
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [OG_IMAGE_URL],
+      images: [propertyImageUrl || OG_LOGO_URL],
     },
     robots: {
       index: true,

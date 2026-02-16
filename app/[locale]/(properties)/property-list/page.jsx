@@ -5,9 +5,9 @@ import Header1 from "@/components/headers/Header1";
 import Properties1 from "@/components/properties/Properties1";
 import React from "react";
 
+import { getDefaultOgImages, getDefaultOgImageUrls } from "@/lib/defaultOgImages";
+
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-const OG_IMAGE = { url: `${baseUrl}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
-const OG_IMAGE_URL = `${baseUrl}/images/logo/og.png`;
 
 const keywordsEn = [
   'properties for sale in syria',
@@ -88,13 +88,13 @@ export async function generateMetadata({ params }) {
       title: isAr ? 'عقار غيت عقار جيت | عقارات في سوريا بيوت للبيع - 1000+ عقار للبيع والإيجار' : '#1 Property Listings in Syria & Lattakia - 1000+ Properties for Sale & Rent',
       description: isAr ? 'عقار غيت / عقار جيت - عقارات في سوريا وبيوت للبيع. تصفح عقارات سوريا واللاذقية. شقق، فلل، بيوت عطلات للبيع والإيجار.' : 'Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Find your perfect home, apartment, holiday home (بيوت عطلات), villa. Advanced search filters. Trusted by expats worldwide.',
       url,
-      images: [OG_IMAGE],
+      images: getDefaultOgImages(baseUrl, locale),
     },
     twitter: {
       card: 'summary_large_image',
       title: isAr ? 'عقارات في سورية - عقار جيت' : '#1 Property Listings in Syria - 1000+ Properties for Sale & Rent',
       description: isAr ? 'عقارات في سورية - عقارات سوريا واللاذقية للبيع والإيجار.' : 'Browse 1000+ verified properties for sale and rent in Syria and Lattakia. Holiday homes (بيوت عطلات), villas, apartments. Advanced search filters.',
-      images: [OG_IMAGE_URL],
+      images: getDefaultOgImageUrls(baseUrl, locale),
     },
     alternates: {
       canonical: url,

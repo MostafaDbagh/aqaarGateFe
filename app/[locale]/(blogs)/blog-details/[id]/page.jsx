@@ -17,7 +17,20 @@ export async function generateMetadata({ params }) {
     if (!res.ok) {
       return {
         title: 'Blog Post | AqaarGate Real Estate',
+        description: 'Syria and Lattakia real estate blog. AqaarGate property insights.',
         alternates: { canonical: url },
+        openGraph: {
+          title: 'Blog Post | AqaarGate Real Estate',
+          description: 'Syria and Lattakia real estate blog.',
+          url,
+          images: getDefaultOgImages(baseUrl, locale),
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: 'Blog Post | AqaarGate',
+          description: 'Syria and Lattakia real estate blog.',
+          images: getDefaultOgImageUrls(baseUrl, locale),
+        },
       };
     }
     const blog = await res.json();
@@ -47,7 +60,20 @@ export async function generateMetadata({ params }) {
   } catch {
     return {
       title: 'Blog Post | AqaarGate Real Estate',
+      description: 'Syria and Lattakia real estate blog. AqaarGate property insights.',
       alternates: { canonical: url },
+      openGraph: {
+        title: 'Blog Post | AqaarGate Real Estate',
+        description: 'Syria and Lattakia real estate blog.',
+        url,
+        images: getDefaultOgImages(baseUrl, locale),
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'Blog Post | AqaarGate',
+        description: 'Syria and Lattakia real estate blog.',
+        images: getDefaultOgImageUrls(baseUrl, locale),
+      },
     };
   }
 }

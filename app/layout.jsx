@@ -308,14 +308,14 @@ export const metadata = {
     title: 'AqaarGate - Best Real Estate Sites in Syria | #1 Platform | Buy, Rent & Sell',
     description: 'AqaarGate is one of the best real estate sites in Syria. The #1 platform in Syria & Lattakia. 1000+ verified properties for sale and rent. Luxury homes, apartments, holiday homes (بيوت عطلات سوريا), villas. Trusted worldwide.',
     images: [
-      { url: '/images/logo/og.png', width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' },
+      { url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/og.png`, width: 1200, height: 630, alt: 'AqaarGate Real Estate', type: 'image/png' },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'AqaarGate - Best Real Estate Sites in Syria | #1 Platform',
     description: 'One of the best real estate sites in Syria. AqaarGate - #1 platform in Syria & Lattakia. 1000+ properties for sale and rent. Holiday homes, villas, apartments. Trusted worldwide.',
-    images: ['/images/logo/og.png'],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/og.png`],
     creator: '@AqaarGate',
     site: '@AqaarGate',
   },

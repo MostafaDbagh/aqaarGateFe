@@ -6,14 +6,45 @@ export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
-const OG_IMAGE = { url: `${BASE_URL}/images/logo/og.png`, width: 180, height: 180, alt: 'AqaarGate Real Estate', type: 'image/png' };
-const OG_IMAGE_URL = `${BASE_URL}/images/logo/og.png`;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://aqaargatebe2.onrender.com/api';
+const OG_LOGO_URL = `${BASE_URL}/images/logo/og.png`;
+
+function getAbsoluteImageUrl(value) {
+  if (!value) return null;
+  const raw = typeof value === 'string' ? value : (value?.url || value?.secure_url || value?.path || value?.src);
+  if (!raw || typeof raw !== 'string') return null;
+  const s = raw.trim();
+  if (/^https?:\/\//i.test(s) || s.startsWith('//')) return s.startsWith('//') ? `https:${s}` : s;
+  if (s.startsWith('/')) return `${API_BASE.replace(/\/api\/?$/, '')}${s}`;
+  return null;
+}
+
+function getFirstPropertyImageUrl(property) {
+  if (Array.isArray(property?.images) && property.images.length > 0) {
+    const u = getAbsoluteImageUrl(property.images[0]);
+    if (u) return u;
+  }
+  for (const key of ['coverImage', 'featuredImage', 'mainImage']) {
+    const u = getAbsoluteImageUrl(property?.[key]);
+    if (u) return u;
+  }
+  if (Array.isArray(property?.galleryImages) && property.galleryImages.length > 0) {
+    const u = getAbsoluteImageUrl(property.galleryImages[0]);
+    if (u) return u;
+  }
+  return null;
+}
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const url = `${BASE_URL}/property-detail/${id}`;
 
-  const property = await fetchProperty(id);
+  let property = null;
+  try {
+    property = await fetchProperty(id);
+  } catch {
+    property = null;
+  }
 
   const priceStr = property?.propertyPrice != null
     ? formatPriceWithCurrency(property.propertyPrice, property?.currency || 'USD')
@@ -47,6 +78,14 @@ export async function generateMetadata({ params }) {
       })()
     : "Premium properties in Syria & Lattakia. Buy, rent, holiday homes.";
 
+  const propertyImageUrl = property ? getFirstPropertyImageUrl(property) : null;
+  const ogImages = [];
+  if (propertyImageUrl) {
+    ogImages.push({ url: propertyImageUrl, width: 1200, height: 630, alt: title });
+  }
+  ogImages.push({ url: OG_LOGO_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' });
+  ogImages.push({ url: OG_LOGO_URL, width: 400, height: 400, alt: 'AqaarGate' });
+
   return {
     metadataBase: new URL(BASE_URL),
     title,
@@ -73,13 +112,13 @@ export async function generateMetadata({ params }) {
       siteName: "AqaarGate Real Estate",
       locale: "en_US",
       type: "website",
-      images: [OG_IMAGE],
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [OG_IMAGE_URL],
+      images: [propertyImageUrl || OG_LOGO_URL],
     },
     robots: {
       index: true,
