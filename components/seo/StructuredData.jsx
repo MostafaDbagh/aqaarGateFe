@@ -6,7 +6,7 @@ export default function StructuredData() {
     "@type": "LocalBusiness",
     "@id": `${baseUrl}/#organization`,
     "name": "AqaarGate Real Estate",
-    "alternateName": ["AqaarGate", "عقار جيت", "عقارات في سورية"],
+    "alternateName": ["AqaarGate", "عقار جيت", "عقار غيت", "عقارات في سورية", "عقارات في سوريا", "بيوت للبيع", "بيوت للبيع في سوريا"],
     "legalName": "AqaarGate Real Estate",
     "description": "AqaarGate - Premium real estate services for buying, selling, and renting properties in Syria and Lattakia. Expert guidance for international property buyers.",
     "url": baseUrl,
@@ -157,10 +157,10 @@ export default function StructuredData() {
     "@type": "WebSite",
     "@id": `${baseUrl}/#website`,
     "name": "AqaarGate Real Estate",
-    "alternateName": ["AqaarGate", "عقار جيت", "عقارات في سورية"],
+    "alternateName": ["AqaarGate", "عقار جيت", "عقار غيت", "عقارات في سورية", "عقارات في سوريا", "بيوت للبيع", "بيوت للبيع في سوريا"],
     "url": baseUrl,
     "description": "AqaarGate - The #1 Real Estate Platform in Syria & Lattakia. Find 1000+ verified properties for sale and rent. Buy, sell, and rent properties in Syria. Holiday homes (بيوت عطلات), villas, apartments.",
-    "keywords": "aqaargate, aqaargate.com, #1 real estate syria, real estate syria, properties syria, lattakia properties, syria holiday homes, بيوت عطلات سوريا, aqaargate real estate",
+    "keywords": "aqaargate, aqaargate.com, عقار غيت, عقار جيت, عقارات في سوريا, بيوت للبيع, بيوت للبيع في سوريا, #1 real estate syria, real estate syria, properties syria, lattakia properties, syria holiday homes, بيوت عطلات سوريا, aqaargate real estate",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {

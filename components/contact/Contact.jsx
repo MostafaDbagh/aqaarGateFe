@@ -7,6 +7,8 @@ import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import { translateApiMessage } from "@/utils/translateApiMessages";
 import styles from "./Contact.module.css";
 
+const initialFieldErrors = { name: '', email: '', phone: '', interest: '', message: '' };
+
 export default function Contact() {
   const t = useTranslations('contact');
   const tApi = useTranslations('apiMessages');
@@ -15,64 +17,80 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState(initialFieldErrors);
   const interestOptionKeys = ['selectOption', 'rent', 'sale', 'job', 'futureBuyer', 'rentalService', 'becomeAgent', 'complain', 'query', 'location'];
   const [selectedInterest, setSelectedInterest] = useState('selectOption');
   const formRef = useRef(null);
   const lastSubmitTimeRef = useRef(0);
-  
+
+  const clearFieldError = (field) => {
+    setFieldErrors((prev) => (prev[field] ? { ...prev, [field]: '' } : prev));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSubmitMessage('');
-    
+    setFieldErrors(initialFieldErrors);
+
     // Prevent double submission (simple debounce)
     const now = Date.now();
-    if (now - lastSubmitTimeRef.current < 2000) { // 2 seconds minimum between submissions
+    if (now - lastSubmitTimeRef.current < 2000) {
       return;
     }
     lastSubmitTimeRef.current = now;
-    
+
     if (!formRef.current) return;
-    
+
     const formData = new FormData(formRef.current);
     const name = formData.get('name')?.trim();
     const email = formData.get('email')?.trim();
     const phone = formData.get('phone')?.trim();
     const message = formData.get('message')?.trim();
-    
-    // Get selected interest from state (translate key for backend)
-    const interest = selectedInterest && selectedInterest !== 'selectOption' 
-      ? t(selectedInterest) 
+
+    const interest = selectedInterest && selectedInterest !== 'selectOption'
+      ? t(selectedInterest)
       : 'General Inquiry';
-    
-    // Validation - Name, Phone, Interest, Message are required (Email is optional)
-    if (!name || !phone || !message) {
-      const errorMsg = locale === 'ar' 
-        ? 'يرجى ملء جميع الحقول المطلوبة'
-        : 'Please fill in all required fields';
-      setError(errorMsg);
-      return;
+
+    const nextFieldErrors = { ...initialFieldErrors };
+    let hasError = false;
+    const err = (key, fallback) => {
+      try {
+        return t(key) || fallback;
+      } catch {
+        return fallback;
+      }
+    };
+
+    if (!name) {
+      nextFieldErrors.name = err('errors.nameRequired', 'Please enter your name');
+      hasError = true;
+    }
+    if (!phone) {
+      nextFieldErrors.phone = err('errors.phoneRequired', 'Please enter your phone number');
+      hasError = true;
     }
     if (selectedInterest === 'selectOption') {
-      const errorMsg = locale === 'ar' 
-        ? 'يرجى اختيار ما يهمك'
-        : 'Please select what you are interested in';
-      setError(errorMsg);
-      return;
+      nextFieldErrors.interest = err('errors.interestRequired', 'Please select what you are interested in');
+      hasError = true;
     }
-    
-    // Email validation - only if provided
+    if (!message) {
+      nextFieldErrors.message = err('errors.messageRequired', 'Please enter your message');
+      hasError = true;
+    }
     if (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        const errorMsg = locale === 'ar' 
-          ? 'يرجى إدخال عنوان بريد إلكتروني صحيح'
-          : 'Please enter a valid email address';
-        setError(errorMsg);
-        return;
+        nextFieldErrors.email = err('errors.emailInvalid', 'Please enter a valid email address');
+        hasError = true;
       }
     }
-    
+
+    if (hasError) {
+      setFieldErrors(nextFieldErrors);
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -90,9 +108,9 @@ export default function Contact() {
           locale === 'ar' ? 'نجاح' : 'Success',
           locale === 'ar' ? 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.' : 'Your message has been sent successfully! We will contact you soon.'
         );
-        // Reset form
         formRef.current?.reset();
         setSelectedInterest('selectOption');
+        setFieldErrors(initialFieldErrors);
       } else {
         throw new Error(result.message || 'Failed to send message');
       }
@@ -141,6 +159,7 @@ export default function Contact() {
                 id="contactform"
                 onSubmit={handleSubmit}
                 className="form-contact"
+                noValidate
               >
                 <div className="heading-section">
                   <h2 className="title">{t('title')}</h2>
@@ -153,22 +172,29 @@ export default function Contact() {
                     <label htmlFor="name">{t('name')} <span className={styles.required}>*</span></label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${fieldErrors.name ? styles.inputError : ''}`}
                       placeholder={t('namePlaceholder')}
                       name="name"
                       id="name"
-                      required
+                      onChange={() => clearFieldError('name')}
+                      aria-invalid={!!fieldErrors.name}
+                      aria-describedby={fieldErrors.name ? 'name-error' : undefined}
                     />
+                    {fieldErrors.name && (
+                      <span id="name-error" className={styles.fieldError} role="alert">{fieldErrors.name}</span>
+                    )}
                   </fieldset>
                   <fieldset>
                     <label htmlFor="email">{t('email')}</label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${fieldErrors.email ? styles.inputError : ''}`}
                       placeholder={t('emailPlaceholder')}
                       name="email"
                       id="email-contact"
+                      onChange={() => clearFieldError('email')}
                     />
+                    {fieldErrors.email && <span className={styles.fieldError} role="alert">{fieldErrors.email}</span>}
                   </fieldset>
                 </div>
                 <div className="cols">
@@ -176,25 +202,33 @@ export default function Contact() {
                     <label htmlFor="phone">{t('phoneNumber')} <span className={styles.required}>*</span></label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${fieldErrors.phone ? styles.inputError : ''}`}
                       placeholder={t('phonePlaceholder')}
                       name="phone"
                       id="phone"
-                      required
+                      onChange={() => clearFieldError('phone')}
+                      aria-invalid={!!fieldErrors.phone}
+                      aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
                     />
+                    {fieldErrors.phone && (
+                      <span id="phone-error" className={styles.fieldError} role="alert">{fieldErrors.phone}</span>
+                    )}
                   </fieldset>
                   <div className="select">
                     <label className="text-1 fw-6 mb-12">
                       {t('interestedIn')} <span className={styles.required}>*</span>
                     </label>
-
                     <DropdownSelect
                       options={interestOptionKeys}
                       translateOption={(key) => t(key)}
                       addtionalParentClass=""
                       selectedValue={selectedInterest}
-                      onChange={(value) => setSelectedInterest(value)}
+                      onChange={(value) => {
+                        setSelectedInterest(value);
+                        clearFieldError('interest');
+                      }}
                     />
+                    {fieldErrors.interest && <span className={styles.fieldError} role="alert">{fieldErrors.interest}</span>}
                   </div>
                 </div>
                 <fieldset>
@@ -203,11 +237,20 @@ export default function Contact() {
                     name="message"
                     cols={30}
                     rows={10}
+                    className={fieldErrors.message ? styles.inputError : ''}
                     placeholder={t('messagePlaceholder')}
                     id="message"
-                    required
-                    defaultValue={""}
+                    defaultValue=""
+                    onChange={() => clearFieldError('message')}
+                    aria-invalid={!!fieldErrors.message}
+                    aria-describedby={fieldErrors.message ? 'message-error' : undefined}
+                    style={{marginBottom: 0}}
                   />
+                  {fieldErrors.message && (
+                    <span id="message-error" className={styles.fieldError} role="alert">
+                      {fieldErrors.message}
+                    </span>
+                  )}
                 </fieldset>
                 {error && (
                   <div className={styles.errorMessage}>
@@ -221,9 +264,10 @@ export default function Contact() {
                 )}
                 <div className="send-wrap">
                   <button
-                    className={`tf-btn bg-color-primary fw-7 pd-8 ${styles.submitButton}`}
+                    className={`tf-btn bg-color-primary fw-7 pd-8 mt-12 ${styles.submitButton}`}
                     type="submit"
                     disabled={isSubmitting}
+                    style={{marginTop: '32px'}}
                   >
                     {isSubmitting 
                       ? (locale === 'ar' ? 'جاري الإرسال...' : 'Sending...')

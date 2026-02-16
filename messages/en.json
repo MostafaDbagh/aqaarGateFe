@@ -572,6 +572,13 @@
     "yourMessage": "Your Message:",
     "messagePlaceholder": "Message",
     "contactExperts": "Contact our experts",
+    "errors": {
+      "nameRequired": "Please enter your name",
+      "phoneRequired": "Please enter your phone number",
+      "interestRequired": "Please select what you are interested in",
+      "messageRequired": "Please enter your message",
+      "emailInvalid": "Please enter a valid email address"
+    },
     "about": {
       "title": "We provide the most suitable and quality real estate.",
       "subtitle": "What matters most to us is providing clarity and transparency to ensure the satisfaction of both the client and the customer.",

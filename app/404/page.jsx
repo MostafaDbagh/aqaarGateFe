@@ -31,7 +31,7 @@ export default function NotFoundPage() {
                   Oh no... We lost this page
                 </h2>
                 <p className="mb-40" style={{ fontSize: '1.1rem', lineHeight: 1.8, color: '#666' }}>
-                  We searched everywhere but couldn't find what you're looking for. Let's find a better place for you to go.
+                  We searched everywhere but couldn&apos;t find what you&apos;re looking for. Let&apos;s find a better place for you to go.
                 </p>
                 <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
                   <Link

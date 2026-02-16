@@ -568,6 +568,13 @@
     "yourMessage": "رسالتك:",
     "messagePlaceholder": "الرسالة",
     "contactExperts": "اتصل بخبرائنا",
+    "errors": {
+      "nameRequired": "يرجى إدخال اسمك",
+      "phoneRequired": "يرجى إدخال رقم هاتفك",
+      "interestRequired": "يرجى اختيار ما يهمك",
+      "messageRequired": "يرجى إدخال رسالتك",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح"
+    },
     "about": {
       "title": "نوفر العقارات الأنسب والأعلى جودة.",
       "subtitle": "ان اكثر مايهمنا هو توفيرالوضوح والشفافية لضمان رضى كل من العميل والزبون",

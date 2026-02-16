@@ -9,7 +9,6 @@
   "scripts": {
     "dev": "next dev",
     "build:og": "node scripts/generate-og-image.js",
-    "test:og": "node test-og.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

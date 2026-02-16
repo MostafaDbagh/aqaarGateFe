@@ -78,24 +78,25 @@ export default function HomePageClient() {
         try {
           const parsed = JSON.parse(storedResults);
           if (parsed && parsed.listings && parsed.listings.length > 0) {
-            // Clear normal search params when AI search is applied
-            setSearchParams({
-              status: "",
-              keyword: "",
-              priceMin: "",
-              priceMax: "",
-              sizeMin: "",
-              sizeMax: "",
-              state: "",
-              bedrooms: "",
-              bathrooms: "",
-              amenities: [],
-              propertyType: "",
-              furnished: ""
+            // Defer state updates to avoid synchronous setState in effect (lint + perf)
+            queueMicrotask(() => {
+              setSearchParams({
+                status: "",
+                keyword: "",
+                priceMin: "",
+                priceMax: "",
+                sizeMin: "",
+                sizeMax: "",
+                state: "",
+                bedrooms: "",
+                bathrooms: "",
+                amenities: [],
+                propertyType: "",
+                furnished: ""
+              });
+              setAiSearchResults(parsed);
+              setUseAISearch(true);
             });
-            
-            setAiSearchResults(parsed);
-            setUseAISearch(true);
             // Clear from sessionStorage after reading (optional - you may want to keep it)
             // sessionStorage.removeItem('aiSearchResults');
           }
@@ -118,19 +119,21 @@ export default function HomePageClient() {
     
     // Normal search - apply filters but limit to 12 listings
     if (triggerSearch || category) {
-      // Clear AI search when normal search is triggered
-      setUseAISearch(false);
-      setAiSearchResults(null);
+      queueMicrotask(() => {
+        setUseAISearch(false);
+        setAiSearchResults(null);
+      });
       if (typeof window !== 'undefined') {
         sessionStorage.removeItem('aiSearchResults');
       }
       const cleaned = cleanParams(searchParams);
-      // Apply normal filters but always limit to 12 for home page
-      setMostRecentParams({ ...cleaned, limit: 12, sort: cleaned.sort || 'newest' });
+      queueMicrotask(() => {
+        setMostRecentParams({ ...cleaned, limit: 12, sort: cleaned.sort || 'newest' });
+      });
     } else {
-      // Default: show only last 12 properties on home page when no search
-      // This applies whether AI search is active or not
-      setMostRecentParams({ limit: 12, sort: 'newest' });
+      queueMicrotask(() => {
+        setMostRecentParams({ limit: 12, sort: 'newest' });
+      });
     }
   }, [searchParams, triggerSearch, category]); // Removed useAISearch from dependencies
 

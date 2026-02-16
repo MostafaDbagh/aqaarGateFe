@@ -35,8 +35,21 @@
 }
 
 .required {
-  color: #dc2626;
+  color: #FF2c2c;
   font-weight: 600;
+}
+
+.fieldError {
+  display: block;
+  font-size: 13px;
+  color: #FF2c2c;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+.inputError {
+  border-color: #FF2c2c !important;
+  box-shadow: 0 0 0 1px #FF2c2c;
 }
 
 .errorMessage {
@@ -45,9 +58,9 @@
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 20px;
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background-color: rgba(255, 44, 44, 0.08);
+  color: #FF2c2c;
+  border: 1px solid #FF2c2c;
   text-align: center;
 }
 

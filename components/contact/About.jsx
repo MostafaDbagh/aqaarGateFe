@@ -205,8 +205,8 @@ export default function About() {
                   </div>
                   <div className="content">
                     <div className="sub">{t("emailAddressLabel")}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', }}>
-                      <a  style={{ fontSize: '30px !important' }} href="mailto:contact@aqaargate.com">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <a  className="phone" href="mailto:contact@aqaargate.com">
                         contact@aqaargate.com
                       </a>
                       <CopyIcon text="contact@aqaargate.com" />

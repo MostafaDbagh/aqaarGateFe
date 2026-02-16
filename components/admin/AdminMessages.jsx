@@ -474,7 +474,7 @@ export default function AdminMessages() {
                   <i className={`icon-message ${adminStyles.emptyStateIcon}`} aria-hidden="true"></i>
                 </div>
                 <h5>No messages found</h5>
-                <p className="text-muted">You don't have any messages for admin properties matching your current filters.</p>
+                <p className="text-muted">You don&apos;t have any messages for admin properties matching your current filters.</p>
               </div>
             ) : (
               <div className={`table-responsive ${adminStyles.tableWrapper}`}>

@@ -34,8 +34,8 @@ export default function InternationalSEO() {
       {/* Target audience from EU and Gulf countries */}
       <meta name="target" content="Syria, Germany, Netherlands, Europe, United Arab Emirates, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman" />
       
-      {/* International keywords - exact phrases so Google shows same site for EN/AR */}
-      <meta name="keywords" content="properties for sale in syria, عقارات للبيع في سوريا, syria real estate from germany, syria properties netherlands, syria real estate expats, syria properties eu, syria real estate uae, syria properties saudi arabia, syria real estate qatar, syria properties kuwait, syria real estate bahrain, syria properties oman, buy property syria from europe, invest syria from gulf, syria holiday homes expats, syria vacation rentals eu" />
+      {/* International keywords - exact phrases so Google shows same site for EN/AR; Arabic first for Arab users */}
+      <meta name="keywords" content="عقار غيت, عقار جيت, عقارات في سوريا, بيوت للبيع, بيوت للبيع في سوريا, عقارات للبيع في سوريا, موقع عقاري, موقع عقارات, properties for sale in syria, syria real estate from germany, syria properties netherlands, syria real estate expats, syria properties eu, syria real estate uae, syria properties saudi arabia, syria real estate qatar, buy property syria from europe, invest syria from gulf, syria holiday homes expats, syria vacation rentals eu" />
     </>
   );
 }

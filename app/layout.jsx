@@ -9,6 +9,14 @@ export const metadata = {
     // Exact Google search phrases - same site for EN and AR
     'properties for sale in syria',
     'عقارات للبيع في سوريا',
+    // Arabic brand & high-intent (عقار غيت / عقار جيت - how users search)
+    'عقار غيت',
+    'عقار جيت',
+    'عقارغيت',
+    'عقارجيت',
+    'بيوت للبيع',
+    'بيوت للبيع في سوريا',
+    'عقارات في سوريا',
     // Arabic - موقع عقاري، عقارات في سورية
     'موقع عقاري',
     'موقع عقارات',
@@ -351,7 +359,7 @@ const jsonLd = {
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
       name: 'AqaarGate',
-      alternateName: ['AqaarGate Real Estate', 'aqaargate', 'aqaargate.com', 'best real estate sites in Syria', 'موقع عقاري', 'موقع عقارات', 'عقارات في سورية', 'عقارات في سوريا', 'سوق العقارات الإلكتروني في سورية', 'عقار جيت'],
+      alternateName: ['AqaarGate Real Estate', 'aqaargate', 'aqaargate.com', 'best real estate sites in Syria', 'موقع عقاري', 'موقع عقارات', 'عقارات في سورية', 'عقارات في سوريا', 'سوق العقارات الإلكتروني في سورية', 'عقار جيت', 'عقار غيت', 'بيوت للبيع', 'بيوت للبيع في سوريا'],
       description: 'AqaarGate is one of the best real estate sites in Syria. The #1 real estate platform in Syria & Lattakia. Buy, rent & sell properties, holiday homes, villas, apartments.',
       publisher: { '@id': `${SITE_URL}/#organization` },
       inLanguage: ['en', 'ar'],
