@@ -341,12 +341,14 @@ export const metadata = {
 // With localePrefix: 'always', all routes go through [locale]/layout.jsx
 // The nested layout will override the lang/dir attributes via its own <html> tag
 // But Next.js still requires root layout to have <html>/<body>
+import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Providers from './Providers';
 import IntlProvider from './IntlProvider';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID || '1886520671979014';
 
 // Note: Organization/LocalBusiness with @id #organization is defined in StructuredData.jsx
 // to avoid duplicate/conflicting definitions. Organization type does NOT support aggregateRating
@@ -385,6 +387,27 @@ export default function RootLayout({ children }) {
         </Providers>
         <Analytics />
         <SpeedInsights />
+        {/* Facebook Pixel */}
+        <Script
+          id="facebook-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${FB_PIXEL_ID}');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
+            alt=""
+          />
+        </noscript>
       </body>
     </html>
   );
