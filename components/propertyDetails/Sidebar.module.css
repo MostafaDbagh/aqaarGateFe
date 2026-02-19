@@ -35,9 +35,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-}
-
-/* Avatar initials fallback */
+}/* Avatar initials fallback */
 .avatarInitials {
   width: 100%;
   height: 100%;

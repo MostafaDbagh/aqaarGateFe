@@ -78,8 +78,6 @@
 
 .addPropertyWhatsAppLink svg path {
   stroke: #15803d;
-}
-
-.addPropertyWhatsAppLink:hover svg path {
+}.addPropertyWhatsAppLink:hover svg path {
   stroke: #16a34a;
 }

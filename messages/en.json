@@ -349,14 +349,14 @@
     "message": "Your account has been created successfully. You can now login with your credentials."
   },
   "hero": {
-    "title": "Find your Dream Home in Syria",
-    "subtitle": "Discover the latest verified properties for sale and rent across Syria. By using ",
+    "title": "Discover verified homes, apartments, and investment opportunities across Syria.",
+    "subtitle": "Start your smart search with AqaarGate By using",
     "subtitleHighlight": "AI",
     "forAll": "All",
     "forSale": "For sale",
     "forRent": "For rent",
     "searchPlaceholder": "Search by Keywords tags like ...",
-    "aiSearchPlaceholder": "Ask anything about properties in Syria...",
+    "aiSearchPlaceholder": "Type what you want to search for about properties in Syria, e.g. (show me houses in Latakia)",
     "exampleQueriesTitle": "Example queries:",
     "searchButton": "Search",
     "matchesFound": "{{count}} match your search",
