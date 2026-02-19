@@ -3,9 +3,10 @@ import HomePageClient from '../HomePageClient';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
 const OG_IMAGE_URL = `${baseUrl}/images/logo/og.png`;
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
 const OG_IMAGES = [
-  { url: OG_IMAGE_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' },
-  { url: OG_IMAGE_URL, width: 400, height: 400, alt: 'AqaarGate' },
+  { url: OG_IMAGE_URL, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT, alt: 'AqaarGate Real Estate', type: 'image/png' },
 ];
 
 export async function generateMetadata({ params }) {

@@ -221,11 +221,6 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
                 </li>
                 <li>
                   <a href="#">
-                    <i className="icon-X" />
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
                     <i className="icon-linked" />
                   </a>
                 </li>

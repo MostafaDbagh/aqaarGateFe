@@ -342,11 +342,6 @@ export default function MobileMenu() {
                       </a>
                     </li>
                     <li>
-                      <a href="https://www.twitter.com/aqaargate" target="_blank" rel="noopener noreferrer">
-                        <i className="icon-X" />
-                      </a>
-                    </li>
-                    <li>
                       <a href="https://www.linkedin.com/company/aqaargate" target="_blank" rel="noopener noreferrer">
                         <i className="icon-linked" />
                       </a>

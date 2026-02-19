@@ -84,12 +84,15 @@ export async function generateMetadata({ params }) {
   const arUrl = `${BASE_URL}/ar/property-detail/${id}`;
 
   const propertyImageUrl = property ? getFirstPropertyImageUrl(property) : null;
-  const ogImages = [];
+  // Put logo first so WhatsApp/Facebook always get a valid image (same-origin); property image can fail (CDN, hotlink)
+  const OG_W = 1200;
+  const OG_H = 630;
+  const ogImages = [
+    { url: OG_LOGO_URL, width: OG_W, height: OG_H, alt: 'AqaarGate Real Estate', type: 'image/png' },
+  ];
   if (propertyImageUrl) {
     ogImages.push({ url: propertyImageUrl, width: 1200, height: 630, alt: title });
   }
-  ogImages.push({ url: OG_LOGO_URL, width: 1200, height: 630, alt: 'AqaarGate Real Estate' });
-  ogImages.push({ url: OG_LOGO_URL, width: 400, height: 400, alt: 'AqaarGate' });
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -131,7 +134,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title,
       description,
-      images: [propertyImageUrl || OG_LOGO_URL],
+      images: [OG_LOGO_URL],
     },
     robots: {
       index: true,

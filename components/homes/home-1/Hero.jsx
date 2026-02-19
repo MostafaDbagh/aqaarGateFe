@@ -22,6 +22,7 @@ export default function Hero({
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [previewDismissed, setPreviewDismissed] = useState(false);
   const [searchFormOpen, setSearchFormOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const status = searchParams?.status ?? '';
   const debouncedAiQuery = useDebounce(aiQuery, 500);
   const searchQuery = submittedQuery || debouncedAiQuery;
@@ -64,6 +65,21 @@ export default function Hero({
 
   const meaningful = hasMeaningfulParams(extractedParams) && !aiSearchError;
   const effectiveListings = meaningful ? listings : [];
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handleSearchPreviewClick = useCallback(() => {
+    const q = debouncedAiQuery.trim();
+    const hasResults = q && !aiSearchLoading && (listings.length > 0 || (pagination?.total ?? 0) > 0);
+    if (hasResults) {
+      setIsNavigating(true);
+      setTimeout(() => setSubmittedQuery(q), 320);
+    } else {
+      scrollToTop();
+    }
+  }, [debouncedAiQuery, aiSearchLoading, listings.length, pagination?.total, scrollToTop]);
 
   useEffect(() => {
     if (submittedQuery.trim().length > 0 && !aiSearchLoading && !hasNavigatedRef.current) {
@@ -242,7 +258,15 @@ export default function Hero({
                         <span>{isRTL ? 'جاري البحث...' : 'Searching...'}</span>
                       </div>
                     ) : !aiSearchError && (listings.length > 0 || (pagination?.total ?? 0) > 0) ? (
-                      <div className={styles.searchPreviewMatch}>
+                      <div
+                        className={`${styles.searchPreviewMatch} ${isNavigating ? styles.searchPreviewMatchNavigating : ''}`}
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSearchPreviewClick(); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSearchPreviewClick(); } }}
+                        aria-label={isRTL ? 'عرض نتائج البحث' : 'View search results'}
+                        aria-busy={isNavigating}
+                      >
                         <span className={styles.searchPreviewQuery}>{debouncedAiQuery}</span>
                         <span className={styles.searchPreviewCountNum}>{pagination?.total ?? listings.length}</span>
                         <span className={styles.searchPreviewCountLabel}>{t('matchesFoundLabel')}</span>
