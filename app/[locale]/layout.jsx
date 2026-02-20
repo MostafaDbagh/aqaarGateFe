@@ -12,6 +12,23 @@ import AdvancedSEO from '@/components/seo/AdvancedSEO';
 import PerformanceOptimization from '@/components/seo/PerformanceOptimization';
 import InternationalSEO from '@/components/seo/InternationalSEO';
 import BrandSEO from '@/components/seo/BrandSEO';
+import { getDefaultOgImages, getDefaultOgImageUrls } from '@/lib/defaultOgImages';
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  return {
+    metadataBase: new URL(BASE_URL),
+    openGraph: {
+      images: getDefaultOgImages(BASE_URL, locale),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      images: getDefaultOgImageUrls(BASE_URL, locale),
+    },
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
