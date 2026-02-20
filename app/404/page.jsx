@@ -5,9 +5,24 @@ import Header1 from "@/components/headers/Header1";
 import Link from "next/link";
 import React from "react";
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
+const OG_IMAGE = `${baseUrl}/images/logo/og.png`;
+
 export const metadata = {
   title: "Page Not Found - AqaarGate",
   description: "The page you are looking for does not exist. Return to homepage or browse properties in Syria and Lattakia.",
+  openGraph: {
+    title: "Page Not Found - AqaarGate",
+    description: "The page you are looking for does not exist. Return to homepage or browse properties in Syria and Lattakia.",
+    url: `${baseUrl}/404`,
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'AqaarGate Real Estate', type: 'image/png' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Page Not Found - AqaarGate",
+    description: "The page you are looking for does not exist.",
+    images: [OG_IMAGE],
+  },
   robots: {
     index: false,
     follow: true,

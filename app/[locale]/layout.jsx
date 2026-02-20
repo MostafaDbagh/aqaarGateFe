@@ -20,6 +20,7 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
   return {
     metadataBase: new URL(BASE_URL),
+    // OG image: static (same for en & ar). Title/description/url are set per-page and are dynamic by locale.
     openGraph: {
       images: getDefaultOgImages(BASE_URL, locale),
     },

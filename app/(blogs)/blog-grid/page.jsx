@@ -37,10 +37,11 @@ export const metadata = {
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/blog-grid`,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/og.png`,
         width: 1200,
         height: 630,
-        alt: 'AqaarGate - Blog',
+        alt: 'AqaarGate Real Estate',
+        type: 'image/png',
       },
     ],
   },
@@ -48,7 +49,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Syria Real Estate Blog - Property News & Tips in Lattakia",
     description: "Stay updated with the latest Syria and Lattakia real estate news, property investment tips, market trends, and buying guides.",
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/en/opengraph-image`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/og.png`],
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/blog-grid`,

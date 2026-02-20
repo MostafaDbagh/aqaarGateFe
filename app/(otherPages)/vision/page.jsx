@@ -21,11 +21,13 @@ export const metadata = {
     title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
     description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/vision`,
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/og.png`, width: 1200, height: 630, alt: 'AqaarGate Real Estate', type: 'image/png' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: "Our Vision - AqaarGate | Transforming Real Estate in Syria",
     description: "Discover AqaarGate's vision: displaying Syria properties to the world with modern standards.",
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com'}/images/logo/og.png`],
   },
 };
 
