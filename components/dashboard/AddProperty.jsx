@@ -452,7 +452,7 @@ export default function AddProperty({ isAdminMode = false }) {
         newErrors.numberOfFloors = t('howManyFloorsRequired');
       }
     }
-    if (!formData.size || isNaN(formData.size) || parseInt(formData.size) <= 0) {
+    if (!formData.size || isNaN(formData.size) || parseFloat(formData.size) <= 0) {
       newErrors.size = "Valid size is required";
     }
     if (!formData.sizeUnit || formData.sizeUnit.trim() === '') {
@@ -576,9 +576,9 @@ export default function AddProperty({ isAdminMode = false }) {
         propertyPrice: parsedPrice, // CRITICAL: Send exact price - NO DEDUCTION, NO MODIFICATION
         bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office" || formData.propertyType === "Building") ? 0 : parseInt(formData.bedrooms) || 0,
         bathrooms: (formData.propertyType === "Land" || formData.propertyType === "Building") ? 0 : parseInt(formData.bathrooms) || 0,
-        size: parseInt(formData.size),
+        size: parseFloat(formData.size),
         sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
-        landArea: formData.landArea ? parseInt(formData.landArea) : parseInt(formData.size),
+        landArea: formData.landArea ? parseFloat(formData.landArea) : parseFloat(formData.size),
         yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : null,
         floor: formData.propertyType !== "Building" && formData.floor ? parseInt(formData.floor) : undefined,
         numberOfFloors: formData.propertyType === "Building" && formData.numberOfFloors ? parseInt(formData.numberOfFloors) : undefined,
@@ -1133,6 +1133,7 @@ export default function AddProperty({ isAdminMode = false }) {
                     value={formData.size}
                     onChange={handleInputChange}
                     min="0"
+                    step="any"
                     style={{ 
                       flex: 1,
                       MozAppearance: 'textfield',

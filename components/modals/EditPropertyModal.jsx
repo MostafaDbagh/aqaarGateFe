@@ -721,6 +721,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
                   value={formData.squareFootage}
                   onChange={handleInputChange}
                   min="0"
+                  step="any"
                   className={`${styles.input} no-spinner`}
                   style={{ direction: 'ltr', textAlign: 'left', flex: 1 }}
                   onFocus={handleInputFocus}
