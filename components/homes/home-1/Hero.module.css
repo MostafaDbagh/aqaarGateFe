@@ -447,10 +447,16 @@
     min-height: 48px !important;
   }
 
+  /* Prevent zoom on input focus: 16px + touch-action + text-size-adjust */
   .chatInput {
-    font-size: 15px !important;
+    font-size: 16px !important;
     padding: 8px 10px !important;
     min-width: 77% !important;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+  .chatInput::placeholder {
+    font-size: 16px !important;
   }
 
   .chatInputActions {
@@ -471,8 +477,14 @@
     min-height: 44px !important;
   }
 
+  /* Prevent zoom on input focus - mobile only */
   .chatInput {
-    font-size: 14px !important;
+    font-size: 16px !important;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+  .chatInput::placeholder {
+    font-size: 16px !important;
   }
 
   .sendBtn,
