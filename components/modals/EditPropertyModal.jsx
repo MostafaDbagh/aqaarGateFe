@@ -290,7 +290,7 @@ const EditPropertyModal = ({ isOpen, onClose, property, onSuccess }) => {
         currency: formData.currency || 'USD',
         bedrooms: (formData.propertyType === "Land" || formData.propertyType === "Commercial" || formData.propertyType === "Office" || formData.propertyType === "Building") ? 0 : parseInt(formData.bedrooms) || 0,
         bathrooms: (formData.propertyType === "Land" || formData.propertyType === "Building") ? 0 : parseInt(formData.bathrooms) || 0,
-        squareFootage: parseInt(formData.squareFootage) || 0,
+        squareFootage: parseFloat(formData.squareFootage) || 0,
         sizeUnit: formData.sizeUnit && formData.sizeUnit.trim() !== '' ? formData.sizeUnit : 'sqm', // Default to sqm if not selected
         yearBuilt: formData.yearBuilt && formData.yearBuilt.toString().trim() !== '' ? parseInt(formData.yearBuilt) : null,
         // Contact information (admin can edit)
