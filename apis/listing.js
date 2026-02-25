@@ -130,6 +130,22 @@ export const listingAPI = {
     }
   },
 
+  // Set listing as featured (star) - admin only. Featured listings stay in Fresh Listings.
+  setListingFeatured: async (id, isFeatured) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await Axios.patch(`/listing/${id}/featured`, { isFeatured }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   // Update listing images (add new and/or delete existing)
   updateListingImages: async (id, formData) => {
     try {

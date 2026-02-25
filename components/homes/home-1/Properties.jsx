@@ -285,6 +285,31 @@ export default function Properties({ listings, isLoading, isError }) {
           overflow: 'hidden',
           position: 'relative'
         }}>
+          {listing.isFeatured && (
+            <span
+              className="featured-star-badge"
+              style={{
+                position: 'absolute',
+                top: '10px',
+                ...(locale === 'ar' ? { left: '10px', right: 'auto' } : { right: '10px', left: 'auto' }),
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(0,0,0,0.35)',
+                color: '#f0b429',
+              }}
+              title={locale === 'ar' ? 'مميز' : 'Featured'}
+              aria-hidden="true"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            </span>
+          )}
           <Link 
             href={`/property-detail/${listing._id}`} 
             style={{ 

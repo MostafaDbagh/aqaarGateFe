@@ -50,6 +50,7 @@ export default function AdminPropertiesByAdmin() {
   const itemsPerPage = 6;
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [featuredLoadingId, setFeaturedLoadingId] = useState(null);
   
   // Property type translations mapping
   const propertyTypeTranslations = {
@@ -102,6 +103,24 @@ export default function AdminPropertiesByAdmin() {
       message,
       type
     });
+  };
+
+  // Toggle featured (star) - listing stays in Fresh Listings when featured
+  const handleToggleFeatured = async (listing) => {
+    const id = listing._id;
+    const nextFeatured = !listing.isFeatured;
+    setFeaturedLoadingId(id);
+    try {
+      await listingAPI.setListingFeatured(id, nextFeatured);
+      setListings((prev) =>
+        prev.map((l) => (l._id === id ? { ...l, isFeatured: nextFeatured } : l))
+      );
+      showToast(nextFeatured ? 'Listing featured in Fresh Listings' : 'Listing unfeatured', 'success');
+    } catch (err) {
+      showToast(err?.message || 'Failed to update featured', 'error');
+    } finally {
+      setFeaturedLoadingId(null);
+    }
   };
 
   // Handle export properties
@@ -711,6 +730,32 @@ export default function AdminPropertiesByAdmin() {
                         </td>
                         <td>
                           <ul className="list-action" style={{ justifyContent: 'center', direction: 'ltr' }}>
+                            <li>
+                              <button
+                                onClick={() => handleToggleFeatured(listing)}
+                                disabled={featuredLoadingId === listing._id}
+                                className="item"
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  cursor: featuredLoadingId === listing._id ? 'wait' : 'pointer',
+                                  color: listing.isFeatured ? '#f0b429' : '#A3ABB0',
+                                  fontSize: '18px'
+                                }}
+                                title={listing.isFeatured ? 'Featured in Fresh Listings (click to remove)' : 'Feature for Fresh Listings'}
+                              >
+                                {featuredLoadingId === listing._id ? (
+                                  <span style={{ fontSize: '14px' }}>...</span>
+                                ) : (
+                                  <svg width={20} height={20} viewBox="0 0 24 24" fill={listing.isFeatured ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                  </svg>
+                                )}
+                              </button>
+                            </li>
                             <li>
                               <button 
                                 onClick={() => handleEditProperty(listing)} 

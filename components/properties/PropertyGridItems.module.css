@@ -227,6 +227,10 @@
   display: block !important;
 }
 
+.featuredStarBadge {
+  /* Position/size via inline styles for locale (top-right EN, top-left AR) */
+}
+
 .imageWrap {
   position: relative !important;
   width: 100% !important;
