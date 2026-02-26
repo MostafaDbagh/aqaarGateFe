@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import FavoriteButton from "../common/FavoriteButton";
@@ -35,6 +35,16 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
   };
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
   const [activeImageIndex, setActiveImageIndex] = useState({});
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(0);
+  const didSwipeRef = useRef(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   if (!listings || listings.length === 0) {
     // Case 1: No active search/filters - show "no listings to show" message
     if (!hasActiveSearch) {
@@ -135,6 +145,36 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
       ...prev,
       [propertyId]: index,
     }));
+  };
+
+  const handleImageTouchStart = (e) => {
+    if (!isMobile) return;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleImageTouchEnd = (e, propertyId, totalImages, onPrev, onNext) => {
+    if (!isMobile || totalImages <= 1) return;
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = touchStartX.current - endX;
+    const threshold = 50;
+    if (deltaX > threshold) {
+      didSwipeRef.current = true;
+      e.preventDefault();
+      e.stopPropagation();
+      onNext();
+    } else if (deltaX < -threshold) {
+      didSwipeRef.current = true;
+      e.preventDefault();
+      e.stopPropagation();
+      onPrev();
+    }
+  };
+
+  const handleImageAreaClick = (e) => {
+    if (didSwipeRef.current) {
+      e.preventDefault();
+      didSwipeRef.current = false;
+    }
   };
 
   const resolveImageUrl = (value) => {
@@ -291,6 +331,13 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
         .slider-control:focus-visible {
           outline: 2px solid #0ea5e9 !important;
           outline-offset: 2px !important;
+        }
+
+        @media (max-width: 768px) {
+          .show-arrows-mobile .slider-control {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+          }
         }
 
         .slider-control.prev {
@@ -462,8 +509,16 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
                 </svg>
               </span>
             )}
-            <div className="image-slider">
-              <Link href={`/property-detail/${property._id}`} className="image-link">
+            <div
+              className={`image-slider${isMobile && totalImages > 1 ? ' show-arrows-mobile' : ''}`}
+              onTouchStart={handleImageTouchStart}
+              onTouchEnd={(e) => handleImageTouchEnd(e, property._id, totalImages, () => handlePrevImage(property._id, totalImages), () => handleNextImage(property._id, totalImages))}
+            >
+              <Link
+                href={`/property-detail/${property._id}`}
+                className="image-link"
+                onClick={handleImageAreaClick}
+              >
               <Image
                 className="lazyload property-img"
                 alt={property.propertyKeyword || property.propertyTitle || t('common.property')}

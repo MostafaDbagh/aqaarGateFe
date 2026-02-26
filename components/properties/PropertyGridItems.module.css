@@ -312,6 +312,14 @@
   outline-offset: 2px !important;
 }
 
+/* Property-list: show arrows on mobile when multiple images */
+@media (max-width: 768px) {
+  .showArrowsOnMobile .sliderControl {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
 .sliderControlPrev {
   left: 12px !important;
   width: 26px !important;

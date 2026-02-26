@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import { translateKeywordsString } from "@/utils/translateKeywords";
 import FavoriteButton from "../common/FavoriteButton";
@@ -36,7 +36,47 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
   };
   const [showPhoneNumbers, setShowPhoneNumbers] = useState({});
   const [activeImageIndex, setActiveImageIndex] = useState({});
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(0);
+  const didSwipeRef = useRef(false);
   const { handleDetailsClick, handleQuickViewClick } = usePropertyActions();
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleImageTouchStart = (e) => {
+    if (!isMobile) return;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleImageTouchEnd = (e, propertyId, totalImages, onPrev, onNext) => {
+    if (!isMobile || totalImages <= 1) return;
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = touchStartX.current - endX;
+    const threshold = 50;
+    if (deltaX > threshold) {
+      didSwipeRef.current = true;
+      e.preventDefault();
+      e.stopPropagation();
+      onNext();
+    } else if (deltaX < -threshold) {
+      didSwipeRef.current = true;
+      e.preventDefault();
+      e.stopPropagation();
+      onPrev();
+    }
+  };
+
+  const handleImageAreaClick = (e) => {
+    if (didSwipeRef.current) {
+      e.preventDefault();
+      didSwipeRef.current = false;
+    }
+  };
 
   const togglePhoneNumber = (propertyId) => {
     setShowPhoneNumbers((prev) => ({
@@ -262,7 +302,7 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
 
         return (
           <div className="box-house hover-img property-image-fix" key={property._id}>
-          <div className={styles.imageWrap}>
+          <div className={`${styles.imageWrap}${isMobile && totalImages > 1 ? ` ${styles.showArrowsOnMobile}` : ''}`}>
             {property.isFeatured && (
               <span
                 className={styles.featuredStarBadge}
@@ -288,8 +328,16 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
                 </svg>
               </span>
             )}
-            <div className={styles.imageSlider}>
-              <Link href={`/property-detail/${property._id}`} className={styles.imageLink}>
+            <div
+              className={styles.imageSlider}
+              onTouchStart={handleImageTouchStart}
+              onTouchEnd={(e) => handleImageTouchEnd(e, property._id, totalImages, () => handlePrevImage(property._id, totalImages), () => handleNextImage(property._id, totalImages))}
+            >
+              <Link
+                href={`/property-detail/${property._id}`}
+                className={styles.imageLink}
+                onClick={handleImageAreaClick}
+              >
               <Image
                 className={`lazyload ${styles.propertyImg}`}
                 alt={ property.propertyTitle || t('common.property')}
