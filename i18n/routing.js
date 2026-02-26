@@ -5,8 +5,8 @@ export const routing = defineRouting({
   // A list of all locales that are supported
   locales: ['en', 'ar'],
 
-  // Used when no locale matches
-  defaultLocale: 'en',
+  // Used when no locale matches (root / opens at /ar)
+  defaultLocale: 'ar',
 
   // The prefix is applied to all routes
   localePrefix: 'always',
