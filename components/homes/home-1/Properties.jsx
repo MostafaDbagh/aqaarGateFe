@@ -377,6 +377,27 @@ export default function Properties({ listings, isLoading, isError }) {
               No Image Available
             </div>
           </Link>
+          <span
+            className="watermark-logo"
+            style={{
+              position: 'absolute',
+              bottom: '8px',
+              left: '8px',
+              zIndex: 10,
+              pointerEvents: 'none',
+              opacity: 0.85,
+              display: 'block',
+            }}
+            aria-hidden="true"
+          >
+            <img
+              src="/images/logo/Logo-32x32.png"
+              alt="Aqaar Gate"
+              width={96}
+              height={96}
+              style={{ display: 'block', maxHeight: '96px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}
+            />
+          </span>
 
           <ul className="box-tag flex gap-8">
             {listing.offer && (

@@ -231,6 +231,23 @@
   /* Position/size via inline styles for locale (top-right EN, top-left AR) */
 }
 
+.watermarkLogo {
+  position: absolute !important;
+  bottom: 8px !important;
+  left: 8px !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+  opacity: 0.85 !important;
+  display: block !important;
+}
+.watermarkLogo img {
+  max-height: 96px !important;
+  width: auto !important;
+  max-width: 96px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3)) !important;
+}
+
 .imageWrap {
   position: relative !important;
   width: 100% !important;

@@ -357,6 +357,12 @@ export default function PropertyGridItems({ listings = [], isAISearch = false, h
                 </div>
               </>
             )}
+            <span
+              className={styles.watermarkLogo}
+              aria-hidden="true"
+            >
+              <img src="/images/logo/Logo-32x32.png" alt="Aqaar Gate" width={96} height={96} style={{ display: 'block', maxHeight: '96px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
+            </span>
             </div>
             <ul className="box-tag flex gap-8">
               {property.propertyType === 'Holiday Homes' && (
