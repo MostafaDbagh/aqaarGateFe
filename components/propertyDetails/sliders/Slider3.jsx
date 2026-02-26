@@ -21,6 +21,7 @@ const fallbackImages = [
 
 export default function Slider3({ property }) {
   const [swiperRef, setSwiperRef] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   
   // Helper function to resolve image URL
   const resolveImageUrl = (value) => {
@@ -186,6 +187,11 @@ export default function Slider3({ property }) {
   return (
     <div className="single-property-gallery style-1">
       <div className="position-relative">
+        {images.length > 0 && (
+          <div className={styles.imageCounter} aria-live="polite">
+            {activeIndex + 1} / {images.length}
+          </div>
+        )}
         <Gallery>
           <Swiper
             dir="ltr"
@@ -199,6 +205,8 @@ export default function Slider3({ property }) {
             slidesPerView={1}
             spaceBetween={0}
             style={{ width: '100%' }}
+            onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+            onSwiper={(swiper) => setActiveIndex(swiper.activeIndex)}
           >
             {images.map((elm, i) => (
               <SwiperSlide key={`main-${elm.src}-${i}`} className="swiper-slide" style={{ width: '100%' }}>
