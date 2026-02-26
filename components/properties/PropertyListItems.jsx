@@ -544,7 +544,7 @@ export default function PropertyListItems({ listings = [], isAISearch = false, h
               }}
               aria-hidden="true"
             >
-              <img src="/images/logo/Logo-32x32.png" alt="Aqaar Gate" width={96} height={96} style={{ display: 'block', maxHeight: '96px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
+              <img className="watermark-logo-img" src="/images/logo/Logo-32x32.png" alt="Aqaar Gate" width={140} height={140} style={{ display: 'block', maxHeight: '140px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
             </span>
             <ul className="box-tag flex gap-8">
               {property.propertyType === 'Holiday Homes' && (

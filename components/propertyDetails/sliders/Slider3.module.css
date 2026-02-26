@@ -26,9 +26,9 @@
 }
 .watermark img {
   display: block;
-  max-height: 100px;
+  max-height: 160px;
   width: auto;
-  max-width: 100px;
+  max-width: 160px;
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
