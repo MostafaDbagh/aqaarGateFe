@@ -1,0 +1,94 @@
+/* Property detail main gallery: force original aspect ratio, no stretch.
+   Loaded after theme so these overrides win. */
+
+/* Swiper container and slide: full width so image can be centered in the middle */
+.single-property-gallery .sw-single,
+.single-property-gallery .sw-single .swiper,
+.single-property-gallery .sw-single .swiper-wrapper {
+  width: 100% !important;
+}
+
+.single-property-gallery .sw-single .swiper-slide {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.single-property-gallery.style-1 .sw-single .swiper-slide .image-wrap,
+.single-property-gallery .sw-single .image-wrap.image-wrap,
+.single-property-gallery .sw-single .swiper-slide a.image-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 320px !important;
+  max-height: 520px !important;
+  overflow: hidden !important;
+  background: #f0f0f0 !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+/* All main gallery images: never stretch - keep natural ratio */
+.single-property-gallery.style-1 .sw-single .swiper-slide .image-wrap img.property-detail-main-img,
+.single-property-gallery .sw-single .image-wrap img.property-detail-main-img,
+.single-property-gallery .sw-single .swiper-slide .image-wrap img:not(.watermark-logo-img) {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 520px !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+}
+
+/* Override theme .sw-single .image-wrap img { width: 100% } */
+.sw-single .image-wrap img.property-detail-main-img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+/* Swiper slide: do not force height so image can keep natural ratio */
+.single-property-gallery.style-1 .sw-single .swiper-slide,
+.single-property-gallery .sw-single .swiper-slide {
+  height: auto !important;
+  min-height: 320px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.single-property-gallery .sw-single .swiper-wrapper {
+  align-items: center !important;
+}
+
+/* Center the image horizontally within the slide */
+.single-property-gallery .sw-single .image-wrap img.property-detail-main-img {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (max-width: 768px) {
+  .single-property-gallery.style-1 .sw-single .swiper-slide .image-wrap img.property-detail-main-img,
+  .single-property-gallery .sw-single .image-wrap img.property-detail-main-img {
+    max-height: 300px !important;
+  }
+  .single-property-gallery.style-1 .sw-single .swiper-slide .image-wrap,
+  .single-property-gallery .sw-single .image-wrap.image-wrap {
+    max-height: 300px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .single-property-gallery.style-1 .sw-single .swiper-slide .image-wrap img.property-detail-main-img,
+  .single-property-gallery .sw-single .image-wrap img.property-detail-main-img {
+    max-height: 250px !important;
+  }
+  .single-property-gallery.style-1 .sw-single .swiper-slide .image-wrap,
+  .single-property-gallery .sw-single .image-wrap.image-wrap {
+    max-height: 250px !important;
+  }
+}

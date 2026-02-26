@@ -196,9 +196,13 @@ export default function Slider3({ property }) {
               nextEl: ".snbpdn1",
             }}
             className="swiper sw-single"
+            slidesPerView={1}
+            spaceBetween={0}
+            style={{ width: '100%' }}
           >
             {images.map((elm, i) => (
-              <SwiperSlide key={`main-${elm.src}-${i}`} className="swiper-slide">
+              <SwiperSlide key={`main-${elm.src}-${i}`} className="swiper-slide" style={{ width: '100%' }}>
+                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '320px' }}>
                 <Item
                   original={elm.src}
                   thumbnail={elm.src}
@@ -207,21 +211,35 @@ export default function Slider3({ property }) {
                 >
                   {({ ref, open }) => (
                     <a
+                      ref={ref}
+                      role="button"
+                      tabIndex={0}
                       data-fancybox="gallery"
                       onClick={open}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } }}
                       className={`image-wrap d-block ${styles.imageWrap}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        minWidth: '100%',
+                      }}
                     >
-                      <Image
-                        ref={ref}
-                        className="lazyload"
-                        alt="Property gallery image"
+                      <img
+                        className={`lazyload property-detail-main-img ${styles.mainGalleryImg}`}
+                        alt={elm.alt || "Property gallery image"}
                         src={elm.src}
-                        width={840}
-                        height={473}
                         style={{
-                          width: '100%',
+                          display: 'block',
+                          maxWidth: '100%',
+                          width: 'auto',
                           height: 'auto',
-                          objectFit: 'contain'
+                          maxHeight: '520px',
+                          objectFit: 'contain',
+                          objectPosition: 'center',
+                          marginLeft: 'auto',
+                          marginRight: 'auto',
                         }}
                       />
                       <span className={styles.watermark} aria-hidden="true">
@@ -237,6 +255,7 @@ export default function Slider3({ property }) {
                     </a>
                   )}
                 </Item>
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>

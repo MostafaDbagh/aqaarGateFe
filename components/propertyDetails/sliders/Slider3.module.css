@@ -1,17 +1,31 @@
 .imageWrap {
   position: relative;
   max-height: 520px;
+  min-height: 320px;
   overflow: hidden;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
   width: 100%;
+  min-width: 100%;
+  background: #f0f0f0;
+  box-sizing: border-box;
 }
 
-.imageWrap img {
-  width: 100%;
-  height: auto;
-  max-height: 520px;
-  object-fit: contain;
+/* Main gallery image: preserve aspect ratio, never stretch */
+.mainGalleryImg,
+.imageWrap img.property-detail-main-img,
+.imageWrap img:not(.watermark-logo-img) {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 520px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
 }
 
 /* AqaarGate logo watermark - bottom left */
@@ -41,10 +55,12 @@
 @media (max-width: 768px) {
   .imageWrap {
     max-height: 300px;
+    min-height: 200px;
   }
   
-  .imageWrap img {
-    max-height: 300px;
+  .mainGalleryImg,
+  .imageWrap img:not(.watermark-logo-img) {
+    max-height: 300px !important;
   }
   
   .noImagesContainer {
@@ -64,10 +80,12 @@
 @media (max-width: 480px) {
   .imageWrap {
     max-height: 250px;
+    min-height: 180px;
   }
   
-  .imageWrap img {
-    max-height: 250px;
+  .mainGalleryImg,
+  .imageWrap img:not(.watermark-logo-img) {
+    max-height: 250px !important;
   }
   
   .noImagesContainer {
