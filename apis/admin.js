@@ -360,6 +360,61 @@ export const adminAPI = {
     } catch (error) {
       throw error.response?.data || error.message;
     }
+  },
+
+  // Blogs (admin CRUD, EN/AR fields)
+  getAllBlogs: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.status) params.append('status', filters.status);
+      if (filters.search) params.append('search', filters.search);
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = `/admin/blogs${queryString ? `?${queryString}` : ''}`;
+      const response = await Axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createBlog: async (blogData) => {
+    try {
+      const response = await Axios.post('/admin/blogs', blogData);
+      return response.data;
+    } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.message) {
+        throw new Error(errorData.message);
+      }
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateBlog: async (id, blogData) => {
+    try {
+      const response = await Axios.put(`/admin/blogs/${id}`, blogData);
+      return response.data;
+    } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.message) {
+        throw new Error(errorData.message);
+      }
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deleteBlog: async (id) => {
+    try {
+      const response = await Axios.delete(`/admin/blogs/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
   }
 };
 

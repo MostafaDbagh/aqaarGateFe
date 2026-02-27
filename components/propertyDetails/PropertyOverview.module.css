@@ -80,17 +80,29 @@
 
 /* Address and share/favorite on the same line on all screens (including mobile) */
 .addressRow {
-  display: flex;
+  display: flex !important;
+  flex-wrap: nowrap !important;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: nowrap;
   gap: 12px;
   margin-bottom: 12px;
 }
 
 .addressLine {
   min-width: 0;
+  flex: 1 1 auto;
   margin-bottom: 0 !important;
+}
+
+.addressRow .action {
+  flex-shrink: 0;
+}
+
+.addressRow .list-action {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 8px;
+  margin: 0 !important;
 }
 
 @media (max-width: 768px) {

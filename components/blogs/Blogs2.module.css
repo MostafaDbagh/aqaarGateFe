@@ -1,0 +1,81 @@
+.grid {
+  display: grid;
+  gap: 40px 32px;
+  margin-bottom: 56px;
+}
+
+@media (min-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 32px 20px;
+    margin-bottom: 40px;
+  }
+}
+
+.card .image-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.card .image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 220px;
+}
+
+.imageLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 320px;
+}
+
+.emptyWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.emptyWrap p {
+  color: var(--Text, #6b7280);
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

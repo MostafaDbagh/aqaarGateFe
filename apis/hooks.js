@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale } from 'next-intl';
-import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI, notificationAPI, careerAPI, adminAPI } from './index';
+import { authAPI, listingAPI, reviewAPI, contactAPI, favoriteAPI, agentAPI, pointAPI, messageAPI, newsletterAPI, dashboardAPI, notificationAPI, careerAPI, blogAPI, adminAPI } from './index';
 
 // Authentication hooks
 export const useAuth = () => {
@@ -658,6 +658,64 @@ export const useCareerMutations = () => {
     createCareer: createMutation.mutate,
     updateCareer: updateMutation.mutate,
     deleteCareer: deleteMutation.mutate,
+    isCreating: createMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+    createError: createMutation.error,
+    updateError: updateMutation.error,
+    deleteError: deleteMutation.error,
+  };
+};
+
+// Public blog hooks (published blogs only)
+export const useBlogs = (params = {}) => {
+  const locale = useLocale();
+  return useQuery({
+    queryKey: ['blogs', locale, params],
+    queryFn: () => blogAPI.getAllBlogs(params),
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
+};
+
+// Admin blog hooks
+export const useAdminBlogs = (filters = {}) => {
+  return useQuery({
+    queryKey: ['admin', 'blogs', filters],
+    queryFn: () => adminAPI.getAllBlogs(filters),
+    staleTime: 1 * 60 * 1000,
+    retry: 2,
+  });
+};
+
+export const useBlogMutations = () => {
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: adminAPI.createBlog,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin', 'blogs']);
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => adminAPI.updateBlog(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin', 'blogs']);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: adminAPI.deleteBlog,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin', 'blogs']);
+    },
+  });
+
+  return {
+    createBlog: createMutation.mutate,
+    updateBlog: updateMutation.mutate,
+    deleteBlog: deleteMutation.mutate,
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,

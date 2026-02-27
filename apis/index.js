@@ -15,6 +15,7 @@ import cityAPI from './city';
 import propertyRentalAPI from './propertyRental';
 import adminAPI from './admin';
 import careerAPI from './career';
+import blogAPI from './blog';
 import notificationAPI from './notification';
 import futureBuyerAPI from './futureBuyer';
 
@@ -36,6 +37,7 @@ export {
   propertyRentalAPI,
   adminAPI,
   careerAPI,
+  blogAPI,
   notificationAPI,
   futureBuyerAPI
 };
@@ -58,6 +60,7 @@ export default {
   propertyRental: propertyRentalAPI,
   admin: adminAPI,
   career: careerAPI,
+  blog: blogAPI,
   notification: notificationAPI,
   futureBuyer: futureBuyerAPI
 };
@@ -79,5 +82,6 @@ export const city = cityAPI;
 export const propertyRental = propertyRentalAPI;
 export const admin = adminAPI;
 export const career = careerAPI;
+export const blog = blogAPI;
 export const notification = notificationAPI;
 export const futureBuyer = futureBuyerAPI;

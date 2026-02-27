@@ -375,6 +375,31 @@ export default function Sidebar() {
                   </button>
                 </li>
 
+                {/* Blogs */}
+                <li
+                  className={`nav-menu-item ${
+                    adminTabContext?.activeTab === TABS.BLOGS ? "active" : ""
+                  }`}
+                >
+                  <button 
+                    type="button"
+                    className={`nav-menu-link ${styles.adminButton}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (adminTabContext) {
+                        adminTabContext.setActiveTab(TABS.BLOGS);
+                        router.replace('/en/admin/blogs');
+                      } else {
+                        router.push('/en/admin/blogs');
+                      }
+                    }}
+                  >
+                    <i className="icon-file" />
+                    <span>Blogs</span>
+                  </button>
+                </li>
+
                 {/* Reviews */}
                 <li
                   className={`nav-menu-item ${

@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Link } from '@/i18n/routing';
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 import Cta from "@/components/common/Cta";
 import Breadcumb from "@/components/common/Breadcumb";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from "next-intl";
+import styles from "./BlogDetailClient.module.css";
 
 function getApiUrl() {
   if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
@@ -17,7 +18,9 @@ function getApiUrl() {
 }
 
 export default function BlogDetailClient({ id }) {
-  const t = useTranslations('blog');
+  const t = useTranslations("blog");
+  const locale = useLocale();
+  const isAr = locale === "ar";
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -76,53 +79,58 @@ export default function BlogDetailClient({ id }) {
     );
   }
 
-  const imageSrc = blog.imageSrc || '/images/section/blog-bg.jpg';
-  const imageUrl = imageSrc.startsWith('http') ? imageSrc : imageSrc;
+  const imageSrc = blog.imageSrc || "/images/section/blog-bg.jpg";
+  const imageUrl = imageSrc.startsWith("http") ? imageSrc : imageSrc;
+
+  const title = isAr && blog.title_ar ? blog.title_ar : blog.title;
+  const content = isAr && blog.content_ar ? blog.content_ar : blog.content;
+  const excerpt = isAr && blog.excerpt_ar ? blog.excerpt_ar : blog.excerpt;
+  const tagLabel = isAr && blog.tag_ar ? blog.tag_ar : blog.tag;
+  const authorName = isAr && blog.author?.name_ar ? blog.author.name_ar : blog.author?.name;
 
   return (
     <div id="wrapper">
       <Header1 />
       <div className="main-content">
-        <Breadcumb pageName={blog.title} />
+        <Breadcumb pageName={title} />
         <section className="section-blog-details tf-spacing-1">
           <div className="tf-container">
             <div className="row">
               <div className="col-12">
-                <article className="blog-article-item">
-                  <div className="image-wrap mb-4">
+                <article className={`blog-article-item ${styles.article}`} dir={isAr ? "rtl" : "ltr"}>
+                  <div className={`image-wrap mb-4 ${styles.imageWrap}`}>
                     <Image
                       src={imageUrl}
-                      alt={blog.title || 'Blog image'}
-                      width={1200}
-                      height={630}
-                      className="w-100"
-                      style={{ objectFit: 'cover', borderRadius: '8px' }}
-                      unoptimized={imageUrl.startsWith('http')}
+                      alt={title || "Blog image"}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 1200px"
+                      className={styles.heroImage}
+                      unoptimized={imageUrl.startsWith("http")}
                     />
-                    {blog.tag && (
+                    {tagLabel && (
                       <div className="box-tag mt-3">
-                        <span className="tag-item text-4 text_white fw-6">{blog.tag}</span>
+                        <span className="tag-item text-4 text_white fw-6">{tagLabel}</span>
                       </div>
                     )}
                   </div>
                   <div className="article-content">
-                    <h1 className="title mb-4">{blog.title}</h1>
-                    {blog.author?.name && (
+                    <h1 className="title mb-4">{title}</h1>
+                    {(authorName || blog.publishedAt || blog.createdAt) && (
                       <p className="text-muted mb-3">
-                        {t('by') || 'By'} {blog.author.name}
-                        {blog.publishedAt && (
+                        {authorName && <>{t("by") || "By"} {authorName}</>}
+                        {(blog.publishedAt || blog.createdAt) && (
                           <span className="ms-2">
-                            • {new Date(blog.publishedAt || blog.createdAt).toLocaleDateString()}
+                            • {new Date(blog.publishedAt || blog.createdAt).toLocaleDateString(locale)}
                           </span>
                         )}
                       </p>
                     )}
-                    {blog.excerpt && (
-                      <p className="text-1 mb-4 fw-5">{blog.excerpt}</p>
+                    {excerpt && (
+                      <p className="text-1 mb-4 fw-5">{excerpt}</p>
                     )}
                     <div
                       className="blog-content"
-                      dangerouslySetInnerHTML={{ __html: blog.content || '' }}
+                      dangerouslySetInnerHTML={{ __html: content || "" }}
                       style={{ lineHeight: 1.8 }}
                     />
                   </div>
