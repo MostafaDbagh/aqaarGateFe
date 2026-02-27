@@ -78,3 +78,30 @@
   }
 }
 
+/* Address and share/favorite on the same line on all screens (including mobile) */
+.addressRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.addressLine {
+  min-width: 0;
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .addressRow {
+    gap: 8px;
+  }
+
+  .addressLine {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+

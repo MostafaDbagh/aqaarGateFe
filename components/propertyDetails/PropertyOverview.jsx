@@ -158,12 +158,29 @@ export default function PropertyOverview({ property }) {
           ))}
         </div>
       )}
-      <div className="info flex justify-between">
-        <div className="feature">
-          <p className="location text-1 flex items-center gap-10">
+      <div className="info">
+        <div className={`${styles.addressRow} flex justify-between items-center`}>
+          <p className={`location text-1 flex items-center gap-10 ${styles.addressLine}`}>
             <i className="icon-location" />
             {locale === 'ar' && property?.address_ar ? property.address_ar : (property?.address || 'Property Location')}
           </p>
+          <div className="action">
+            <ul className="list-action">
+              <li>
+                <FavoriteButton 
+                  propertyId={property?._id}
+                  showLabel={false}
+                  className="btn-icon save hover-tooltip"
+                  iconClassName="icon-heart-1"
+                />
+              </li>
+              <li>
+                <ShareButton property={property} />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="feature">
           <ul className="feature-list flex flex-wrap gap-10 " style={{margin: '12px 0'}}>
             {property?.propertyType && property.propertyType.toLowerCase().trim() !== 'land' && property?.propertyType?.trim() !== 'أرض' && property?.bedrooms != null && Number(property.bedrooms) > 0 && (
               <li className="text-1 flex items-center gap-10">
@@ -180,21 +197,6 @@ export default function PropertyOverview({ property }) {
             <li className="text-1 flex items-center gap-10">
               <i className="icon-Ruler" style={{ margin: '0 2px' }} />
               <span>{property?.size || '0'}</span> {getSizeUnitLabel(property?.sizeUnit)}
-            </li>
-          </ul>
-        </div>
-        <div className="action">
-          <ul className="list-action">
-            <li>
-              <FavoriteButton 
-                propertyId={property?._id}
-                showLabel={false}
-                className="btn-icon save hover-tooltip"
-                iconClassName="icon-heart-1"
-              />
-            </li>
-            <li>
-              <ShareButton property={property} />
             </li>
           </ul>
         </div>
