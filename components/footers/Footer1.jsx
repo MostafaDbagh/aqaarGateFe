@@ -94,16 +94,8 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
           <div className="col-12">
             <div className="footer-top">
               <div className="footer-logo">
-                <Link href={`/`}>
-                  <Image
-                    id="logo_footer"
-                    alt="logo-footer"
-                    src={logo}
-                    width={138}
-                    height={48}
-                    loading="lazy"
-                    priority={false}
-                  />
+                <Link href={`/`} className={styles.logoText}>
+                  AqaarGate - بوابة العقار
                 </Link>
               </div>
               <div className="wrap-contact-item">

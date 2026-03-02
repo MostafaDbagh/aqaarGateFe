@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap');
+
+/* Fancy footer logo text - Lexend */
+.logoText {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'Lexend', sans-serif;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s ease, letter-spacing 0.2s ease;
+}
+.logoText:hover {
+  color: #f1913d;
+  letter-spacing: 0.14em;
+}
+
 .successMessage {
   color: #10b981; /* green-500 */
   font-weight: 600;
