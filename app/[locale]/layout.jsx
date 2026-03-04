@@ -13,6 +13,7 @@ import PerformanceOptimization from '@/components/seo/PerformanceOptimization';
 import InternationalSEO from '@/components/seo/InternationalSEO';
 import BrandSEO from '@/components/seo/BrandSEO';
 import { getDefaultOgImages, getDefaultOgImageUrls } from '@/lib/defaultOgImages';
+import layoutStyles from './layout.module.css';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aqaargate.com';
 
@@ -72,7 +73,7 @@ export default async function LocaleLayout({ children, params }) {
             />
             <NextIntlClientProvider locale={routing.defaultLocale} messages={fallbackMessages} timeZone={timeZone}>
               <Providers>
-                <div style={{ padding: '20px', textAlign: 'center' }}>
+                <div className={layoutStyles.errorMessageBox}>
                   Error loading messages. Please refresh the page.
                 </div>
               </Providers>
@@ -83,7 +84,7 @@ export default async function LocaleLayout({ children, params }) {
         // If even default messages fail, return minimal layout
         return (
           <Providers>
-            <div style={{ padding: '20px', textAlign: 'center' }}>
+            <div className={layoutStyles.errorMessageBox}>
               Error loading messages. Please refresh the page.
             </div>
           </Providers>

@@ -377,6 +377,7 @@
     "faq": "FAQ's",
     "blog": "Blog",
     "futureInterestBuyer": "Future Buyer",
+    "vip": "VIP",
     "query": "Query",
     "forRegisteredUsersOnly": "For registered users only"
   },
@@ -545,7 +546,18 @@
     "agentsDetails": "Agents Details",
     "aboutUs": "About Us",
     "ourVision": "Our Vision",
-    "futureBuyerInterest": "Future Buyer Interest"
+    "futureBuyerInterest": "Future Buyer Interest",
+    "vip": "VIP Properties"
+  },
+  "vipPage": {
+    "heroBadge": "Exclusive",
+    "heroTitle": "We Value Your Time",
+    "heroSubtitle": "You're a busy professional. We've hand-picked these VIP listings so you can focus on what matters—finding the right property without the noise.",
+    "heroTagline": "Curated for decision-makers. No endless scrolling—just quality options, ready for you.",
+    "listingsTitle": "VIP Listings",
+    "listingsSubtitle": "Hand-selected properties for discerning clients.",
+    "noListings": "No VIP listings at the moment. Check back soon.",
+    "viewAllProperties": "View all properties"
   },
   "contact": {
     "pageName": "Contact",

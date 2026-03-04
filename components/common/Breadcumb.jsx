@@ -26,6 +26,8 @@ export default function Breadcumb({ pageName = "Property Listing" }) {
       return t('ourVision');
     } else if (normalizedName === "future buyer interest") {
       return t('futureBuyerInterest');
+    } else if (normalizedName === "vip properties" || normalizedName === "vip") {
+      return t('vip');
     }
     return name; // Fallback to original if no translation found
   };

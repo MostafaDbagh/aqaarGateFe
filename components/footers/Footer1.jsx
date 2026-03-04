@@ -137,7 +137,7 @@ function Footer1({ logo = "/images/logo/new-logo.png" }) {
                         href={`https://wa.me/${'+971586057772'.replace(/[^0-9]/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: '#f1913d', fontWeight: '600' }}
+                        className={styles.whatsappLink}
                       >
                         +971586057772
                       </a>

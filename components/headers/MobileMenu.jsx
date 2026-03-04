@@ -314,7 +314,7 @@ export default function MobileMenu() {
                 "/contact" == pathname ? "current-item" : ""
               }`}
             >
-              <Link href={`/contact`} className="tem-menu-mobile">
+              <Link href="/contact" className="tem-menu-mobile">
                 {" "}
                 {t("contact")}
               </Link>

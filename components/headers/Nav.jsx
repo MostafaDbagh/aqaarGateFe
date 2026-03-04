@@ -195,6 +195,14 @@ export default function Nav() {
       )
     },
     {
+      id: 'contact',
+      element: (
+        <li key="contact" className={normalizedPath === '/contact' || normalizedPath?.startsWith('/contact/') ? "current-menu" : ""}>
+          <Link href="/contact">{t('contact')}</Link>
+        </li>
+      )
+    },
+    {
       id: 'futureBuyers',
       element: (
         <li 
@@ -202,14 +210,6 @@ export default function Nav() {
           className={`${normalizedPath === '/future-buyer-interest' || normalizedPath?.startsWith('/future-buyer-interest/') ? "current-menu" : ""}`}
         >
           <Link href="/future-buyer-interest">{t('futureInterestBuyer')}</Link>
-        </li>
-      )
-    },
-    {
-      id: 'contact',
-      element: (
-        <li key="contact" className={normalizedPath === '/contact' || normalizedPath?.startsWith('/contact/') ? "current-menu" : ""}>
-          <Link href={`/contact`}>{t('contact')}</Link>
         </li>
       )
     }

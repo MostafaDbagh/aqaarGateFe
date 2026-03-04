@@ -40,6 +40,11 @@
   margin-left: 2px;
 }
 
+.whatsappLink {
+  color: #f1913d;
+  font-weight: 600;
+}
+
 .appStoreContainer {
   display: flex;
   flex-direction: column;

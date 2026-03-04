@@ -373,6 +373,7 @@
     "faq": "الأسئلة الشائعة",
     "blog": "المدونة",
     "futureInterestBuyer": "مشتري مستقبلي",
+    "vip": "عقارات VIP",
     "query": "استفسار",
     "forRegisteredUsersOnly": "للمستخدمين المسجلين فقط"
   },
@@ -541,7 +542,18 @@
     "agentsDetails": "تفاصيل الوكلاء",
     "aboutUs": "من نحن",
     "ourVision": "رؤيتنا",
-    "futureBuyerInterest": "مشتري مستقبلي"
+    "futureBuyerInterest": "مشتري مستقبلي",
+    "vip": "عقارات VIP"
+  },
+  "vipPage": {
+    "heroBadge": "حصري",
+    "heroTitle": "نقدّر وقتك",
+    "heroSubtitle": "وقتك ثمين. اخترنا لك هذه العقارات المميزة لتتمكن من التركيز على الأهم—إيجاد العقار المناسب دون إضاعة الوقت.",
+    "heroTagline": "مختارة لصنّاع القرار. بدون تصفح طويل—خيارات ذات جودة، جاهزة لك.",
+    "listingsTitle": "عقارات VIP",
+    "listingsSubtitle": "عقارات مختارة لعملائنا المميزين.",
+    "noListings": "لا توجد عقارات VIP حالياً. تحقق لاحقاً.",
+    "viewAllProperties": "عرض كل العقارات"
   },
   "contact": {
     "pageName": "اتصل بنا",

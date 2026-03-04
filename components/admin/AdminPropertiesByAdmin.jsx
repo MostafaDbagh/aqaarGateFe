@@ -11,6 +11,7 @@ import DropdownSelect from "../common/DropdownSelect";
 import { listingAPI } from "@/apis/listing";
 import logger from "@/utlis/logger";
 import styles from "../dashboard/Property.module.css";
+import adminStyles from "./AdminPropertiesByAdmin.module.css";
 import DashboardFooter from "../common/DashboardFooter";
 import { EyeIcon } from "../icons/EyeIcon";
 import { useTranslations, useLocale } from 'next-intl';
@@ -51,7 +52,9 @@ export default function AdminPropertiesByAdmin() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [featuredLoadingId, setFeaturedLoadingId] = useState(null);
-  
+  const [featuredOrderDraft, setFeaturedOrderDraft] = useState({}); // { [listingId]: inputValue } for unsaved order
+  const [vipLoadingId, setVipLoadingId] = useState(null);
+
   // Property type translations mapping
   const propertyTypeTranslations = {
     en: {
@@ -111,13 +114,56 @@ export default function AdminPropertiesByAdmin() {
     const nextFeatured = !listing.isFeatured;
     setFeaturedLoadingId(id);
     try {
-      await listingAPI.setListingFeatured(id, nextFeatured);
+      const res = await listingAPI.setListingFeatured(id, nextFeatured);
+      setFeaturedOrderDraft((prev) => { const next = { ...prev }; delete next[id]; return next; });
       setListings((prev) =>
-        prev.map((l) => (l._id === id ? { ...l, isFeatured: nextFeatured } : l))
+        prev.map((l) => (l._id === id ? { ...l, isFeatured: nextFeatured, featuredOrder: nextFeatured ? (res?.featuredOrder ?? null) : null } : l))
       );
       showToast(nextFeatured ? 'Listing featured in Fresh Listings' : 'Listing unfeatured', 'success');
     } catch (err) {
       showToast(err?.message || 'Failed to update featured', 'error');
+    } finally {
+      setFeaturedLoadingId(null);
+    }
+  };
+
+  // Toggle VIP - listing appears on VIP page when set
+  const handleToggleVip = async (listing) => {
+    const id = listing._id;
+    const nextVip = !listing.isVip;
+    setVipLoadingId(id);
+    try {
+      await listingAPI.setListingVip(id, nextVip);
+      setListings((prev) => prev.map((l) => (l._id === id ? { ...l, isVip: nextVip } : l)));
+      showToast(nextVip ? 'Listing marked as VIP' : 'Listing removed from VIP', 'success');
+    } catch (err) {
+      showToast(err?.message || 'Failed to update VIP', 'error');
+    } finally {
+      setVipLoadingId(null);
+    }
+  };
+
+  // Set featured order (1 = first). Save triggers API; backend bumps others (e.g. previous 1 becomes 2).
+  const handleSaveFeaturedOrder = async (listing) => {
+    const id = listing._id;
+    const raw = featuredOrderDraft[id] !== undefined ? featuredOrderDraft[id] : (listing.featuredOrder ?? '');
+    const num = raw === '' ? null : parseInt(String(raw), 10);
+    if (!listing.isFeatured) return;
+    if (num !== null && (num < 1 || !Number.isInteger(num))) {
+      showToast('Enter a number 1 or higher', 'error');
+      return;
+    }
+    setFeaturedLoadingId(id);
+    try {
+      const res = await listingAPI.setListingFeatured(id, true, num ?? undefined);
+      setFeaturedOrderDraft((prev) => { const next = { ...prev }; delete next[id]; return next; });
+      setListings((prev) =>
+        prev.map((l) => (l._id === id ? { ...l, featuredOrder: res?.featuredOrder ?? num ?? null } : l))
+      );
+      showToast('Featured order saved. Others shifted.', 'success');
+      await fetchListings();
+    } catch (err) {
+      showToast(err?.message || 'Failed to save order', 'error');
     } finally {
       setFeaturedLoadingId(null);
     }
@@ -457,36 +503,22 @@ export default function AdminPropertiesByAdmin() {
             </form>
           </div>
         </div>
-        <div className="widget-box-2 wd-listing mt-20" style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
-            <h3 className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left', margin: 0 }}>
+        <div className={`widget-box-2 wd-listing mt-20 ${locale === 'ar' ? adminStyles.dirRtl : adminStyles.dirLtr}`}>
+          <div className={adminStyles.headerRow}>
+            <h3 className={`title ${adminStyles.titleRow} ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart}`}>
               Properties by Admin
               {totalListings > 0 && (
-                <span style={{ fontSize: '14px', fontWeight: 'normal', marginLeft: locale === 'ar' ? '0' : '10px', marginRight: locale === 'ar' ? '10px' : '0' }}>
+                <span className={locale === 'ar' ? adminStyles.titleSubRtl : adminStyles.titleSub}>
                   ({totalListings} {t('total')} - {t('showing')} {startIndex + 1}-{endIndex})
                 </span>
               )}
             </h3>
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div className={adminStyles.actionsRow}>
               <button
                 type="button"
                 onClick={handleExportProperties}
                 disabled={displayListings.length === 0}
-                className="tf-btn"
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  border: '1px solid #6366f1',
-                  backgroundColor: '#6366f1',
-                  color: 'white',
-                  cursor: displayListings.length === 0 ? 'not-allowed' : 'pointer',
-                  opacity: displayListings.length === 0 ? 0.5 : 1,
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
+                className={`tf-btn ${adminStyles.exportBtn}`}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -498,27 +530,27 @@ export default function AdminPropertiesByAdmin() {
           <div className="wrap-table">
             <div className="table-responsive">
               {loading ? (
-                <div style={{ padding: '40px', textAlign: 'center' }}>
+                <div className={adminStyles.stateCenter}>
                   <LocationLoader 
                     size="medium" 
                     message={t('loading')}
                   />
                 </div>
               ) : error ? (
-                <div style={{ padding: '40px', textAlign: 'center', color: '#dc3545' }}>
+                <div className={`${adminStyles.stateCenter} ${adminStyles.stateError}`}>
                   <p>{error}</p>
                 </div>
               ) : displayListings.length === 0 ? (
-                <div style={{ padding: '40px', textAlign: 'center' }}>
+                <div className={adminStyles.stateCenter}>
                   <p>{t('noProperties')}</p>
                 </div>
               ) : (
-                <table style={{ direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                <table className={locale === 'ar' ? adminStyles.dirRtl : adminStyles.dirLtr}>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>{t('listing')}</th>
-                      <th style={{ textAlign: 'center' }}>{t('status')}</th>
-                      <th style={{ textAlign: 'center' }}>{t('action')}</th>
+                      <th className={locale === 'ar' ? adminStyles.thEnd : adminStyles.thStart}>{t('listing')}</th>
+                      <th className={adminStyles.thCenter}>{t('status')}</th>
+                      <th className={adminStyles.thCenter}>{t('action')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -526,39 +558,21 @@ export default function AdminPropertiesByAdmin() {
                       <tr key={listing._id} className="file-delete">
                         <td>
                           <div className="listing-box">
-                            <div className="images" style={{ position: 'relative' }}>
+                            <div className={`images ${adminStyles.imagesWrap} ${listing.isSold ? adminStyles.imgSold : ''}`}>
                               <Image
                                 alt={listing.propertyKeyword || 'Property'}
                                 src={getPropertyImage(listing)}
                                 width={615}
                                 height={405}
-                                style={{
-                                  opacity: listing.isSold ? 0.7 : 1,
-                                  transition: 'opacity 0.3s ease'
-                                }}
                               />
                               {listing.isSold && (
-                                <div style={{
-                                  position: 'absolute',
-                                  top: '50%',
-                                  left: '50%',
-                                  transform: 'translate(-50%, -50%)',
-                                  backgroundColor: 'rgba(220, 53, 69, 0.9)',
-                                  color: 'white',
-                                  padding: '8px 16px',
-                                  borderRadius: '6px',
-                                  fontSize: '14px',
-                                  fontWeight: 'bold',
-                                  textTransform: 'uppercase',
-                                  letterSpacing: '1px',
-                                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-                                }}>
+                                <div className={adminStyles.soldBadge}>
                                   {t('sold')}
                                 </div>
                               )}
                             </div>
-                            <div className="content" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
-                              <div className="title" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                            <div className={`content ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart}`}>
+                              <div className={`title ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart}`}>
                                 <Link
                                   href={`/property-detail/${listing._id}`}
                                   className="link"
@@ -568,102 +582,37 @@ export default function AdminPropertiesByAdmin() {
                               </div>
                               {/* Property Keyword Tags */}
                               {listing.propertyKeyword && (
-                                <div style={{ 
-                                  marginTop: '16px', 
-                                  marginBottom: '16px', 
-                                  display: 'flex', 
-                                  flexWrap: 'wrap', 
-                                  gap: '6px',
-                                  justifyContent: locale === 'ar' ? 'flex-start' : 'flex-end',
-                                  direction: locale === 'ar' ? 'rtl' : 'ltr',
-                                  textAlign: locale === 'ar' ? 'right' : 'left'
-                                }}>
+                                <div className={`${adminStyles.keywordsRow} ${locale === 'ar' ? adminStyles.keywordsRowRtl : ''} ${locale === 'ar' ? adminStyles.dirRtl : adminStyles.dirLtr} ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart}`}>
                                   {listing.propertyKeyword.split(',').map((keyword, index) => {
                                     const trimmedKeyword = keyword.trim();
                                     if (!trimmedKeyword) return null;
                                     const translatedKeyword = translateKeywordWithT(trimmedKeyword, tCommon);
                                     return (
-                                      <span 
-                                        key={index} 
-                                        style={{
-                                          display: 'inline-flex',
-                                          alignItems: 'center',
-                                          justifyContent: 'center',
-                                          padding: '4px 10px',
-                                          backgroundColor: '#f0f0f0',
-                                          border: '1px solid #e0e0e0',
-                                          borderRadius: '20px',
-                                          fontSize: '12px',
-                                          color: '#333',
-                                          fontWeight: '500',
-                                          direction: locale === 'ar' ? 'rtl' : 'ltr',
-                                          textAlign: 'center',
-                                          whiteSpace: 'nowrap'
-                                        }}
-                                      >
+                                      <span key={index} className={adminStyles.keywordTag}>
                                         {translatedKeyword}
                                       </span>
                                     );
                                   })}
                                 </div>
                               )}
-                              <div className="text-date" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                              <div className={`text-date ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart}`}>
                                 {t('postingDate')}: {formatDate(listing.createdAt)}
                               </div>
-                              <div className="text-1 text-color-3" style={{ textAlign: locale === 'ar' ? 'right' : 'left', direction: locale === 'ar' ? 'rtl' : 'ltr' }}>
+                              <div className={`text-1 text-color-3 ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart} ${locale === 'ar' ? adminStyles.dirRtl : adminStyles.dirLtr}`}>
                                 {locale === 'ar' && listing.address_ar ? listing.address_ar : listing.address}
                               </div>
-                              <div className="text-btn text-color-primary" style={{ textAlign: locale === 'ar' ? 'right' : 'left' }}>
+                              <div className={`text-btn text-color-primary ${locale === 'ar' ? adminStyles.textEnd : adminStyles.textStart}`}>
                                 {formatPriceWithCurrency(listing?.propertyPrice, listing?.currency)}
                                 {((listing.status?.toLowerCase() === 'rent' || listing.status?.toLowerCase() === 'for rent') && listing.rentType) && ` / ${listing.rentType}`}
                               </div>
                               
                               {/* Info Tags - ID and Views */}
-                              <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                marginTop: '12px',
-                                flexWrap: 'wrap',
-                                justifyContent: locale === 'ar' ? 'flex-end' : 'flex-start'
-                              }}>
-                                {/* Property ID Tag */}
-                                <div style={{
-                                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                  color: 'white',
-                                  padding: '5px 12px',
-                                  borderRadius: '16px',
-                                  fontSize: '10px',
-                                  fontWeight: '700',
-                                  fontFamily: 'monospace',
-                                  letterSpacing: '0.5px',
-                                  textTransform: 'uppercase',
-                                  boxShadow: '0 2px 8px rgba(102, 126, 234, 0.4)',
-                                  border: '1px solid rgba(255, 255, 255, 0.2)'
-                                }}>
+                              <div className={`${adminStyles.infoRow} ${locale === 'ar' ? adminStyles.infoRowRtl : ''}`}>
+                                <div className={adminStyles.idTag}>
                                   ID: {listing.propertyId || listing._id.substring(0, 8).toUpperCase()}
                                 </div>
-                                
-                                {/* Views Count */}
-                                <div style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '6px',
-                                  background: '#c3c3c3',
-                                  color: 'black',
-                                  padding: '5px 12px',
-                                  borderRadius: '16px',
-                                  fontSize: '11px',
-                                  fontWeight: '600',
-                                  border: '1px solid rgba(255, 255, 255, 0.2)'
-                                }}>
-                                  <EyeIcon 
-                                    width={14} 
-                                    height={14} 
-                                    stroke="#333"
-                                    fill="none"
-                                    style={{ flexShrink: 0 }}
-                                  />
+                                <div className={adminStyles.viewsTag}>
+                                  <EyeIcon width={14} height={14} stroke="#333" fill="none" className={adminStyles.iconShrink} />
                                   <span>{listing.visitCount || 0} {t('views')}</span>
                                 </div>
                               </div>
@@ -671,119 +620,84 @@ export default function AdminPropertiesByAdmin() {
                           </div>
                         </td>
                         <td>
-                          <div className="status-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+                          <div className={`status-wrap ${adminStyles.statusWrap}`}>
                             {(() => {
                               const normalizedStatus = listing.status?.toLowerCase() || '';
                               const isSale = normalizedStatus === 'sale' || normalizedStatus === 'for sale';
                               const isRent = normalizedStatus === 'rent' || normalizedStatus === 'for rent';
+                              const statusClass = listing.isSold ? adminStyles.btnStatusSold : isSale ? adminStyles.btnStatusSale : adminStyles.btnStatusRent;
                               return (
-                                <span className="btn-status" style={{
-                                  background: listing.isSold ? '#dc3545' : isSale ? '#00b14f' : '#007bff',
-                                  color: 'white',
-                                  padding: '8px',
-                                  height: '40px',
-                                  minWidth: '80px',
-                                  borderRadius: '8px',
-                                  fontSize: '12px',
-                                  fontWeight: '600',
-                                  textAlign: 'center',
-                                  textTransform: 'uppercase',
-                                  letterSpacing: '0.5px',
-                                  border: 'none',
-                                  outline: 'none',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center'
-                                }}>
+                                <span className={`btn-status ${adminStyles.btnStatus} ${statusClass}`}>
                                   {listing.isSold ? t('sold') : isSale ? t('forSale') : t('forRent')}
                                 </span>
                               );
                             })()}
-                            <span className="btn-status" style={{
-                              background: 
-                                (listing.approvalStatus?.toLowerCase()) === 'pending' ? '#ff9500' : 
-                                (listing.approvalStatus?.toLowerCase()) === 'approved' ? '#00b14f' : 
-                                (listing.approvalStatus?.toLowerCase()) === 'closed' ? '#6c757d' : 
-                                (listing.approvalStatus?.toLowerCase()) === 'rejected' ? '#dc3545' : '#ff9500',
-                              color: 'white',
-                              padding: '8px',
-                              height: '40px',
-                              minWidth: '80px',
-                              borderRadius: '8px',
-                              fontSize: '12px',
-                              fontWeight: '600',
-                              textAlign: 'center',
-                              textTransform: 'capitalize',
-                              letterSpacing: '0.3px',
-                              border: 'none',
-                              outline: 'none',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}>
-                              {(listing.approvalStatus?.toLowerCase()) === 'pending' ? `⏳ ${t('pending')}` : 
-                               (listing.approvalStatus?.toLowerCase()) === 'approved' ? `✓ ${t('approved')}` :
-                               (listing.approvalStatus?.toLowerCase()) === 'closed' ? `🔒 ${t('closed')}` : 
-                               (listing.approvalStatus?.toLowerCase()) === 'rejected' ? `❌ ${t('rejected')}` : `⏳ ${t('pending')}`}
-                            </span>
+                            {(() => {
+                              const approval = listing.approvalStatus?.toLowerCase();
+                              const approvalClass = approval === 'pending' ? adminStyles.btnStatusPending : approval === 'approved' ? adminStyles.btnStatusApproved : approval === 'closed' ? adminStyles.btnStatusClosed : approval === 'rejected' ? adminStyles.btnStatusRejected : adminStyles.btnStatusPending;
+                              return (
+                                <span className={`btn-status ${adminStyles.btnStatus} ${adminStyles.btnStatusCapitalize} ${approvalClass}`}>
+                                  {approval === 'pending' ? `⏳ ${t('pending')}` : approval === 'approved' ? `✓ ${t('approved')}` : approval === 'closed' ? `🔒 ${t('closed')}` : approval === 'rejected' ? `❌ ${t('rejected')}` : `⏳ ${t('pending')}`}
+                                </span>
+                              );
+                            })()}
                           </div>
                         </td>
                         <td>
-                          <ul className="list-action" style={{ justifyContent: 'center', direction: 'ltr' }}>
+                          <ul className={`list-action ${adminStyles.listActionCenter} ${adminStyles.dirLtr}`}>
                             <li>
                               <button
                                 onClick={() => handleToggleFeatured(listing)}
                                 disabled={featuredLoadingId === listing._id}
-                                className="item"
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '5px',
-                                  cursor: featuredLoadingId === listing._id ? 'wait' : 'pointer',
-                                  color: listing.isFeatured ? '#f0b429' : '#A3ABB0',
-                                  fontSize: '18px'
-                                }}
+                                className={`item ${adminStyles.actionBtn} ${adminStyles.actionBtnFeatured} ${listing.isFeatured ? adminStyles.actionBtnFeaturedActive : ''} ${featuredLoadingId === listing._id ? adminStyles.actionBtnWait : ''}`}
                                 title={listing.isFeatured ? 'Featured in Fresh Listings (click to remove)' : 'Feature for Fresh Listings'}
                               >
                                 {featuredLoadingId === listing._id ? (
-                                  <span style={{ fontSize: '14px' }}>...</span>
+                                  <span className={adminStyles.loadingDots}>...</span>
                                 ) : (
                                   <svg width={20} height={20} viewBox="0 0 24 24" fill={listing.isFeatured ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                                   </svg>
                                 )}
                               </button>
+                              {listing.isFeatured && (
+                                <span className={adminStyles.featuredOrderWrap}>
+                                  <label htmlFor={`featured-order-${listing._id}`} className={adminStyles.featuredOrderLabel}>#</label>
+                                  <input
+                                    id={`featured-order-${listing._id}`}
+                                    type="number"
+                                    min={1}
+                                    value={featuredOrderDraft[listing._id] !== undefined ? featuredOrderDraft[listing._id] : (listing.featuredOrder ?? '')}
+                                    placeholder="1"
+                                    disabled={featuredLoadingId === listing._id}
+                                    onChange={(e) => {
+                                      const v = e.target.value;
+                                      setFeaturedOrderDraft((prev) => ({ ...prev, [listing._id]: v }));
+                                    }}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSaveFeaturedOrder(listing); } }}
+                                    title="Position on homepage (1 = first). Click Save to apply; others will shift."
+                                    className={adminStyles.featuredOrderInput}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleSaveFeaturedOrder(listing)}
+                                    disabled={featuredLoadingId === listing._id}
+                                    title="Save order (others with same or higher number will shift down)"
+                                    className={adminStyles.saveOrderBtn}
+                                  >
+                                    {featuredLoadingId === listing._id ? '...' : 'Save'}
+                                  </button>
+                                </span>
+                              )}
                             </li>
                             <li>
                               <button 
                                 onClick={() => handleEditProperty(listing)} 
-                                className="item"
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '5px',
-                                  cursor: 'pointer',
-                                  color: '#A3ABB0',
-                                  fontSize: '14px'
-                                }}
+                                className={`item ${adminStyles.actionBtn}`}
                                 title={t('edit')}
                               >
-                                <svg width={16}
-                                  height={16}
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                 aria-hidden="true">
-                                  <path
-                                    d="M11.2413 2.9915L12.366 1.86616C12.6005 1.63171 12.9184 1.5 13.25 1.5C13.5816 1.5 13.8995 1.63171 14.134 1.86616C14.3685 2.10062 14.5002 2.4186 14.5002 2.75016C14.5002 3.08173 14.3685 3.39971 14.134 3.63416L4.55467 13.2135C4.20222 13.5657 3.76758 13.8246 3.29 13.9668L1.5 14.5002L2.03333 12.7102C2.17552 12.2326 2.43442 11.7979 2.78667 11.4455L11.242 2.9915H11.2413ZM11.2413 2.9915L13 4.75016"
-                                    stroke="#A3ABB0"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
+                                <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className={adminStyles.actionBtnSvg}>
+                                  <path d="M11.2413 2.9915L12.366 1.86616C12.6005 1.63171 12.9184 1.5 13.25 1.5C13.5816 1.5 13.8995 1.63171 14.134 1.86616C14.3685 2.10062 14.5002 2.4186 14.5002 2.75016C14.5002 3.08173 14.3685 3.39971 14.134 3.63416L4.55467 13.2135C4.20222 13.5657 3.76758 13.8246 3.29 13.9668L1.5 14.5002L2.03333 12.7102C2.17552 12.2326 2.43442 11.7979 2.78667 11.4455L11.242 2.9915H11.2413ZM11.2413 2.9915L13 4.75016" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 {t('edit')}
                               </button>
@@ -791,29 +705,13 @@ export default function AdminPropertiesByAdmin() {
                             <li>
                               <button 
                                 onClick={() => handleMarkSold(listing)} 
-                                className="item"
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '5px',
-                                  cursor: 'pointer',
-                                  color: listing.isSold ? '#ff6b35' : '#A3ABB0',
-                                  fontSize: '14px',
-                                  fontWeight: listing.isSold ? '600' : '400'
-                                }}
+                                className={`item ${adminStyles.actionBtn} ${listing.isSold ? adminStyles.actionBtnSold : ''}`}
                                 title={listing.isSold ? t('unmarkAsSold') : t('markAsSold')}
                               >
-                                <svg width={16}
-                                  height={16}
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                 aria-hidden="true">
+                                <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className={listing.isSold ? adminStyles.actionBtnSvgSold : adminStyles.actionBtnSvg}>
                                   <path
                                     d="M12.2427 12.2427C13.3679 11.1175 14.0001 9.59135 14.0001 8.00004C14.0001 6.40873 13.3679 4.8826 12.2427 3.75737C11.1175 2.63214 9.59135 2 8.00004 2C6.40873 2 4.8826 2.63214 3.75737 3.75737M12.2427 12.2427C11.1175 13.3679 9.59135 14.0001 8.00004 14.0001C6.40873 14.0001 4.8826 13.3679 3.75737 12.2427C2.63214 11.1175 2 9.59135 2 8.00004C2 6.40873 2.63214 4.8826 3.75737 3.75737M12.2427 12.2427L3.75737 3.75737"
-                                    stroke={listing.isSold ? '#ff6b35' : '#A3ABB0'}
+                                    stroke="currentColor"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                   />
@@ -824,31 +722,11 @@ export default function AdminPropertiesByAdmin() {
                             <li>
                               <button 
                                 onClick={() => handleDeleteProperty(listing)} 
-                                className="remove-file item"
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '5px',
-                                  cursor: 'pointer',
-                                  color: '#A3ABB0',
-                                  fontSize: '14px'
-                                }}
+                                className={`remove-file item ${adminStyles.actionBtn}`}
                                 title={t('delete')}
                               >
-                                <svg width={16}
-                                  height={16}
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                 aria-hidden="true">
-                                  <path
-                                    d="M9.82667 6.00035L9.596 12.0003M6.404 12.0003L6.17333 6.00035M12.8187 3.86035C13.0467 3.89501 13.2733 3.93168 13.5 3.97101M12.8187 3.86035L12.1067 13.1157C12.0776 13.4925 11.9074 13.8445 11.63 14.1012C11.3527 14.3579 10.9886 14.5005 10.6107 14.5003H5.38933C5.0114 14.5005 4.64735 14.3579 4.36999 14.1012C4.09262 13.8445 3.92239 13.4925 3.89333 13.1157L3.18133 3.86035M12.8187 3.86035C12.0492 3.74403 11.2758 3.65574 10.5 3.59568M3.18133 3.86035C2.95333 3.89435 2.72667 3.93101 2.5 3.97035M3.18133 3.86035C3.95076 3.74403 4.72416 3.65575 5.5 3.59568M10.5 3.59568V2.98501C10.5 2.19835 9.89333 1.54235 9.10667 1.51768C8.36908 1.49411 7.63092 1.49411 6.89333 1.51768C6.10667 1.54235 5.5 2.19901 5.5 2.98501V3.59568M10.5 3.59568C8.83581 3.46707 7.16419 3.46707 5.5 3.59568"
-                                    stroke="#A3ABB0"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
+                                <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className={adminStyles.actionBtnSvg}>
+                                  <path d="M9.82667 6.00035L9.596 12.0003M6.404 12.0003L6.17333 6.00035M12.8187 3.86035C13.0467 3.89501 13.2733 3.93168 13.5 3.97101M12.8187 3.86035L12.1067 13.1157C12.0776 13.4925 11.9074 13.8445 11.63 14.1012C11.3527 14.3579 10.9886 14.5005 10.6107 14.5003H5.38933C5.0114 14.5005 4.64735 14.3579 4.36999 14.1012C4.09262 13.8445 3.92239 13.4925 3.89333 13.1157L3.18133 3.86035M12.8187 3.86035C12.0492 3.74403 11.2758 3.65574 10.5 3.59568M3.18133 3.86035C2.95333 3.89435 2.72667 3.93101 2.5 3.97035M3.18133 3.86035C3.95076 3.74403 4.72416 3.65575 5.5 3.59568M10.5 3.59568V2.98501C10.5 2.19835 9.89333 1.54235 9.10667 1.51768C8.36908 1.49411 7.63092 1.49411 6.89333 1.51768C6.10667 1.54235 5.5 2.19901 5.5 2.98501V3.59568M10.5 3.59568C8.83581 3.46707 7.16419 3.46707 5.5 3.59568" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 {t('delete')}
                               </button>
@@ -864,14 +742,7 @@ export default function AdminPropertiesByAdmin() {
             
             {/* Pagination - Keep numbers in English and LTR direction for both languages */}
             {!loading && !error && displayListings.length > 0 && pagination && pagination.pages > 1 && (
-              <ul 
-                className="wg-pagination" 
-                style={{ 
-                  marginTop: '20px',
-                  direction: 'ltr', // Force LTR for pagination in both languages
-                  textAlign: 'left' // Keep left alignment
-                }}
-              >
+              <ul className={`wg-pagination ${adminStyles.paginationWrap}`}>
                 <li className={`arrow ${currentPage === 1 ? 'disabled' : ''}`}>
                   <a 
                     href="#" 
@@ -879,19 +750,15 @@ export default function AdminPropertiesByAdmin() {
                       e.preventDefault();
                       if (currentPage > 1) handlePrevPage();
                     }}
-                    style={{ 
-                      cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                      opacity: currentPage === 1 ? 0.5 : 1
-                    }}
+                    className={currentPage === 1 ? adminStyles.paginationArrowDisabled : adminStyles.paginationArrow}
                   >
                     <i className="icon-arrow-left" />
                   </a>
                 </li>
-                
                 {getPageNumbers().map((page, index) => (
                   <li key={index} className={currentPage === page ? 'active' : ''}>
                     {page === '...' ? (
-                      <span style={{ padding: '0 10px' }}>...</span>
+                      <span className={adminStyles.paginationEllipsis}>...</span>
                     ) : (
                       <a 
                         href="#" 
@@ -899,14 +766,13 @@ export default function AdminPropertiesByAdmin() {
                           e.preventDefault();
                           handlePageClick(page);
                         }}
-                        style={{ cursor: 'pointer' }}
+                        className={adminStyles.paginationArrow}
                       >
                         {page}
                       </a>
                     )}
                   </li>
                 ))}
-                
                 <li className={`arrow ${currentPage >= totalPages ? 'disabled' : ''}`}>
                   <a 
                     href="#" 
@@ -914,10 +780,7 @@ export default function AdminPropertiesByAdmin() {
                       e.preventDefault();
                       if (currentPage < totalPages) handleNextPage();
                     }}
-                    style={{ 
-                      cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
-                      opacity: currentPage >= totalPages ? 0.5 : 1
-                    }}
+                    className={currentPage >= totalPages ? adminStyles.paginationArrowDisabled : adminStyles.paginationArrow}
                   >
                     <i className="icon-arrow-right" />
                   </a>

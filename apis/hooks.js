@@ -68,7 +68,7 @@ export const useSearchListings = (searchParams = {}, options = {}) => {
     staleTime: 5 * 60 * 1000, // 5 minutes - increased for better performance
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
     refetchOnWindowFocus: false, // Prevent refetch on window focus
-    refetchOnMount: false, // Prevent refetch on component mount if data exists
+    refetchOnMount: options.refetchOnMount !== undefined ? options.refetchOnMount : false, // Homepage can pass true so Fresh Listings order is up to date
     retry: 1, // Reduce retry attempts
     retryDelay: 1000, // 1 second delay between retries
   });

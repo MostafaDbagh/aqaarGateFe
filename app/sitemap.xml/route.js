@@ -167,6 +167,8 @@ export async function GET() {
     { url: `${baseUrl}/ar/property-rental-service`, lastmod: now, changefreq: 'monthly', priority: '0.7' },
     { url: `${baseUrl}/en/future-buyer-interest`, lastmod: now, changefreq: 'monthly', priority: '0.7' },
     { url: `${baseUrl}/ar/future-buyer-interest`, lastmod: now, changefreq: 'monthly', priority: '0.7' },
+    { url: `${baseUrl}/en/vip`, lastmod: now, changefreq: 'daily', priority: '0.8' },
+    { url: `${baseUrl}/ar/vip`, lastmod: now, changefreq: 'daily', priority: '0.8' },
     { url: `${baseUrl}/en/contact`, lastmod: now, changefreq: 'monthly', priority: '0.6' },
     { url: `${baseUrl}/ar/contact`, lastmod: now, changefreq: 'monthly', priority: '0.6' },
     { url: `${baseUrl}/en/faq`, lastmod: now, changefreq: 'monthly', priority: '0.5' },

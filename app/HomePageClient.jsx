@@ -16,16 +16,11 @@ const Properties = lazy(() => import("@/components/homes/home-1/Properties").cat
 const Cities = lazy(() => import("@/components/homes/home-1/Cities").catch(() => ({ default: () => null })));
 const Properties2 = lazy(() => import("@/components/homes/home-1/Properties2").catch(() => ({ default: () => null })));
 const SEOContent = lazy(() => import("@/components/homes/home-1/SEOContent").catch(() => ({ default: () => null })));
+import homeStyles from "./HomePageClient.module.css";
 
 // Loading component for Suspense fallback
 const ComponentLoader = ({ name }) => (
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    minHeight: '200px',
-    padding: '40px 20px'
-  }}>
+  <div className={homeStyles.componentLoader}>
     <LocationLoader size="medium" message={`Loading ${name}...`} />
   </div>
 );
@@ -143,7 +138,7 @@ export default function HomePageClient() {
     data: listings = [],
     isLoading,
     isError,
-  } = useSearchListings(mostRecentParams, { enabled: true }); // Always enabled
+  } = useSearchListings(mostRecentParams, { enabled: true, refetchOnMount: true }); // Refetch on mount so Fresh Listings order (featured #) is up to date
 
   // CRITICAL: "Most Recent Listings" (Fresh Listings) - normal search, featured first then newest
   // Ensure we always limit to 20 listings for the home page
@@ -251,41 +246,7 @@ export default function HomePageClient() {
           onClick={handleClearAllSearch}
           aria-label={isRTL ? "مسح البحث" : "Clear Search"}
           title={isRTL ? "مسح البحث" : "Clear Search"}
-          style={{
-            position: 'fixed',
-            bottom: isMobile ? '20px' : '30px',
-            [isRTL ? 'left' : 'right']: isMobile ? '20px' : '30px',
-            zIndex: 1000,
-            background: '#F1913D',
-            color: 'white',
-            border: 'none',
-            borderRadius: '50px',
-            padding: isMobile ? '12px 20px' : '14px 24px',
-            fontSize: isMobile ? '13px' : '14px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(241, 145, 61, 0.4)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.background = '#EA580C';
-            e.target.style.boxShadow = '0 6px 16px rgba(241, 145, 61, 0.5)';
-            e.target.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = '#F1913D';
-            e.target.style.boxShadow = '0 4px 12px rgba(241, 145, 61, 0.4)';
-            e.target.style.transform = 'translateY(0)';
-          }}
-          onMouseDown={(e) => {
-            e.target.style.transform = 'translateY(0)';
-          }}
-          onMouseUp={(e) => {
-            e.target.style.transform = 'translateY(-2px)';
-          }}
+          className={`${homeStyles.clearSearchBtn} ${isMobile ? homeStyles.clearSearchBtnMobile : ''} ${isRTL ? homeStyles.clearSearchBtnRtl : ''}`}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

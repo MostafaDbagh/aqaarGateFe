@@ -1,0 +1,226 @@
+/* Admin Properties By Admin - classes only, no inline styles */
+
+.dirRtl { direction: rtl; }
+.dirLtr { direction: ltr; }
+.textStart { text-align: left; }
+.textEnd { text-align: right; }
+.textCenter { text-align: center; }
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.titleRow { margin: 0; }
+.titleSub {
+  font-size: 14px;
+  font-weight: normal;
+  margin-left: 10px;
+  margin-right: 0;
+}
+.titleSubRtl { margin-left: 0; margin-right: 10px; }
+.actionsRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.exportBtn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #6366f1;
+  background-color: #6366f1;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.exportBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.stateCenter { padding: 40px; text-align: center; }
+.stateError { color: #dc3545; }
+
+.tableDir { /* direction set via dirRtl/dirLtr */ }
+.thStart { text-align: left; }
+.thEnd { text-align: right; }
+.thCenter { text-align: center; }
+
+.imagesWrap { position: relative; }
+.imagesWrap.imgSold img { opacity: 0.7; transition: opacity 0.3s ease; }
+.soldBadge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(220, 53, 69, 0.9);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.contentDir { /* textAlign via textStart/textEnd */ }
+.keywordsRow {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.keywordsRowRtl { justify-content: flex-start; }
+.keywordTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.infoRowRtl { justify-content: flex-end; }
+.idTag {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.viewsTag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #c3c3c3;
+  color: black;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.iconShrink { flex-shrink: 0; }
+
+.statusWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+.btnStatus {
+  padding: 8px;
+  height: 40px;
+  min-width: 80px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.btnStatusSale { background: #00b14f; }
+.btnStatusRent { background: #007bff; }
+.btnStatusSold { background: #dc3545; }
+.btnStatusPending { background: #ff9500; }
+.btnStatusApproved { background: #00b14f; }
+.btnStatusRejected { background: #dc3545; }
+.btnStatusClosed { background: #6c757d; }
+.btnStatusCapitalize { text-transform: capitalize; letter-spacing: 0.3px; }
+
+.listActionCenter { justify-content: center; }
+.actionBtn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  color: #A3ABB0;
+  font-size: 14px;
+}
+.actionBtnFeatured { font-size: 18px; color: #A3ABB0; }
+.actionBtnFeaturedActive { color: #f0b429; }
+.actionBtnWait { cursor: wait; }
+.actionBtnSold { color: #ff6b35; font-weight: 600; }
+.actionBtnSvg path { stroke: #A3ABB0; fill: none; }
+.actionBtnSvgSold path { stroke: #ff6b35; fill: none; }
+.loadingDots { font-size: 14px; }
+.featuredOrderWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.featuredOrderLabel { font-size: 11px; color: #666; font-weight: 600; }
+.featuredOrderInput {
+  width: 44px;
+  padding: 6px 8px;
+  font-size: 13px;
+  text-align: center;
+  direction: ltr;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  outline: none;
+  background-color: #fff;
+}
+.saveOrderBtn {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0d6efd;
+  background: #e7f1ff;
+  border: 1px solid #b6d4fe;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.saveOrderBtn:disabled { cursor: wait; }
+
+.vipLabel { font-size: 12px; font-weight: 600; }
+.vipActive { color: #0d9488; }
+
+.paginationWrap {
+  margin-top: 20px;
+  direction: ltr;
+  text-align: left;
+}
+.paginationArrow { cursor: pointer; }
+.paginationArrowDisabled { cursor: not-allowed; opacity: 0.5; }
+.paginationEllipsis { padding: 0 10px; }

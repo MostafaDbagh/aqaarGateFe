@@ -130,11 +130,29 @@ export const listingAPI = {
     }
   },
 
-  // Set listing as featured (star) - admin only. Featured listings stay in Fresh Listings.
-  setListingFeatured: async (id, isFeatured) => {
+  // Set listing as featured (star) - admin only. Optional featuredOrder: 1 = first, 2 = second, etc.
+  setListingFeatured: async (id, isFeatured, featuredOrder = undefined) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await Axios.patch(`/listing/${id}/featured`, { isFeatured }, {
+      const body = { isFeatured };
+      if (isFeatured && featuredOrder !== undefined && featuredOrder !== null) body.featuredOrder = featuredOrder;
+      const response = await Axios.patch(`/listing/${id}/featured`, body, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Set listing as VIP - admin only. VIP listings appear on the VIP page.
+  setListingVip: async (id, isVip) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await Axios.patch(`/listing/${id}/vip`, { isVip }, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
