@@ -161,7 +161,6 @@ export default function AdminPropertiesByAdmin() {
         prev.map((l) => (l._id === id ? { ...l, featuredOrder: res?.featuredOrder ?? num ?? null } : l))
       );
       showToast('Featured order saved. Others shifted.', 'success');
-      await fetchListings();
     } catch (err) {
       showToast(err?.message || 'Failed to save order', 'error');
     } finally {
