@@ -668,7 +668,7 @@ export default function AdminPropertiesByAdmin() {
                                     type="number"
                                     min={1}
                                     value={featuredOrderDraft[listing._id] !== undefined ? featuredOrderDraft[listing._id] : (listing.featuredOrder ?? '')}
-                                    placeholder="1"
+                                    placeholder=""
                                     disabled={featuredLoadingId === listing._id}
                                     onChange={(e) => {
                                       const v = e.target.value;
