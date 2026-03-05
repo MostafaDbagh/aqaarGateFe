@@ -82,9 +82,13 @@ const nextConfig = {
           protocol: 'https',
           hostname: '**.herokuapp.com',
         },
+        {
+          protocol: 'https',
+          hostname: 'images.pexels.com',
+        },
       ],
       // Legacy domains support (for older Next.js versions)
-      domains: ['res.cloudinary.com', 'picsum.photos', 'cdn.pixabay.com', 'i.pravatar.cc', 'example.com'],
+      domains: ['res.cloudinary.com', 'picsum.photos', 'cdn.pixabay.com', 'i.pravatar.cc', 'example.com', 'images.pexels.com'],
       formats: ['image/avif', 'image/webp'],
       deviceSizes: [360, 420, 640, 768, 1024, 1280, 1536, 1920],
       imageSizes: [16, 32, 48, 64, 96, 128, 256],

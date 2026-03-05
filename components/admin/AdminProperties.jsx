@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { adminAPI } from "@/apis";
+import { listingAPI } from "@/apis/listing";
 import LocationLoader from "@/components/common/LocationLoader";
 import { useGlobalModal } from "@/components/contexts/GlobalModalContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
@@ -36,6 +37,8 @@ export default function AdminProperties() {
   });
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [featuredLoadingId, setFeaturedLoadingId] = useState(null);
+  const [vipLoadingId, setVipLoadingId] = useState(null);
 
   useEffect(() => {
     fetchProperties();
@@ -141,6 +144,40 @@ export default function AdminProperties() {
     queryClient.invalidateQueries(['my-listings']);
     queryClient.invalidateQueries(['listings']);
     queryClient.invalidateQueries(['listing']);
+  };
+
+  const handleToggleFeatured = async (property) => {
+    const id = property._id;
+    const nextFeatured = !property.isFeatured;
+    setFeaturedLoadingId(id);
+    try {
+      await listingAPI.setListingFeatured(id, nextFeatured);
+      setProperties((prev) =>
+        prev.map((p) => (p._id === id ? { ...p, isFeatured: nextFeatured } : p))
+      );
+      showSuccessModal("Success", nextFeatured ? "Listing featured in Fresh Listings" : "Listing unfeatured");
+    } catch (err) {
+      showWarningModal("Error", err?.message || "Failed to update featured");
+    } finally {
+      setFeaturedLoadingId(null);
+    }
+  };
+
+  const handleToggleVip = async (property) => {
+    const id = property._id;
+    const nextVip = !property.isVip;
+    setVipLoadingId(id);
+    try {
+      await listingAPI.setListingVip(id, nextVip);
+      setProperties((prev) =>
+        prev.map((p) => (p._id === id ? { ...p, isVip: nextVip } : p))
+      );
+      showSuccessModal("Success", nextVip ? "Listing marked as VIP" : "Listing removed from VIP");
+    } catch (err) {
+      showWarningModal("Error", err?.message || "Failed to update VIP");
+    } finally {
+      setVipLoadingId(null);
+    }
   };
 
   const handleCloseDetailsModal = () => {
@@ -294,6 +331,30 @@ export default function AdminProperties() {
                         title="Edit property"
                       >
                         Edit
+                      </button>
+                      <button
+                        className={`${styles.btn} ${styles.btnFeatured} ${property.isFeatured ? styles.btnFeaturedActive : ''}`}
+                        onClick={() => handleToggleFeatured(property)}
+                        disabled={featuredLoadingId === property._id}
+                        title={property.isFeatured ? "Featured in Fresh Listings (click to remove)" : "Feature for Fresh Listings"}
+                      >
+                        {featuredLoadingId === property._id ? "..." : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill={property.isFeatured ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                          </svg>
+                        )}
+                      </button>
+                      <button
+                        className={`${styles.btn} ${styles.btnVip} ${property.isVip ? styles.btnVipActive : ''}`}
+                        onClick={() => handleToggleVip(property)}
+                        disabled={vipLoadingId === property._id}
+                        title={property.isVip ? "Remove from VIP listing" : "Mark as VIP listing"}
+                      >
+                        {vipLoadingId === property._id ? "..." : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M4 8L6 20H18L20 8M4 8L5.71624 9.37299C6.83218 10.2657 7.39014 10.7121 7.95256 10.7814C8.4453 10.8421 8.94299 10.7173 9.34885 10.4314C9.81211 10.1051 10.0936 9.4483 10.6565 8.13476L12 5M4 8C4.55228 8 5 7.55228 5 7C5 6.44772 4.55228 6 4 6C3.44772 6 3 6.44772 3 7C3 7.55228 3.44772 8 4 8ZM20 8L18.2838 9.373C17.1678 10.2657 16.6099 10.7121 16.0474 10.7814C15.5547 10.8421 15.057 10.7173 14.6511 10.4314C14.1879 10.1051 13.9064 9.4483 13.3435 8.13476L12 5M20 8C20.5523 8 21 7.55228 21 7C21 6.44772 20.5523 6 20 6C19.4477 6 19 6.44772 19 7C19 7.55228 19.4477 8 20 8ZM12 5C12.5523 5 13 4.55228 13 4C13 3.44772 12.5523 3 12 3C11.4477 3 11 3.44772 11 4C11 4.55228 11.4477 5 12 5ZM12 4H12.01M20 7H20.01M4 7H4.01" />
+                          </svg>
+                        )}
                       </button>
                       {property.approvalStatus === "pending" && (
                         <>

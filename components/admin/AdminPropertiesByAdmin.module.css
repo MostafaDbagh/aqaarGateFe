@@ -72,6 +72,21 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+.vipBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(249, 115, 22, 0.95);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 .contentDir { /* textAlign via textStart/textEnd */ }
 .keywordsRow {
   margin-top: 16px;
@@ -178,6 +193,8 @@
 }
 .actionBtnFeatured { font-size: 18px; color: #A3ABB0; }
 .actionBtnFeaturedActive { color: #f0b429; }
+.actionBtnVip { font-size: 16px; color: #A3ABB0; }
+.actionBtnVipActive { color: #f97316; }
 .actionBtnWait { cursor: wait; }
 .actionBtnSold { color: #ff6b35; font-weight: 600; }
 .actionBtnSvg path { stroke: #A3ABB0; fill: none; }
@@ -214,6 +231,7 @@
 .saveOrderBtn:disabled { cursor: wait; }
 
 .vipLabel { font-size: 12px; font-weight: 600; }
+.vipIconActive { opacity: 1; }
 .vipActive { color: #0d9488; }
 
 .paginationWrap {

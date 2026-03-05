@@ -30,6 +30,8 @@ export default function Property() {
   const itemsPerPage = 6;
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [featuredLoadingId, setFeaturedLoadingId] = useState(null);
+  const [vipLoadingId, setVipLoadingId] = useState(null);
   // Property type translations mapping
   const propertyTypeTranslations = {
     en: {
@@ -155,6 +157,46 @@ export default function Property() {
     }
   };
 
+
+  // Toggle Featured (Fresh Listings)
+  const handleToggleFeatured = async (listing) => {
+    if (isAgentBlocked) {
+      showToast(t('accountBlocked'), 'error');
+      return;
+    }
+    const id = listing._id;
+    const nextFeatured = !listing.isFeatured;
+    setFeaturedLoadingId(id);
+    try {
+      await listingAPI.setListingFeatured(id, nextFeatured);
+      refetch();
+      showToast(nextFeatured ? (t('featuredInFreshListings') || 'Listing featured in Fresh Listings') : (t('unfeatured') || 'Listing unfeatured'), 'success');
+    } catch (err) {
+      showToast(err?.message || (t('failedToUpdate') || 'Failed to update featured'), 'error');
+    } finally {
+      setFeaturedLoadingId(null);
+    }
+  };
+
+  // Toggle VIP (VIP page listing)
+  const handleToggleVip = async (listing) => {
+    if (isAgentBlocked) {
+      showToast(t('accountBlocked'), 'error');
+      return;
+    }
+    const id = listing._id;
+    const nextVip = !listing.isVip;
+    setVipLoadingId(id);
+    try {
+      await listingAPI.setListingVip(id, nextVip);
+      refetch();
+      showToast(nextVip ? (t('listingMarkedVip') || 'Listing marked as VIP') : (t('listingRemovedVip') || 'Listing removed from VIP'), 'success');
+    } catch (err) {
+      showToast(err?.message || (t('failedToUpdate') || 'Failed to update VIP'), 'error');
+    } finally {
+      setVipLoadingId(null);
+    }
+  };
 
   // Handle mark as sold/unsold
   const handleMarkSold = (listing) => {
@@ -602,6 +644,36 @@ export default function Property() {
                                   transition: 'opacity 0.3s ease'
                                 }}
                               />
+                              {listing.isVip && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: 12,
+                                  right: 12,
+                                  backgroundColor: 'rgba(249, 115, 22, 0.95)',
+                                  color: 'white',
+                                  padding: '4px 10px',
+                                  borderRadius: 6,
+                                  fontSize: 11,
+                                  fontWeight: 700
+                                }}>
+                                  VIP
+                                </div>
+                              )}
+                              {listing.isFeatured && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: 12,
+                                  left: 12,
+                                  backgroundColor: 'rgba(240, 180, 41, 0.95)',
+                                  color: 'white',
+                                  padding: '4px 10px',
+                                  borderRadius: 6,
+                                  fontSize: 11,
+                                  fontWeight: 700
+                                }}>
+                                  {t('featured')}
+                                </div>
+                              )}
                               {listing.isSold && (
                                 <div style={{
                                   position: 'absolute',
@@ -825,6 +897,60 @@ export default function Property() {
                                   />
                                 </svg>
                                 {t('edit')}
+                              </button>
+                            </li>
+                            <li>
+                              <button 
+                                onClick={() => handleToggleFeatured(listing)} 
+                                disabled={isAgentBlocked || featuredLoadingId === listing._id}
+                                className="item"
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  cursor: (isAgentBlocked || featuredLoadingId === listing._id) ? 'not-allowed' : 'pointer',
+                                  color: (isAgentBlocked || featuredLoadingId === listing._id) ? '#D3D3D3' : (listing.isFeatured ? '#f0b429' : '#A3ABB0'),
+                                  fontSize: '14px',
+                                  opacity: (isAgentBlocked || featuredLoadingId === listing._id) ? 0.5 : 1
+                                }}
+                                title={listing.isFeatured ? t('removeFromFeatured') : t('featureForFreshListings')}
+                              >
+                                {featuredLoadingId === listing._id ? (
+                                  <span>...</span>
+                                ) : (
+                                  <svg width={16} height={16} viewBox="0 0 24 24" fill={listing.isFeatured ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                  </svg>
+                                )}
+                                {t('featured')}
+                              </button>
+                            </li>
+                            <li>
+                              <button 
+                                onClick={() => handleToggleVip(listing)} 
+                                disabled={isAgentBlocked || vipLoadingId === listing._id}
+                                className="item"
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  cursor: (isAgentBlocked || vipLoadingId === listing._id) ? 'not-allowed' : 'pointer',
+                                  color: (isAgentBlocked || vipLoadingId === listing._id) ? '#D3D3D3' : (listing.isVip ? '#f97316' : '#A3ABB0'),
+                                  fontSize: '14px',
+                                  opacity: (isAgentBlocked || vipLoadingId === listing._id) ? 0.5 : 1
+                                }}
+                                title={listing.isVip ? t('removeFromVip') : t('markAsVip')}
+                              >
+                                {vipLoadingId === listing._id ? (
+                                  <span>...</span>
+                                ) : (
+                                  <img src="/images/crown-vip.png" alt="" width={16} height={16} style={{ opacity: listing.isVip ? 1 : 0.6 }} aria-hidden="true" />
+                                )}
+                                VIP
                               </button>
                             </li>
                             <li>

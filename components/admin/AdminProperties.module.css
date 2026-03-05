@@ -160,7 +160,11 @@
 .actions {
   display: flex;
   gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+  white-space: nowrap;
 }
+
 
 .btn {
   padding: 6px 12px;
@@ -226,6 +230,38 @@
 
 .btnDelete:hover {
   background-color: #4b5563;
+}
+
+.btnFeatured,
+.btnVip {
+  padding: 6px 8px;
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.btnFeatured:hover:not(:disabled),
+.btnVip:hover:not(:disabled) {
+  background-color: #d1d5db;
+}
+
+.btnFeatured:disabled,
+.btnVip:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.btnFeaturedActive {
+  background-color: #fef3c7;
+  color: #f0b429;
+}
+
+.btnVipActive {
+  background-color: #ffedd5;
+  color: #f97316;
+}
+
+.vipIconActive {
+  opacity: 1;
 }
 
 .noData {
