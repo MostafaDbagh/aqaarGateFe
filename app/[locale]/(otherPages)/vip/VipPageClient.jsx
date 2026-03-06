@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import { Crown, Clock, Shield, Phone, Mail } from "lucide-react";
+import { Crown, Clock, Star, Phone, Mail } from "lucide-react";
 import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 import Breadcumb from "@/components/common/Breadcumb";
@@ -15,6 +15,30 @@ import { useTranslations, useLocale } from "next-intl";
 import styles from "./VipPageClient.module.css";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.aqaargate.com";
+
+/** Ease-in-out cubic for smooth scroll */
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function smoothScrollToElement(element, options = {}) {
+  const { duration = 1000, offset = 0 } = options;
+  if (!element) return;
+  const start = window.scrollY ?? document.documentElement.scrollTop;
+  const target = element.getBoundingClientRect().top + start - offset;
+  const distance = target - start;
+  const startTime = performance.now();
+
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+    window.scrollTo(0, start + distance * eased);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
 
 export default function VipPageClient() {
   const t = useTranslations("vipPage");
@@ -85,9 +109,18 @@ export default function VipPageClient() {
                 <p className={styles.heroSubtitle}>
                   {t("heroSubtitle")}
                 </p>
-                <Link href="/property-list" className={styles.heroCta}>
+                <button
+                  type="button"
+                  className={styles.heroCta}
+                  onClick={() => {
+                    if (!hasListings) return;
+                    const el = document.getElementById("featured-vip-properties");
+                    smoothScrollToElement(el, { duration: 1000, offset: 24 });
+                  }}
+                  aria-label={t("heroCta")}
+                >
                   {t("heroCta")}
-                </Link>
+                </button>
               </div>
             </div>
           </section>
@@ -112,7 +145,7 @@ export default function VipPageClient() {
                 </div>
                 <div className={styles.featureCard}>
                   <div className={styles.featureIconWrap}>
-                    <Shield className={styles.featureIcon} size={32} />
+                    <Star className={styles.featureIcon} size={32} />
                   </div>
                   <h3 className={styles.featureTitle}>{t("whatWeOffer")}</h3>
                   <ul className={styles.featureList}>
@@ -148,7 +181,7 @@ export default function VipPageClient() {
           </section>
 
           {showFeaturedSection && (
-            <section className={`${styles.section} ${styles.sectionAlt}`} aria-labelledby="featured-vip-heading">
+            <section id="featured-vip-properties" className={`${styles.section} ${styles.sectionAlt}`} aria-labelledby="featured-vip-heading">
               <div className={styles.sectionInner}>
                 <div className={styles.sectionHead}>
                   <h2 id="featured-vip-heading" className={styles.sectionTitle}>{t("listingsTitle")}</h2>
