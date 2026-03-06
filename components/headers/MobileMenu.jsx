@@ -289,6 +289,27 @@ export default function MobileMenu() {
               </Link>
             </li>
             <li
+              className={`menu-item ${
+                pathname?.split("/")[1] === "vip" ? "current-menu-item" : ""
+              }`}
+            >
+              <Link
+                href="/vip"
+                className="item-menu-mobile"
+                onClick={() => {
+                  const offcanvas = document.getElementById('menu-mobile');
+                  if (offcanvas) {
+                    const closeButton = offcanvas.querySelector('[data-bs-dismiss="offcanvas"]');
+                    if (closeButton) {
+                      closeButton.click();
+                    }
+                  }
+                }}
+              >
+                {tNav("vip")}
+              </Link>
+            </li>
+            <li
               className={`menu-item  ${
                 isParentActive(blogMenu) ? "current-menu-item" : ""
               } `}
