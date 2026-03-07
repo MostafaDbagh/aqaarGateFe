@@ -17,6 +17,7 @@ export default function AdminContacts() {
     limit: 20
   });
   const [pagination, setPagination] = useState(null);
+  const [detailsContact, setDetailsContact] = useState(null);
 
   useEffect(() => {
     fetchContacts();
@@ -128,12 +129,23 @@ export default function AdminContacts() {
                   </td>
                   <td>{new Date(contact.createdAt).toLocaleDateString()}</td>
                   <td>
-                    <button
-                      className={`${styles.btn} ${styles.btnDelete}`}
-                      onClick={() => handleDelete(contact._id)}
-                    >
-                      Delete
-                    </button>
+                    <div className={styles.actions}>
+                      <button
+                        type="button"
+                        className={`${styles.btn} ${styles.btnDetails}`}
+                        onClick={() => setDetailsContact(contact)}
+                        title="View full message"
+                      >
+                        Details
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.btn} ${styles.btnDelete}`}
+                        onClick={() => handleDelete(contact._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -141,6 +153,45 @@ export default function AdminContacts() {
           </tbody>
         </table>
       </div>
+
+      {/* Details modal – full message for admin */}
+      {detailsContact && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setDetailsContact(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="details-modal-title"
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <h2 id="details-modal-title" className={styles.modalTitle}>Contact details</h2>
+              <button
+                type="button"
+                className={styles.modalClose}
+                onClick={() => setDetailsContact(null)}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <p className={styles.detailRow}><strong>Name:</strong> {detailsContact.name}</p>
+              <p className={styles.detailRow}><strong>Email:</strong> {detailsContact.email}</p>
+              <p className={styles.detailRow}><strong>Phone:</strong> {detailsContact.phone}</p>
+              <p className={styles.detailRow}><strong>Interest:</strong> {detailsContact.interest}</p>
+              <p className={styles.detailRow}><strong>Date:</strong> {new Date(detailsContact.createdAt).toLocaleString()}</p>
+              <div className={styles.messageFull}>
+                <strong>Message:</strong>
+                <div className={styles.messageText}>{detailsContact.message || "—"}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Pagination */}
       {pagination && pagination.pages > 1 && (
