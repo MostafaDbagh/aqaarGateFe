@@ -333,8 +333,8 @@
       "submitFailed": "Failed to become an agent. Please try again."
     },
     "success": {
-      "title": "Congratulations! 🎉",
-      "message": "You are now an agent! Your account is pending admin verification. Once verified by an admin, you'll be able to list and manage properties."
+      "title": "Happy to have you join us",
+      "message": "Our real estate partners specialist will contact you."
     }
   },
   "globalStatus": {
