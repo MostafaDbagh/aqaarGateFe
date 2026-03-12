@@ -28,19 +28,19 @@
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 24px;
+  height: 260px;
 }
 
 .card .image-wrap img {
   width: 100%;
-  height: 100%;
+  height: 260px;
   object-fit: cover;
-  min-height: 220px;
 }
 
 .imageLink {
   display: block;
   width: 100%;
-  height: 100%;
+  height: 260px;
 }
 
 .loaderWrap {
