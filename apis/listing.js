@@ -149,10 +149,12 @@ export const listingAPI = {
   },
 
   // Set listing as VIP - admin only. VIP listings appear on the VIP page.
-  setListingVip: async (id, isVip) => {
+  setListingVip: async (id, isVip, vipOrder = undefined) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await Axios.patch(`/listing/${id}/vip`, { isVip }, {
+      const body = { isVip };
+      if (isVip && vipOrder !== undefined && vipOrder !== null) body.vipOrder = vipOrder;
+      const response = await Axios.patch(`/listing/${id}/vip`, body, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

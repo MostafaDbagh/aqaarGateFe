@@ -204,7 +204,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 .featuredOrderLabel { font-size: 11px; color: #666; font-weight: 600; }
 .featuredOrderInput {

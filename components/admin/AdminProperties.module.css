@@ -165,6 +165,40 @@
   white-space: nowrap;
 }
 
+.vipOrderRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.vipOrderLabel {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.vipOrderInput {
+  width: 48px;
+  padding: 4px 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.btnSaveOrder {
+  background-color: #059669;
+  color: white;
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+.btnSaveOrder:hover {
+  background-color: #047857;
+}
+
 
 .btn {
   padding: 6px 12px;

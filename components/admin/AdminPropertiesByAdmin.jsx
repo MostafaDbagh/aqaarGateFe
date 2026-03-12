@@ -53,6 +53,7 @@ export default function AdminPropertiesByAdmin() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [featuredLoadingId, setFeaturedLoadingId] = useState(null);
   const [featuredOrderDraft, setFeaturedOrderDraft] = useState({}); // { [listingId]: inputValue } for unsaved order
+  const [vipOrderDraft, setVipOrderDraft] = useState({});
   const [vipLoadingId, setVipLoadingId] = useState(null);
 
   // Property type translations mapping
@@ -133,11 +134,34 @@ export default function AdminPropertiesByAdmin() {
     const nextVip = !listing.isVip;
     setVipLoadingId(id);
     try {
-      await listingAPI.setListingVip(id, nextVip);
-      setListings((prev) => prev.map((l) => (l._id === id ? { ...l, isVip: nextVip } : l)));
+      const res = await listingAPI.setListingVip(id, nextVip);
+      setVipOrderDraft((prev) => { const next = { ...prev }; delete next[id]; return next; });
+      setListings((prev) => prev.map((l) => (l._id === id ? { ...l, isVip: nextVip, vipOrder: nextVip ? (res?.vipOrder ?? null) : null } : l)));
       showToast(nextVip ? 'Listing marked as VIP' : 'Listing removed from VIP', 'success');
     } catch (err) {
       showToast(err?.message || 'Failed to update VIP', 'error');
+    } finally {
+      setVipLoadingId(null);
+    }
+  };
+
+  const handleSaveVipOrder = async (listing) => {
+    const id = listing._id;
+    if (!listing.isVip) return;
+    const raw = vipOrderDraft[id] !== undefined ? vipOrderDraft[id] : (listing.vipOrder ?? '');
+    const num = raw === '' ? null : parseInt(String(raw), 10);
+    if (num !== null && (num < 1 || !Number.isInteger(num))) {
+      showToast('Enter a number 1 or higher', 'error');
+      return;
+    }
+    setVipLoadingId(id);
+    try {
+      const res = await listingAPI.setListingVip(id, true, num ?? undefined);
+      setVipOrderDraft((prev) => { const next = { ...prev }; delete next[id]; return next; });
+      setListings((prev) => prev.map((l) => (l._id === id ? { ...l, vipOrder: res?.vipOrder ?? num ?? null } : l)));
+      showToast('VIP order saved.', 'success');
+    } catch (err) {
+      showToast(err?.message || 'Failed to save VIP order', 'error');
     } finally {
       setVipLoadingId(null);
     }
@@ -711,6 +735,34 @@ export default function AdminPropertiesByAdmin() {
                                 <span className={adminStyles.vipLabel}>VIP</span>
                               </button>
                             </li>
+                            {listing.isVip && (
+                              <li>
+                                <span className={adminStyles.featuredOrderWrap}>
+                                  <label htmlFor={`vip-order-${listing._id}`} className={adminStyles.featuredOrderLabel}>VIP #</label>
+                                  <input
+                                    id={`vip-order-${listing._id}`}
+                                    type="number"
+                                    min={1}
+                                    value={vipOrderDraft[listing._id] !== undefined ? vipOrderDraft[listing._id] : (listing.vipOrder ?? '')}
+                                    placeholder="1"
+                                    disabled={vipLoadingId === listing._id}
+                                    onChange={(e) => setVipOrderDraft((prev) => ({ ...prev, [listing._id]: e.target.value }))}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSaveVipOrder(listing); } }}
+                                    title="Position on VIP page (1 = first). Click Save."
+                                    className={adminStyles.featuredOrderInput}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleSaveVipOrder(listing)}
+                                    disabled={vipLoadingId === listing._id}
+                                    title="Save VIP order"
+                                    className={adminStyles.saveOrderBtn}
+                                  >
+                                    {vipLoadingId === listing._id ? '...' : 'Save'}
+                                  </button>
+                                </span>
+                              </li>
+                            )}
                             <li>
                               <button 
                                 onClick={() => handleEditProperty(listing)} 

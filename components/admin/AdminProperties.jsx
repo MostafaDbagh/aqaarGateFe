@@ -39,6 +39,7 @@ export default function AdminProperties() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [featuredLoadingId, setFeaturedLoadingId] = useState(null);
   const [vipLoadingId, setVipLoadingId] = useState(null);
+  const [vipOrderDraft, setVipOrderDraft] = useState({}); // { [propertyId]: inputValue }
 
   useEffect(() => {
     fetchProperties();
@@ -168,13 +169,38 @@ export default function AdminProperties() {
     const nextVip = !property.isVip;
     setVipLoadingId(id);
     try {
-      await listingAPI.setListingVip(id, nextVip);
+      const res = await listingAPI.setListingVip(id, nextVip);
+      setVipOrderDraft((prev) => { const next = { ...prev }; delete next[id]; return next; });
       setProperties((prev) =>
-        prev.map((p) => (p._id === id ? { ...p, isVip: nextVip } : p))
+        prev.map((p) => (p._id === id ? { ...p, isVip: nextVip, vipOrder: nextVip ? (res?.vipOrder ?? null) : null } : p))
       );
       showSuccessModal("Success", nextVip ? "Listing marked as VIP" : "Listing removed from VIP");
     } catch (err) {
       showWarningModal("Error", err?.message || "Failed to update VIP");
+    } finally {
+      setVipLoadingId(null);
+    }
+  };
+
+  const handleSaveVipOrder = async (property) => {
+    const id = property._id;
+    if (!property.isVip) return;
+    const raw = vipOrderDraft[id] !== undefined ? vipOrderDraft[id] : (property.vipOrder ?? '');
+    const num = raw === '' ? null : parseInt(String(raw), 10);
+    if (num !== null && (num < 1 || !Number.isInteger(num))) {
+      showWarningModal("Invalid order", "Enter a number 1 or higher (1 = first on VIP page).");
+      return;
+    }
+    setVipLoadingId(id);
+    try {
+      const res = await listingAPI.setListingVip(id, true, num ?? undefined);
+      setVipOrderDraft((prev) => { const next = { ...prev }; delete next[id]; return next; });
+      setProperties((prev) =>
+        prev.map((p) => (p._id === id ? { ...p, vipOrder: res?.vipOrder ?? num ?? null } : p))
+      );
+      showSuccessModal("Success", "VIP order saved. Listing will appear in this order on the VIP page.");
+    } catch (err) {
+      showWarningModal("Error", err?.message || "Failed to save VIP order");
     } finally {
       setVipLoadingId(null);
     }
@@ -356,6 +382,29 @@ export default function AdminProperties() {
                           </svg>
                         )}
                       </button>
+                      {property.isVip && (
+                        <span className={styles.vipOrderRow}>
+                          <label className={styles.vipOrderLabel}>Order:</label>
+                          <input
+                            type="number"
+                            min={1}
+                            className={styles.vipOrderInput}
+                            value={vipOrderDraft[property._id] !== undefined ? vipOrderDraft[property._id] : (property.vipOrder ?? '')}
+                            onChange={(e) => setVipOrderDraft((prev) => ({ ...prev, [property._id]: e.target.value }))}
+                            placeholder="1"
+                            title="Position on VIP page (1 = first)"
+                          />
+                          <button
+                            type="button"
+                            className={`${styles.btn} ${styles.btnSaveOrder}`}
+                            onClick={() => handleSaveVipOrder(property)}
+                            disabled={vipLoadingId === property._id}
+                            title="Save VIP order"
+                          >
+                            {vipLoadingId === property._id ? "..." : "Save"}
+                          </button>
+                        </span>
+                      )}
                       {property.approvalStatus === "pending" && (
                         <>
                           <button
