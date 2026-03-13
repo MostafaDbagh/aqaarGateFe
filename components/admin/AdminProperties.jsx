@@ -316,9 +316,24 @@ export default function AdminProperties() {
                 <td colSpan="8" className={styles.noData}>No properties found</td>
               </tr>
             ) : (
-              properties.map((property) => (
+              properties.map((property) => {
+                const idText = property.propertyId || property._id.slice(-6);
+                const isByAgent = !!(property.agentName || (property.agentId && (typeof property.agentId === 'object' ? (property.agentId.username || property.agentId.email) : property.agentId)));
+                const agentDisplayName = property.agentName || (property.agentId && typeof property.agentId === 'object' && (property.agentId.username || property.agentId.email)) || (property.agentId ? 'Agent' : '');
+                return (
                 <tr key={property._id}>
-                  <td>{property.propertyId || property._id.slice(-6)}</td>
+                  <td>
+                    <div className={styles.idCellWrap}>
+                      {isByAgent ? (
+                        <>
+                          <span className={styles.idBadgeByAgent} title="Listing added by agent">{idText}</span>
+                          {agentDisplayName && <span className={styles.agentNameBelow}>{agentDisplayName}</span>}
+                        </>
+                      ) : (
+                        idText
+                      )}
+                    </div>
+                  </td>
                   <td>
                     <div className={styles.propertyInfo}>
                       <strong>{property.propertyKeyword}</strong>
@@ -438,7 +453,8 @@ export default function AdminProperties() {
                     </div>
                   </td>
                 </tr>
-              ))
+              );
+              })
             )}
           </tbody>
         </table>

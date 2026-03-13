@@ -66,6 +66,29 @@
   font-size: 14px;
 }
 
+.idCellWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.idBadgeByAgent {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #dbeafe;
+  color: #1e40af;
+  width: fit-content;
+}
+
+.agentNameBelow {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
 .propertyInfo {
   display: flex;
   flex-direction: column;
