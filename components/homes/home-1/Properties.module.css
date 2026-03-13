@@ -1,3 +1,9 @@
+/* Fresh Listings subtitle number (21) - orange for both en and ar */
+.subtitleNumber {
+  color: #ea580c;
+  font-weight: 600;
+}
+
 /* Card wrapper - fills grid cell for equal-width layout */
 .cardWrapper {
   width: 100%;

@@ -243,7 +243,9 @@ export default function Properties({ listings, isLoading, isError, showHeading =
                   {tHomeSections('todaysListings')}
                 </h2>
                 <p className="text-1 split-text split-lines-transform">
-                  {tHomeSections('todaysListingsSubtitle')}
+                  {tHomeSections('todaysListingsSubtitleBefore')}
+                  <span className={styles.subtitleNumber}>21</span>
+                  {tHomeSections('todaysListingsSubtitleAfter')}
                 </p>
               </div>
               <div style={{ padding: '60px 20px', textAlign: 'center' }}>
@@ -754,7 +756,9 @@ export default function Properties({ listings, isLoading, isError, showHeading =
                 {tHomeSections('todaysListings')}
               </h2>
               <p className="text-1 split-text split-lines-transform">
-                {tHomeSections('todaysListingsSubtitle')}
+                {tHomeSections('todaysListingsSubtitleBefore')}
+                <span className={styles.subtitleNumber}>21</span>
+                {tHomeSections('todaysListingsSubtitleAfter')}
               </p>
             </div>
             {gridContent}

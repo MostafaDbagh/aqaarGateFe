@@ -50,8 +50,8 @@ export default function HomePageClient() {
   // State to track if we're using AI search results
   const [aiSearchResults, setAiSearchResults] = useState(null);
   const [useAISearch, setUseAISearch] = useState(false);
-  // Initialize with default limit: 20 for Fresh Listings
-  const [params, setParams] = useState({ limit: 20, sort: 'newest' });
+  // Initialize with default limit: 21 for Fresh Listings
+  const [params, setParams] = useState({ limit: 21, sort: 'newest' });
 
   // Check if mobile on mount
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function HomePageClient() {
 
   // CRITICAL: "Most Recent Listings" should ALWAYS use normal search, regardless of AI search
   // Create separate params for Most Recent Listings that are NEVER affected by AI search
-  const [mostRecentParams, setMostRecentParams] = useState({ limit: 20, sort: 'newest' });
+  const [mostRecentParams, setMostRecentParams] = useState({ limit: 21, sort: 'newest' });
 
   useEffect(() => {
     // CRITICAL: "Most Recent Listings" is COMPLETELY independent of AI search
@@ -123,11 +123,11 @@ export default function HomePageClient() {
       }
       const cleaned = cleanParams(searchParams);
       queueMicrotask(() => {
-        setMostRecentParams({ ...cleaned, limit: 20, sort: cleaned.sort || 'newest' });
+        setMostRecentParams({ ...cleaned, limit: 21, sort: cleaned.sort || 'newest' });
       });
     } else {
       queueMicrotask(() => {
-        setMostRecentParams({ limit: 20, sort: 'newest' });
+        setMostRecentParams({ limit: 21, sort: 'newest' });
       });
     }
   }, [searchParams, triggerSearch, category]); // Removed useAISearch from dependencies
@@ -141,10 +141,10 @@ export default function HomePageClient() {
   } = useSearchListings(mostRecentParams, { enabled: true, refetchOnMount: true }); // Refetch on mount so Fresh Listings order (featured #) is up to date
 
   // CRITICAL: "Most Recent Listings" (Fresh Listings) - normal search, featured first then newest
-  // Ensure we always limit to 20 listings for the home page
+  // Ensure we always limit to 21 listings for the home page
   const finalListings = Array.isArray(listings) 
-    ? listings.slice(0, 20) // Always limit to 20 listings
-    : (listings?.data ? listings.data.slice(0, 20) : []);
+    ? listings.slice(0, 21) // Always limit to 21 listings
+    : (listings?.data ? listings.data.slice(0, 21) : []);
   
   // Always use normal search loading/error states (ignore AI search for this section)
   const finalIsLoading = isLoading;
@@ -188,8 +188,8 @@ export default function HomePageClient() {
     });
     
     // Reset params to default
-    setParams({ limit: 20, sort: 'newest' });
-    setMostRecentParams({ limit: 20, sort: 'newest' });
+    setParams({ limit: 21, sort: 'newest' });
+    setMostRecentParams({ limit: 21, sort: 'newest' });
     setTriggerSearch(false);
     setCategory("");
     
